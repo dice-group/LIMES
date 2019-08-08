@@ -99,14 +99,18 @@ export default {
 	        let endpoint = srcOrTgt.endpoint;
 
 	        let propertyName = property.split(":")[1].split(" ")[0];
-	        this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint);
+	        this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint, this.$store.state.checkboxEndpointAsFile);
 	        
 	      }
 	    },
 
-	    fetchForNextLevelProperties(p,endpoint){
+	    fetchForNextLevelProperties(p,endpoint,endpointFromFile){
 	      let query = encodeURIComponent('ASK{?s <'+p+'> ?o. FILTER isIRI(?o)}');
-	      fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
+	      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`;
+		  if(endpointFromFile){
+			  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${query}`;
+		  }
+	      fetch(url, {
 	        headers: {
 	          'Accept': 'application/json',
 	          'Content-Type': 'application/json'
@@ -117,7 +121,7 @@ export default {
 	       })
 	      .then((content) => {
 	        if(content.boolean){
-	          this.getForNextLevelProperties(p,endpoint);
+	          this.getForNextLevelProperties(p,endpoint,endpointFromFile);
 	        } 
 	        else {
 				this.blockForCheckNextLevel.getField("enable_propertypath").setValue(false);
@@ -128,10 +132,14 @@ export default {
 	      })
 	    },
 
-	    getForNextLevelProperties(p,endpoint){
+	    getForNextLevelProperties(p,endpoint,endpointFromFile){
 		      //let block = this.block;
 		      let query = encodeURIComponent('SELECT distinct ?p WHERE { ?s <'+p+'> ?o. FILTER isIRI(?o) ?o ?p ?o2}');
-		      fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
+		      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`;
+			  if(endpointFromFile){
+				  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${query}`;
+			  }
+		      fetch(url, {
 		        headers: {
 		          'Accept': 'application/json',
 		          'Content-Type': 'application/json'

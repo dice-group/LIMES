@@ -76,6 +76,14 @@ export default {
       classes: [],
     }
   },
+  mounted(){
+	this.$store.watch(this.$store.getters.checkboxEndpoint, n => {
+      if(!n){
+		this.classes.splice(0);
+		this.afterFilteredClasses.splice(0);
+      }
+    });  
+  },
   methods:{
     getPrefix(urlValue){
         let property;
@@ -113,11 +121,15 @@ export default {
         return {pair: prefix+":"+property, namespace: prefixNamespace};
 
     },
-    fetchClasses(endpoint) {
+    fetchClasses(endpoint, endpointFromFile) {
       this.classes.splice(0);
       this.messageAboutClasses = "Loading ...";
       this.messageAboutProps  = "";
-      fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`, {
+      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`;
+      if(endpointFromFile){
+		  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`;
+	  }
+      fetch(url, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -142,10 +154,14 @@ export default {
         this.afterFilteredClasses = this.source.classes;
       })
     },
-    fetchProperties(endpoint, curClass) {
+    fetchProperties(endpoint, curClass, endpointFromFile) {
       this.messageAboutProps = "Properties haven't received yet. Loading ...";
       let query = encodeURIComponent('select distinct ?p where { ?s a <'+curClass+'>. ?s ?p ?o}');
-      fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
+      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`;
+      if(endpointFromFile){
+		  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${query}`;
+	  }
+      fetch(url, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'

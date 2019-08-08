@@ -94,6 +94,13 @@ export default {
       classVar: '',
     }
   },
+  mounted(){
+	this.$store.watch(this.$store.getters.checkboxEndpoint, n => {
+      if(!n){
+		this.classVar = '';
+      }
+    });  
+  },
   methods: {
     onClassFocus() {
       this.focusedClass = true;
@@ -107,12 +114,12 @@ export default {
       this.classVar = option;
       //this.$emit('toggle-classVar', option);
       this.source.propertiesForChoice.splice(0);
-      this.fetchProperties(this.source.endpoint, option);
+      this.fetchProperties(this.source.endpoint, option, this.$store.state.checkboxEndpointAsFile);
       this.changeRestrictions(option);
     },
     enterClassClicked(){
       this.source.propertiesForChoice.splice(0);
-      this.fetchProperties(this.source.endpoint, this.classVar);
+      this.fetchProperties(this.source.endpoint, this.classVar, this.$store.state.checkboxEndpointAsFile);
       this.changeRestrictions(this.classVar);
     },
     changeRestrictions(option){
