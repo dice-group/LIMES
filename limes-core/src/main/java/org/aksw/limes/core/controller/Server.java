@@ -173,10 +173,18 @@ public class Server {
     private Object handleLocalSparql(Request req, Response res) throws IOException {
         String uploadId = req.params("uploadId");
         String s = uploadFiles.get(uploadId);
+        String query = req.queryParams("query");
+        String matchQuery = query.toLowerCase().trim();
         Model queryModel = ModelFactory.createDefaultModel().read(s);
-        QueryExecution queryExecution = QueryExecutionFactory.create(req.queryParams("query"), queryModel);
-        ResultSet resultSet = queryExecution.execSelect();
-        ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), resultSet);
+        QueryExecution queryExecution = QueryExecutionFactory.create(query, queryModel);
+        if (matchQuery.startsWith("select")) {
+            ResultSet resultSet = queryExecution.execSelect();
+            ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), resultSet);
+        } else if (matchQuery.startsWith("ask")) {
+            boolean result = queryExecution.execAsk();
+            ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), result);
+        }
+        queryExecution.close();
         return "";
     }
 
