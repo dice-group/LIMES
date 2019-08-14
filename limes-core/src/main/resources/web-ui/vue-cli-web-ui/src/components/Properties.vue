@@ -61,18 +61,26 @@ export default {
 	      if(strForXml && strForXml.length !== 0){
 	      	
 	      	let curBlock = this.currentBlock;
+	      	let lastBlock = this.currentBlock;
 	      	
+	      	let num =0;
 	      	do{		
 				//check next level
 				if(curBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true' 
 					&& curBlock.getChildren()[0].type !== "propertyPath"){
 						this.blockForCheckNextLevel = curBlock;
 						this.checkNextLevelProperties(srcOrTgt, strForXml);
-				}	
-	
-				curBlock = curBlock.getChildren()[0];
+
+				}
+
+				if(curBlock.getChildren().length && curBlock.getChildren()[0].type !== "emptyBlock"){
+					curBlock = curBlock.getChildren()[0];
+				}
 				
-			} while (curBlock.getField("enable_propertypath") !== null);
+				lastBlock = lastBlock.getChildren().length && lastBlock.getChildren()[0];
+				
+			} while (lastBlock.getField("enable_propertypath") !== null);
+	
 	      	
 	      }	
 
@@ -95,17 +103,40 @@ export default {
 
 	    checkNextLevelProperties(srcOrTgt, property){
 	      if(property && property !== null && property.length !== 0){
-	        let label = property.split(":")[0];
-	        let endpoint = srcOrTgt.endpoint;
+			if(property.indexOf("/") !== -1){
+				let endpoint = srcOrTgt.endpoint;
+				let arr = property.split("/");
+				let urls = arr.map(p => {
+					let label = p.split(":")[0];
+					let propertyName = p.split(":")[1];
+					return this.$store.state.context[label]+propertyName;
+				});
+				this.fetchForNextLevelProperties(urls, endpoint, this.$store.state.checkboxEndpointAsFile);
+			} else { 
+				let label = property.split(":")[0];
+				let endpoint = srcOrTgt.endpoint;
 
-	        let propertyName = property.split(":")[1].split(" ")[0];
-	        this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint, this.$store.state.checkboxEndpointAsFile);
-	        
+				let propertyName = property.split(":")[1].split(" ")[0];
+				let urls = [];
+				urls.push(this.$store.state.context[label]+propertyName);
+				this.fetchForNextLevelProperties(urls ,endpoint, this.$store.state.checkboxEndpointAsFile);
+			}
 	      }
 	    },
 
 	    fetchForNextLevelProperties(p,endpoint,endpointFromFile){
-	      let query = encodeURIComponent('ASK{?s <'+p+'> ?o. FILTER isIRI(?o)}');
+		  let keyWord = 'ASK';	
+		  let str = '{';
+		  let lastIndex = '';
+		  p.forEach((url,index) => {
+			  if(index === 0){
+				  str += '?s'+' <'+url+'>' + ' ?v'+index+'. ';
+			  } else {
+				  str += '?v'+(index-1)+' <'+url+'>' + ' ?v'+index+'. ';
+			  }
+			  lastIndex = index;
+		  });
+	      let query = encodeURIComponent(keyWord+str+'FILTER isIRI(?v'+lastIndex+')}');
 	      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`;
 		  if(endpointFromFile){
 			  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${query}`;
@@ -121,7 +152,7 @@ export default {
 	       })
 	      .then((content) => {
 	        if(content.boolean){
-	          this.getForNextLevelProperties(p,endpoint,endpointFromFile);
+	          this.getForNextLevelProperties(str, lastIndex, endpoint,endpointFromFile);
 	        } 
 	        else {
 				this.blockForCheckNextLevel.getField("enable_propertypath").setValue(false);
@@ -132,9 +163,9 @@ export default {
 	      })
 	    },
 
-	    getForNextLevelProperties(p,endpoint,endpointFromFile){
+	    getForNextLevelProperties(p, lastIndex, endpoint,endpointFromFile){
 		      //let block = this.block;
-		      let query = encodeURIComponent('SELECT distinct ?p WHERE { ?s <'+p+'> ?o. FILTER isIRI(?o) ?o ?p ?o2}');
+		      let query = encodeURIComponent('SELECT distinct ?p WHERE ' + p +' FILTER isIRI(?v'+lastIndex+')'+' ?v'+lastIndex+' ?p ?p2}');
 		      let url = `${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`;
 			  if(endpointFromFile){
 				  url = `${window.LIMES_SERVER_URL}/uploads/${endpoint}/sparql?query=${query}`;
@@ -157,25 +188,10 @@ export default {
 		          classes.push(pair);
 		        });
 		        let arr = classes.map(i => [i, i]);
-		        //console.log(arr);
-
-		        //console.log(block);
-		        // add new dropdown list in property, doesn't work without 
-		        // ,
-				    // {
-				    //   "type": "input_value",
-				    //   "name": "propName"
-				    // }
-			    // var dropdown = new Blockly.FieldDropdown(arr);
-			    // this.currentBlock.getInput('propName').appendField(dropdown, 'propTitle');
-
-
-		  // another variant
-		  //console.log(this.currentBlock.type);
 
 		        var dropdown = new Blockly.FieldDropdown(arr);
 		        var checkbox = new Blockly.FieldCheckbox(false);
-		      	let parentColour = this.currentBlock.getColour();
+		      	let parentColour = this.blockForCheckNextLevel.getColour();//this.currentBlock.getColour();
 		        var newBlock = this.$store.state.Workspace.newBlock('propertyPath');
 		        newBlock.getInput("propertyPath").removeField('propTitle');
 		        newBlock.getInput("propertyPath").removeField('enable_propertypath');
@@ -186,7 +202,7 @@ export default {
 				newBlock.initSvg();
 		      	newBlock.render();
 
-		      	var parentConnection = this.currentBlock.getInput('propName').connection;
+		      	var parentConnection = this.blockForCheckNextLevel.getInput('propName')? this.blockForCheckNextLevel.getInput('propName').connection :  this.blockForCheckNextLevel.getInput('propertyPath').connection;
 				var childConnection = newBlock.outputConnection;
 				parentConnection.connect(childConnection);
 

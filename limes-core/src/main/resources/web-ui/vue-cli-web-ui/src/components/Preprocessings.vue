@@ -80,7 +80,7 @@ export default {
 						if(!isCleared){
 
 							let strForXml = child.getFieldValue("propTitle");
-							let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
+							let propPath = this.getPropPath(child);
 							this.addProperies(child,strForXml + propPath + " RENAME " + i.getField("RENAME").getDisplayText_());
 						}
 					}
@@ -103,7 +103,7 @@ export default {
 						if(!isCleared){
 
 							let strForXml = child.getFieldValue("propTitle");
-							let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
+							let propPath = this.getPropPath(child);
 							let strOfPreprocessings = " AS "+ i.getFieldValue('function');
 							this.addProperies(child,strForXml + propPath + strOfPreprocessings);
 						}
@@ -118,19 +118,12 @@ export default {
 		        let strForXml = i.getFieldValue("propTitle");
 		        this.addProperies(i,strForXml);
 		    }else{
-				// if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
-				// 	console.log("REMOVE");
-				// 	if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
-				// 		i.getChildren()[0].dispose();
-				// 	}
-				// }
 				
-
 				//with property path
 				if(i.getChildren().length && i.getChildren().filter(b => b.type === "propertyPath").length){
 					if(!this.clearPropertyPath(i)){
 						let strForXml = i.getFieldValue("propTitle");
-						let propPath = i.getChildren()[0].getField("path").getDisplayText_() + i.getChildren()[0].getFieldValue("propTitle");
+						let propPath = this.getPropPath(i);
 						this.addProperies(i,strForXml + propPath);
 					}
 				}
@@ -138,18 +131,41 @@ export default {
 		    
 	      }
 	    },
+	    getPropPath(i){
+			let propPath = '';
+			let curBlock = i;
+;			do{		
+				//check next level
+				propPath += curBlock.getChildren()[0].getField("path").getDisplayText_() + curBlock.getChildren()[0].getFieldValue("propTitle");	
+				if(curBlock.getChildren().length && curBlock.getChildren()[0].type !== "emptyBlock"){
+					curBlock = curBlock.getChildren()[0];
+				}			
+			} while (curBlock.getChildren()[0].getField("enable_propertypath") !== null);
+			
+			return propPath;
+		},
+		
 	    clearPropertyPath(i){
 	    	// i - block
 	    	let isCleared = false;
-			if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
-				console.log("REMOVE");
-				if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
-					i.getChildren()[0].dispose();
-					isCleared = true;
+			let curBlock = i;
+			do{		
+				//check next level
+				if(curBlock.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
+					console.log("REMOVE");
+					if(curBlock.getChildren() && curBlock.getChildren().length && curBlock.getChildren()[0].type === "propertyPath"){
+						curBlock.getChildren()[0].dispose(true);
+						isCleared = true;
+					}
 				}
-			}
+				if(curBlock.getChildren().length && curBlock.getChildren()[0].type !== "emptyBlock"){
+					curBlock = curBlock.getChildren()[0];
+				}			
+			} while (curBlock.getChildren()[0].getField("enable_propertypath") !== null || curBlock.getChildren()[0].length === 0);
+			
 			return isCleared;
 	    },
+	    
 	    addChainOfPreprocessings(i,renameText){
 	      let arrForXml = i.toString().split(" ").map(pf => pf.toLowerCase()).filter(prepFunc => prepFunc !== "optional" && prepFunc !== "source" && prepFunc !== "target" && prepFunc !== "property" && prepFunc !== "rename" && prepFunc !== "as" && prepFunc !== "pp" && prepFunc !== "???" && prepFunc !== "");
 	      if(renameText !== null && arrForXml[arrForXml.length-1].toLowerCase() === renameText.toLowerCase()){

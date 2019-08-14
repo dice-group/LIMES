@@ -241,7 +241,7 @@ export default {
     },
     deleteOldPrefixes(){
       if(this.exPrefixes.length){// && !isArraysEqual){
-        console.log(this.exPrefixes,this.prefixes);
+        //console.log(this.exPrefixes,this.prefixes);
         this.exPrefixes.forEach(pref => {
           this.prefixes.forEach(pr => {
             if(pref.label === pr.label){
@@ -250,7 +250,7 @@ export default {
           })
         }) 
       }
-      console.log("before clear");
+      //console.log("before clear");
       this.exPrefixes.splice(0);
     },
     addOldAndNewPrefix(props){

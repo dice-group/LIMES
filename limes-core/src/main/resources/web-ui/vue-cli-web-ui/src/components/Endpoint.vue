@@ -7,7 +7,7 @@
       </md-input-container>
     </md-layout>
     <md-layout>
-	  <md-checkbox v-model="checkboxEndpointAsFile" class="md-primary" @change="changeCheckboxEndpoint">Endpoint as file</md-checkbox>	
+	  <md-checkbox v-model="checkboxEndpointAsFile" class="md-primary" @change="changeCheckboxEndpoint">Endpoint file as input</md-checkbox>	
       <md-input-container class="dropdown">
         <label>Endpoint</label>
         <md-input v-model="source.endpoint" @keyup.enter.native="enterEndpointClicked"

@@ -86,6 +86,7 @@ var propertyPath = {
         "OptionalTargetProperty",
         "OptionalSourceProperty",
         "emptyBlock",
+        "propertyPath",
       ]
     }
   ],
