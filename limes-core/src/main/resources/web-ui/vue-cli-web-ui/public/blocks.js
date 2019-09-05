@@ -260,6 +260,75 @@ var RenamePreprocessingFunction = {
   "helpUrl": ""
 }
 
+var ComplexPreprocessingFunction = {
+  "type": "complexpreprocessingfunction",
+  "message0": "%1 %2 %3 %4 Rename %5 %6 %7",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "complexfunction",
+      "options": [
+        [
+          "Concat",
+          "concat"
+        ],
+        [
+          "Split",
+          "split"
+        ],
+        [
+          "ToWktPoint",
+          "towktpoint"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "Prop1",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty"
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "Prop2",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty"
+      ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_glue",
+      "checked": false
+    },
+    {
+      "type": "field_input",
+      "name": "RENAME1",
+      "text": "A"
+    },
+    {
+      "type": "field_input",
+      "name": "RENAME2",
+      "text": "B"
+    },
+    {
+      "type": "input_dummy",
+      "name": "params"
+    }
+
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 300,
+  "tooltip": "Pre-processing function",
+  "helpUrl": ""
+}
+
 var PreprocessingFunction = {
   "type": "preprocessingfunction",
   "message0": "%1 %2",

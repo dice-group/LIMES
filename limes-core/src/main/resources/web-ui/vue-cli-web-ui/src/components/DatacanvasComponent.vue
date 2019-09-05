@@ -11,6 +11,7 @@
 	          <block type="operator"></block>
 	          <block type="preprocessingfunction"></block>
 	          <block type="renamepreprocessingfunction"></block>
+            <block type="complexpreprocessingfunction"></block>
 	    </xml> 
     </md-layout>
 </template>
@@ -46,6 +47,7 @@ export default {
 	      'measure': Measure,
 	      'operator': Operator,
 	      'preprocessingfunction':PreprocessingFunction,
+        'complexpreprocessingfunction': ComplexPreprocessingFunction,
 	      'nolangpreprocessingfunction': NolangPreprocessingFunction,
 	      'renamepreprocessingfunction': RenamePreprocessingFunction,
 	      'lowercasepreprocessingfunction': LowercasePreprocessingFunction,
@@ -80,7 +82,70 @@ export default {
             Blockly.Blocks[key] = {
               init: function() {
                 this.jsonInit(typesOfBlocks[key]);              
-              }
+              },
+              onchange : function(event) {
+                
+                if(key === 'complexpreprocessingfunction'){
+                  if(this.getField("complexfunction").getDisplayText_() ==='Concat'){
+                    if(!this.getInput('Prop2')){
+                      this.appendValueInput("Prop2");
+                      this.moveInputBefore("Prop2", "params");
+                      this.getInput("Prop2").setCheck([
+                          "SourceProperty",
+                          "TargetProperty",
+                          "OptionalTargetProperty",
+                          "OptionalSourceProperty"
+                        ]);
+                        }
+                        if(!this.getField("enable_glue")){
+                          this.getInput("params")
+                      .insertFieldAt(0, new Blockly.FieldCheckbox(false), "enable_glue");
+                        }
+                        // if(!this.getField("renametext")){
+                        //   this.getInput("params")
+                        // .appendField('Rename', "renametext");
+                        // }
+                        if(!this.getField("RENAME1")){
+                          this.getInput("params")
+                        .appendField(new Blockly.FieldTextInput('A'), "RENAME1");
+                        }
+                        if(this.getField("RENAME2")){
+                          this.getInput("params").removeField('RENAME2');
+                        }
+                      }
+                      else if(this.getField("complexfunction").getDisplayText_() ==='Split'){
+                           if(this.getInput('Prop2')){
+                              this.removeInput('Prop2');
+                           }
+                           if(!this.getField("enable_glue")){
+                             this.getInput("params")
+                         .insertFieldAt(0, new Blockly.FieldCheckbox(false), "enable_glue");
+                           }
+                           if(!this.getField("RENAME2")){
+                             this.getInput("params")
+                           .appendField(new Blockly.FieldTextInput('B'), "RENAME2");
+                            }
+                      }
+                      else if(this.getField("complexfunction").getDisplayText_() ==='ToWktPoint'){
+                           if(!this.getInput('Prop2')){
+                          this.appendValueInput("Prop2");
+                          this.moveInputBefore("Prop2", "params");
+                          this.getInput("Prop2").setCheck([
+                              "SourceProperty",
+                              "TargetProperty",
+                              "OptionalTargetProperty",
+                              "OptionalSourceProperty"
+                            ]);
+                           }
+                           if(this.getField("enable_glue")){                    
+                             this.getInput("params").removeField('enable_glue');
+                           }
+                           if(this.getField("RENAME2")){
+                             this.getInput("params").removeField('RENAME2');
+                           }
+                    }
+                }
+              },              
             };
           }
 
