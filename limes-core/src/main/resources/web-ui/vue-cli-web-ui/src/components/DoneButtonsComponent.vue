@@ -150,6 +150,7 @@ export default {
   <PAGESIZE>${data.pagesize}</PAGESIZE>
   <RESTRICTION>${data.restriction}</RESTRICTION>
 ${data.properties.length ? data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n') : ''}
+${data.function && data.function.length ? `  <FUNCTION>${data.function}</FUNCTION>` : ''}
 ${data.optionalProperties.length ? data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n') : ''}
 ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 </${tag.toUpperCase()}>

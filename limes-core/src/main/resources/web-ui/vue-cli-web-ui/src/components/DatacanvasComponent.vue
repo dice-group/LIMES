@@ -84,7 +84,7 @@ export default {
                 this.jsonInit(typesOfBlocks[key]);              
               },
               onchange : function(event) {
-                
+
                 if(key === 'preprocessingfunction'){
                   if(this.getField("function").getDisplayText_() === 'replace' 
                     || this.getField("function").getDisplayText_() ==='regexreplace'){
@@ -120,10 +120,18 @@ export default {
                           this.getInput("params")
                       .insertFieldAt(0, new Blockly.FieldCheckbox(false), "enable_glue");
                         }
-                        // if(!this.getField("renametext")){
-                        //   this.getInput("params")
-                        // .appendField('Rename', "renametext");
-                        // }
+                        if(this.getField("enable_glue").getValue().toLowerCase() === 'true'){
+                          let text = ',';
+                          if(this.getField("glue_text")){
+                            text = this.getFieldValue("glue_text");
+                            this.getInput("params").removeField('glue_text');
+                          }
+                          this.getInput("params")
+                            .insertFieldAt(1, new Blockly.FieldTextInput(text), "glue_text");
+                        } else if(this.getField("glue_text")){
+                          this.getInput("params").removeField('glue_text');
+                        }
+
                         if(!this.getField("RENAME1")){
                           this.getInput("params")
                         .appendField(new Blockly.FieldTextInput('A'), "RENAME1");
@@ -140,6 +148,15 @@ export default {
                              this.getInput("params")
                          .insertFieldAt(0, new Blockly.FieldCheckbox(false), "enable_glue");
                            }
+                           if(this.getField("enable_glue").getValue().toLowerCase() === 'true'){
+                              if(this.getField("glue_text")){
+                                this.getInput("params").removeField('glue_text');
+                              }
+                              this.getInput("params")
+                                .insertFieldAt(1, new Blockly.FieldTextInput(','), "glue_text");
+                           } else if(this.getField("glue_text")){
+                              this.getInput("params").removeField('glue_text');
+                            }
                            if(!this.getField("RENAME2")){
                              this.getInput("params")
                            .appendField(new Blockly.FieldTextInput('B'), "RENAME2");

@@ -90,31 +90,44 @@ export default {
 	                this.addChainOfPreprocessings(i, null);
 	              } else {
 
-	              	let strOfPreprocessings =  " AS "+ i.getFieldValue('function');
-	              	if(i.getField("textA")){
-	              		strOfPreprocessings = " AS "+ i.getFieldValue('function')+"("+i.getField("textA").text_+","+i.getField("textB").text_+")";
-	              	}
+	              	if(i.getField("complexfunction").getDisplayText_() ==='Concat'){
+	              		this.complexFunctionHandler('concat', i); 		
+	              	} else
+					if(i.getField("complexfunction").getDisplayText_() ==='Split'){
+	              		this.complexFunctionHandler('split', i);	
+	              	} else
+					if(i.getField("complexfunction").getDisplayText_() ==='ToWktPoint'){
+	              		this.complexFunctionHandler('toWktPoint', i);	
+	              	} else
+	              	{
 
-	              	let isCleared = this.clearPropertyPath(child);
-					//without PP
+		              	let strOfPreprocessings =  " AS "+ i.getFieldValue('function');
 
-					//if(isCleared){	
-						let strForXml = child.getFieldValue("propTitle");
-						//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
-						strForXml += strOfPreprocessings;
-						this.addProperies(child,strForXml);
-					//}
-	                //with PP
-					//else 
-					if(!isCleared && child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
+		              	if(i.getField("textA")){
+		              		strOfPreprocessings = " AS "+ i.getFieldValue('function')+"("+i.getField("textA").text_+","+i.getField("textB").text_+")";
+		              	}
 
-						if(!isCleared){
+		              	let isCleared = this.clearPropertyPath(child);
+						//without PP
 
-							//let 
-							strForXml = child.getFieldValue("propTitle");
-							let propPath = this.getPropPath(child);
+						//if(isCleared){	
+							let strForXml = child.getFieldValue("propTitle");
 							//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
-							this.addProperies(child,strForXml + propPath + strOfPreprocessings);
+							strForXml += strOfPreprocessings;
+							this.addProperies(child,strForXml);
+						//}
+		                //with PP
+						//else 
+						if(!isCleared && child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
+
+							if(!isCleared){
+
+								//let 
+								strForXml = child.getFieldValue("propTitle");
+								let propPath = this.getPropPath(child);
+								//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
+								this.addProperies(child,strForXml + propPath + strOfPreprocessings);
+							}
 						}
 					}
 	              }
@@ -142,6 +155,42 @@ export default {
 		    
 	      }
 	    },
+
+	    complexFunctionHandler(functionName, i){
+			let prblock1 = i.getChildren()[0] || null;
+      		let prblock2 = i.getChildren()[1] || null;
+      		let prop1 = prblock1 ? prblock1.getFieldValue("propTitle") : null;
+      		let prop2 = prblock2 ? prblock2.getFieldValue("propTitle") : null;
+      		let func = '';
+      		let glue = ',';
+      		if(i.getField("glue_text")){
+      			glue = i.getFieldValue("glue_text");
+      		}
+
+      		if(functionName === "concat"){
+      			//concat(property1, property2, glue=",") RENAME newprop
+      			func = functionName+"("+prop1+", "+prop2+', glue="'+glue+'") RENAME '+ i.getFieldValue("RENAME1");
+      		} else if(functionName === "split"){
+      			//split(property, splitChar=",") RENAME prop1,prop2
+      			func = functionName+"("+prop1+', splitChar="'+glue+'") RENAME '+ i.getFieldValue("RENAME1")+","+ i.getFieldValue("RENAME2");
+      		}else if(functionName === "toWktPoint"){
+				//toWktPoint(property1, property2) RENAME wktPoint
+				func = functionName+"("+prop1+", "+prop2+") RENAME "+ i.getFieldValue("RENAME1");
+      		}
+
+      		if(prblock1 && prblock1.type.indexOf("source") !== -1){
+      			this.$store.commit('changeSourceFunction', func);
+      		} else if(prblock1 && prblock1.type.indexOf("target") !== -1){
+      			this.$store.commit('changeTargetFunction', func);
+      		}
+      		if(prblock1){
+      			this.addProperies(prblock1, prop1);
+      		}
+      		if(prblock2){
+      			this.addProperies(prblock2, prop2);
+      		}
+	    },
+
 	    getPropPath(i){
 			let propPath = '';
 			let curBlock = i;

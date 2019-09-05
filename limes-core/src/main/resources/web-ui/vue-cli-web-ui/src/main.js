@@ -43,6 +43,7 @@ const store = new Vuex.Store({
 	        var: '?s',
 	        pagesize: 1000,
 	        restriction: '?s rdf:type some:Type',
+            function: '',
 	        type: 'sparql',
 	        properties: ['dc:title AS lowercase RENAME name'],
 	        optionalProperties: [],//['rdfs:label'],
@@ -56,6 +57,7 @@ const store = new Vuex.Store({
 	        var: '?t',
 	        pagesize: 1000,
 	        restriction: '?t rdf:type some:Type',
+            function: '',
 	        type: 'sparql',
 	        properties: ['foaf:name AS lowercase RENAME name'],
 	        optionalProperties: [],//['rdf:type'],
@@ -84,6 +86,12 @@ const store = new Vuex.Store({
         },
         changeTarget (state, obj) {
             state.target = obj;
+        },
+        changeSourceFunction (state, str) {
+            state.source.function = str;
+        },
+        changeTargetFunction (state, str) {
+            state.target.function = str;
         },
         changeSourceProps (state, arr) {
             state.source.properties = arr;

@@ -63,6 +63,12 @@ export default {
 	      }*/
 	      let sourceProperty = this.$store.state.source.properties[num];
 	      let targetProperty = this.$store.state.target.properties[num];
+	      if(this.$store.state.source.function && this.$store.state.source.function.length){
+	      	sourceProperty = this.$store.state.source.function;
+	      }
+	      if(this.$store.state.target.function && this.$store.state.target.function.length){
+	      	targetProperty = this.$store.state.target.function;
+	      }
 	      if(sourceProperty){
 			  sourceProperty = sourceProperty.split("AS")[0].trim();
 			  if(sourceProperty.indexOf("RENAME") !== -1){

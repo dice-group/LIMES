@@ -262,7 +262,7 @@ var RenamePreprocessingFunction = {
 
 var ComplexPreprocessingFunction = {
   "type": "complexpreprocessingfunction",
-  "message0": "%1 %2 %3 %4 Rename %5 %6 %7",
+  "message0": "%1 %2 %3 %4 %5 Rename %6 %7 %8",
   "args0": [
     {
       "type": "field_dropdown",
@@ -306,6 +306,11 @@ var ComplexPreprocessingFunction = {
       "type": "field_checkbox",
       "name": "enable_glue",
       "checked": false
+    },
+    {
+      "type": "field_input",
+      "name": "glue_text",
+      "text": ","
     },
     {
       "type": "field_input",

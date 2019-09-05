@@ -87,16 +87,24 @@ export default {
 	      
 	      if(strForXml && strForXml.length !== 0){//&& !allProps.some(i => i === strForXml)){
 		      if(kindOfProperty === "s"){
-		      	this.$store.commit('addSrcProps', strForXml);
+		      	if(!this.$store.state.source.properties.some(i => i === strForXml)){
+		      		this.$store.commit('addSrcProps', strForXml);
+		      	}
 		      }
 		      if(kindOfProperty === "t"){
-		      	this.$store.commit('addTgtProps', strForXml);
+		      	if(!this.$store.state.target.properties.some(i => i === strForXml)){
+		      		this.$store.commit('addTgtProps', strForXml);
+		      	}
 		      }
 		      if(kindOfProperty === "os"){
-		      	this.$store.commit('addOSrcProps', strForXml);
+		      	if(!this.$store.state.source.optionalProperties.some(i => i === strForXml)){
+		      		this.$store.commit('addOSrcProps', strForXml);
+		      	}
 		      }
 		      if(kindOfProperty === "ot"){
-		      	this.$store.commit('addOTgtProps', strForXml);
+		      	if(!this.$store.state.target.optionalProperties.some(i => i === strForXml)){
+		      		this.$store.commit('addOTgtProps', strForXml);
+		      	}
 		      }
 		  }
 	    },
