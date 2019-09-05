@@ -331,7 +331,7 @@ var ComplexPreprocessingFunction = {
 
 var PreprocessingFunction = {
   "type": "preprocessingfunction",
-  "message0": "%1 %2",
+  "message0": "%1 %2 %3 %4",
   "args0": [
     {
       "type": "field_dropdown",
@@ -342,6 +342,16 @@ var PreprocessingFunction = {
           "selectPreprocessingFunction"
         ],
       ]
+    },
+    {
+      "type": "field_input",
+      "name": "textA",
+      "text": "A"
+    },
+    {
+      "type": "field_input",
+      "name": "textB",
+      "text": "B"
     },
     {
       "type": "input_value",

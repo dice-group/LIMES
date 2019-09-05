@@ -85,6 +85,25 @@ export default {
               },
               onchange : function(event) {
                 
+                if(key === 'preprocessingfunction'){
+                  if(this.getField("function").getDisplayText_() === 'replace' 
+                    || this.getField("function").getDisplayText_() ==='regexreplace'){
+                    //add two input fields
+                    if(!this.getField("textA")){
+                        var textinput1 = new Blockly.FieldTextInput('A');
+                        var textinput2 = new Blockly.FieldTextInput('B');
+                        this.getInput("NAME").appendField(textinput1, 'textA');
+                        this.getInput("NAME").appendField(textinput2, 'textB');
+                    }
+                    
+                  } else {
+                    if(this.getField("textA")){
+                      this.getInput("NAME").removeField('textA');
+                        this.getInput("NAME").removeField('textB');
+                      }
+                  }
+                }
+                
                 if(key === 'complexpreprocessingfunction'){
                   if(this.getField("complexfunction").getDisplayText_() ==='Concat'){
                     if(!this.getInput('Prop2')){

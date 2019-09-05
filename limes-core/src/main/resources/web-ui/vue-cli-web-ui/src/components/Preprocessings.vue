@@ -91,7 +91,7 @@ export default {
 	              } else {
 
 	              	let strOfPreprocessings =  " AS "+ i.getFieldValue('function');
-	              	if(this.addFieldsForPreprFunction(i)){
+	              	if(i.getField("textA")){
 	              		strOfPreprocessings = " AS "+ i.getFieldValue('function')+"("+i.getField("textA").text_+","+i.getField("textB").text_+")";
 	              	}
 
@@ -142,29 +142,6 @@ export default {
 		    
 	      }
 	    },
-	    addFieldsForPreprFunction(i){
-	    	let strOfPreprocessingsChanged = false;
-	      	// if prepr function - replace or regexreplace
-	        if(i.type !== 'sourceproperty' && (i.getField("function").getDisplayText_() === 'replace' 
-	        	|| i.getField("function").getDisplayText_() ==='regexreplace')){
-	      	  //add two input fields
-	      	  if(!i.getField("textA")){
-	          	  var textinput1 = new Blockly.FieldTextInput('A');
-	          	  var textinput2 = new Blockly.FieldTextInput('B');
-	          	  i.getInput("NAME").appendField(textinput1, 'textA');
-	          	  i.getInput("NAME").appendField(textinput2, 'textB');
-	          }
-	          strOfPreprocessingsChanged = true;
-	          
-	        } else {
-	        	if(i.getField("textA")){
-	        		i.getInput("NAME").removeField('textA');
-	          		i.getInput("NAME").removeField('textB');
-	          	}
-	          	strOfPreprocessingsChanged = false;
-	        }
-	        return strOfPreprocessingsChanged;
-	    },
 	    getPropPath(i){
 			let propPath = '';
 			let curBlock = i;
@@ -208,7 +185,7 @@ export default {
 	      	let propertyForXml = "";
 	      	do{		
 				//check next level
-				let changedPrepr = this.addFieldsForPreprFunction(curBlock);
+				let changedPrepr = curBlock.getField("textA");
 				
               	if(changedPrepr){
               		strOfPreprocessings += curBlock.getFieldValue('function')+"("+curBlock.getField("textA").text_+","+curBlock.getField("textB").text_+")->";
