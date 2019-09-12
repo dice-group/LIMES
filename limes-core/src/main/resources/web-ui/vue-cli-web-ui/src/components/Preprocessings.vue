@@ -18,14 +18,6 @@ export default {
 
 	      if(i.getChildren().length && i.type.indexOf('preprocessing')!== -1)
 	      
-	      /*&& i.getChildren()
-	      .filter(b => b.type === "propertyPath" 
-	      || b.type === "sourceproperty" 
-	      || b.type === "targetproperty" 
-	      || b.type === "optionalsourceproperty" 
-	      || b.type === "optionaltargetproperty"	      
-	      || b.type === "emptyBlock").length === 0)*/
-	      
 	      {
 	        if(!this.$store.state.notConnectedToStart){
 	          i.setDisabled(false);
@@ -59,16 +51,18 @@ export default {
 	              if(child.type === "preprocessingfunction"){
 	                this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
 	              } else {
-	                let defaultRenameText = child.getFieldValue("propTitle").split(":")[1].toUpperCase();
-	                if(i.getField("RENAME").getDisplayText_() === "X" || i.getField("RENAME").getDisplayText_().trim() === ''){
-	                  i.getField("RENAME").setText(defaultRenameText); 
-	                }
+	                let defaultRenameText = child.getFieldValue("propTitle") && child.getFieldValue("propTitle").split(":")[1].toUpperCase();
+	                i.getField("RENAME").setText(defaultRenameText); 
+
 
 	                let renameText = i.getField("RENAME").getDisplayText_();                 
 	                if(renameText !== defaultRenameText){
 	                  i.getField("RENAME").setText(renameText); 
 	                }
-	                let isCleared = this.clearPropertyPath(child);
+	                let isCleared = true;
+	                if(child.getChildren()[0] && child.getChildren()[0].type === "propertyPath"){
+	                	isCleared = this.clearPropertyPath(child);
+	                }
 	                //without PP
 	                if(isCleared){
 						let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
@@ -90,13 +84,13 @@ export default {
 	                this.addChainOfPreprocessings(i, null);
 	              } else {
 
-	              	if(i.getField("complexfunction").getDisplayText_() ==='Concat'){
+	              	if(i.getField("complexfunction") && i.getField("complexfunction").getDisplayText_() ==='Concat'){
 	              		this.complexFunctionHandler('concat', i); 		
 	              	} else
-					if(i.getField("complexfunction").getDisplayText_() ==='Split'){
+					if(i.getField("complexfunction") && i.getField("complexfunction").getDisplayText_() ==='Split'){
 	              		this.complexFunctionHandler('split', i);	
 	              	} else
-					if(i.getField("complexfunction").getDisplayText_() ==='ToWktPoint'){
+					if(i.getField("complexfunction") && i.getField("complexfunction").getDisplayText_() ==='ToWktPoint'){
 	              		this.complexFunctionHandler('toWktPoint', i);	
 	              	} else
 	              	{
@@ -106,28 +100,26 @@ export default {
 		              	if(i.getField("textA")){
 		              		strOfPreprocessings = " AS "+ i.getFieldValue('function')+"("+i.getField("textA").text_+","+i.getField("textB").text_+")";
 		              	}
-
-		              	let isCleared = this.clearPropertyPath(child);
+		              	
+		              	let isCleared = true;
+		              	if(child.getChildren()[0] && child.getChildren()[0].type === "propertyPath"){
+		              		isCleared = this.clearPropertyPath(child);
+		              	}
 						//without PP
-
-						//if(isCleared){	
+						if(isCleared){	
 							let strForXml = child.getFieldValue("propTitle");
 							//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
 							strForXml += strOfPreprocessings;
 							this.addProperies(child,strForXml);
-						//}
+						}
 		                //with PP
-						//else 
+						else 
 						if(!isCleared && child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
 
-							if(!isCleared){
-
-								//let 
-								strForXml = child.getFieldValue("propTitle");
-								let propPath = this.getPropPath(child);
-								//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
-								this.addProperies(child,strForXml + propPath + strOfPreprocessings);
-							}
+							let strForXml = child.getFieldValue("propTitle");
+							let propPath = this.getPropPath(child);
+							//let strOfPreprocessings = " AS "+ i.getFieldValue('function');
+							this.addProperies(child,strForXml + propPath + strOfPreprocessings);
 						}
 					}
 	              }
@@ -231,14 +223,18 @@ export default {
 	      //add fields to prepr functions if needed
 	      	let curBlock = i;
 	      	let strOfPreprocessings = " AS ";
+	      	let renameStr = "";
 	      	let propertyForXml = "";
 	      	do{		
 				//check next level
 				let changedPrepr = curBlock.getField("textA");
-				
               	if(changedPrepr){
               		strOfPreprocessings += curBlock.getFieldValue('function')+"("+curBlock.getField("textA").text_+","+curBlock.getField("textB").text_+")->";
-              	} else {
+              	} else 
+              	if(curBlock.type === "renamepreprocessingfunction"){
+              		renameStr = " RENAME " + curBlock.getField("RENAME").getDisplayText_();
+              	}
+              	else{
               		strOfPreprocessings +=  curBlock.getFieldValue('function') + "->";
               	}
 
@@ -247,8 +243,8 @@ export default {
 					propertyForXml = curBlock.getFieldValue("propTitle");
 				}
 				
-			} while (curBlock.getChildren()[0].type.indexOf('sourceproperty') !== -1
-				|| curBlock.getChildren()[0].type.indexOf('targetproperty') !== -1);
+			} while (curBlock.getChildren()[0] && (curBlock.getChildren()[0].type.indexOf('sourceproperty') !== -1
+				|| curBlock.getChildren()[0].type.indexOf('targetproperty') !== -1));
 			strOfPreprocessings = strOfPreprocessings.slice(0,-2);
 
 			//with property path
@@ -265,7 +261,7 @@ export default {
 				} while (curPropBlock.type.indexOf('emptyBlock') !== -1);
 			}
 			
-			this.addProperies(curBlock,propertyForXml + strOfPreprocessings);
+			this.addProperies(curBlock,propertyForXml + strOfPreprocessings+renameStr);
 			  
 	    }
 	}

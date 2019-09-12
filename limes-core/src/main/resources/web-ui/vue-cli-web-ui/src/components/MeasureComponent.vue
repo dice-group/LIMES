@@ -70,15 +70,17 @@ export default {
 	      	targetProperty = this.$store.state.target.function;
 	      }
 	      if(sourceProperty){
+	      	let srdP = sourceProperty;
 			  sourceProperty = sourceProperty.split("AS")[0].trim();
-			  if(sourceProperty.indexOf("RENAME") !== -1){
-				 sourceProperty = sourceProperty.split("RENAME")[1].trim(); 
+			  if(srdP.indexOf("RENAME") !== -1){
+				 sourceProperty = srdP.split("RENAME")[1].trim(); 
 			  }
 		  }
 		  if(targetProperty){
+		  	let tgtP = targetProperty;
 			  targetProperty = targetProperty.split("AS")[0].trim();
-			  if(targetProperty.indexOf("RENAME") !== -1){
-				targetProperty = targetProperty.split("RENAME")[1].trim();
+			  if(tgtP.indexOf("RENAME") !== -1){
+				targetProperty = tgtP.split("RENAME")[1].trim();
 			  }
 		  }
 	      
