@@ -49,6 +49,7 @@ const store = new Vuex.Store({
 	        optionalProperties: [],//['rdfs:label'],
 	        propertiesForChoice: ["a","b","c"],
 	        allProperties: [],
+            renameName: "",
 	      },
 	    target: {
 	        id: 'targetId',
@@ -63,6 +64,7 @@ const store = new Vuex.Store({
 	        optionalProperties: [],//['rdf:type'],
 	        propertiesForChoice: ["a","b","c"],
 	        allProperties: [],
+            renameName: "",
 	      },
         context: {},
         Workspace: null,
@@ -86,6 +88,12 @@ const store = new Vuex.Store({
         },
         changeTarget (state, obj) {
             state.target = obj;
+        },
+        changeSourceRenameName (state, str) {
+            state.source.renameName = str;
+        },
+        changeTargetRenameName (state, str) {
+            state.target.renameName = str;
         },
         changeSourceFunction (state, str) {
             state.source.function = str;

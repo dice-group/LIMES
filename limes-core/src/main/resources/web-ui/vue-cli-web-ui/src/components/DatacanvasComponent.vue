@@ -139,6 +139,10 @@ export default {
                         if(this.getField("RENAME2")){
                           this.getInput("params").removeField('RENAME2');
                         }
+                        if(this.getField("enable_A")){
+                          this.getInput("params").removeField('enable_A');
+                          this.getInput("params").removeField('enable_B');
+                        }
                       }
                       else if(this.getField("complexfunction").getDisplayText_() ==='Split'){
                            if(this.getInput('Prop2')){
@@ -161,6 +165,21 @@ export default {
                              this.getInput("params")
                            .appendField(new Blockly.FieldTextInput('B'), "RENAME2");
                             }
+                          if(!this.getField("enable_A")){
+                            this.getInput("params").insertFieldAt(2, new Blockly.FieldCheckbox(false), "enable_A");
+                            this.getInput("params").insertFieldAt(4, new Blockly.FieldCheckbox(false), "enable_B");
+                          }
+   
+                          if(this.getField("enable_B").getValue().toLowerCase() === 'true' && this.getField("enable_A").getValue().toLowerCase() === 'true'){
+                            let name = "";
+                            if(event.name === "enable_A"){
+                              name = "enable_B";
+                            } else {
+                              name = "enable_A";
+                            }
+                            this.getField(name).setValue('false');
+                          }
+
                       }
                       else if(this.getField("complexfunction").getDisplayText_() ==='ToWktPoint'){
                            if(!this.getInput('Prop2')){
@@ -179,6 +198,10 @@ export default {
                            if(this.getField("RENAME2")){
                              this.getInput("params").removeField('RENAME2');
                            }
+                          if(this.getField("enable_A")){
+                            this.getInput("params").removeField('enable_A');
+                            this.getInput("params").removeField('enable_B');
+                          }
                     }
                 }
               },              

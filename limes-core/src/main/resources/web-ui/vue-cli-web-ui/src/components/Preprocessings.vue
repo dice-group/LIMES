@@ -155,6 +155,7 @@ export default {
       		let prop2 = prblock2 ? prblock2.getFieldValue("propTitle") : null;
       		let func = '';
       		let glue = ',';
+      		let renameValue = "";
       		if(i.getField("glue_text")){
       			glue = i.getFieldValue("glue_text");
       		}
@@ -164,7 +165,13 @@ export default {
       			func = functionName+"("+prop1+", "+prop2+', glue="'+glue+'") RENAME '+ i.getFieldValue("RENAME1");
       		} else if(functionName === "split"){
       			//split(property, splitChar=",") RENAME prop1,prop2
-      			func = functionName+"("+prop1+', splitChar="'+glue+'") RENAME '+ i.getFieldValue("RENAME1")+","+ i.getFieldValue("RENAME2");
+      			if(i.getField("enable_A") && i.getField("enable_A").getValue().toLowerCase() === 'true'){
+      				renameValue = i.getFieldValue("RENAME1");
+      			} else {
+      				renameValue = i.getFieldValue("RENAME2");
+      			}
+
+      			func = functionName+"("+prop1+', splitChar="'+glue+'") RENAME '+ i.getFieldValue("RENAME1") +","+ i.getFieldValue("RENAME2");
       		}else if(functionName === "toWktPoint"){
 				//toWktPoint(property1, property2) RENAME wktPoint
 				func = functionName+"("+prop1+", "+prop2+") RENAME "+ i.getFieldValue("RENAME1");
@@ -172,8 +179,14 @@ export default {
 
       		if(prblock1 && prblock1.type.indexOf("source") !== -1){
       			this.$store.commit('changeSourceFunction', func);
+      			if(renameValue && renameValue.length){
+      				this.$store.commit('changeSourceRenameName', renameValue);
+      			}
       		} else if(prblock1 && prblock1.type.indexOf("target") !== -1){
       			this.$store.commit('changeTargetFunction', func);
+      			if(renameValue && renameValue.length){
+      				this.$store.commit('changeTargetRenameName', renameValue);
+      			}
       		}
       		if(prblock1){
       			this.addProperies(prblock1, prop1);

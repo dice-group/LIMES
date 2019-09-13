@@ -74,6 +74,9 @@ export default {
 			  sourceProperty = sourceProperty.split("AS")[0].trim();
 			  if(srdP.indexOf("RENAME") !== -1){
 				 sourceProperty = srdP.split("RENAME")[1].trim(); 
+				 if(this.$store.state.source.renameName.length){
+				 	sourceProperty = this.$store.state.source.renameName;
+				 }
 			  }
 		  }
 		  if(targetProperty){
@@ -81,6 +84,9 @@ export default {
 			  targetProperty = targetProperty.split("AS")[0].trim();
 			  if(tgtP.indexOf("RENAME") !== -1){
 				targetProperty = tgtP.split("RENAME")[1].trim();
+				if(this.$store.state.target.renameName.length){
+				 	targetProperty = this.$store.state.target.renameName;
+				}
 			  }
 		  }
 	      

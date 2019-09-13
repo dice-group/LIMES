@@ -262,7 +262,7 @@ var RenamePreprocessingFunction = {
 
 var ComplexPreprocessingFunction = {
   "type": "complexpreprocessingfunction",
-  "message0": "%1 %2 %3 %4 %5 Rename %6 %7 %8",
+  "message0": "%1 %2 %3 %4 %5 Rename %6 %7 %8 %9 %10",
   "args0": [
     {
       "type": "field_dropdown",
@@ -313,9 +313,19 @@ var ComplexPreprocessingFunction = {
       "text": ","
     },
     {
+      "type": "field_checkbox",
+      "name": "enable_A",
+      "checked": true
+    },
+    {
       "type": "field_input",
       "name": "RENAME1",
       "text": "A"
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_B",
+      "checked": false
     },
     {
       "type": "field_input",
