@@ -525,9 +525,7 @@ public class MLSemantics {
                         logger.warn("Instance " + t + " not exist in the target dataset");
                     }
                 }
-            } else {
-                logger.warn("Instance " + s + " not exist in the source dataset");
-            }
+            } 
         }
         return Lists.newArrayList(sourceTestCache, targetTestCache);
     }
