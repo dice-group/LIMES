@@ -7,9 +7,6 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
@@ -28,7 +25,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
@@ -40,7 +36,6 @@ import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.GlobalFMeasurePruning;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
@@ -63,15 +58,15 @@ import java.util.Map.Entry;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  */
 
-public class SemanticsWombat {
+public class MLSemantics {
     /**
      *
      */
-    private static final Logger logger = Logger.getLogger(SemanticsWombat.class);
+    private static final Logger logger = Logger.getLogger(MLSemantics.class);
 
     public AMapping fullReferenceMapping;
     public String mlAlgorithm = null;
-    public int fold = 1;
+    public int iteration = 1;
     public String datasetName;
     public String resultsFileTest = null;
     public String resultsFileTraining = null;
@@ -81,26 +76,29 @@ public class SemanticsWombat {
     public CSVWriter csvWriterTrain = null;
     public int experiment = 0;
     public List<AMapping> debugMappings = null;
-    //public int f = 0;
+    public AMapping positives = null;
+    public AMapping negatives = null;
+    public AMapping together = null;
+    // public int f = 0;
 
     public void init(String[] args) {
 
         datasetName = args[0];
         experiment = Integer.valueOf(args[1]);
         mlAlgorithm = args[2];
-        //f = Integer.valueOf(args[3]);
+        // f = Integer.valueOf(args[3]);
 
         data = DataSetChooser.getData(datasetName);
 
-        resultsFileTest = data.getDatasetFolder() + "Test" + experiment + mlAlgorithm 
+        resultsFileTest = data.getDatasetFolder() + "Test" + experiment + mlAlgorithm + "7extra"
                 + data.getEvaluationResultFileName();
-        resultsFileTraining = data.getDatasetFolder() + "Training" + experiment + mlAlgorithm 
+        resultsFileTraining = data.getDatasetFolder() + "Training" + experiment + mlAlgorithm + "7extra"
                 + data.getEvaluationResultFileName();
 
         createResultsFile(resultsFileTest, csvWriterTest);
         createResultsFile(resultsFileTraining, csvWriterTrain);
 
-        mappingFolder = new File(data.getDatasetFolder() + "Mappings/");
+        mappingFolder = new File(data.getDatasetFolder() + "Mappings7extra/");
         if (!mappingFolder.exists()) {
             logger.info("creating directory: " + mappingFolder.getName());
             boolean result = false;
@@ -248,55 +246,9 @@ public class SemanticsWombat {
                     new String[] { Dragon.PRUNING_NAME_ERROR_ESTIMATE_PRUNING, Dragon.PRUNING_NAME_GLOBAL_FMEASURE },
                     Dragon.PARAMETER_FITNESS_FUNCTION));
 
-            Set<String> dragonMeasures = new HashSet<>(Arrays.asList(""));
-
             learningParameters.add(new LearningParameter(Dragon.PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class,
                     0, 0, 0, Dragon.PARAMETER_ATOMIC_MEASURES));
-        } /*
-           * else if (mlAlgorithm.equalsIgnoreCase("eagle")) {
-           * learningParameters.add(new LearningParameter(Eagle.GENERATIONS,
-           * 100, Integer.class, 1, Integer.MAX_VALUE, 1, Eagle.GENERATIONS));
-           * learningParameters.add(new
-           * LearningParameter(Eagle.PRESERVE_FITTEST, true, Boolean.class,
-           * Double.NaN, Double.NaN, Double.NaN, Eagle.PRESERVE_FITTEST));
-           * learningParameters.add(new LearningParameter(Eagle.MAX_DURATION,
-           * 60, Long.class, 0, Long.MAX_VALUE, 1, Eagle.MAX_DURATION));
-           * learningParameters.add(new LearningParameter(Eagle.INQUIRY_SIZE,
-           * 10, Integer.class, 1, Integer.MAX_VALUE, 1, Eagle.INQUIRY_SIZE));
-           * learningParameters.add(new LearningParameter(Eagle.MAX_ITERATIONS,
-           * 500, Integer.class, 1, Integer.MAX_VALUE, 1,
-           * Eagle.MAX_ITERATIONS)); learningParameters.add( new
-           * LearningParameter(Eagle.MAX_QUALITY, 0.5, Double.class, 0d, 1d,
-           * Double.NaN, Eagle.MAX_QUALITY)); learningParameters.add(new
-           * LearningParameter(Eagle.TERMINATION_CRITERIA,
-           * TerminationCriteria.iteration, TerminationCriteria.class,
-           * Double.NaN, Double.NaN, Double.NaN, Eagle.TERMINATION_CRITERIA));
-           * learningParameters.add(new
-           * LearningParameter(Eagle.TERMINATION_CRITERIA_VALUE, 0.0,
-           * Double.class, 0d, Double.MAX_VALUE, Double.NaN,
-           * Eagle.TERMINATION_CRITERIA_VALUE)); learningParameters .add(new
-           * LearningParameter(Eagle.BETA, 1.0, Double.class, 0d, 1d,
-           * Double.NaN, Eagle.BETA)); learningParameters.add(new
-           * LearningParameter(Eagle.POPULATION, 20, Integer.class, 1,
-           * Integer.MAX_VALUE, 1, Eagle.POPULATION));
-           * learningParameters.add(new LearningParameter(Eagle.MUTATION_RATE,
-           * 0.6f, Float.class, 0f, 1f, Double.NaN, Eagle.MUTATION_RATE));
-           * learningParameters.add(new
-           * LearningParameter(Eagle.REPRODUCTION_RATE, 0.4f, Float.class, 0f,
-           * 1f, Double.NaN, Eagle.REPRODUCTION_RATE));
-           * learningParameters.add(new LearningParameter(Eagle.CROSSOVER_RATE,
-           * 0.6f, Float.class, 0f, 1f, Double.NaN, Eagle.CROSSOVER_RATE));
-           * learningParameters.add(new LearningParameter(Eagle.MEASURE, new
-           * FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN,
-           * Double.NaN, Eagle.MEASURE)); learningParameters.add(new
-           * LearningParameter(Eagle.PSEUDO_FMEASURE, new PseudoFMeasure(),
-           * IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN,
-           * Eagle.MEASURE)); learningParameters.add(new
-           * LearningParameter(Eagle.PROPERTY_MAPPING,
-           * data.getPropertyMapping(), PropertyMapping.class, Double.NaN,
-           * Double.NaN, Double.NaN, Eagle.PROPERTY_MAPPING)); }
-           */
-
+        }
         return learningParameters;
     }
 
@@ -332,6 +284,10 @@ public class SemanticsWombat {
                 + (data.getSourceCache().getAllInstances().size() * data.getTargetCache().getAllInstances().size())
                 + " positives: " + posSize + " negatives: " + negSize + " together: " + (posSize + negSize));
 
+        
+        createMappingFile(data.getDatasetFolder() + "Mappings7extra/positives.tsv", fullReferenceMapping, 1.0d);
+        createMappingFile(data.getDatasetFolder() + "Mappings7extra/negatives.tsv", negativeExamples, 0.0d);
+
         // positive subsets
         List<AMapping> positiveSubsets = generateEvaluationSets(fullReferenceMapping, posSize);
         int totalP = 0;
@@ -339,7 +295,7 @@ public class SemanticsWombat {
             AMapping mapping = positiveSubsets.get(i);
             logger.info(i + " size: " + mapping.size());
             totalP += mapping.size();
-            createMappingFile(data.getDatasetFolder() + "Mappings/mapping" + i + ".tsv", mapping, 1.0d);
+            createMappingFile(data.getDatasetFolder() + "Mappings7extra/mapping" + i + ".tsv", mapping, 1.0d);
         }
         logger.info("Total positive: " + totalP);
         // negative subsets
@@ -349,17 +305,17 @@ public class SemanticsWombat {
             AMapping mapping = negativeSubsets.get(i);
             logger.info(i + " size: " + mapping.size());
             totalN += mapping.size();
-            createMappingFile(data.getDatasetFolder() + "Mappings/mapping" + i + ".tsv", mapping, 0.0d);
+            createMappingFile(data.getDatasetFolder() + "Mappings7extra/mapping" + i + ".tsv", mapping, 0.0d);
         }
         logger.info("Total negative: " + totalN);
 
     }
 
     public List<AMapping> loadMappings() {
-        List<AMapping> subSets = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) {
+        List<AMapping> subSets = new ArrayList<>(7);
+        for (int i = 0; i < 7; i++) {
             AMapping mapping = MappingFactory.createDefaultMapping();
-            String file = data.getDatasetFolder() + "Mappings/mapping" + i + ".tsv";
+            String file = data.getDatasetFolder() + "Mappings7extra/mapping" + i + ".tsv";
             String line = "";
             String cvsSplitBy = "\t";
 
@@ -391,6 +347,66 @@ public class SemanticsWombat {
             subSets.add(mapping);
         }
 
+        String filePositives = data.getDatasetFolder() + "Mappings7extra/positives.tsv";
+        positives = MappingFactory.createDefaultMapping();
+        String line = "";
+        String cvsSplitBy = "\t";
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(filePositives);
+            br = new BufferedReader(fr);
+            while ((line = br.readLine()) != null) {
+                // use comma as separator
+                String[] m = line.split(cvsSplitBy);
+                positives.add(m[0], m[1], Double.valueOf(m[2]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+                if (fr != null)
+                    fr.close();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        negatives = MappingFactory.createDefaultMapping();
+        if (!mlAlgorithm.equals("wombat simple")) {
+            String fileNegatives = data.getDatasetFolder() + "Mappings7extra/negatives.tsv";
+            
+            line = "";
+            cvsSplitBy = "\t";
+            br = null;
+            fr = null;
+            try {
+                fr = new FileReader(fileNegatives);
+                br = new BufferedReader(fr);
+                while ((line = br.readLine()) != null) {
+                    // use comma as separator
+                    String[] m = line.split(cvsSplitBy);
+                    negatives.add(m[0], m[1], Double.valueOf(m[2]));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (br != null)
+                        br.close();
+                    if (fr != null)
+                        fr.close();
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        together = MappingOperations.union(positives, negatives);
+
         return subSets;
     }
 
@@ -416,7 +432,7 @@ public class SemanticsWombat {
     }
 
     public static void main(String[] args) throws UnsupportedMLImplementationException {
-        SemanticsWombat controller = new SemanticsWombat();
+        MLSemantics controller = new MLSemantics();
         controller.run(args);
     }
 
@@ -433,7 +449,7 @@ public class SemanticsWombat {
         fullReferenceMapping = removeLinksWithNoInstances(data.getReferenceMapping(), fullSourceCache, fullTargetCache);
 
         if (args.length == 4 && args[3].equals("init")) {
-            // create and save mappings for 10 fold cross validation
+            // create and save mappings
             saveMappings();
 
         } else if (args.length == 4 && args[3].equals("debug")) {
@@ -442,14 +458,17 @@ public class SemanticsWombat {
             List<AMapping> subSets = loadMappings();
             // load all mappings
             // but change the iteration
-            for (int i = 4; i <= 4; i++) {
-                fold = i + 1;
-                logger.info("Fold: " + fold);
-                AMapping testSet = subSets.get(i);
-                testSet.getReversedMap();
-                AMapping trainingSet = getLearningPool(subSets, i);// training
-                                                                   // set
+            for (int i = 0; i < 7; i++) {
+                iteration = i + 1;
+                logger.info("Iteration: " + iteration);
+                // training with only 2%
+                AMapping trainingSet = subSets.get(i);
                 trainingSet.getReversedMap();
+
+                // testing on the remaining 98%
+                AMapping testSet = getLearningPool(trainingSet);
+                testSet.getReversedMap();
+
                 fullReferenceMapping = trainingSet;
                 // give this to wombat
                 List<ACache> trainingCaches = reduceCaches(trainingSet, fullSourceCache, fullTargetCache);
@@ -478,7 +497,7 @@ public class SemanticsWombat {
                 AMapping predictions = executeLinkSpecs(mlResults.getLinkSpecification(), testingCaches.get(0),
                         testingCaches.get(1));
                 long runtime = stopWatch.getTime();
-                logger.info("Mapping size: " + mlResults.getMapping());
+                //logger.info("Mapping size: " + mlResults.getMapping());
                 // evaluate
                 // compare results from limes to test set
                 logger.info("Evaluating results");
@@ -617,24 +636,28 @@ public class SemanticsWombat {
 
     private List<AMapping> generateEvaluationSets(AMapping referenceMap, int totalSize) {
 
-        int fraction = (int) (totalSize * 0.1d);
+        int fraction = (int) (totalSize * 0.02d);
+        logger.info("Number of sub-results: " + fraction);
         AMapping localRef = referenceMap.getSubMap(0.0d);
-        List<AMapping> result = new ArrayList<>(10);
+        List<AMapping> result = new ArrayList<>(7);
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 7; i++) {
             AMapping subSet = sampleReferenceMap(localRef, fraction);
             result.add(subSet);
             localRef = MappingOperations.difference(localRef, subSet);
         }
-        result.add(localRef);
+        
         return result;
     }
 
-    private AMapping getLearningPool(List<AMapping> subSets, int evaluationIndex) {
+    public AMapping getLearningPool(AMapping trainingSet) {
         AMapping result = MappingFactory.createDefaultMapping();
-        for (int i = 0; i < 10; i++) {
-            if (i != evaluationIndex) {
-                result = MappingOperations.union(result, subSets.get(i));
+
+        for (String key : together.getMap().keySet()) {
+            for (String value : together.getMap().get(key).keySet()) {
+                if (!trainingSet.contains(key, value)) {
+                    result.add(key, value, together.getMap().get(key).get(value));
+                }
             }
         }
         return result;

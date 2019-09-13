@@ -67,11 +67,12 @@ public class SemanticsString {
         targetV = cR.getConfiguration().getTargetInfo().getVar();
 
         String tempName = "-" + measure + "-" + iteration  + "-" + no;
-        resultsFile = System.getProperty("user.dir") + "/"
+        resultsFile = System.getProperty("user.dir") + "/src/main/resources/"
                 + cR.getConfiguration().getSourceInfo().getEndpoint().substring(0,
                         cR.getConfiguration().getSourceInfo().getEndpoint().lastIndexOf("/"))
                 + "/" + "Runtimes" + tempName + ".csv";
         // create file if it doesn't exist
+        logger.info(resultsFile);
         File f = new File(resultsFile);
         if (!f.exists()) {
             try {
