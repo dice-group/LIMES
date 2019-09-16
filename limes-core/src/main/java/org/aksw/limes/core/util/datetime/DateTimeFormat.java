@@ -58,11 +58,11 @@ public enum DateTimeFormat {
 
         for (DateTimeFormat pat : DateTimeFormat.values()) {
             try {
-                
+                System.out.println("Before: " + date);
                 df = new SimpleDateFormat(pat.getPattern());
                 // exception -> date remains null
                 date = df.parse(timeStamp);
-                
+                System.out.println("After: " + date.toString());
                 // no exception -> date gets a value
                 if (date != null)
                     break;
