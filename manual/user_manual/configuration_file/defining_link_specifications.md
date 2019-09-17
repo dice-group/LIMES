@@ -237,27 +237,7 @@ where beginDate1 and beginDate2 are properties of the source and target KB respe
 indicate the begin of a temporal event instance and endDate1 and endDate2 are properties of the source
 and target KB respectively, whose values indicate the end of a temporal event instance.
 Both begin and end properties for both source and target MUST be included in an atomic LS whose
-measure is temporal. The allowed date and time formats are: 
-* `yyyy-MM-dd'T'HH:mm:ss.SSSXXX` e.g. `2015-05-20T08:21:04.123Z` or `2015-05-20T08:21:04.12Z` 
-* `yyyy-MM-dd'T'HH:mm:ss.SSS` e.g. `2015-05-20T08:21:04.123` or `2015-05-20T08:21:04.12` or `2015-05-20T08:21:04.1`
-* `yyyy-MM-dd'T'HH:mm:ssXXX` e.g. `2015-05-20T08:21:04Z` or `2015-05-20T08:21:04+02:00`
-* `yyyy-MM-dd'T'HH:mm:ss` e.g. `2015-05-20T08:21:04`
-* `yyyy-MM-dd'T'HH:mmXXX` e.g. `2015-05-20T08:21Z` or `2015-05-20T08:21+02:00`
-* `yyyy-MM-dd'T'HH:mm` e.g. `2015-05-20T08:21` or `2015-05-20T08:21:00`
-* `yyyy-MM-dd` e.g. `2015-05-20`
-* `yyyy-MM` e.g. `2015-05`
-* `yyyy` e.g. `2015`
-
-where:
-
-* yyyy = four-digit year
-* MM = two-digit month (01=January, etc.)
-* dd = two-digit day of month (01 through 31)
-* hh   = two digits of hour (00 through 23) (am/pm NOT allowed)
-* mm   = two digits of minute (00 through 59)
-* ss   = two digits of second (00 through 59)
-* SSS  = one, two or three digits representing a decimal fraction of a second. 
-* XXX = time zone designator (Z or +hh:mm or -hh:mm)
+measure is temporal. Also, the acceptable values for all properties are in the format: `2015-04-22T11:29:51+02:00`.
 
 
 ### Resource-Set Measures

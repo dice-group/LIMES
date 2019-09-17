@@ -13,7 +13,6 @@ import java.util.TreeSet;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.util.datetime.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,24 +81,6 @@ public abstract class AAtomicAllenAlgebraMapper {
     }
 
     /**
-     * Returns the epoch value of an input time stamp
-     * 
-     * 
-     * @param timeStamp,
-     *            the time stamp
-     * 
-     * @return the epoch value of the corresponding time stamp
-     */
-    protected static long getEpoch(String timeStamp) {
-
-        Date date = DateTimeFormat.getDate(timeStamp);
-        long epoch = date.getTime();
-
-        return epoch;
-
-    }
-
-    /**
      * Orders a cache of instances based on their begin date property. For each
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
@@ -112,7 +93,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      *            The metric expression
      * @param kbType,
      *            source or target
-     * 
+     *            
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
@@ -129,15 +110,20 @@ public abstract class AAtomicAllenAlgebraMapper {
             TreeSet<String> time = instance.getProperty(property);
 
             for (String value : time) {
-                // 2015-04-22T11:29:51+02:00
-                Date date = DateTimeFormat.getDate(value);
-                long epoch = date.getTime();
-                if (!blocks.containsKey(epoch)) {
-                    Set<String> l = new HashSet<String>();
-                    l.add(instance.getUri());
-                    blocks.put(epoch, l);
-                } else {
-                    blocks.get(epoch).add(instance.getUri());
+                try {
+                    // 2015-04-22T11:29:51+02:00
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                    Date date = df.parse(value);
+                    long epoch = date.getTime();
+                    if (!blocks.containsKey(epoch)) {
+                        Set<String> l = new HashSet<String>();
+                        l.add(instance.getUri());
+                        blocks.put(epoch, l);
+                    } else {
+                        blocks.get(epoch).add(instance.getUri());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -160,7 +146,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      *            The metric expression
      * @param kbType,
      *            source or target
-     * 
+     *            
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
