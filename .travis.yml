@@ -4,7 +4,7 @@ services:
   - xvfb
 language: java
 jdk:
-  - openjdk9
+  - openjdk12
 
 # build limes
 install:
