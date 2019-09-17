@@ -8,7 +8,7 @@ jdk:
 
 # build limes
 install:
-  - mvn install -U -Dmaven.test.skip=true
+  - mvn install -U -Dmaven.test.skip=true 2>&1 >/dev/null
 
 # execute tests
 script:
@@ -16,7 +16,7 @@ script:
 
 # deploy gitbook after success
 after_success:
-  - npm install -g gitbook-cli
+  - npm install -g gitbook-cli 2>&1 >/dev/null
   - bash ./gh-deploy.sh
 
 # disable emails, enable slack push
