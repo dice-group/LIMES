@@ -72,5 +72,10 @@
             <artifactId>openjfx-monocle</artifactId>
             <version>1.8.0_20</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11-ea+19</version>
+        </dependency>
     </dependencies>
 </project>
