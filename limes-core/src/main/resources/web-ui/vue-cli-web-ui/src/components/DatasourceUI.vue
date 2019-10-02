@@ -77,12 +77,18 @@ export default {
     }
   },
   mounted(){
-	this.$store.watch(this.$store.getters.checkboxEndpoint, n => {
+	this.$store.watch(this.$store.getters.checkboxEndpointS, n => {
       if(!n){
 		this.classes.splice(0);
 		this.afterFilteredClasses.splice(0);
       }
     });  
+  this.$store.watch(this.$store.getters.checkboxEndpointT, n => {
+      if(!n){
+    this.classes.splice(0);
+    this.afterFilteredClasses.splice(0);
+      }
+    }); 
   },
   methods:{
     getPrefix(urlValue){

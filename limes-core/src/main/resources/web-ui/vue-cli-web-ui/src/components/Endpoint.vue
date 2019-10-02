@@ -157,7 +157,12 @@ export default {
 	},
 	changeCheckboxEndpoint(){	
 		this.checkboxEndpointAsFile = !this.checkboxEndpointAsFile
-		this.$store.commit('changeCheckboxEndpointAsFile', this.checkboxEndpointAsFile);
+    if(this.source.id === "sourceId"){
+		  this.$store.commit('changeCheckboxEndpointAsFileS', this.checkboxEndpointAsFile);
+    }
+    if(this.source.id === "targetId"){
+      this.$store.commit('changeCheckboxEndpointAsFileT', this.checkboxEndpointAsFile);
+    }
 		if(!this.checkboxEndpointAsFile){
 			this.source.endpoint = '';
 			this.endpointFile = '';

@@ -95,11 +95,16 @@ export default {
     }
   },
   mounted(){
-	this.$store.watch(this.$store.getters.checkboxEndpoint, n => {
+	this.$store.watch(this.$store.getters.checkboxEndpointS, n => {
       if(!n){
 		this.classVar = '';
       }
     });  
+    this.$store.watch(this.$store.getters.checkboxEndpointT, n => {
+      if(!n){
+    this.classVar = '';
+      }
+    });
   },
   methods: {
     onClassFocus() {
@@ -114,12 +119,14 @@ export default {
       this.classVar = option;
       //this.$emit('toggle-classVar', option);
       this.source.propertiesForChoice.splice(0);
-      this.fetchProperties(this.source.endpoint, option, this.$store.state.checkboxEndpointAsFile);
+      let checkedFile = this.source.id === "sourceId" ? this.$store.state.checkboxEndpointAsFileS : this.$store.state.checkboxEndpointAsFileT;
+      this.fetchProperties(this.source.endpoint, option, checkedFile);
       this.changeRestrictions(option);
     },
     enterClassClicked(){
       this.source.propertiesForChoice.splice(0);
-      this.fetchProperties(this.source.endpoint, this.classVar, this.$store.state.checkboxEndpointAsFile);
+      let checkedFile = this.source.id === "sourceId" ? this.$store.state.checkboxEndpointAsFileS : this.$store.state.checkboxEndpointAsFileT;
+      this.fetchProperties(this.source.endpoint, this.classVar, checkedFile);
       this.changeRestrictions(this.classVar);
     },
     changeRestrictions(option){

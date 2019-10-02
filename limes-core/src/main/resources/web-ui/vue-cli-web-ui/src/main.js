@@ -71,7 +71,8 @@ const store = new Vuex.Store({
         mainSource: false,
 	    mainTarget: false,
 	    notConnectedToStart: false,
-	    checkboxEndpointAsFile: false,
+        checkboxEndpointAsFileS: false,
+	    checkboxEndpointAsFileT: false,
     },
     getters: {
 	    getSrcProps: state => () => state.source.properties,
@@ -80,7 +81,8 @@ const store = new Vuex.Store({
 	    getOpTgtProps: state => () => state.target.optionalProperties,
 	    getSrcAllProps: state => () => state.source.allProperties,
 	    getTgtAllProps: state => () => state.target.allProperties,
-	    checkboxEndpoint: state => () => state.checkboxEndpointAsFile,
+	    checkboxEndpointS: state => () => state.checkboxEndpointAsFileS,
+        checkboxEndpointT: state => () => state.checkboxEndpointAsFileT,
 	},
     mutations: {
         changeSource (state, obj) {
@@ -149,9 +151,12 @@ const store = new Vuex.Store({
         addOTgtProps (state, str) {
             state.target.optionalProperties.push(str);
         },
-        changeCheckboxEndpointAsFile(state, bool){
-			state.checkboxEndpointAsFile = bool;
+        changeCheckboxEndpointAsFileS(state, bool){
+			state.checkboxEndpointAsFileS = bool;
 		},
+        changeCheckboxEndpointAsFileT(state, bool){
+            state.checkboxEndpointAsFileT = bool;
+        },
     },
 });
 
