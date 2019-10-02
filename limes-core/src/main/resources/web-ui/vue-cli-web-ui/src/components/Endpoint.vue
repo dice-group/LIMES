@@ -29,7 +29,7 @@
               </div>
               
         </div>
-        <md-file v-model="endpointFile" id="endpointFile0" v-on:selected="importEndpointFile()" v-show="checkboxEndpointAsFile"></md-file> 
+        <md-file v-model="endpointFile" id="endpointFile0" v-on:selected="importEndpointFile" v-show="checkboxEndpointAsFile"></md-file> 
       </md-input-container>
 
     </md-layout>
@@ -135,8 +135,8 @@ export default {
         this.$emit('repeat-classes', this.endpointandclasses.classes);
       }
     },
-    importEndpointFile(){
-		var fileToLoad = document.getElementById("endpointFile0").files[0];
+    importEndpointFile(FileList){
+		var fileToLoad = FileList[0];
 		const formData = new FormData();
 
 		formData.append('file', fileToLoad);
