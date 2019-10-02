@@ -1,8 +1,9 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -20,19 +21,18 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionM
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.DoubleMetaphoneMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
-import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
 import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
@@ -89,7 +89,13 @@ public class MeasureFactory {
     public static final String DOUBLEMETA = "doublemeta";
     public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
-
+    public static final String META = "meta";
+    public static final String NYSIIS = "nysiis";
+    public static final String CAVERPHONE1 = "caverphone1";
+    public static final String CAVERPHONE2 = "caverphone2";
+    public static final String REFINEDSOUNDEX = "refinedsoundex";
+    public static final String MATCHRATING = "matchrating";
+    public static final String DAITCHMOKOTOFF = "daitchmokotoff";
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
     public static final String MANHATTAN = "manhattan";
@@ -186,7 +192,6 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-
         if (measure.startsWith(QGRAMS)) {
             return MeasureType.QGRAMS;
         }
@@ -201,6 +206,27 @@ public class MeasureFactory {
         }
         if (measure.startsWith(KOELN)) {
             return MeasureType.KOELN;
+        }
+        if (measure.startsWith(META)) {
+            return MeasureType.META;
+        }
+        if (measure.startsWith(REFINEDSOUNDEX)) {
+            return MeasureType.REFINEDSOUNDEX;
+        }
+        if (measure.startsWith(NYSIIS)) {
+            return MeasureType.NYSIIS;
+        }
+        if (measure.startsWith(MATCHRATING)) {
+            return MeasureType.MATCHRATING;
+        }
+        if (measure.startsWith(CAVERPHONE1)) {
+            return MeasureType.CAVERPHONE1;
+        }
+        if (measure.startsWith(CAVERPHONE2)) {
+            return MeasureType.CAVERPHONE2;
+        }
+        if (measure.startsWith(DAITCHMOKOTOFF)) {
+            return MeasureType.DAITCHMOKOTOFF;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
