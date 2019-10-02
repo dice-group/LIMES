@@ -7,7 +7,10 @@
       </md-input-container>
     </md-layout>
     <md-layout>
-	  <md-checkbox v-model="checkboxEndpointAsFile" class="md-primary" @change="changeCheckboxEndpoint">Endpoint file as input</md-checkbox>	
+    <div>
+      <md-radio v-model="checkboxEndpointAsFile" v-bind:md-value="false" class="md-primary" @change="changeCheckboxEndpoint">Sparql endpoint</md-radio>
+      <md-radio v-model="checkboxEndpointAsFile" v-bind:md-value="true" class="md-primary" @change="changeCheckboxEndpoint">Local file</md-radio>
+    </div>	
       <md-input-container class="dropdown">
         <label>Endpoint</label>
         <md-input v-model="source.endpoint" @keyup.enter.native="enterEndpointClicked"
