@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
@@ -105,6 +102,7 @@ public class SummaryTest {
 
 	@Before
 	public void prepareData() {
+        Locale.setDefault(Locale.US);
 		EvaluationRun e11 = new EvaluationRun(algo1, implementation, data1,
 				ImmutableMap.of(EvaluatorType.F_MEASURE, fmAvg1and2, EvaluatorType.PRECISION, pAvg), 0);
 		EvaluationRun e12 = new EvaluationRun(algo1, implementation, data1,

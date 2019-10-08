@@ -9,14 +9,13 @@
 
 	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>1.6.3-SNAPSHOT</version>
+	<version>1.7.2-SNAPSHOT</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
 
 	<packaging>pom</packaging>
 	<modules>
-		<module>limes-gui</module>
 		<module>limes-core</module>
 		<module>limes-debian-cli</module>
 	</modules>
@@ -130,7 +129,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>3.1.0</version>
 					<configuration>
 						<failOnError>false</failOnError>
 					</configuration>
@@ -147,7 +146,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.17</version>
+					<version>2.22.2</version>
 					<configuration>
 						<skipTests>false</skipTests>
 					</configuration>
@@ -213,44 +212,6 @@
 				</plugins>
 			</build>
 		</profile>
-
-		<!--<profile>-->
-			<!--<id>release</id>-->
-			<!--<build>-->
-				<!--<plugins>-->
-					<!--<plugin>-->
-						<!--<groupId>org.apache.maven.plugins</groupId>-->
-						<!--<artifactId>maven-gpg-plugin</artifactId>-->
-						<!--<version>1.6</version>-->
-						<!--<executions>-->
-							<!--<execution>-->
-								<!--<id>sign-artifacts</id>-->
-								<!--<phase>verify</phase>-->
-								<!--<goals>-->
-									<!--<goal>sign</goal>-->
-								<!--</goals>-->
-								<!--<configuration>-->
-									<!--<keyname>AKSW</keyname>-->
-									<!--<passphraseServerId>${gpg.keyname}</passphraseServerId>-->
-								<!--</configuration>-->
-							<!--</execution>-->
-						<!--</executions>-->
-					<!--</plugin>-->
-
-					<!--<plugin>-->
-						<!--<groupId>org.sonatype.plugins</groupId>-->
-						<!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
-						<!--<extensions>true</extensions>-->
-						<!--<configuration>-->
-							<!--<serverId>ossrh</serverId>-->
-							<!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
-							<!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
-						<!--</configuration>-->
-					<!--</plugin>-->
-
-				<!--</plugins>-->
-			<!--</build>-->
-		<!--</profile>-->
 	</profiles>
 
     <distributionManagement>

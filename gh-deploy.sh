@@ -35,19 +35,9 @@ cd ..
 # Clean out existing contents
 rm -rf out/**/* || exit 0
 
-# compile gitbook
-# enter manual folder
-cd manual
-# remove old folder if present
-rm -rf _book || exit 0
-# install gitbook deps
-gitbook install
-# build new
-gitbook build
-# copy new files to out
-cp -r _book/** ../out
+# copy manual
+cp -r manual/** ../out
 # exit to higher level
-cd ..
 
 # Now let's go have some fun with the cloned repo
 cd out
