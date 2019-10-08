@@ -178,10 +178,10 @@ variable `y` is associated) with the `linkedct:condition` (with which the
 variable `x` is associated).
 
 For detailed instructions on how to assemble a valid link specification
-and a complete catalogue of all measure types included in LIMES, see [Defining Link Specifications](./defining_link_specifications.md)
+and a complete catalogue of all measure types included in LIMES, see [Defining Link Specifications](defining_link_specifications.md)
 
 
-## Execution (optional) {#execution}
+## Execution (optional)
 
 Three LIMES execution parameters could be set here:
  * `REWRITER`: LIMES 1.0.0 implements the `DEFAULT` rewriter.
@@ -196,7 +196,7 @@ Three LIMES execution parameters could be set here:
  
 If not set, the `DEFAULT` value for each parameter will be used.
 
-## Machine Learning (optional) {#machine-learning}
+## Machine Learning (optional)
 
 In most cases, finding a good link specification (i.e. one that achieves high F-Measure)
 is not a trivial task.
@@ -221,7 +221,7 @@ For example:
 For more information on the meaning and possible values of the elements within the `MLALGORITHM` tag,
 please refer to [Defining Machine Learning Tasks]{./defining_ml_tasks.md}.
 
-## Granularity (optional) {#granularity}
+## Granularity (optional)
 The user can choose positive integers to set the granularity of HYPPO, HR3 or ORCHID by setting
 
     <GRANULARITY>2</GRANULARITY>.

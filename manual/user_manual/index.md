@@ -1,4 +1,4 @@
-#User Manual (Version 1.0.0)
+# User Manual (Version 1.0.0)
 
 LIMES, the **Li**nk Discovery Framework for **Me**tric **S**paces, is a
 framework for discovering links between entities contained in Linked

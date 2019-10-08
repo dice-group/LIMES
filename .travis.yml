@@ -16,7 +16,6 @@ script:
 
 # deploy gitbook after success
 after_success:
-  - npm install -g gitbook-cli 2>&1 >/dev/null
   - bash ./gh-deploy.sh
 
 # disable emails, enable slack push

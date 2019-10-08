@@ -2,7 +2,7 @@
 
 Links Specifications (LS) can be simple or complex.
 A simple LS just consists of the measure name together with the arguments to the measure.
-Possible arguments to a measure are all properties as defined in [Data Sources](./index.md#data-sources). 
+Possible arguments to a measure are all properties as defined in [Data Sources](index.md#data-sources). 
 A possible simple LS is shown in the following example:
 ```xml
 <METRIC>trigrams(x.rdfs:label,y.dc:title)</METRIC>
@@ -28,7 +28,7 @@ MAX(trigrams(x.rdfs:label,y.dc:title)|0.3,euclidean(x.lat|long, y.latitude|longi
 This specification computes the maximum of:
 
 1. The trigram similarity of x's `rdfs:label` and y's `dc:title` is greater or equal to 0.3
-2. The 2-dimension Euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. 
+2. The 2-dimension Euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $  is greater or equal to 0.5. 
 
 Note that euclidean supports arbitrarily many dimensions. In addition, note that `ADD` allows to define weighted sums as follows:`ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)`.
 
@@ -69,7 +69,7 @@ The string measures package consists of the following measures:
 
 * **Cosine**: Cosine string similarity is a measure of similarity between two non-zero vectors
 representations of the two input strings of an inner product space that measures the cosine of
-the angle between them. The outcome of the Cosine string similarity is neatly bounded in $$[0,1]$$
+the angle between them. The outcome of the Cosine string similarity is neatly bounded in $[0,1]$
 * **ExactMatch**: Exact match string similarity is a measure of similarity between two input
 strings that returns one in case the two input strings were identical, zero otherwise.
 * **Jaccard**: The Jaccard index, also known as Intersection over Union and the Jaccard similarity
@@ -93,8 +93,8 @@ between two strings. Informally, the Levenshtein distance between two strings is
 of single-character edits (insertions, deletions or substitutions) required to change one string into
 the other. It is named after the Soviet mathematician Vladimir Levenshtein, who considered this
 distance in 1965. Normalized Levenshtein distance is computed by dividing the Levenshtein distance
-by the length of the input string. Let $$d_{lvn}$$ be the normalized Levenshtein distance.
-Then we define the Levenshtein similarity in LIMES as $$\frac{1}{1-d_{lvn}}$$.
+by the length of the input string. Let $d_{lvn}$ be the normalized Levenshtein distance.
+Then we define the Levenshtein similarity in LIMES as $\frac{1}{1-d_{lvn}}$.
 * **MongeElkan**: The Monge-Elkan similarity measure is a type of hybrid similarity measure that
 combines the benefits of sequence-based and set-based methods. This can be effective for domains
 in which more control is needed over the similarity measure. In LIMES, we use trigrams of the input
@@ -120,7 +120,7 @@ DoubleMetaphone encoding of the two input strings.
 In LIMES, we measure the similarity of two input strings by counting the number of trigrams they share.
 Formally, we compute the trigram similarity as the normalized sum of absolute differences between
 tri-gram vectors of both the input strings.
-* **Qgrams**: Same as trigram but using a group of $$q$$ (set to four by default) consecutive characters for generating
+* **Qgrams**: Same as trigram but using a group of $q$ (set to four by default) consecutive characters for generating
 the q-gram vectors of the input strings.
 
 
@@ -166,8 +166,8 @@ distance maps the elements of source geometry as evenly as possible to the eleme
 points of the source and target geometries that satisfy the bijection relation. 
 
 
-For all the above measures, the threshold $$\theta$$ corresponds to the distance $$x$$ between two
-points in km via $$\theta = \frac{1}{1+x}$$.
+For all the above measures, the threshold $\theta$ corresponds to the distance $x$ between two
+points in km via $\theta = \frac{1}{1+x}$.
 
 ### Topological Measures
   
@@ -231,7 +231,7 @@ Moreover, LIMES support the following temporal relations between POI resources b
 * **Tmp_Meets**: The end first POI timestamp meets the start of the second POI time stamp.
 * **Tmp_Is_xBy**: reverse of Tmp_Meets
 
-Below, an example of an atomic LS that consists of the temporal measure Tmp_Finishes and a threshold $$\theta = 1.0$$ is given: 
+Below, an example of an atomic LS that consists of the temporal measure Tmp_Finishes and a threshold $\theta = 1.0$ is given: 
 `Tmp_Finishes(x.beginDate1|endDate1, y.beginDate2|endDate2) | 0.8`
 where beginDate1 and beginDate2 are properties of the source and target KB respectively, whose values
 indicate the begin of a temporal event instance and endDate1 and endDate2 are properties of the source

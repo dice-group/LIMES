@@ -1,4 +1,4 @@
-# Running LIMES {#top}
+# Running LIMES
 
 LIMES can be run in three modes: CLI client, CLI server and GUI client.
 All modes offer the same functionality but over different interfaces to support a variety of use cases.    

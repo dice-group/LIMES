@@ -1,7 +1,7 @@
 ########
 ## BUILD
 # build first using maven
-FROM maven:3.3.9-jdk-8 as builder
+FROM maven:3.6.2-jdk-12 as builder
 # set workdir
 WORKDIR /limes
 # copy files
@@ -18,7 +18,7 @@ cp -p ./target/limes-core-${PROJECT_VERSION}.jar /limes/limes.jar
 ##########
 ## RELEASE
 # then run in a lighter jdk base
-FROM openjdk:8-jdk
+FROM openjdk:12.0.2-jdk
 # set workdir
 WORKDIR /limes
 # copy jar from build step
