@@ -12,7 +12,7 @@ install:
 
 # execute tests.. skip GUI tests for now, until it is fixec
 script:
-  - cd limes-core && mvn test
+  - mvn test
 
 # deploy gitbook after success
 after_success:
