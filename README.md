@@ -37,5 +37,5 @@ Then, update the project on Eclipse.
 
 * [Web UI](http://limes.aksw.org/)  
 * [Project web site](https://dice.cs.uni-paderborn.de/projects/active-projects/limes/)
-* [User manual](http://dice-group.github.io/LIMES/user_manual/)
-* [Developer manual](http://dice-group.github.io/LIMES/developer_manual/)
+* [User manual](http://dice-group.github.io/LIMES/#/user_manual/index)
+* [Developer manual](http://dice-group.github.io/LIMES/#/developer_manual/index)

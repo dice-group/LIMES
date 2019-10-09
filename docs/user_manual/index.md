@@ -11,7 +11,7 @@ conditions. By these means, LIMES can reduce the number of comparisons
 needed during the mapping process by several orders of magnitude and
 complexity without losing a single link.
 
-![LIMES workflow](./images/uml.png "fig:")
+![LIMES workflow](../images/uml.png "fig:")
 
 The LIMES framework consists of eight main modules of which each can be extended to accommodate new or improved functionality. The central module of LIMES is the **controller** module, which coordinates the matching process. The matching process is carried out as follows: First, the **controller** calls the **configuration** module, which reads the configuration file and extracts all the information necessary to carry out the comparison of instances, including the URL of the SPARQL-endpoints of source (S) and the target (T) knowledge bases, the restrictions on the instances to map (e.g., their type), the expression of the metric to be used and the threshold to be used. 
 
