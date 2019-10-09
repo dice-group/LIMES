@@ -10,13 +10,13 @@ In the menu bar click on *Learn* and choose the type you want to use. A new wind
 find a drop-down menu, showing you which algorithms implement the chosen learning type. After you click on your desired algorithm,
 the window will fill with elements you can use the set the parameters.
 
-<img src="../../images/MachineLearning.png" width="600" alt ="overview of machine learning window">
+<img src="./imagesimages/MachineLearning.png" width="600" alt ="overview of machine learning window">
 
 ##Active Learning
 If you are happy with the parameters you must click on *Learn* in the bottom right corner. After the progress popup vanishes you
 will see a new window, where the algorithm wants you to label link candidates as matches or non-matches.
 
-<img src="../../images/activelearning.png" width="700" alt ="active learning window asking user to label examples">
+<img src="./imagesimages/activelearning.png" width="700" alt ="active learning window asking user to label examples">
 
 You can click on *Learn* again and another iteration starts. If you don't want another iteration, you can click on *Get Results*
 and a new view with results will pop up. This time you also have the possibility to *Save Linkspecification* in the bottom left corner.
@@ -25,7 +25,7 @@ This will put the metric to the metric builder and you can save this configurati
 ##Batch Learning
 This learning type only takes one iteration and you have to provide a file containing the training mapping. 
 
-<img src="../../images/BatchLearningInput.png" width="400" alt ="batch learning window asking for a training mapping file">
+<img src="./imagesimages/BatchLearningInput.png" width="400" alt ="batch learning window asking for a training mapping file">
 
 The file can be either CSV or some kind of RDF. For CSV, the first line contains the properties on which you want to match, and
 the following lines the matched properties of the instance, that are matches. For example:

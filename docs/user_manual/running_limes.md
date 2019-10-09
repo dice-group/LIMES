@@ -121,7 +121,7 @@ configuration file in the XML or RDF serialization.
 The LIMES GUI consists of three main components: the *menu bar*,the *tool box* and the *metric builder*.
 We will discuss each of the two components in the following subsections.
 
-<img src="../images/LimesOverview.png" width="700" alt ="Overview">
+<img src="./imagesimages/LimesOverview.png" width="700" alt ="Overview">
 
 ### Menu Bar 
 The menu bar contains three drop-down menus:
@@ -142,7 +142,7 @@ The menu bar contains three drop-down menus:
     * **[Unsupervised Learning](user_manual/gui/machine_learning/unsupervised_learning.md)**
 
 ### Toolbox
-<img src="../images/ToolBox.png" height="400" style="float:right; margin:0 0 0 2em" alt ="ToolBox">
+<img src="./imagesimages/ToolBox.png" height="400" style="float:right; margin:0 0 0 2em" alt ="ToolBox">
 
 On the left you can find the toolbox containing everything you need to build your own metric after you loaded/made a configuration
 * *Source/Target Properties*: The properties you want to link (if you did not load or create a configuration these are empty)
@@ -152,7 +152,7 @@ On the left you can find the toolbox containing everything you need to build you
 <div style="clear:both"></div>
 
 ### Metric Builder
-<img src="../images/MetricBuilder.png" width="600" alt ="MetricBuilder">
+<img src="./imagesimages/MetricBuilder.png" width="600" alt ="MetricBuilder">
 
 The metric builder eases the process of complex link specification creation, especially for end users
 with limited programming experience. In particular, you can visually link the various atomic link
@@ -171,19 +171,19 @@ Files can also be entered more easily by pressing the little green button with t
 Let's use `http://dbpedia.org/sparql` as source endpoint and `http://linkedgeodata.org/sparql` as target endpoint URL.
 We enter `dbpedia` as source ID and `lgd` as target ID:
 
-<img src="../images/EditEndpointView.png" width="800" alt ="Endpoint Configuration Window">
+<img src="./imagesimages/EditEndpointView.png" width="800" alt ="Endpoint Configuration Window">
 
 Pressing *Next* gets you to the next step:
 
 #### Class matching
-<img src="../images/EditClassMatchingView.png" width="800" alt ="Class Matching Configuration Window">
+<img src="./imagesimages/EditClassMatchingView.png" width="800" alt ="Class Matching Configuration Window">
 
 A source and target class must be selected by clicking on it to continue. Some classes have subclasses which can be accessed by clicking on the arrow besides them.
 We click on `HistoricPlace` from dbpedia and `HistoricThing` from lgd.
 The *Next* step is:
 
 #### Property Matching
-<img src="../images/EditPropertyMatchingView.png" width="800" alt ="Property Matching Configuration Window">
+<img src="./imagesimages/EditPropertyMatchingView.png" width="800" alt ="Property Matching Configuration Window">
 
 Clicking on the available properties moves them to the bottom container, where the already added properties can be seen. If you
 change your mind, clicking on added properties moves them back up. Alternatively all available properties can be added with the button *Add All*.
@@ -217,14 +217,14 @@ If you want you can define a [Acceptance Threshold](../../configuration_file/acc
 #### Running Your Linkspecification
 If you followed the steps, your Linkspecification should look something like this:
 
-<img src="../images/BuildMetric.png" width="600" alt ="Finished Metric">
+<img src="./imagesimages/BuildMetric.png" width="600" alt ="Finished Metric">
 
 If you want to *Run* it, just click on the button in the bottom right corner.
 
 #### Results
 After the progress popup vanished you should see your results in a new window.
 
-<img src="../images/ResultView.png" width="800" ="Results">
+<img src="./imagesimages/ResultView.png" width="800" ="Results">
 
 In the top left you have the possibility to save them into a file. The relation between them will be defined as `owl:sameAs`.
 
@@ -240,13 +240,13 @@ In the menu bar click on *Learn* and choose the type you want to use. A new wind
 find a drop-down menu, showing you which algorithms implement the chosen learning type. After you click on your desired algorithm,
 the window will fill with elements you can use the set the parameters.
 
-<img src="../images/MachineLearning.png" width="600" alt ="overview of machine learning window">
+<img src="./imagesimages/MachineLearning.png" width="600" alt ="overview of machine learning window">
 
 #### Active Learning
 If you are happy with the parameters you must click on *Learn* in the bottom right corner. After the progress popup vanishes you
 will see a new window, where the algorithm wants you to label link candidates as matches or non-matches.
 
-<img src="../images/activelearning.png" width="700" alt ="active learning window asking user to label examples">
+<img src="./imagesimages/activelearning.png" width="700" alt ="active learning window asking user to label examples">
 
 You can click on *Learn* again and another iteration starts. If you don't want another iteration, you can click on *Get Results*
 and a new view with results will pop up. This time you also have the possibility to *Save Linkspecification* in the bottom left corner.
@@ -255,7 +255,7 @@ This will put the metric to the metric builder and you can save this configurati
 #### Batch Learning
 This learning type only takes one iteration and you have to provide a file containing the training mapping. 
 
-<img src="../images/BatchLearningInput.png" width="400" alt ="batch learning window asking for a training mapping file">
+<img src="./imagesimages/BatchLearningInput.png" width="400" alt ="batch learning window asking for a training mapping file">
 
 The file can be either CSV or some kind of RDF. For CSV, the first line contains the properties on which you want to match, and
 the following lines the matched properties of the instance, that are matches. For example:
@@ -281,7 +281,7 @@ the results will be presented.
 LIMES Web UI is an additional tool to write configuration file in the XML using web interface and execute it using the LIMES server.
 LIMES Web UI consists of six main components: *prefixes*, *data source / target* , *manual metric*, *machine learning*, *acceptance/review conditions* and *output*.
 
-<img src="../images/full_limes_with_marks.png" width="800" alt ="Overview">
+<img src="./imagesimages/full_limes_with_marks.png" width="800" alt ="Overview">
 
 ### 1 - Prefixes
 
@@ -289,7 +289,7 @@ The Prefixes component consists of two parts:
 * Currently added prefixes. They look like chips, containing the label of the prefix and a hover tooltip with the namespace.
 * Add new prefix (optional). In most cases, our interface is able to automatically find the common prefixes from [prefix.cc](https://prefix.cc/context). In case the user want to add a prefix manually, (s)he can type the prefix, choose the its respective URI  from the dropdown list (if any) or manually type it.  Then, the user click on *Add* and the prefix will be added as a new chip. Again, this process is necessary for common prefixes. 
 
-<img src="../images/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
+<img src="./imagesimages/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
 
 ### 2 - Data source / target
 
@@ -298,7 +298,7 @@ The Data source and data target consists of the two similar components, which in
 * *Restriction*: Contains of three parameters splitted by space (?s rdf:type some:Type). The third parameter will be changed automatically after changing the restriction class. 
 * *Restriction class*: A dropdown list of restriction classes according to the endpoint. You can start typing the name of the class and the list will be filtered automatically. After choosing the restriction class, you will get all the properties related to this class.
 
-<img src="../images/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
+<img src="./imagesimages/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
 
 ### 3 - Manual metric and machine learning
 
@@ -336,7 +336,7 @@ At the top before the Workspace there are two options related to Workspace:
 * *Export workspace to xml*: You can download an xml file of the current Workspace with connected blocks. 
 * *Select file for the importing to the workspace*: You can upload the xml file of the saved Workspace to change the current Workspace.
   
-<img src="../images/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
+<img src="./imagesimages/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
 
 #### Machine learning
 
@@ -347,12 +347,12 @@ The tab *Machine learning* consists of three parts:
 
 If *Type* is supervised batch or supervised active, you will see the additional input, where you can upload the file with training data.
 
-<img src="../images/ml_web_ui.png" width="800" alt ="ML_web_ui">
+<img src="./imagesimages/ml_web_ui.png" width="800" alt ="ML_web_ui">
 
 ### 4 - Acceptance and review conditions
 
 In this component you can define the *Acceptance Threshold* and the *Review Threshold*. In addition, you can rename the names of files, which can be created after execution. Besides, you can change the *Relation*. Instead of prefix you can write the namespace and its respective URI will be automatically found by the interface, converted to a prefix (if it exists in prefix.cc, otherwise you have to manually add it).
-<img src="../images/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
+<img src="./imagesimages/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
 
 ### 5 - Output
 
@@ -361,13 +361,13 @@ Here you can choose an output format, including turtle (TTL), n-triples (N3), ta
 ### Display config and run
 There are three buttons at the bottom of the page: *Display config*, *Execute*, *Check the state of the previous run*.  
 * If you click on the *Display config*, you can look at formed xml config. Also, if you want you can save it.
-<img src="../images/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
+<img src="./imagesimages/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
 
 * The *Execute* button will immediately start the process of executing this xml config. You can have a look at the log messages by clicking on the link *Show log*.
 
-<img src="../images/job_status_web_ui.png" width="400" alt ="job_status_web_ui">  
+<img src="./imagesimages/job_status_web_ui.png" width="400" alt ="job_status_web_ui">  
   
 * *Check the state of the previous run* button. The execution can take time. To look at the result later, you must copy the *execution key*.
 In order to get the result of the previous run, you should click on *Check the state of the previous run* button. Here you can paste the *execution key*, which you copied when you ran the execution. Then click on *Check* and you will get the result. If the run is finished without errors and result is not empty, then you can download *accepted links* and *reviewed links* files.  
   
-<img src="../images/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 
+<img src="./imagesimages/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 

@@ -22,14 +22,14 @@ If you want you can define a [Acceptance Threshold](../../configuration_file/acc
 ## Running your Linkspecification
 If you followed the steps, your Linkspecification should look something like this:
 
-<img src="../../../images/BuildMetric.png" width="600" alt ="Finished Metric">
+<img src="./imagesimages/BuildMetric.png" width="600" alt ="Finished Metric">
 
 If you want to *Run* it, just click on the button in the bottom right corner.
 
 ## Results
 After the progress popup vanished you should see your results in a new window.
 
-<img src="../../../images/ResultView.png" width="800" ="Results">
+<img src="./imagesimages/ResultView.png" width="800" ="Results">
 
 In the top left you have the possibility to save them into a file. The relation between them will be defined as `owl:sameAs`.
 

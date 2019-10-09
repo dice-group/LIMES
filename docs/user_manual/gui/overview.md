@@ -1,5 +1,5 @@
 #Overview of the GUI elements
-<img src="../../images/LimesOverview.png" width="700" alt ="Overview">
+<img src="./imagesimages/LimesOverview.png" width="700" alt ="Overview">
 ## Menu Bar 
 The menu bar contains three drop-down menus:
 * *File*
@@ -28,7 +28,7 @@ All the machine learning functionality of the GUI can be accessed through this d
 These features are only available when a configuration is loaded
 
 ### Toolbox
-<img src="../../images/ToolBox.png" height="400" alt ="ToolBox">
+<img src="./imagesimages/ToolBox.png" height="400" alt ="ToolBox">
 
 On the left you can find the toolbox containing everything you need to build your own metric after you loaded/made a configuration
 * *Source/Target Properties*: The properties you want to link (if you did not load or create a configuration these are empty)
@@ -36,6 +36,6 @@ On the left you can find the toolbox containing everything you need to build you
 * *Operators*: All the operators you can use to combine measures
 
 ### Metric Builder
-<img src="../../images/MetricBuilder.png" width="600" alt ="MetricBuilder">
+<img src="./imagesimages/MetricBuilder.png" width="600" alt ="MetricBuilder">
 
 Here you can link the various nodes to create the metric you want
