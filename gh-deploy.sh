@@ -36,7 +36,7 @@ cd ..
 rm -rf out/**/* || exit 0
 
 # copy manual
-cp -r manual/** ../out
+cp -r manual/** out/
 # exit to higher level
 
 # Now let's go have some fun with the cloned repo
