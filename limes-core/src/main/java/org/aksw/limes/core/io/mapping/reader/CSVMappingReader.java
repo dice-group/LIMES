@@ -129,12 +129,9 @@ public class CSVMappingReader extends AMappingReader {
             while (s != null) {
                 // split first line
                 split = s.split(delimiter);
-                //If brokets are used remove them
-                if(s.startsWith("<")){
-                    m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), Double.parseDouble(split[2]));
-                }else {
-                    m.add(split[0], split[1], Double.parseDouble(split[2]));
-                }
+                split[0] = removeBrackets(removeQuotes(split[0]));
+                split[1] = removeBrackets(removeQuotes(split[1]));
+                m.add(split[0], split[1], Double.parseDouble(split[2]));
                 s = reader.readLine();
             }
             reader.close();
@@ -176,7 +173,16 @@ public class CSVMappingReader extends AMappingReader {
         return m;
     }
 
+    private String removeBrackets(String s) {
+        s = s.trim();
+        if ((s.charAt(0) == '<' && s.charAt(s.length() - 1) == '>')) {
+            return s.substring(1, s.length() - 1);
+        }
+        return s;
+    }
+
     private String removeQuotes(String s) {
+        s = s.trim();
         if ((s.charAt(0) == '\"' && s.charAt(s.length() - 1) == '\"') || (s.charAt(0) == '\'' && s.charAt(s.length() - 1) == '\'')) {
             return s.substring(1, s.length() - 1);
         }
