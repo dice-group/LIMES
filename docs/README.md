@@ -1,4 +1,4 @@
-![LIMES Logo](images/limes_logo.png "LIMES")
+![LIMES Logo](./images/limes_logo.png "LIMES")
 
 # LIMES Documentation
 
