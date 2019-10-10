@@ -653,7 +653,8 @@ var Measure = {
       "name": "sourceProperty",
       "check": [
         "SourceProperty",
-        "PreprocessingFunction",      
+        "PreprocessingFunction", 
+        "OptionalSourceProperty"     
       ]
     },
     {
@@ -662,6 +663,7 @@ var Measure = {
       "check": [
         "TargetProperty",
         "PreprocessingFunction",
+        "OptionalTargetProperty"
       ]
     }
   ],

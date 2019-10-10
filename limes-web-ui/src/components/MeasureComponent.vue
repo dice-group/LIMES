@@ -61,8 +61,28 @@ export default {
 	          values.unshift(valuesOfBlock.filter(val => val.indexOf(":") !== -1)[0]);
 	        }
 	      }*/
-	      let sourceProperty = this.$store.state.source.properties[num];
-	      let targetProperty = this.$store.state.target.properties[num];
+	      let sourceProperty = this.$store.state.source.properties[num] 
+	      	|| this.$store.state.source.optionalProperties[num];
+	      if(!sourceProperty && this.$store.state.source.properties.length < 2){
+	      	if(i.getChildren().length && i.getChildren()[0].type.indexOf("optional") !== -1){
+		      	sourceProperty = this.$store.state.source.optionalProperties[num-1];
+		    }
+		    if(i.getChildren().length && i.getChildren()[0].type === "sourceproperty"){
+		      	sourceProperty = this.$store.state.source.properties[num-1];
+		    } 
+		  }
+
+	      let targetProperty = this.$store.state.target.properties[num]
+	      	|| this.$store.state.target.optionalProperties[num];
+	      if(!targetProperty && this.$store.state.target.properties.length < 2){
+	      	if(i.getChildren().length && i.getChildren()[0].type.indexOf("optional") !== -1){
+		      	targetProperty = this.$store.state.target.optionalProperties[num-1];
+		    }
+		    if(i.getChildren().length && i.getChildren()[0].type === "targetproperty"){
+		      	targetProperty = this.$store.state.target.properties[num-1];
+		    } 
+		  }
+
 	      if(this.$store.state.source.function && this.$store.state.source.function.length){
 	      	sourceProperty = this.$store.state.source.function;
 	      }

@@ -314,8 +314,8 @@ export default {
                       let firstM = i.getChildren()[0];
                       let secondM = i.getChildren()[1];
 
-                      this.mainSource = false;
-                      this.mainTarget = false;
+                      // this.mainSource = false;
+                      // this.mainTarget = false;
 
                       let props1 = "", props2 = "";
                       this.$store.commit('removeProps');
@@ -329,35 +329,33 @@ export default {
                       if(firstM){
                         firstM.setDisabled(false);
 
+                        // if(secondM && secondM.getChildren().length && (secondM.getChildren()[0].type ==='sourceproperty' || secondM.getChildren()[0].type ==='targetproperty')){
+                        //   let secondMChildren = secondM.getChildren();
+                        //   if(secondMChildren.length){
+                        //     secondMChildren.forEach(m => {
+                        //       if(m.type === 'sourceproperty'){
+                        //         this.mainSource = true;
+                        //       }
+                        //       if(m.type === 'targetproperty'){
+                        //         this.mainTarget = true;
+                        //       }
+                        //     });
+                        //   }
 
+                        // } else {
 
-                        if(secondM && secondM.getChildren().length && (secondM.getChildren()[0].type ==='sourceproperty' || secondM.getChildren()[0].type ==='targetproperty')){
-                          let secondMChildren = secondM.getChildren();
-                          if(secondMChildren.length){
-                            secondMChildren.forEach(m => {
-                              if(m.type === 'sourceproperty'){
-                                this.mainSource = true;
-                              }
-                              if(m.type === 'targetproperty'){
-                                this.mainTarget = true;
-                              }
-                            });
-                          }
+                        //   if(firstM.getChildren().length){
+                        //     firstM.getChildren().forEach(m => {
+                        //       if(m.type === 'sourceproperty'){
+                        //         this.mainSource = true;
+                        //       }
+                        //       if(m.type === 'targetproperty'){
+                        //         this.mainTarget = true;
+                        //       }
+                        //     });
 
-                        } else {
-
-                          if(firstM.getChildren().length){
-                            firstM.getChildren().forEach(m => {
-                              if(m.type === 'sourceproperty'){
-                                this.mainSource = true;
-                              }
-                              if(m.type === 'targetproperty'){
-                                this.mainTarget = true;
-                              }
-                            });
-
-                          }
-                        }
+                        //   }
+                        // }
                       }
 
                       if(secondM){
@@ -366,59 +364,59 @@ export default {
                         //console.log(this.mainSource,this.mainTarget);
 
 
-                          if(this.mainSource){
-                            secondM.inputList[1].setCheck([
-                              "SourceProperty",
-                              "PreprocessingFunction",
-                              "OptionalSourceProperty"        
-                            ]);
-                          } else {
-                            secondM.inputList[1].setCheck([
-                              "SourceProperty",
-                              "PreprocessingFunction"   
-                            ]);
-                          }
+                          // if(this.mainSource){
+                          //   secondM.inputList[1].setCheck([
+                          //     "SourceProperty",
+                          //     "PreprocessingFunction",
+                          //     "OptionalSourceProperty"        
+                          //   ]);
+                          // } else {
+                          //   secondM.inputList[1].setCheck([
+                          //     "SourceProperty",
+                          //     "PreprocessingFunction"   
+                          //   ]);
+                          // }
             
-                          if(this.mainTarget){
-                            secondM.inputList[2].setCheck([
-                              "TargetProperty",
-                              "PreprocessingFunction",
-                              "OptionalTargetProperty"        
-                            ]);
-                          } else {
-                            secondM.inputList[2].setCheck([
-                              "TargetProperty",
-                              "PreprocessingFunction"   
-                            ]);
-                          }
+                          // if(this.mainTarget){
+                          //   secondM.inputList[2].setCheck([
+                          //     "TargetProperty",
+                          //     "PreprocessingFunction",
+                          //     "OptionalTargetProperty"        
+                          //   ]);
+                          // } else {
+                          //   secondM.inputList[2].setCheck([
+                          //     "TargetProperty",
+                          //     "PreprocessingFunction"   
+                          //   ]);
+                          // }
 
-                          /////
+                          // /////
 
-                          if(this.mainSource){
-                            firstM.inputList[1].setCheck([
-                              "SourceProperty",
-                              "PreprocessingFunction",
-                              "OptionalSourceProperty"        
-                            ]);
-                          } else {
-                            firstM.inputList[1].setCheck([
-                              "SourceProperty",
-                              "PreprocessingFunction"   
-                            ]);
-                          }
+                          // if(this.mainSource){
+                          //   firstM.inputList[1].setCheck([
+                          //     "SourceProperty",
+                          //     "PreprocessingFunction",
+                          //     "OptionalSourceProperty"        
+                          //   ]);
+                          // } else {
+                          //   firstM.inputList[1].setCheck([
+                          //     "SourceProperty",
+                          //     "PreprocessingFunction"   
+                          //   ]);
+                          // }
             
-                          if(this.mainTarget){
-                            firstM.inputList[2].setCheck([
-                              "TargetProperty",
-                              "PreprocessingFunction",
-                              "OptionalTargetProperty"        
-                            ]);
-                          } else {
-                            firstM.inputList[2].setCheck([
-                              "TargetProperty",
-                              "PreprocessingFunction"   
-                            ]);
-                          }
+                          // if(this.mainTarget){
+                          //   firstM.inputList[2].setCheck([
+                          //     "TargetProperty",
+                          //     "PreprocessingFunction",
+                          //     "OptionalTargetProperty"        
+                          //   ]);
+                          // } else {
+                          //   firstM.inputList[2].setCheck([
+                          //     "TargetProperty",
+                          //     "PreprocessingFunction"   
+                          //   ]);
+                          // }
  
 
                       }

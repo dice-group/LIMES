@@ -40,12 +40,12 @@ export default {
 	            }
 
 	            // check preprocessing for availability to use optional property
-	            if(srcOrTgt.toLowerCase() === 'source'){
-	              this.$store.state.mainSource = true;
-	            }
-	            if(srcOrTgt.toLowerCase() === 'target'){
-	              this.$store.state.mainTarget = true;
-	            }
+	            // if(srcOrTgt.toLowerCase() === 'source'){
+	            //   this.$store.state.mainSource = true;
+	            // }
+	            // if(srcOrTgt.toLowerCase() === 'target'){
+	            //   this.$store.state.mainTarget = true;
+	            // }
 
 	            if(i.type.indexOf('renamepreprocessing')!== -1){
 	              if(child.type === "preprocessingfunction"){
