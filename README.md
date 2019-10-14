@@ -7,7 +7,6 @@ installing use:
 ```
 mvn clean install
 ```
-
 Creating the runnable jar file including the dependencies use:
 ```
 mvn clean package shade:shade -Dcheckstyle.skip=true -Dmaven.test.skip=true
@@ -15,23 +14,12 @@ mvn clean package shade:shade -Dcheckstyle.skip=true -Dmaven.test.skip=true
 
 The .jar will be placed in `limes-core/target/limes-core-VERSION-SNAPSHOT.jar`
 
-## Generating Jar File (GUI)
-switch to `limes-gui` and use:
-```
-mvn jfx:jar -Dcheckstyle.skip=true -Dmaven.test.skip=true
-```
-
-The .jar will be placed in `limes-gui/target/jfx/app/limes-GUI-VERSION-SNAPSHOT-jfx.jar`
-
-The `limes-gui/target/jfx/app/lib` folder needs to be in the same folder as the .jar for the .jar to work!
-
 ### Importing into Eclipse
 In case Eclipse does not recognize the project as Java. Please run the following from the `limes-core/` directory:
 ```
 mvn eclipse:eclipse
 ```
 Then, update the project on Eclipse.
-
 
 ## More details
 
