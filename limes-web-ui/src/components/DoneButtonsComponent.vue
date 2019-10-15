@@ -75,13 +75,54 @@
         </md-dialog-actions>
       </md-dialog>
 
+      <!-- supervised active ml dialog -->
+      <md-dialog ref="supervisedActiveMLDialog" v-bind:md-esc-to-close="false" v-bind:md-click-outside-to-close="false">
+        <md-dialog-title>Supervised active ml dialog</md-dialog-title>
+
+        <md-dialog-content>  
+        	<md-list>
+	          	<div v-for="(i, index) in activeLearningArray">					
+				    <md-list-item>
+				      	<span class="activeLearningItem">{{index+1+"."}}</span>
+				      	<span class="activeLearningItem">{{i.source}}</span>
+				      	<span class="activeLearningItem">{{i.predicate}}</span>
+				      	<span class="activeLearningItem">{{i.target}}</span>
+						<md-button class="md-primary" @click="openActiveLearningTable(index)">Show table</md-button>
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton(index)">-</md-radio>	
+				    </md-list-item> 
+		        </div> 
+	        </md-list>
+	        <md-table v-if="activeLearningTableForNum !== null">
+			  <md-table-header>
+			    <md-table-row>
+			      <md-table-head>{{activeLearningArray[activeLearningTableForNum].source}}</md-table-head>
+			      <md-table-head>{{activeLearningArray[activeLearningTableForNum].target}}</md-table-head>
+			    </md-table-row>
+			  </md-table-header>
+
+			  <md-table-body>
+			    <md-table-row v-for="(row, index) in 3" :key="index">
+			      <md-table-cell>Dessert Name</md-table-cell>
+			      <md-table-cell v-for="(col, index) in 1" :key="index">Text</md-table-cell>
+			    </md-table-row>
+			  </md-table-body>
+			</md-table> 	  
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-raised md-primary" @click="execute()">Continue execution</md-button>
+          <md-button class="md-primary" @click="cancelExecution()">Cancel</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
 
       <!-- visible part -->
       <md-layout>
         <md-button class="md-raised md-flex" v-on:click="showConfig()">Display config</md-button>
       </md-layout>
       <md-layout>
-        <md-button class="md-raised md-primary md-flex" v-on:click="execute()">Execute</md-button>
+        <md-button class="md-raised md-primary md-flex" v-on:click="mlalgorithm.type === 'supervised active' ? openActiveWindow() : execute()">Execute</md-button>
       </md-layout>
       <md-layout>
         <md-button class="md-raised md-flex" v-on:click="showDialogForPreviousRun()">Check the state of the previous run</md-button>
@@ -139,6 +180,25 @@ export default {
 	    notFoundKeyMessage: '',
 	    findStatusMessage: '',
 	    exampleConfigEnable: false,
+	    activeLearningArray: [
+	    	{
+	    		source: "S",
+	    		predicate: "sameAs",
+	    		target: "T",
+	    	},
+	    	{
+	    		source: "S1",
+	    		predicate: "sameAs",
+	    		target: "T1",
+	    	},
+	    	{
+	    		source: "S2",
+	    		predicate: "sameAs",
+	    		target: "T2",
+	    	}
+	    ],
+	    radioButton: [false, false, false],
+	    activeLearningTableForNum: null,
     }
   },
 	methods: {
@@ -266,6 +326,19 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    saveXML(){
 	      this.forceFileDownload(this.generateConfig(),'file.xml');
+	    },
+	    // open this window if mlalgorithm.type === 'supervised active'
+	    openActiveWindow(){
+	    	this.$refs.supervisedActiveMLDialog.open();
+	    },
+	    openActiveLearningTable(index){
+	    	this.activeLearningTableForNum = index;
+	    },
+	    changeRadioButton(index){
+			this.radioButton[index] = !this.radioButton[index];
+	    },
+	    cancelExecution(){
+			this.$refs.supervisedActiveMLDialog.close();
 	    },
 	    // execute button
 	    execute() {
