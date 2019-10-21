@@ -5,7 +5,7 @@
 LIMES is [publicly available](https://github.com/dice-group/limes) 
 offering the entire Java source code as well as indicative configurations.
 Java SDK 12 (or later) as well as Maven 3.6.2 (or later) must be installed
-and properly configured in order to compile and execute DEER.
+and properly configured in order to compile and execute LIMES.
 The `pom.xml` file contains the project's configuration in Maven and has been successfully
 tested in Mac OS, Microsoft Windows and Linux environments.
 The following building instructions assume that Git is also installed.

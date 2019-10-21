@@ -63,6 +63,8 @@ export default {
       type: Object,
     },
   },
+
+  //<div class="md-title" style="display: inline-block;" v-b-tooltip.html.right="tooltipTitle">Prefixes</div>
   data() {
     return {
       label: '',
@@ -70,6 +72,8 @@ export default {
       focused: false,
       optionsShown: false,
       afterFilteredOptions: this.filteredOptions,
+      // tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=_31-prefixes' target='_blank' style='color: #191970;'>User manual: Prefixes</a>",
+      // },
     };
   },
   methods: {

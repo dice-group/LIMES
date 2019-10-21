@@ -30,7 +30,7 @@
                 <p class="details-card-name">More details about the project:</p>
                 <ul> 
                   <li><a href="https://dice.cs.uni-paderborn.de/projects/active-projects/limes/" target="_blank">Project web site</a></li>
-                  <li><a href="https://dice-group.github.io/LIMES/user_manual/" target="_blank">User manual</a></li>
+                  <li><a href="http://dice-group.github.io/LIMES/#/user_manual/index" target="_blank">User manual</a></li>
                   <li><a href="https://github.com/dice-group/LIMES" target="_blank">GitHub</a></li>
                 </ul>
 

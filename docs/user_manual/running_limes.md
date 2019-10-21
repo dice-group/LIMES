@@ -1,9 +1,9 @@
 # Running LIMES
 
-LIMES can be run in three modes: CLI client, CLI server and GUI client.
+LIMES can be run in three modes: Command Line Interface (CLI) client, CLI server, WEB UI and GUI client.
 All modes offer the same functionality but over different interfaces to support a variety of use cases.    
 
-## Client
+# 1. Using the CLI Client
 For this purpose, simply run
 
 ```bash
@@ -27,14 +27,14 @@ The following optional command line flags and options are available:
 In case your system runs out of memory, please use the `-Xmx` option (must appear before the -jar option) to
 allocate more memory to the Java Virtual Machine.
 
-## Server
+# 2. Using the CLI Server
 
 LIMES can be run as an HTTP Server, implementing a RESTful API and serving a browser frontend by default.
 Configuration files are accepted via POST multipart/form-data uploads.
 Each configuration file gets assigned a unique *job_id*.
 Given this job id, the user can query the server for the status of the job, its logs, a list of result files and the contents of these result files.
 
-### API
+## API
 The following RESTful operations are currently implemented:
 
 * `submit/` **(POST)** ---
@@ -69,7 +69,7 @@ returns a list of result files in a JSON object.
 returns the contents of a given result file for a given job id.
   
   
-### Example
+## Example
 
 ```bash
 # Get latest LIMES, dev branch
@@ -112,14 +112,14 @@ curl http://localhost:8080/logs/7538819321022935531
 # 2018-06-20T12:08:09,027 [ForkJoinPool.commonPool-worker-2] INFO org.aksw.limes.core.io.cache.HybridCache 111 - Checking for file [...]
 ```
 
-## Web UI
+# 3. Using the Web UI
 
 LIMES Web UI is an additional tool to write configuration file in the XML using web interface and execute it using the LIMES server.
 LIMES Web UI consists of six main components: *prefixes*, *data source / target* , *manual metric*, *machine learning*, *acceptance/review conditions* and *output*.
 
 <img src="./images/full_limes_with_marks.png" width="800" alt ="Overview">
 
-### 1 - Prefixes
+## 3.1 - Prefixes
 
 The Prefixes component consists of two parts:
 * Currently added prefixes. They look like chips, containing the label of the prefix and a hover tooltip with the namespace.
@@ -127,7 +127,7 @@ The Prefixes component consists of two parts:
 
 <img src="./images/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
 
-### 2 - Data source / target
+## 3.2 - Data source / target
 
 The Data source and data target consists of the two similar components, which include three input fields:
 * *Endpoint*: A dropdown list of available endpoints. Moreover, the user can try to search for the endpoint, typing it in the input field or write your own endpoint. After clicking on the endpoint from the list or writing it by hand and press the Enter, the user will get the list of restriction classes according to this endpoint.
@@ -136,11 +136,11 @@ The Data source and data target consists of the two similar components, which in
 
 <img src="./images/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
 
-### 3 - Manual metric and machine learning
+## 3.3 - Manual metric and machine learning
 
 After the *data source and target* have chosen and you have got a message that properties have already received, you are now ready to build a metric. You can build a manual metric or use machine learning.   These options are interchangeable. Consider first the manual metric tab.
 
-#### Manual metric
+### Manual metric
 To build a metric you can drag and drop elements from the toolbox. 
 
 There are 8 blocks: 
@@ -174,7 +174,7 @@ At the top before the Workspace there are two options related to Workspace:
   
 <img src="./images/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
 
-#### Machine learning
+### Machine learning
 
 The tab *Machine learning* consists of three parts:
 * *Name*:The machine learning (ML) algorithm name. The currently available ML algorithms include WOMBAT Simple, WOMBAT Complete and EAGLE
@@ -185,12 +185,12 @@ If *Type* is supervised batch or supervised active, you will see the additional 
 
 <img src="./images/ml_web_ui.png" width="800" alt ="ML_web_ui">
 
-### 4 - Acceptance and review conditions
+## 3.4 - Acceptance and review conditions
 
 In this component you can define the *Acceptance Threshold* and the *Review Threshold*. In addition, you can rename the names of files, which can be created after execution. Besides, you can change the *Relation*. Instead of prefix you can write the namespace and its respective URI will be automatically found by the interface, converted to a prefix (if it exists in prefix.cc, otherwise you have to manually add it).
 <img src="./images/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
 
-### 5 - Output
+## 3.5 - Output
 
 Here you can choose an output format, including turtle (TTL), n-triples (N3), tab separated values (TAB), comma separated values (CSV).
 
@@ -209,7 +209,7 @@ In order to get the result of the previous run, you should click on *Check the s
 <img src="./images/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 
 
 
-## GUI
+# 4. Using the Desktop GUI client(Deprecated)
 
 The main purpose of the LIMES GUI is to provide the users of LIMES with an
 easy interface for configuring LIMES, without the need to write the
@@ -219,7 +219,7 @@ We will discuss each of the two components in the following subsections.
 
 <img src="./images/LimesOverview.png" width="700" alt ="Overview">
 
-### Menu Bar 
+## Menu Bar 
 The menu bar contains three drop-down menus:
 * **File**, which serves as a collection of the following main functionality:
     * **New**: Create a new configuration 
@@ -237,7 +237,7 @@ The menu bar contains three drop-down menus:
     * **[Batch Learning](user_manual/gui/machine_learning/batch_learning.md)**
     * **[Unsupervised Learning](user_manual/gui/machine_learning/unsupervised_learning.md)**
 
-### Toolbox
+## Toolbox
 <img src="./images/ToolBox.png" height="400" style="float:right; margin:0 0 0 2em" alt ="ToolBox">
 
 On the left you can find the toolbox containing everything you need to build your own metric after you loaded/made a configuration
@@ -247,16 +247,16 @@ On the left you can find the toolbox containing everything you need to build you
 
 <div style="clear:both"></div>
 
-### Metric Builder
+## Metric Builder
 <img src="./images/MetricBuilder.png" width="600" alt ="MetricBuilder">
 
 The metric builder eases the process of complex link specification creation, especially for end users
 with limited programming experience. In particular, you can visually link the various atomic link
 specification nodes to create complex link specification with ease.
 
-### How to create a new configuration
+## How to create a new configuration
 
-#### Endpoint configuration
+### Endpoint configuration
 After clicking on *File* -> *New* a window pops up in which the source and target endpoints of the new configuration can be configured:  
 * *EndpointURL*: Either a URL of a SPARQL Endpoint is entered here, or the filepath to a local endpoint. 
 Files can also be entered more easily by pressing the little green button with the file symbol which opens a file chooser dialog.
@@ -271,14 +271,14 @@ We enter `dbpedia` as source ID and `lgd` as target ID:
 
 Pressing *Next* gets you to the next step:
 
-#### Class matching
+### Class matching
 <img src="./images/EditClassMatchingView.png" width="800" alt ="Class Matching Configuration Window">
 
 A source and target class must be selected by clicking on it to continue. Some classes have subclasses which can be accessed by clicking on the arrow besides them.
 We click on `HistoricPlace` from dbpedia and `HistoricThing` from lgd.
 The *Next* step is:
 
-#### Property Matching
+### Property Matching
 <img src="./images/EditPropertyMatchingView.png" width="800" alt ="Property Matching Configuration Window">
 
 Clicking on the available properties moves them to the bottom container, where the already added properties can be seen. If you
@@ -289,12 +289,12 @@ Let's take `rdfs:label` for both. Since the properties are alphabetically sorted
 
 Press *Finish* and you are now ready to build a metric!
 
-### How to Create a New Link Specification
-#### Get the Nodes You Need Into the Metric Builder
+## How to Create a New Link Specification
+### Get the Nodes You Need Into the Metric Builder
 Clicking on elements from the toolbox makes nodes appear in the metric builder. Click on both `rdfs:label` properties you have.
 Now we need a measure to check the similarity between those properties. Let's choose `cosine` for example.
 
-#### Start Linking
+### Start Linking
 Right clicking the nodes creates a small context menu for the node. If you click *Link To* you can
 link the node with an appropriate other node. The following links are permitted:
 * property -> measure
@@ -306,25 +306,25 @@ Also operator and measure need two nodes that link to them. The context menu als
 the node. If you want to delete a link, just right-click the arrow. 
 Let's link our properties with `cosine` and the measure with `output`.
 
-#### Define Thresholds
+####Define Thresholds
 If you want you can define a [Acceptance Threshold](../../configuration_file/acceptance.md) and [Verification Threshold](../../configuration_file/review.md) 
 (specifying files is not yet implemented here). 
 
-#### Running Your Linkspecification
+### Running Your Linkspecification
 If you followed the steps, your Linkspecification should look something like this:
 
 <img src="./images/BuildMetric.png" width="600" alt ="Finished Metric">
 
 If you want to *Run* it, just click on the button in the bottom right corner.
 
-#### Results
+### Results
 After the progress popup vanished you should see your results in a new window.
 
 <img src="./images/ResultView.png" width="800" ="Results">
 
 In the top left you have the possibility to save them into a file. The relation between them will be defined as `owl:sameAs`.
 
-### Machine Learning in the GUI
+## Machine Learning in the GUI
 Since finding a good metric expression can be hard, we also have implemented machine learning algorithms in the GUI. There are
 three different types of algorithms you can use:
 * Active Learning
@@ -338,7 +338,7 @@ the window will fill with elements you can use the set the parameters.
 
 <img src="./images/MachineLearning.png" width="600" alt ="overview of machine learning window">
 
-#### Active Learning
+### Active Learning
 If you are happy with the parameters you must click on *Learn* in the bottom right corner. After the progress popup vanishes you
 will see a new window, where the algorithm wants you to label link candidates as matches or non-matches.
 
@@ -348,7 +348,7 @@ You can click on *Learn* again and another iteration starts. If you don't want a
 and a new view with results will pop up. This time you also have the possibility to *Save Linkspecification* in the bottom left corner.
 This will put the metric to the metric builder and you can save this configuration if you want.
 
-#### Batch Learning
+### Batch Learning
 This learning type only takes one iteration and you have to provide a file containing the training mapping. 
 
 <img src="./images/BatchLearningInput.png" width="400" alt ="batch learning window asking for a training mapping file">
@@ -368,6 +368,6 @@ If you use RDF a mapping has `owl:sameAs` as predicate. For example:
 
 Of course the more training data you provide the better the algorithm can learn. After you click on *Save* the learning will start.
 
-#### Unsupervised Learning
+### Unsupervised Learning
 This is the type that needs the least effort from the user. You just click on *Learn* and after the algorithm is finished, 
 the results will be presented.
