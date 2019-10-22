@@ -1,6 +1,6 @@
 <template>
 	<md-layout>
-      <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
+      <div id="blocklyArea" style="height: 550px; width: 100%;"></div>
       <div id="blocklyDiv" style="position: absolute"></div>
 	    <xml id="toolbox" ref=toolbox style="display: none"> 
 	          <block type="sourceproperty"></block>

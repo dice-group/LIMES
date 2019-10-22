@@ -65,7 +65,7 @@ Optional properties can be set to segment the requested dataset.
 * The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
 * The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
 
-### Pre-processing Functions
+### Preprocessing Functions
 #### Simple
 
 Currently, LIMES supports the following set of pre-processing functions:
