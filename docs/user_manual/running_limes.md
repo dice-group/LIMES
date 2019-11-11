@@ -165,7 +165,7 @@ The *Operator* block includes the list of operators.
   
 *Optional source property* and *Optional target property* can be connected just after connecting the *Source property* and the *Target property*.  
 
-In general, once you add *Source property*/*Target property*/*Optional source property*/*Optional target property* to the workspace, you can choose the property from the dropdown list. Prefixes of the properties will automatically added to the *Prefixes*.  
+In general, once you add *Source property*/*Target property*/*Optional source property*/*Optional target property* to the workspace, you can choose the property from the dropdown list. Prefixes of the properties will automatically added to the *Prefixes*.  There is a checkbox *PP* &nbsp;for each property, which defined as Property path. If user checks this *PP*, it means that the mode Property path is enabled and new subproperties will be loaded after some time if they exist. The user can uncheck *PP* &nbsp; and then the property will return to the previous state.
   
 You can remove the block using the trash can or using right click on the block.  
 On the bottom after the Workspace you can see the formed *Metric*.  
