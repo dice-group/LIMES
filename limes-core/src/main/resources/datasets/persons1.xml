@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LIMES SYSTEM "limes.dtd">
 <LIMES>
-	<PREFIX>
-		<NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
-		<LABEL>rdf</LABEL>
-	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
-		<LABEL>rdfs</LABEL>
-	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
-		<LABEL>owl</LABEL>
-	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.okkam.org/ontology_person1.owl#</NAMESPACE>
-		<LABEL>okkamperson1</LABEL>
-	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.okkam.org/ontology_person2.owl#</NAMESPACE>
-		<LABEL>okkamperson2</LABEL>
-	</PREFIX>
-<SOURCE>
-		<ID>person11</ID>
-		<ENDPOINT>src/main/resources/datasets/Persons1/person11.nt</ENDPOINT>
-		<VAR>?x</VAR>
-		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?x rdf:type okkamperson1:Person</RESTRICTION>
-		<PROPERTY>okkamperson1:surname AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson1:given_name AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson1:age AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson1:phone_numer</PROPERTY>		
-		<PROPERTY>okkamperson1:soc_sec_id</PROPERTY>
-		<PROPERTY>okkamperson1:has_address AS cleaniri</PROPERTY>
-		<PROPERTY>okkamperson1:date_of_birth AS lowercase</PROPERTY>
-		<TYPE>N3</TYPE>
-</SOURCE>
-	
-	<TARGET>
-		<ID>person12</ID>
-		<ENDPOINT>src/main/resources/datasets/Persons1/person12.nt</ENDPOINT>
-		<VAR>?y</VAR>
-		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?y rdf:type okkamperson2:Person</RESTRICTION>
-		<PROPERTY>okkamperson2:surname AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson2:given_name AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson2:age AS lowercase</PROPERTY>
-		<PROPERTY>okkamperson2:phone_numer</PROPERTY>
-		<PROPERTY>okkamperson2:has_address AS cleaniri</PROPERTY>
-		<PROPERTY>okkamperson2:soc_sec_id</PROPERTY>
-		<PROPERTY>okkamperson2:date_of_birth AS lowercase</PROPERTY>
-		<TYPE>N3</TYPE>
-	</TARGET>	
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
+        <LABEL>rdf</LABEL>
+    </PREFIX>
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+        <LABEL>rdfs</LABEL>
+    </PREFIX>
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+        <LABEL>owl</LABEL>
+    </PREFIX>
+    <PREFIX>
+        <NAMESPACE>http://www.okkam.org/ontology_person1.owl#</NAMESPACE>
+        <LABEL>okkamperson1</LABEL>
+    </PREFIX>
+    <PREFIX>
+        <NAMESPACE>http://www.okkam.org/ontology_person2.owl#</NAMESPACE>
+        <LABEL>okkamperson2</LABEL>
+    </PREFIX>
+    <SOURCE>
+        <ID>person11</ID>
+        <ENDPOINT>datasets/Persons1/person11.nt</ENDPOINT>
+        <VAR>?x</VAR>
+        <PAGESIZE>1000</PAGESIZE>
+        <RESTRICTION>?x rdf:type http://www.okkam.org/ontology_person1.owl#Person</RESTRICTION>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#surname AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#given_name AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#age AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#phone_numer</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#soc_sec_id</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#has_address AS cleaniri</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person1.owl#date_of_birth AS lowercase</PROPERTY>
+        <TYPE>N3</TYPE>
+    </SOURCE>
 
-	<METRIC>levenshtein(x.okkamperson1:surname, y.okkamperson2:surname)</METRIC>
+    <TARGET>
+        <ID>person12</ID>
+        <ENDPOINT>datasets/Persons1/person12.nt</ENDPOINT>
+        <VAR>?y</VAR>
+        <PAGESIZE>1000</PAGESIZE>
+        <RESTRICTION>?y rdf:type okkamperson2:Person</RESTRICTION>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#surname AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#given_name AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#age AS lowercase</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#phone_numer</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#has_address AS cleaniri</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#soc_sec_id</PROPERTY>
+        <PROPERTY>http://www.okkam.org/ontology_person2.owl#date_of_birth AS lowercase</PROPERTY>
+        <TYPE>N3</TYPE>
+    </TARGET>
 
-	<ACCEPTANCE>
-		<THRESHOLD>0.98</THRESHOLD>
-		<FILE>accepted.txt</FILE>
-		<RELATION>owl:sameAs</RELATION>
-	</ACCEPTANCE>
-	<REVIEW>
-		<THRESHOLD>0.95</THRESHOLD>
-		<FILE>reviewme.txt</FILE>
-		<RELATION>owl:sameAs</RELATION>
-	</REVIEW>
-	
-		<EXECUTION>
-		<REWRITER>default</REWRITER>
-		<PLANNER>default</PLANNER>
-		<ENGINE>default</ENGINE>
-	</EXECUTION>
-	<OUTPUT>N3</OUTPUT>
+    <METRIC>levenshtein(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#surname)</METRIC>
+
+    <ACCEPTANCE>
+        <THRESHOLD>0.98</THRESHOLD>
+        <FILE>accepted.txt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+    </ACCEPTANCE>
+    <REVIEW>
+        <THRESHOLD>0.95</THRESHOLD>
+        <FILE>reviewme.txt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+    </REVIEW>
+
+    <EXECUTION>
+        <REWRITER>default</REWRITER>
+        <PLANNER>default</PLANNER>
+        <ENGINE>default</ENGINE>
+    </EXECUTION>
+    <OUTPUT>N3</OUTPUT>
 </LIMES>

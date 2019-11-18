@@ -11,12 +11,12 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineSegment;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineSegment;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -333,7 +333,7 @@ public class PolygonFrechetDistance {
         LineString tempLsQ;
         LineString tempLsP;
         Coordinate p1, p2, q1, q2;
-        com.vividsolutions.jts.geom.Polygon tempCircle;
+        org.locationtech.jts.geom.Polygon tempCircle;
         Geometry tempGeom;
 
         for (int i = 0; i < poly1.points.size() - 1; i++) {

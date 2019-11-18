@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>daily</ID>
-		<ENDPOINT>src/main/resources/datasets/dailymed-drugbank-ingredients/source2.csv</ENDPOINT>
+		<ENDPOINT>datasets/dailymed-drugbank-ingredients/source2.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -17,7 +17,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>drugbank</ID>
-		<ENDPOINT>src/main/resources/datasets/dailymed-drugbank-ingredients/target2.csv</ENDPOINT>
+		<ENDPOINT>datasets/dailymed-drugbank-ingredients/target2.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

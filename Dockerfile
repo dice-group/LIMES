@@ -1,24 +1,24 @@
+########
 ## BUILD
 # build first using maven
-FROM maven:3.3.9-jdk-8 as builder
+FROM maven:3.6.2-jdk-12 as builder
 # set workdir
 WORKDIR /limes
-# install deps
-RUN apt-get update && apt-get install -y openjfx
 # copy files
 ADD . /limes
-# install deps
-RUN cd limes-core && mvn install -U -Dmaven.test.skip=true
-# run tests
-RUN cd limes-core && mvn test
-# build package
-RUN cd limes-core && mvn clean package shade:shade -Dmaven.test.skip=true
-# copy final app jar
-RUN cp -p $(find limes-core/target -name 'limes-core-*SNAPSHOT.jar') limes.jar
-
+WORKDIR /limes/limes-core
+RUN mvn clean package shade:shade -Dmaven.test.skip=true
+# do some magic to get the right jar file to copy
+RUN mvn com.smartcodeltd:release-candidate-maven-plugin:LATEST:version \
+-DoutputTemplate="PROJECT_VERSION={{ version }}" \
+-DoutputUri="file://\${project.basedir}/__version" && \
+cat __version | sed -e /^$/d -e /^#/d -e 's/^/export /' > _version && \
+. ./_version && \
+cp -p ./target/limes-core-${PROJECT_VERSION}.jar /limes/limes.jar
+##########
 ## RELEASE
 # then run in a lighter jdk base
-FROM openjdk:8-jdk
+FROM openjdk:12.0.2-jdk
 # set workdir
 WORKDIR /limes
 # copy jar from build step

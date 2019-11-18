@@ -8,6 +8,12 @@
 *.war
 *.ear
 
+
+# Two log files I got during my build - probably they should not even get generated ~ Claus 2018/03/14
+*.log
+${sys:logFilename}
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 */bin/
@@ -20,7 +26,16 @@ hs_err_pid*
 **/.idea/
 *.iml
 .DS_Store
+.server-storage
 *.ser
+dependency-reduced-pom.xml
+pom.xml.releaseBackup
 
 # ignore gitbook builds
 _book
+# ignore dist files from vue build
+/limes-web-ui/dist/
+/limes-web-ui/node_modules/
+# misc
+package-lock.json
+release.properties

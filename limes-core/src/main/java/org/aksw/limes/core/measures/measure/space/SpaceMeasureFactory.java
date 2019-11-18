@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -41,12 +41,15 @@
 	
 	<MLALGORITHM>
 		<NAME>wombat simple</NAME>
-		<TYPE>supervised batch</TYPE>
-		<TRAINING>trainingData.nt</TRAINING>
+		<TYPE>unsupervised</TYPE>
 		<PARAMETER> 
 			<NAME>max execution time in minutes</NAME>
 			<VALUE>60</VALUE>
 		</PARAMETER>
+        <PARAMETER>
+            <NAME>beta</NAME>
+            <VALUE>5.0</VALUE>
+        </PARAMETER>
 	</MLALGORITHM>
 	
 	<ACCEPTANCE>

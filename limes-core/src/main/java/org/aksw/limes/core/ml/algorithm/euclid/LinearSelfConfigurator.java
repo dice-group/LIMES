@@ -298,7 +298,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         for (double threshold = 1; threshold > MIN_THRESHOLD; threshold = threshold - learningRate) {
 //        	logger.info("execute("+sourceProperty+", "+targetProperty+ ", "+measure+", "+threshold+");");
             AMapping mapping = execute(sourceProperty, targetProperty, measure, threshold);
-            //            double fMeasure = qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), mapping, beta);
+            //            double fMeasure = qMeasure.calculate(source.getAllUris(), target.getAllUris(), mapping, beta);
             double fMeasure = computeQuality(mapping);
             //            System.out.println("Source: " + sourceProperty + ""
             //                    + " Target: " + targetProperty + " Threshold " + threshold + " leads to F-Measure " + fMeasure);
@@ -429,7 +429,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     public List<SimpleClassifier> learnClassifer(List<SimpleClassifier> classifiers) {
         classifiers = normalizeClassifiers(classifiers);
         AMapping m = getMapping(classifiers);
-        //      double f = qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+        //      double f = qMeasure.calculate(source.getAllUris(), target.getAllUris(), m, beta);
         double f = computeQuality(m);
         // no need to update if the classifiers are already perfect
         if (f == 1.0) {

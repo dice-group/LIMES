@@ -74,7 +74,7 @@ public class Tree<T> {
      */
     public void addChild(Tree<T> child) {
         if (children == null) {
-            children = new ArrayList<Tree<T>>();
+            children = new ArrayList<>();
         }
         children.add(child);
         child.parent = this;
@@ -84,11 +84,6 @@ public class Tree<T> {
      * @param child to be removed
      */
     public void removeChild(Tree<T> child) {
-        if (children != null || children.size() > 0) {
-            for (Tree<T> c : children) {
-                removeChild(c);
-            }
-        }
         children.remove(child);
     }
 

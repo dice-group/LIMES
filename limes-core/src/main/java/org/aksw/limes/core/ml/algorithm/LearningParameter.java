@@ -14,6 +14,7 @@ public class LearningParameter {
     protected double rangeEnd;
     protected double rangeStep;
     protected String description;
+    protected String[] instanceOptions;
 
     
     /**
@@ -56,6 +57,19 @@ public class LearningParameter {
         this.rangeStep = rangeStep;
         this.description = description;
     }
+    
+    
+    public LearningParameter(String name, Object value, Class<?> clazz, String[] instanceOptions, String description) {
+        this(name, value);
+        this.clazz = clazz;
+        this.instanceOptions = instanceOptions;
+        this.description = description;
+    }
+
+	@Override
+	public String toString() {
+		return new StringBuilder("").append(name).append(" : ").append(value).toString();
+	}
 
     
     
@@ -157,7 +171,17 @@ public class LearningParameter {
         this.description = description;
     }
 
-    @Override
+	public String[] getInstanceOptions() {
+		return instanceOptions;
+	}
+
+
+	public void setInstanceOptions(String[] instanceOptions) {
+		this.instanceOptions = instanceOptions;
+	}
+
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

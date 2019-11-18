@@ -41,7 +41,7 @@ public class PseudoFMeasure extends APseudoPRF {
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
-        return getPseudoFMeasure(predictions, goldStandard, 1);
+        return calculate(predictions, goldStandard, 1d);
     }
     /** 
      * The method calculates the pseudo F-Measure of the machine learning predictions compared to a gold standard for different beta values
@@ -50,12 +50,10 @@ public class PseudoFMeasure extends APseudoPRF {
      * @param beta   Beta for F-beta
      * @return double - This returns the calculated pseudo F-Measure
      */
-    public double getPseudoFMeasure(AMapping predictions, GoldStandard goldStandard, double beta) {
-        double p = precision(predictions, goldStandard);// getPseudoPrecision(sourceUris, targetUris, result);
-        double r = recall(predictions, goldStandard); //getPseudoRecall(sourceUris, targetUris, result);        
-        if (p == 0 && r == 0) {
-            return 0.0;
-        }
+    public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {
+        double p = precision(predictions, goldStandard);
+        double r = recall(predictions, goldStandard);
+        if (p == 0 && r == 0) return 0.0;
         double f = (1 + beta * beta) * p * r / (beta * beta * p + r);
         return f;
     }

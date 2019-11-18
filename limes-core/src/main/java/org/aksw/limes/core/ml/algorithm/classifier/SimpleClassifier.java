@@ -61,7 +61,8 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
      * @author sherif
      */
     public String getMetricExpression() {
-        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format(Locale.ENGLISH, "%.2f", threshold);
+//        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format(Locale.ENGLISH, "%.2f", threshold);
+        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" +  threshold;
     }
 
     public String getSourceProperty() {

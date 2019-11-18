@@ -1,6 +1,13 @@
 package org.aksw.limes.core.measures.mapper.string;
 
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
 import org.aksw.commons.util.Pair;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -8,13 +15,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.util.RandomStringGenerator;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
 
 public class ExactMatchMapperTest {
 

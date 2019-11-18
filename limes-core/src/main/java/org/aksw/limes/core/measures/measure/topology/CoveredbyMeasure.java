@@ -2,10 +2,9 @@ package org.aksw.limes.core.measures.measure.topology;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.AMeasure;
-
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import org.aksw.limes.core.util.LimesWktReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 
 /**
  * Measure that checks for the topological relation coveredby.
@@ -20,7 +19,7 @@ public class CoveredbyMeasure extends AMeasure {
         Geometry sGeo, tGeo;
         sWKT = object1.toString();
         tWKT = object2.toString();
-        WKTReader reader = new WKTReader();
+        LimesWktReader reader = new LimesWktReader();
         try {
             sGeo = reader.read(sWKT);
             tGeo = reader.read(tWKT);

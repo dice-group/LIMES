@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.Point;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -91,7 +91,7 @@ public class Polygon {
      * Returns a Geometry from the Points of the Polygon
      *
      * @return Geometry
-     * @throws com.vividsolutions.jts.io.ParseException
+     * @throws org.locationtech.jts.io.ParseException
      *             if Geometry is not valid
      */
     public Geometry getGeometry() throws ParseException {

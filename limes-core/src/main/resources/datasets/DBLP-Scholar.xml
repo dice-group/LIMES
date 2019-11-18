@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>dblp1</ID>
-		<ENDPOINT>src/main/resources/datasets/DBLP-Scholar/DBLP1.csv</ENDPOINT>
+		<ENDPOINT>datasets/DBLP-Scholar/DBLP1.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -20,7 +20,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>scholar</ID>
-		<ENDPOINT>src/main/resources/datasets/DBLP-Scholar/Scholar.csv</ENDPOINT>
+		<ENDPOINT>datasets/DBLP-Scholar/Scholar.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

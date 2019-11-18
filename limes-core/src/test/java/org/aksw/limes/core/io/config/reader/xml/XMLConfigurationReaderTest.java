@@ -1,20 +1,33 @@
 package org.aksw.limes.core.io.config.reader.xml;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import org.aksw.limes.core.io.preprocessing.functions.Concat;
+import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -24,7 +37,8 @@ import org.junit.Test;
 public class XMLConfigurationReaderTest {
     
     Map<String, String> prefixes = new HashMap<>();
-    Map<String, Map<String, String>> functions = new HashMap<>();
+    LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
+    ArrayList<String> properties;
     KBInfo sourceInfo, targetInfo;
     Configuration testConf;
 
@@ -34,18 +48,17 @@ public class XMLConfigurationReaderTest {
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
         prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-        prefixes = Collections.unmodifiableMap(prefixes);
         HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
-        functions = Collections.unmodifiableMap(functions);
+        properties = new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT"));
         
         sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
                 "?x",                                                             //String var
-                new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
+                properties, //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?x a lgdo:RelayBox")),       //ArrayList<String> restrictions
                 functions,                                                        //Map<String, Map<String, String>> functions
@@ -61,7 +74,7 @@ public class XMLConfigurationReaderTest {
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
                 "?y",                                                             //String var
-                new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
+                properties, //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?y a lgdo:RelayBox")),       //ArrayList<String> restrictions
                 functions,                                                        //Map<String, Map<String, String>> functions
@@ -98,6 +111,7 @@ public class XMLConfigurationReaderTest {
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
+        assertEquals(testConf, fileConf);
         assertTrue(testConf.equals(fileConf));
     }
     
@@ -125,10 +139,13 @@ public class XMLConfigurationReaderTest {
         lp.setName("max execution time in minutes");
         lp.setValue(60);
         mlParameters.add(lp);
+        lp = new LearningParameter();
+        lp.setName("beta");
+        lp.setValue(5.0);
+        mlParameters.add(lp);
 
         testConf.setMlAlgorithmName("wombat simple");
-        testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
-        testConf.setTrainingDataFile("trainingData.nt");
+        testConf.setMlImplementationType(MLImplementationType.UNSUPERVISED);
         testConf.setMlAlgorithmParameters(mlParameters);
 
 //        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
@@ -137,6 +154,45 @@ public class XMLConfigurationReaderTest {
         Configuration fileConf = c.read();
         
         assertTrue(testConf.equals(fileConf));
+    }
+    
+    @Test
+    public void testNAryFunctions() {
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
+        testConf.setExecutionRewriter("default");
+        testConf.setExecutionPlanner("default");
+        testConf.setExecutionEngine("default");
+    	prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
+    	properties.add("geopos:lat");
+    	properties.add("geopos:long");
+
+    	LinkedHashMap<String, Map<String, String>> sourceFunctions = new LinkedHashMap<>();
+    	LinkedHashMap<String, Map<String, String>> targetFunctions = new LinkedHashMap<>();
+        HashMap<String, String> f = new HashMap<>();
+        f.put("polygon", null);
+        sourceFunctions.put("geom:geometry/geos:asWKT", f);
+        targetFunctions.put("geom:geometry/geos:asWKT", f);
+        HashMap<String, String> f3 = new HashMap<>();
+        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_KEYWORD+",)");
+        sourceFunctions.put("latlong", f3);
+        HashMap<String, String> f4 = new HashMap<>();
+        f4.put("poly1,poly2", "split(polygon, "+ Split.SPLIT_CHAR_KEYWORD +"\".\")");
+        targetFunctions.put("poly1,poly2", f4);
+
+
+        testConf.setPrefixes(prefixes);
+        sourceInfo.setProperties(properties);
+        sourceInfo.setFunctions(sourceFunctions);
+        targetInfo.setProperties(properties);
+        targetInfo.setFunctions(targetFunctions);
+        testConf.setSourceInfo(sourceInfo);
+        testConf.setTargetInfo(targetInfo);
+
+        String file = Thread.currentThread().getContextClassLoader().getResource("naryfunctionstest.xml").getPath();
+        XMLConfigurationReader c = new XMLConfigurationReader(file);
+        Configuration fileConf = c.read();
+        
+        assertEquals(testConf, fileConf);
     }
 
 }
