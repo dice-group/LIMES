@@ -1,11 +1,17 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
@@ -14,22 +20,44 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
-import org.aksw.limes.core.measures.measure.string.*;
+import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
+import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
+import org.aksw.limes.core.measures.measure.string.JaroMeasure;
+import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
+import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
+import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
+import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.*;
+import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
+import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
+import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
+import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
+import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
+import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +68,12 @@ import org.slf4j.LoggerFactory;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
  * @version 1.0
  */
 public class MeasureFactory {
+    static Logger logger = LoggerFactory.getLogger(MeasureFactory.class);
+
     // String measures
     public static final String COSINE = "cosine";
     public static final String EXACTMATCH = "exactmatch";
@@ -58,11 +89,19 @@ public class MeasureFactory {
     public static final String DOUBLEMETA = "doublemeta";
     public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
+    public static final String META = "meta";
+    public static final String NYSIIS = "nysiis";
+    public static final String CAVERPHONE1 = "caverphone1";
+    public static final String CAVERPHONE2 = "caverphone2";
+    public static final String REFINEDSOUNDEX = "refinedsoundex";
+    public static final String MATCHRATING = "matchrating";
+    public static final String DAITCHMOKOTOFF = "daitchmokotoff";
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
     public static final String MANHATTAN = "manhattan";
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
     public static final String GEO_GREAT_ELLIPTIC = "geo_great_elliptic";
+
     // Point-set measures
     public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroid_indexed_hausdorff";
     public static final String GEO_FAST_HAUSDORFF = "geo_fast_hausdorff";
@@ -71,6 +110,7 @@ public class MeasureFactory {
     public static final String GEO_NAIVE_HAUSDORFF = "geo_naive_hausdorff";
     public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scan_indexed_hausdorff";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetric_hausdorff";
+
     public static final String GEO_MAX = "geo_max";
     public static final String GEO_MEAN = "geo_mean";
     public static final String GEO_MIN = "geo_min";
@@ -78,12 +118,14 @@ public class MeasureFactory {
     public static final String GEO_FRECHET = "geo_frechet";
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
-    public static final String GEO_NAIVE_SURJECTION = "geo_surjection";
+    public static final String GEO_SURJECTION = "geo_surjection";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
+
     // Temporal measures
     public static final String TMP_CONCURRENT = "tmp_concurrent";
     public static final String TMP_PREDECESSOR = "tmp_predecessor";
     public static final String TMP_SUCCESSOR = "tmp_successor";
+
     public static final String TMP_AFTER = "tmp_after";
     public static final String TMP_BEFORE = "tmp_before";
     public static final String TMP_DURING = "tmp_during";
@@ -97,6 +139,7 @@ public class MeasureFactory {
     public static final String TMP_MEETS = "tmp_meets";
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_STARTS = "tmp_starts";
+
     // Topological measures
     public static final String TOP_CONTAINS = "top_contains";
     public static final String TOP_COVERED_BY = "top_covered_by";
@@ -108,21 +151,16 @@ public class MeasureFactory {
     public static final String TOP_OVERLAPS = "top_overlaps";
     public static final String TOP_TOUCHES = "top_touches";
     public static final String TOP_WITHIN = "top_within";
+
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
-    // Semantic edge-counting measures
-    public static final String SHORTEST_PATH = "shortest_path";
-    public static final String LCH = "lch";
-    public static final String LI = "li";
-    public static final String WUPALMER = "wupalmer";
-    static Logger logger = LoggerFactory.getLogger(MeasureFactory.class);
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
      * types.
      *
      * @param expression,
-     *         The name/type of the measure.
+     *            The name/type of the measure.
      * @return a specific measure type
      */
     public static MeasureType getMeasureType(String expression) {
@@ -154,7 +192,6 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-
         if (measure.startsWith(QGRAMS)) {
             return MeasureType.QGRAMS;
         }
@@ -169,6 +206,27 @@ public class MeasureFactory {
         }
         if (measure.startsWith(KOELN)) {
             return MeasureType.KOELN;
+        }
+        if (measure.startsWith(META)) {
+            return MeasureType.META;
+        }
+        if (measure.startsWith(REFINEDSOUNDEX)) {
+            return MeasureType.REFINEDSOUNDEX;
+        }
+        if (measure.startsWith(NYSIIS)) {
+            return MeasureType.NYSIIS;
+        }
+        if (measure.startsWith(MATCHRATING)) {
+            return MeasureType.MATCHRATING;
+        }
+        if (measure.startsWith(CAVERPHONE1)) {
+            return MeasureType.CAVERPHONE1;
+        }
+        if (measure.startsWith(CAVERPHONE2)) {
+            return MeasureType.CAVERPHONE2;
+        }
+        if (measure.startsWith(DAITCHMOKOTOFF)) {
+            return MeasureType.DAITCHMOKOTOFF;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
@@ -233,7 +291,7 @@ public class MeasureFactory {
         if (measure.startsWith(GEO_SUM_OF_MIN)) {
             return MeasureType.GEO_SUM_OF_MIN;
         }
-        if (measure.startsWith(GEO_NAIVE_SURJECTION)) {
+        if (measure.startsWith(GEO_SURJECTION)) {
             return MeasureType.GEO_NAIVE_SURJECTION;
         }
         if (measure.startsWith(GEO_FAIR_SURJECTION)) {
@@ -328,33 +386,17 @@ public class MeasureFactory {
         if (measure.startsWith(SET_JACCARD)) {
             return MeasureType.SET_JACCARD;
         }
-
-        ////////////////////////////////////////////////////
-        if (measure.startsWith(SHORTEST_PATH)) {
-            return MeasureType.SHORTEST_PATH;
-        }
-        if (measure.startsWith(LCH)) {
-            return MeasureType.LCH;
-        }
-        if (measure.startsWith(LI)) {
-            return MeasureType.LI;
-        }
-        if (measure.startsWith(WUPALMER)) {
-            return MeasureType.WUPALMER;
-        }
-        ///////////////////////////////////////////
-
-        //////////////////////////////////
         throw new InvalidMeasureException(measure);
     }
-
 
     /**
      * Factory function for retrieving the desired measure instance.
      *
      * @param type,
-     *         Type of the measure
+     *            Type of the measure
+     *
      * @return a specific measure instance
+     *
      */
     public static AMeasure createMeasure(MeasureType type) {
 
@@ -491,31 +533,10 @@ public class MeasureFactory {
             ///////////////////////
             case SET_JACCARD:
                 return new SetJaccardMeasure();
-            ///////////////////////
-            case SHORTEST_PATH:
-                AIndex IndexerSP = createIndexer();
-                return new ShortestPathMeasure(0.0, true, false, IndexerSP);
-            case LCH:
-                AIndex IndexerLCH = createIndexer();
-                return new LCHMeasure(0.0, true, false, IndexerLCH);
-            case LI:
-                AIndex IndexerLi = createIndexer();
-                return new LiMeasure(0.0, true, false, IndexerLi);
-            case WUPALMER:
-                AIndex IndexerWP = createIndexer();
-                return new WuPalmerMeasure(0.0, true, false, IndexerWP);
-
-            ////////////////////////////////
             default:
                 throw new InvalidMeasureException(type.toString());
         }
 
-    }
-
-    public static AIndex createIndexer() {
-        AIndex Indexer = new MemoryIndex();
-        Indexer.preIndex(false);
-        return Indexer;
     }
 
 }

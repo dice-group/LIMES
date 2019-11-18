@@ -4,12 +4,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
+import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
+import org.aksw.limes.core.io.preprocessing.PreprocessingFunctionFactory;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -17,13 +30,13 @@ import spark.Request;
 import spark.Response;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -41,9 +54,13 @@ public class Server {
     public static final String CONFIG_FILE_SUFFIX = "xml";
 
     private static final Gson GSON = new GsonBuilder().create();
+    private static final int FILE_SIZE_THRESHOLD = 1024;
+    private static final long MAX_REQUEST_SIZE = 1024 * 1024 * 15;
+    private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
     private static Server instance = null;
 
     private final Map<String, CompletableFuture<Void>> requests = new HashMap<>();
+    private Map<String, String> uploadFiles = new HashMap<>();
     private final File uploadDir = new File(STORAGE_DIR_PATH);
     private int port = -1;
     private int limit = -1;
@@ -56,6 +73,17 @@ public class Server {
     }
 
     public void run(int port, int limit) {
+        try {
+            Path files = Paths.get(STORAGE_DIR_PATH, "files").toAbsolutePath();
+            if (Files.exists(files)) {
+                Files.walk(files)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        } catch (IOException e) {
+           throw new RuntimeException(e);
+        }
         this.limit = limit;
         if (this.port > 0) {
             throw new IllegalStateException("Server already running on port " + port + "!");
@@ -67,13 +95,21 @@ public class Server {
         }
         port(port);
         staticFiles.location("/web-ui");
-        staticFiles.expireTime(10);
+        staticFiles.expireTime(7200);
         enableCORS("*","GET, POST, OPTIONS","");
         post("/submit", this::handleSubmit);
         get("/status/:id", this::handleStatus);
         get("/logs/:id", this::handleLogs);
         get("/results/:id", this::handleResults);
         get("/result/:id/:file", this::handleResult);
+        get("/list/operators", this::handleOperators);
+        get("/list/measures", this::handleMeasures);
+        get("/list/preprocessings", this::handlePreprocessings);
+        get("/sparql/:endpoint", this::handleSparql);
+        get("/uploads/:uploadId/sparql", this::handleLocalSparql);
+        post("/upload", this::handleUpload);
+        post("/sparql/:endpoint", this::handleSparql);
+        options("/sparql/:endpoint", this::handleSparql);
         exception(Exception.class, (e, req, res) -> {
             logger.error("Error in processing request" + req.uri(), e);
             res.status(500);
@@ -89,7 +125,139 @@ public class Server {
         awaitInitialization();
     }
 
+    private Object handleSparql(Request req, Response res) throws IOException {
+        String endpointUrl = URLDecoder.decode(req.params("endpoint"), "UTF-8");
+        if (req.queryString() != null && !req.queryString().equals("null")) {
+            endpointUrl += "?" + req.queryString();
+        }
+        logger.info("endpointUrl: {}", endpointUrl);
+        org.apache.http.client.fluent.Request request;
+        switch (req.requestMethod()) {
+            case "POST":
+                request = org.apache.http.client.fluent.Request.Post(endpointUrl);
+                request.bodyByteArray(req.bodyAsBytes());
+                break;
+            case "OPTIONS":
+                request = org.apache.http.client.fluent.Request.Options(endpointUrl);
+                break;
+            case "GET":
+            default:
+                request = org.apache.http.client.fluent.Request.Get(endpointUrl);
+                break;
+        }
+        for (String header : req.headers()) {
+            if (!header.equals("Content-Length") && !header.equals("Host"))
+                request.setHeader(header, req.headers(header));
+        }
+        HttpResponse response = request.execute().returnResponse();
+        for (Header header : response.getAllHeaders()) {
+            if (!header.getName().startsWith("Access-Control")) {
+                res.header(header.getName(), header.getValue());
+            }
+        }
+        res.status(response.getStatusLine().getStatusCode());
+        if (!req.requestMethod().equals("OPTIONS")) {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                entity.writeTo(baos);
+                byte[] bytes = baos.toByteArray();
+                res.raw().getOutputStream().write(bytes);
+                res.raw().getOutputStream().flush();
+                res.raw().getOutputStream().close();
+            }
+        }
+        return res.raw();
+    }
+
+    private Object handleLocalSparql(Request req, Response res) throws IOException {
+        String uploadId = req.params("uploadId");
+        String s = uploadFiles.get(uploadId);
+        String query = req.queryParams("query");
+        String matchQuery = query.toLowerCase().trim();
+        Model queryModel = ModelFactory.createDefaultModel().read(s);
+        QueryExecution queryExecution = QueryExecutionFactory.create(query, queryModel);
+        if (matchQuery.startsWith("select")) {
+            ResultSet resultSet = queryExecution.execSelect();
+            ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), resultSet);
+        } else if (matchQuery.startsWith("ask")) {
+            boolean result = queryExecution.execAsk();
+            ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), result);
+        }
+        queryExecution.close();
+        return "";
+    }
+
+    private Object handleUpload(Request req, Response res) throws IOException, ServletException {
+        File workingDir = new File(uploadDir.getAbsoluteFile(), "files");
+        if (!workingDir.exists() && !workingDir.mkdirs() ||  !workingDir.isDirectory()) {
+            throw new IOException("Not able to create directory " + workingDir.getAbsolutePath());
+        }
+        Map<String, String> partUploads = new HashMap<>();
+        req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(workingDir.getAbsolutePath(), MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD));
+        if (req.contentType().contains("multipart/form-data")) {
+            for (Part part : req.raw().getParts()) {
+                try (InputStream is = part.getInputStream()) {
+                    String uploadId = UUID.randomUUID().toString();
+                    Path partFileName = Paths.get(part.getSubmittedFileName()).getFileName();
+                    String extension = FilenameUtils.getExtension(partFileName.toString());
+                    Path destinationPath = workingDir.toPath().resolve(uploadId + "." + extension);
+                    Files.copy(is, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                    partUploads.put(part.getSubmittedFileName(), uploadId);
+                    uploadFiles.put(uploadId, destinationPath.toString());
+                    logger.info("Uploaded file '{}' with uploadId '{}'", part.getName(), uploadId);
+                }
+            }
+        } else {
+            return GSON.toJson(new ErrorMessage(1, "Only Requests of type \"multipart/form-data\" are allowed"));
+        }
+        res.status(200);
+        return GSON.toJson(new UploadMessage(partUploads));
+    }
+
     private Server(){
+    }
+
+    private Object handleOperators(Request req, Response res) {
+        OperatorsMessage result = new OperatorsMessage(
+                Arrays.stream(LogicOperator.values())
+                        .map(Enum::name)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
+    }
+
+    private Object handleMeasures(Request req, Response res) {
+        MeasuresMessage result = new MeasuresMessage(
+                Arrays.stream(MeasureType.values())
+                        .map(Enum::name)
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
+    }
+
+    private Object handlePreprocessings(Request req, Response res) {
+        PreprocessingsMessage result = new PreprocessingsMessage(
+                PreprocessingFunctionFactory.listTypes().stream()
+                        .map(pp -> {
+                            APreprocessingFunction ppf =
+                                    PreprocessingFunctionFactory.getPreprocessingFunction(
+                                            PreprocessingFunctionFactory.getPreprocessingType(pp)
+                                    );
+                            return new PreprocessingsMessage.PPInfo(
+                                    pp,
+                                    ppf.minNumberOfArguments(),
+                                    ppf.maxNumberOfArguments(),
+                                    ppf.isComplex());
+                        })
+                        .filter(ppi -> !ppi.isComplex)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
     }
 
     private Object handleSubmit(Request req, Response res) throws Exception {
@@ -98,7 +266,7 @@ public class Server {
         String fileName = getFileName(configFile);
         String suffix = FilenameUtils.getExtension(fileName);
         final Path tempFile = Files.createTempFile(uploadDir.toPath(), CONFIG_FILE_PREFIX, "." + (
-                        suffix.equals("") ? CONFIG_FILE_SUFFIX : suffix));
+                suffix.equals("") ? CONFIG_FILE_SUFFIX : suffix));
         try (InputStream is = configFile.getInputStream()) {
             Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
         }
@@ -115,6 +283,14 @@ public class Server {
             MDC.put("requestId", requestId);
             AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
             Configuration config = reader.read();
+	    String sourceEndpoint = config.getSourceInfo().getEndpoint();
+            if (uploadFiles.containsKey(sourceEndpoint)) {
+                config.getSourceInfo().setEndpoint(uploadFiles.get(sourceEndpoint));
+            }
+            String targetEndpoint = config.getTargetInfo().getEndpoint();
+            if (uploadFiles.containsKey(targetEndpoint)) {
+                config.getTargetInfo().setEndpoint(uploadFiles.get(targetEndpoint));
+            }
             LimesResult mappings = Controller.getMapping(config, limit);
             String outputFormat = config.getOutputFormat();
             ISerializer output = SerializerFactory.createSerializer(outputFormat);
@@ -304,12 +480,76 @@ public class Server {
         }
     }
 
+    private static class MeasuresMessage extends ServerMessage {
+
+        private List<String> availableMeasures;
+
+        private MeasuresMessage(List<String> availableMeasures) {
+            this.availableMeasures = availableMeasures;
+        }
+    }
+
+    private static class OperatorsMessage extends ServerMessage {
+
+        private List<String> availableOperators;
+
+        private OperatorsMessage(List<String> availableOperators) {
+            this.availableOperators = availableOperators;
+        }
+    }
+
+    static class PreprocessingsMessage extends ServerMessage {
+
+        static class PPInfo {
+
+            private String name;
+            private int minArgs;
+            private int maxArgs;
+            private boolean isComplex;
+
+            PPInfo(String name, int minArgs, int maxArgs, boolean isComplex) {
+                this.name = name;
+                this.minArgs = minArgs;
+                this.maxArgs = maxArgs;
+                this.isComplex = isComplex;
+            }
+        }
+
+        private List<PPInfo> availablePreprocessings;
+
+        private PreprocessingsMessage(List<PPInfo> availablePreprocessings) {
+            this.availablePreprocessings = availablePreprocessings;
+        }
+    }
+
     private static class SubmitMessage extends ServerMessage {
 
         private String requestId;
 
         private SubmitMessage(String requestId) {
             this.requestId = requestId;
+        }
+    }
+
+    private static class UploadMessage extends ServerMessage {
+
+        private List<UploadInfo> uploads = new ArrayList<>();
+
+        static class UploadInfo {
+
+            private String partName;
+            private String uploadId;
+
+            UploadInfo(String partName, String uploadId) {
+                this.partName = partName;
+                this.uploadId = uploadId;
+            }
+        }
+
+        private UploadMessage(Map<String, String> partUploads) {
+            for (Map.Entry<String, String> upload : partUploads.entrySet()) {
+                this.uploads.add(new UploadInfo(upload.getKey(), upload.getValue()));
+            }
         }
     }
 

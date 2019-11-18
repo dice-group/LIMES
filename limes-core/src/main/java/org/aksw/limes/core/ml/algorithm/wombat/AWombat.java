@@ -1,4 +1,16 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package org.aksw.limes.core.ml.algorithm.wombat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -30,8 +42,6 @@ import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 
 /**
@@ -298,16 +308,14 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return threshold;
     }
 
+
     /**
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
      *
-     * @param sourceProperty
-     *         Property of source to use
-     * @param targetProperty
-     *         Property of target to use
-     * @param measure
-     *         Measure to be used
+     * @param sourceProperty Property of source to use
+     * @param targetProperty Property of target to use
+     * @param measure Measure to be used
      * @return Best simple classifier
      */
     private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
@@ -320,7 +328,6 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = fMeasure(mapping);
             if (maxOverlap < overlap) {
-                bestMapping = mapping;
                 theta = threshold;
                 maxOverlap = overlap;
                 bestMapping = mapping;
@@ -336,8 +343,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Get the most promising node as the node with the best F-score
      *
-     * @param root
-     *         The whole refinement tree
+     * @param root  The whole refinement tree
      * @return best node from the input tree root
      * @author sherif
      */
@@ -348,8 +354,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Get the most promising node as the node with the best F-score
      *
-     * @param root
-     *         The whole refinement tree
+     * @param root  The whole refinement tree
      * @return most promising node from the input tree root
      * @author sherif
      */
@@ -361,10 +366,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Get the most promising node as the node with the best F-score
      *
-     * @param root
-     *         The whole refinement tree
-     * @param penaltyWeight
-     *         penalty weight
+     * @param root  The whole refinement tree
+     * @param penaltyWeight penalty weight
      * @return most promising node from the input tree root
      * @author sherif
      */
@@ -405,23 +408,23 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
     }
 
-    /**
-     * @param promisingChild
-     *         promising child
-     * @return children penalty + complexity penalty
-     * @author sherif
-     */
-    private double computePenalty(Tree<?> root, Tree<?> promisingChild) {
-        long childrenCount = promisingChild.size() - 1;
-        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / root.size();
-        long level = promisingChild.level();
-        double complexityPenalty = (getComplexityPenaltyWeight() * level) / root.depth();
-        return childrenPenalty + complexityPenalty;
-    }
 
-    protected final boolean saveMapping() {
-        return Boolean.parseBoolean(getParameter(PARAMETER_SAVE_MAPPING).toString());
-    }
+	/**
+	 * @param promisingChild promising child
+	 * @return children penalty + complexity penalty
+	 * @author sherif
+	 */
+	private double computePenalty(Tree<?> root, Tree<?> promisingChild) {
+		long childrenCount = promisingChild.size() - 1;
+		double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / root.size();
+		long level = promisingChild.level();
+		double complexityPenalty = (getComplexityPenaltyWeight() * level) / root.depth();
+		return childrenPenalty + complexityPenalty;
+	}
+
+	protected final boolean saveMapping() {
+		return Boolean.parseBoolean(getParameter(PARAMETER_SAVE_MAPPING).toString());
+	}
 
 
     @Override
@@ -440,16 +443,16 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double propertyLearningRate = 0.9;
         double overallPenaltyWeight = 0.5d;
         boolean verbose = false;
-        Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "cosine", "qgrams"));
+        Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
 
         learningParameters = new ArrayList<>();
         learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
         learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
-        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE, 1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
-        learningParameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE, 1, PARAMETER_EXECUTION_TIME_IN_MINUTES));
+        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
+        learningParameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
         learningParameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class, 0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
         learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
-        learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate, Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+        learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
         learningParameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIGHT));
         learningParameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIGHT));
         learningParameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
@@ -509,11 +512,12 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     protected Set<String> getAtomicMeasures() {
         Set<String> atomicMeasures = new HashSet<>();
-        String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[", "").replace("]", "");
-        for (String m : measuresAsString.split(",")) {
+        String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[","").replace("]", "");
+        for(String m : measuresAsString.split(",")){
             atomicMeasures.add(m.trim());
         }
         return atomicMeasures;
     }
+
 
 }

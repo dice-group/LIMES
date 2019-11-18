@@ -18,5 +18,7 @@ public interface IPreprocessingFunction {
 	public int minNumberOfArguments();
 	
 	public int maxNumberOfArguments();
+
+	boolean isComplex();
 	
 }

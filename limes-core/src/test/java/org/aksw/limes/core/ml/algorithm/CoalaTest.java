@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.coala.Clustering;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;

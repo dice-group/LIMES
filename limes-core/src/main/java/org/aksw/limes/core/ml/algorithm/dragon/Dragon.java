@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
+import org.aksw.limes.core.evaluation.evaluationDataLoader.PropMapper;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -99,7 +99,7 @@ public class Dragon extends ACoreMLAlgorithm {
     // "cosine", "qgrams" };
     // public static final String[] numberMeasures = {};
 
-    public static Set<String> defaultMeasures = null;
+    public static Set<String> defaultMeasures = new HashSet<String>();
 
     public static final double threshold = 0.01;
 
@@ -199,7 +199,8 @@ public class Dragon extends ACoreMLAlgorithm {
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         ls = rw.rewrite(ls);
         DynamicPlanner dp = new DynamicPlanner(source, target);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
+                this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar());
         this.prediction = ee.execute(ls, dp);
         return this.prediction;
     }
@@ -259,10 +260,10 @@ public class Dragon extends ACoreMLAlgorithm {
                 .add(new LearningParameter(PARAMETER_PRUNING_FUNCTION, pruningFunction, PruningFunctionDTL.class,
                         new String[] { PRUNING_NAME_ERROR_ESTIMATE_PRUNING, PRUNING_NAME_GLOBAL_FMEASURE },
                         PARAMETER_FITNESS_FUNCTION));
-        
-        Set<String> measures = new TreeSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams", "overlap", "levenshtein"));
-        learningParameters.add(new LearningParameter(Dragon.PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class,
-                0, 0, 0, Dragon.PARAMETER_ATOMIC_MEASURES));
+
+        Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
+        learningParameters.add(new LearningParameter(Dragon.PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0,
+                0, 0, Dragon.PARAMETER_ATOMIC_MEASURES));
     }
 
     @Override
@@ -275,27 +276,39 @@ public class Dragon extends ACoreMLAlgorithm {
         return mlType == MLImplementationType.SUPERVISED_BATCH;
     }
 
+    private PropertyMapping getPropertyMappingFromParameter() {
+        PropertyMapping propertyMapping = null;
+        if (getParameter(PARAMETER_PROPERTY_MAPPING) instanceof PropertyMapping) {
+            propertyMapping = (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING);
+        } else {
+            propertyMapping = PropMapper
+                    .getPropertyMappingFromFile(getParameter(PARAMETER_PROPERTY_MAPPING).toString());
+            setParameter(PARAMETER_PROPERTY_MAPPING, propertyMapping);
+        }
+        return propertyMapping;
+    }
+
     @Override
     protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
         if (isActive) {
             root = new DecisionTree(this, testSourceCache, testTargetCache, null,
-                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData,
-                    (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+                    Double.parseDouble(getParameter(PARAMETER_MIN_PROPERTY_COVERAGE).toString()),
+                    Double.parseDouble(getParameter(PARAMETER_PROPERTY_LEARNING_RATE).toString()),
+                    Double.parseDouble(getParameter(PARAMETER_PRUNING_CONFIDENCE).toString()), trainingData,
+                    getPropertyMappingFromParameter());
         } else {
             root = new DecisionTree(this, sourceCache, targetCache, null,
                     (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
                     (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
                     (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData,
-                    (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+                    getPropertyMappingFromParameter());
         }
         DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
         DecisionTree.fitnessFunction.setPropertyMapping((PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
         DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
         DecisionTree.fitnessFunction.setDt(root);
-        DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-        root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+        DecisionTree.maxDepth = Integer.parseInt(getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT).toString());
+        root.buildTree(DecisionTree.maxDepth);
         logger.info("FULL:\n" + root.toString());
 
         root.prune();

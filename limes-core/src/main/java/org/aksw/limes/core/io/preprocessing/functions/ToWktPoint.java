@@ -34,5 +34,9 @@ public class ToWktPoint extends APreprocessingFunction {
 		inst.addProperty(property, newValues);
 		return inst;
 	}
-	
+
+    public boolean isComplex() {
+        return true;
+    }
+
 }

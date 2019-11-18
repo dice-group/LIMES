@@ -26,20 +26,18 @@ hs_err_pid*
 **/.idea/
 *.iml
 .DS_Store
+.server-storage
 *.ser
+dependency-reduced-pom.xml
+pom.xml.releaseBackup
 
 # ignore gitbook builds
 _book
 
-limes-core/src/main/java/org/aksw/limes/core/controller/Statistics.java
-limes-core/src/main/java/org/aksw/limes/core/controller/StatisticsString.java
-limes-core/src/main/java/org/aksw/limes/core/measures/measure/semantic/edgecounting/utils/LinksIdentification.java
-limes-core/src/main/resources/wordnet/
-limes-core/src/test/java/org/aksw/limes/core/measures/measure/semantic/
+# ignore dist files from vue build
+/limes-web-ui/dist/
+/limes-web-ui/node_modules/
+# misc
+package-lock.json
+release.properties
 
-.gitignore
-
-limes-core/.gitignore
-
-limes-core/dependency-reduced-pom.xml
-limes-core/manual/

@@ -643,5 +643,4 @@ public class PPJoinPlusPlus extends AMapper {
             return -1.84 + 0.0006 * sourceSize + 0.0006 * targetSize;
         }
     }
-
 }

@@ -9,6 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.aksw.limes.core.controller.Controller;
+import org.aksw.limes.core.controller.LimesResult;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
@@ -16,6 +18,8 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -24,6 +28,7 @@ import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -393,5 +398,15 @@ public class DecisionTreeTest {
 		return tree;
 
 	}
+
+//	@Test
+//	public void runViaConfig(){
+//		Configuration configuration = new XMLConfigurationReader(Thread.currentThread().getContextClassLoader().getResource("Abt-Buy-Dragon.xml").getPath()).read();
+//		LimesResult mapping = Controller.getMapping(configuration);
+//		Assert.assertNotNull(mapping);
+//		Assert.assertNotNull(mapping.getAcceptanceMapping());
+//		Assert.assertNotEquals(0,mapping.getAcceptanceMapping().size());
+//		Assert.assertNotEquals(0,mapping.getVerificationMapping().size());
+//	}
 
 }

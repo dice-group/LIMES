@@ -148,5 +148,4 @@ public class RatcliffObershelpMapper extends AMapper {
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
-
 }
