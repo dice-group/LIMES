@@ -41,9 +41,9 @@ public class EdgeCountingSemanticMapper extends AMapper {
         return indexMinMax;
     }
 
-    public void setValues(boolean i, boolean f) {
-        preIndex = i;
-        filtering = f;
+    public void setValues(boolean index, boolean filter) {
+        preIndex = index;
+        filtering = filter;
     }
 
     public void setNo(int n) {
