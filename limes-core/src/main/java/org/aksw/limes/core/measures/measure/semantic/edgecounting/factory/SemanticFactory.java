@@ -9,6 +9,14 @@ import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implements the semantic measure factory class. For each semantic measure
+ * name, the factory returns an object of the corresponding semantic measure.
+ *
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ *
+ * @version 1.0
+ */
 public class SemanticFactory {
     // Semantic edge-counting measures
     public static final String SHORTEST_PATH = "shortest_path";
@@ -18,6 +26,17 @@ public class SemanticFactory {
 
     static Logger logger = LoggerFactory.getLogger(SemanticFactory.class);
 
+    /**
+     * Factory function for retrieving the desired semantic measure instance.
+     *
+     * @param measure,
+     *            Type of the measure
+     * @param Indexer,
+     *            an index instance
+     *
+     * @return a specific measure instance
+     *
+     */
     public static AEdgeCountingSemanticMeasure createMeasure(SemanticType measure, AIndex Indexer) {
         if (measure == SemanticType.SHORTEST_PATH)
             return new ShortestPathMeasure(Indexer);
@@ -30,6 +49,14 @@ public class SemanticFactory {
         return null;
     }
 
+    /**
+     * Factory function for retrieving a semantic measure name from the set of
+     * allowed types.
+     *
+     * @param measure,
+     *            The name/type of the measure.
+     * @return a specific semantic measure type
+     */
     public static SemanticType getMeasureType(String measure) {
 
         if (measure.startsWith(SHORTEST_PATH)) {
