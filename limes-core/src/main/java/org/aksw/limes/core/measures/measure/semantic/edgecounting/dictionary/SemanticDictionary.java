@@ -19,12 +19,24 @@ import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
 
+/**
+ * Implements the semantic dictionary (wordnet) class. Responsible for loading,
+ * exporting and closing the semantic dictionary.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
+ *
+ */
 public class SemanticDictionary {
     private IRAMDictionary dictionary = null;
     private String wordNetFolder = System.getProperty("user.dir") + "/src/main/resources/wordnet/dict/";
     private String exFile = wordNetFolder + "JWI_Export_.wn";
     private static final Logger logger = LoggerFactory.getLogger(SemanticDictionary.class);
 
+    /**
+     * Exports the wordnet database files into one file.
+     * 
+     */
     public void exportDictionaryToFile() {
         File dictionaryFolder = new File(wordNetFolder);
 
@@ -42,8 +54,6 @@ public class SemanticDictionary {
                 try {
                     dictionary.open();
                     dictionary.export(new FileOutputStream(dicFile));
-                    // logger.info("Export is " + (exFile.length() / 1048576) +
-                    // " MB");
                 } catch (IOException e1) {
                     logger.error("Couldn't open wordnet dictionary. Exiting..");
                     e1.printStackTrace();
@@ -56,6 +66,10 @@ public class SemanticDictionary {
 
     }
 
+    /**
+     * Closes and removes the semantic dictionary from memory
+     * 
+     */
     public void removeDictionary() {
         if (dictionary != null) {
             dictionary.close();
@@ -63,6 +77,10 @@ public class SemanticDictionary {
         }
     }
 
+    /**
+     * Opens the exported wordnet file and loads it to memory
+     * 
+     */
     public void openDictionaryFromFile() {
         File dicFile = new File(exFile);
 
@@ -84,18 +102,49 @@ public class SemanticDictionary {
 
     }
 
+    /**
+     * Retrieves the corresponding IWord of an IWordID in wordnet
+     * 
+     * @param IWordID,
+     *            the input IWordID
+     * 
+     * @return the resulting IWord
+     */
     public IWord getWord(IWordID wordID) {
         return dictionary.getWord(wordID);
     }
 
+    /**
+     * Retrieves the corresponding IIndexWord of a string in wordnet
+     * 
+     * @param str,
+     *            the input string
+     * @param pos,
+     *            the input string's POS
+     * 
+     * @return the resulting IIndexWord
+     */
     public IIndexWord getIndexWord(String str, POS pos) {
         return dictionary.getIndexWord(str, pos);
     }
 
+    /**
+     * Retrieves the corresponding ISynset of ISynsetID in wordnet
+     * 
+     * @param ISynsetID,
+     *            the input ISynsetID
+     * 
+     * @return the resulting ISynset
+     */
     public ISynset getSynset(ISynsetID hypernymId) {
         return dictionary.getSynset(hypernymId);
     }
 
+    /**
+     * Retrieves the semantic wordnet dictionary
+     * 
+     * @return the dictionary
+     */
     public IRAMDictionary getDictionary() {
         return dictionary;
     }

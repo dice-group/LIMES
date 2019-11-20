@@ -25,7 +25,24 @@ public class EdgeCountingSemanticMapper extends AMapper {
     AEdgeCountingSemanticMeasure measure = null;
     AIndex Indexer = null;
 
-
+    /**
+     * Computes a mapping between a source and a target.
+     *
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Variable for the source dataset
+     * @param targetVar
+     *            Variable for the target dataset
+     * @param expression
+     *            Expression to process.
+     * @param threshold
+     *            Similarity threshold
+     * @return A mapping which contains links between the source instances and
+     *         the target instances
+     */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
@@ -47,12 +64,12 @@ public class EdgeCountingSemanticMapper extends AMapper {
         }
 
         AMapping m = MappingFactory.createDefaultMapping();
-
+        // create index before anything
         Indexer = new MemoryIndex();
         Indexer.preIndex();
-
+        // create semantic similarity, pass indexer as parameter
         SemanticType type = SemanticFactory.getMeasureType(expression);
-        measure = SemanticFactory.createMeasure(type,Indexer);
+        measure = SemanticFactory.createMeasure(type, Indexer);
 
         for (Instance sourceInstance : source.getAllInstances()) {
             // System.out.println("Source URI "+sourceInstance.getUri());
@@ -69,7 +86,11 @@ public class EdgeCountingSemanticMapper extends AMapper {
 
         // in case of a db, you close the connection
         Indexer.close();
-
+        // dictionary gets open once, during the creation of the semantic
+        // similarity.
+        // then, it stays open until all comparisons between instances are
+        // carried out. once the comparisons are over, the dictionary must be
+        // closed.
         measure.close();
 
         return m;

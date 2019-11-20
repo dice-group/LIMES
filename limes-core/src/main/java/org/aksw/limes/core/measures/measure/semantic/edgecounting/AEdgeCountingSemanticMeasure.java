@@ -36,9 +36,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected AIndex Indexer = null;
     protected SemanticDictionary dictionary = null;
 
-    public boolean simple = false;
-
-
 
     public AEdgeCountingSemanticMeasure( AIndex indexer) {
         dictionary = new SemanticDictionary();
