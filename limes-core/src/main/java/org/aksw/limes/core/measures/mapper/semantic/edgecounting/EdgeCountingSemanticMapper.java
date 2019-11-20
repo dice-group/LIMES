@@ -11,9 +11,8 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.factory.SemanticFactory;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.factory.SemanticType;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.slf4j.Logger;
@@ -22,37 +21,10 @@ import org.slf4j.MarkerFactory;
 
 public class EdgeCountingSemanticMapper extends AMapper {
     static Logger logger = LoggerFactory.getLogger(EdgeCountingSemanticMapper.class);
-    boolean preIndex = true;
-    boolean filtering = false;
 
     AEdgeCountingSemanticMeasure measure = null;
     AIndex Indexer = null;
 
-    int no = 0;
-
-    long indexMinMax = 0l;
-    long indexPaths = 0l;
-
-    public long getIndexPaths() {
-        return indexPaths;
-    }
-
-    public long getIndexMinMax() {
-        return indexMinMax;
-    }
-
-    public void setValues(boolean index, boolean filter) {
-        preIndex = index;
-        filtering = filter;
-    }
-
-    public void setNo(int n) {
-        no = n;
-    }
-
-    public RuntimeStorage getRuntimes() {
-        return measure.getRuntimeStorage();
-    }
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
@@ -76,43 +48,27 @@ public class EdgeCountingSemanticMapper extends AMapper {
 
         AMapping m = MappingFactory.createDefaultMapping();
 
-        if (preIndex == true) {
-            Indexer = new MemoryIndex();
-            Indexer.preIndex(filtering);
-            if (filtering == true)
-                indexMinMax = Indexer.getDurations()[0];
-            indexPaths = Indexer.getDurations()[1];
-        }
+        Indexer = new MemoryIndex();
+        Indexer.preIndex();
 
         SemanticType type = SemanticFactory.getMeasureType(expression);
-        measure = SemanticFactory.createMeasure(type, threshold, preIndex, filtering, Indexer);
+        measure = SemanticFactory.createMeasure(type,Indexer);
 
-        int counterSource = 0;
         for (Instance sourceInstance : source.getAllInstances()) {
-            counterSource++;
             // System.out.println("Source URI "+sourceInstance.getUri());
-            int counterTarget = 0;
             for (Instance targetInstance : target.getAllInstances()) {
                 // System.out.println("-->Target URI "+targetInstance.getUri());
-                counterTarget++;
-
                 double similarity = measure.getSimilarity(sourceInstance, targetInstance, properties.get(0),
                         properties.get(1));
                 if (similarity >= threshold) {
                     m.add(sourceInstance.getUri(), targetInstance.getUri(), similarity);
                 }
-                if (counterTarget == no)
-                    break;
 
             }
-            if (counterSource == no)
-                break;
         }
 
-        if (preIndex == true) {
-            // in case of a db, you close the connection
-            Indexer.close();
-        }
+        // in case of a db, you close the connection
+        Indexer.close();
 
         measure.close();
 

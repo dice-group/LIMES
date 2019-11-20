@@ -20,12 +20,12 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
@@ -562,16 +562,16 @@ public class MeasureFactory {
         ///////////////////////
         case SHORTEST_PATH:
             AIndex IndexerSP = createIndexer();
-            return new ShortestPathMeasure(0.0, true, false, IndexerSP);
+            return new ShortestPathMeasure(IndexerSP);
         case LCH:
             AIndex IndexerLCH = createIndexer();
-            return new LCHMeasure(0.0, true, false, IndexerLCH);
+            return new LCHMeasure(IndexerLCH);
         case LI:
             AIndex IndexerLi = createIndexer();
-            return new LiMeasure(0.0, true, false, IndexerLi);
+            return new LiMeasure(IndexerLi);
         case WUPALMER:
             AIndex IndexerWP = createIndexer();
-            return new WuPalmerMeasure(0.0, true, false, IndexerWP);
+            return new WuPalmerMeasure(IndexerWP);
         default:
             throw new InvalidMeasureException(type.toString());
         }
@@ -580,7 +580,7 @@ public class MeasureFactory {
 
     public static AIndex createIndexer() {
         AIndex Indexer = new MemoryIndex();
-        Indexer.preIndex(false);
+        Indexer.preIndex();
         return Indexer;
     }
 

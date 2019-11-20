@@ -64,52 +64,6 @@ public class LeastCommonSubsumerFinder {
         }
     }
 
-    @Deprecated
-    public void getLeastCommonSubsumerViaShortestPath(ArrayList<ArrayList<ISynsetID>> synset1Tree,
-            ArrayList<ArrayList<ISynsetID>> synset2Tree) {
-
-        if (synset1Tree == null || synset2Tree == null)
-            return;
-
-        if (synset1Tree.isEmpty() == true || synset2Tree.isEmpty() == true)
-            return;
-
-        lcs = new LeastCommonSubsumer();
-        int path1Pos, path2Pos;
-
-        for (List<ISynsetID> synset1HypernymPath : synset1Tree) {
-
-            for (List<ISynsetID> synset2HypernymPath : synset2Tree) {
-
-                path1Pos = 0;
-                path2Pos = 0;
-                while ((path1Pos < synset1HypernymPath.size()) && (path2Pos < synset2HypernymPath.size())
-                        && (synset1HypernymPath.get(path1Pos).getOffset() == synset2HypernymPath.get(path2Pos)
-                                .getOffset())) {
-                    ++path1Pos;
-                    ++path2Pos;
-                }
-                // if 0) there is no DCS available until now, 1) the new
-                // distance between the synset is less than the existing one
-                // or 2) the current distance of synsets is the same as the
-                // existing one but the new common synset is deeper in the
-                // hierarchy than our current DCS
-                int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
-                int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
-
-                if ((lcs.getPath() == null) || (newPath < oldPath)
-                        || ((path1Pos > lcs.getDepth()) && (newPath == oldPath))) {
-                    // we have found a new DCS
-
-                    lcs.setPaths(synset1HypernymPath.subList(0, path1Pos),
-                            synset1HypernymPath.subList(path1Pos, synset1HypernymPath.size()),
-                            synset2HypernymPath.subList(path2Pos, synset2HypernymPath.size()));
-
-                }
-
-            }
-        }
-    }
 
     private class LeastCommonSubsumer {
 

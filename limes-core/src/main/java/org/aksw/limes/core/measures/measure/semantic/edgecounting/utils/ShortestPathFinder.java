@@ -17,11 +17,9 @@ import edu.mit.jwi.item.Pointer;
 
 public class ShortestPathFinder {
 
-    
     public static int shortestPath(ArrayList<ArrayList<ISynsetID>> synset1Tree,
             ArrayList<ArrayList<ISynsetID>> synset2Tree) {
-        
-        
+
         int path = Integer.MAX_VALUE;
 
         if (synset1Tree == null || synset2Tree == null)
@@ -33,17 +31,7 @@ public class ShortestPathFinder {
         int path1Pos, path2Pos;
 
         for (List<ISynsetID> synset1HypernymPath : synset1Tree) {
-            /*
-             * System.out.println("1"); for(ISynsetID id1: synset1HypernymPath){
-             * System.out.println(""+id1.toString()); }
-             */
             for (List<ISynsetID> synset2HypernymPath : synset2Tree) {
-
-                /*
-                 * System.out.println("2"); for(ISynsetID id2:
-                 * synset2HypernymPath){ System.out.println(""+id2.toString());
-                 * }
-                 */
 
                 path1Pos = 0;
                 path2Pos = 0;
@@ -62,13 +50,13 @@ public class ShortestPathFinder {
         }
         if (path == Integer.MAX_VALUE)
             path = -1;
-        
+
         return path;
 
     }
 
     public static int shortestPath(ISynset synsetID1, ISynset synsetID2, SemanticDictionary dictionary) {
-        
+
         int length = 0;
 
         if (synsetID1 == null || synsetID2 == null || dictionary == null)
@@ -98,19 +86,8 @@ public class ShortestPathFinder {
 
             if (!queue1.isEmpty()) {
 
-                /*
-                 * System.out.println("Visited1"); for (Entry<ISynsetID,
-                 * Integer> entry : visited1.entrySet()) { ISynsetID key =
-                 * entry.getKey(); Integer value = entry.getValue();
-                 * System.out.println("key "+key+" "+value); }
-                 */
-
                 ISynsetID id = queue1.poll();
 
-                /*
-                 * System.out.println("1 Poping: "+id.toString());
-                 * System.out.println("-----------------");
-                 */
                 if (visited2.containsKey(id)) {
                     length = visited1.get(id) + visited2.get(id);
                     if (length < minLength)
@@ -146,19 +123,8 @@ public class ShortestPathFinder {
 
             if (!queue2.isEmpty()) {
 
-                /*
-                 * System.out.println("Visited2"); for (Entry<ISynsetID,
-                 * Integer> entry : visited2.entrySet()) { ISynsetID key =
-                 * entry.getKey(); Integer value = entry.getValue();
-                 * System.out.println("key "+key+" "+value); }
-                 */
-
                 ISynsetID id = queue2.poll();
 
-                /*
-                 * System.out.println("2 Poping: "+id.toString());
-                 * System.out.println("-----------------");
-                 */
                 if (visited1.containsKey(id)) {
                     length = visited1.get(id) + visited2.get(id);
                     if (length < minLength)
@@ -202,7 +168,7 @@ public class ShortestPathFinder {
                     Comparator.comparing(Entry::getValue));
             minLength = min1.getValue() + min2.getValue() + 2;
         }
-        
+
         return minLength;
     }
 

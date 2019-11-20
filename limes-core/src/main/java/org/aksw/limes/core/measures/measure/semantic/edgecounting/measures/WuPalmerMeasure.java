@@ -1,9 +1,8 @@
-package org.aksw.limes.core.measures.measure.semantic.edgecounting;
+package org.aksw.limes.core.measures.measure.semantic.edgecounting.measures;
 
 import java.util.ArrayList;
 
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.filters.ASemanticFilter;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.filters.SemanticFilterFactory;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.LeastCommonSubsumerFinder;
 
@@ -13,8 +12,8 @@ import edu.mit.jwi.item.ISynsetID;
 public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
     double maxValue = 1;
 
-    public WuPalmerMeasure(double threshold, boolean preindex, boolean filtering, AIndex Indexer) {
-        super(threshold, preindex, filtering, Indexer);
+    public WuPalmerMeasure(AIndex Indexer) {
+        super(Indexer);
     }
 
     public double calculate(ArrayList<ArrayList<ISynsetID>> synset1Tree, ArrayList<ArrayList<ISynsetID>> synset2Tree) {
@@ -40,17 +39,13 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
         return sim;
     }
 
-
     @Override
-    public double getSimilarityComplex(ISynset synset1, ISynset synset2) {
+    public double getSim(ISynset synset1, ISynset synset2) {
         double sim = 0.0d;
         ArrayList<ArrayList<ISynsetID>> paths1 = getPaths(synset1);
         ArrayList<ArrayList<ISynsetID>> paths2 = getPaths(synset2);
 
-        long b = System.currentTimeMillis();
         sim = getSimilarity(synset1, paths1, synset2, paths2);
-        long e = System.currentTimeMillis();
-        runtimes.getSynsetSimilarity += e - b;
         return sim;
     }
 
@@ -68,18 +63,6 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
         }
 
         return calculate(synset1Tree, synset2Tree);
-    }
-
-    @Override
-    public boolean filter(ArrayList<Integer> parameters) {
-        if (parameters == null)
-            return true;
-        if (parameters.isEmpty())
-            return true;
-        ASemanticFilter filter = SemanticFilterFactory.createFilter(SemanticFilterFactory.getFilterType("wupalmer"),
-                theta, parameters.get(4));
-        boolean flag = filter.filter(parameters);
-        return flag;
     }
 
     @Override

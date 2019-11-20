@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
-import java.util.ArrayList;
 
 import org.aksw.limes.core.measures.measure.semantic.ISemanticMeasure;
 
@@ -17,10 +16,9 @@ public interface IEdgeCountingSemanticMeasure extends ISemanticMeasure {
      * @return semantic similarity of two synsets
      */
 
-    public double getSimilarityComplex(ISynset synset1, ISynset synset2);
+    public double getSim(ISynset synset1, ISynset synset2);
 
     
 
-    public boolean filter(ArrayList<Integer> parameters);
 
 }

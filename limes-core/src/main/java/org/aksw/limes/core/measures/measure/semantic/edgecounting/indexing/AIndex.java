@@ -7,13 +7,8 @@ import edu.mit.jwi.item.ISynsetID;
 
 public abstract class AIndex {
  
-    protected long[] durations = new long[2];
-    
-    public long[] getDurations() {
-        return durations;
-    }
 
-    public abstract void preIndex(boolean filter);
+    public abstract void preIndex();
     
     public abstract void init(boolean f);
 

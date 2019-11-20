@@ -1,6 +1,11 @@
-package org.aksw.limes.core.measures.measure.semantic.edgecounting;
+package org.aksw.limes.core.measures.measure.semantic.edgecounting.factory;
 
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,16 +18,15 @@ public class SemanticFactory {
 
     static Logger logger = LoggerFactory.getLogger(SemanticFactory.class);
 
-    public static AEdgeCountingSemanticMeasure createMeasure(SemanticType measure, double threshold,
-            boolean preindex, boolean filtering, AIndex Indexer) {
+    public static AEdgeCountingSemanticMeasure createMeasure(SemanticType measure, AIndex Indexer) {
         if (measure == SemanticType.SHORTEST_PATH)
-            return new ShortestPathMeasure(threshold, preindex, filtering, Indexer);
+            return new ShortestPathMeasure(Indexer);
         else if (measure == SemanticType.LI)
-            return new LiMeasure(threshold, preindex, filtering, Indexer);
+            return new LiMeasure(Indexer);
         else if (measure == SemanticType.LCH)
-            return new LCHMeasure(threshold, preindex, filtering, Indexer);
+            return new LCHMeasure(Indexer);
         else if (measure == SemanticType.WUPALMER)
-            return new WuPalmerMeasure(threshold, preindex, filtering, Indexer);
+            return new WuPalmerMeasure(Indexer);
         return null;
     }
 

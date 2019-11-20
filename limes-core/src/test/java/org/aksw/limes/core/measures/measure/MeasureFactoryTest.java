@@ -25,10 +25,10 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
