@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.aksw.limes.core.exceptions.semanticDictionary.ExportedSemanticDictionaryFileNotFound;
+import org.aksw.limes.core.exceptions.semanticDictionary.SemanticDictionaryNotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +27,11 @@ public class SemanticDictionary {
 
     public void exportDictionaryToFile() {
         File dictionaryFolder = new File(wordNetFolder);
-        
+
         if (!dictionaryFolder.exists()) {
             logger.error("Wordnet dictionary folder doesn't exist. Can't do anything");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
+            throw new SemanticDictionaryNotFound("Wordnet dictionary could not be found.\n "
+                    + "Please read the instructions in the README.md file on how to download the worndet database files.\n");
         } else {
             File dicFile = new File(exFile);
             if (!dicFile.exists()) {
@@ -64,13 +65,10 @@ public class SemanticDictionary {
 
     public void openDictionaryFromFile() {
         File dicFile = new File(exFile);
-        
+
         if (!dicFile.exists()) {
-            logger.error("No exported wordnet file is found. Exiting..");
-            logger.error("Please execute the exportDictionaryToFile function first.");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
+            throw new ExportedSemanticDictionaryFileNotFound("No exported wordnet file is found. Exiting..\n"
+                    + "Please execute the exportDictionaryToFile() function first.");
         } else {
             if (dictionary == null) {
                 dictionary = new RAMDictionary(dicFile);
