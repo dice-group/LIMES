@@ -14,6 +14,13 @@ import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.POS;
 
+/**
+ * Implements the memory index class that computes, stores and loads the
+ * hypernym paths of every synset in wordnet.
+ *
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
+ */
 public class MemoryIndex extends AIndex {
     private static final Logger logger = LoggerFactory.getLogger(MemoryIndex.class);
 
@@ -24,21 +31,35 @@ public class MemoryIndex extends AIndex {
 
     protected SemanticDictionary dictionary = null;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(boolean f) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void preIndex() {
         this.preIndexPaths();
 
     }
 
-
+    /**
+     * Stores in memory all possible hypernym paths of a wordnet's synset from
+     * the root(s).
+     * 
+     *
+     */
     public void preIndexPaths() {
         dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
@@ -62,16 +83,9 @@ public class MemoryIndex extends AIndex {
 
     }
 
-    @Override
-    public int getMinDepth(ISynset synset) {
-        return minDepths.get(synset.getPOS().toString()).get(synset.getOffset());
-    }
-
-    @Override
-    public int getMaxDepth(ISynset synset) {
-        return maxDepths.get(synset.getPOS().toString()).get(synset.getOffset());
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<ArrayList<ISynsetID>> getHypernymPaths(ISynset synset) {
         return paths.get(synset.getPOS().toString()).get(synset.getOffset());
