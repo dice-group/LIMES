@@ -250,3 +250,22 @@ To compare sets of resources (e.g. in rdf containers), use the following relatio
 the inputs to be sets of RDF resources.
 
 Please note that RDF collections are not supported yet.
+
+
+
+### Semantic Measures
+  
+The semantic measures package consists of the following edge-counting semantic measures: 
+
+* **Leacock and Chodorow (LCH)**: The LCH semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
+$$ LCH(c_1,c_2) = -\log\left(\frac{len(c_1,c_2)}{2D}\right)$$, where $$len(c_1,c_2)$$ is the is the length of the shortest path between two concepts $c_1$ and $c_2$. 
+We use a normalized version of LCH:
+$$
+LCH(c_1,c_2) = 
+\begin{cases}
+1 \mbox{ if } c_1 = c_2\\
+\frac{-\log\left(\frac{len(c_1,c_2)}{2D}\right)}{\log(2D)} \mbox{ else.}\\
+\end{cases} $$
+
+
+
