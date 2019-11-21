@@ -265,14 +265,14 @@ In order to use the semantic similarities incorporated into LIMES, you must foll
 
 To understand the basic idea behind the edge-counting semantic similarites, we define the following:
 * a lexical vocabulary as a directed acyclic graph (DAG)
-* The set of vertices $V$ is a set of concepts $c_i$, were each $$c_i$$ stands for a set of synonyms. We denote $$|V|$$ with $$n_V$$.
+* The set of vertices $$V$$ is a set of concepts $$c_i$$, were each $$c_i$$ stands for a set of synonyms. We denote $$|V|$$ with $$n_V$$.
 * $$E \subseteq V \times V$$ is a set of directed edges $$e_{jk} = (c_j, c_k)$$. We denote $$|E|$$ with $$n_E$$.
 * The edge $$e_{jk}$$ stand for the hypernymy relations from a parent concept $$c_j$$ to a child concept $$c_k$$. We write $$c_j \rightarrow c_k$$ and we say that $$c_j$$ is a hypernym of $$c_k$$. We also define the hyponymy relation as a directed relation from a child concept $c_k$ to a  parent concept. We write $$c_j \leftarrow c_k$$ and we say that $$c_j$$ is a hyponym of $$c_k$$. Hypernymy and hyponymy are transitive.
 * The root $$r$$ is the unique node of dictionary that has no parent concept.
 * A leaf concept $$c_i$$ is a concept node with no children concepts.
 * A concept as a common subsumer of $$c_1$$ and $$c_2$$ (denoted $$cs(c_1,c_2)$$) iff that concept a hypernym of both $$c_1$$ and $$c_2$$.
-* The least common subsumer (LSO) of $$c_1$$ and $$c_2$$ (denoted $$lso(c_1,c_2)$$) as ``the most specific concept which is an ancestor of both $$c_1$$ and $$c_2$$``
-* We define the directed path from $$c_1$$ to $$c_2$$ via a common subsumer $$cs(c_1,c_2)$4 as: $$path(c_1, c_2) = \{c_1 \leftarrow c_i \leftarrow \ldots \leftarrow cs(c_1,c_2) \rightarrow c_j \rightarrow \ldots \rightarrow c_2: i,j,k \in  \mathbb N, i,j,k \leq n_v$$. Note that they are multiple $$path(c_1, c_2)$$ between two concepts.
+* The least common subsumer (LSO) of $$c_1$$ and $$c_2$$ (denoted $$lso(c_1,c_2)$$) as the most specific concept which is an ancestor of both $$c_1$$ and $$c_2$$.
+* We define the directed path from $$c_1$$ to $$c_2$$ via a common subsumer $$cs(c_1,c_2)$$ as: $$path(c_1, c_2) = \{c_1 \leftarrow c_i \leftarrow \ldots \leftarrow cs(c_1,c_2) \rightarrow c_j \rightarrow \ldots \rightarrow c_2: i,j,k \in  \mathbb N, i,j,k \leq n_v$$. Note that they are multiple $$path(c_1, c_2)$$ between two concepts.
 * $$len(c_1,c_2)$$ is the length of the shortest $$path(c_1, c_2)$$ between two concepts $$c_1$$ and $$c_2$$. Note that $$len$$ define a metric. Hence, it is symmetric and abides by the triangle inequality, i.e., $$len(c_1,c_2) \leq len(c_1,c_3) + len(c_2,c_3)$$ for any $$(c_1, c_2, c_3) \in V^3$$.
 * We define $$depth_{m}(c_i)$$ as the length of the shortest path between $$r$$ and $$c_i$$. Analogously, $$depth_{M}(c_i)$$ as the maximum $$depth(c_i)$$. We set $$D = \max\limits_{c \in V} depth_{M}(c)$$.
 
