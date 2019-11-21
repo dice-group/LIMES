@@ -5,9 +5,17 @@ import java.util.List;
 
 import edu.mit.jwi.item.ISynsetID;
 
+/**
+ * Implements the Least Common Subsumer (LSO) class. The LSO of two concepts c1
+ * and c2 is "the most specific concept which is an ancestor of both c1 and c2".
+ * 
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ *
+ */
 public class LeastCommonSubsumerFinder {
     LeastCommonSubsumer lcs = null;
-    
+
     public int getDepth() {
         if (lcs == null)
             return -1;
@@ -20,6 +28,23 @@ public class LeastCommonSubsumerFinder {
         return lcs.getSynsetsDistance();
     }
 
+    /**
+     * Computes the LSO between two concepts using their hypernym paths. For
+     * each pair of hypernym paths, it traverses both the paths simultaneously,
+     * starting from the root and until they share no more common concepts. Then
+     * it calculates the path length between the two concepts, as the number of
+     * the concepts that they do not have in common. In case 1) there is no LSO
+     * found until now, or 2) the new common concept is located deeper in the
+     * hierarchy, or 3) the new common concept has the same depth as the
+     * previous one but a smaller distance between the two concepts, the
+     * algorithm sets as the new common concept as the LSO.
+     * 
+     * 
+     * @param synset1Tree,
+     *            the hypernym paths of the first concept
+     * @param synset2Tree,
+     *            the hypernym paths of the second concept
+     */
     public void getLeastCommonSubsumer(ArrayList<ArrayList<ISynsetID>> synset1Tree,
             ArrayList<ArrayList<ISynsetID>> synset2Tree) {
 
@@ -43,16 +68,17 @@ public class LeastCommonSubsumerFinder {
                     ++path1Pos;
                     ++path2Pos;
                 }
-                // if 0) there is no DCS available until now, 1) the new common
-                // synset is located deeper in the hierarchy
-                // than our current DCS or 2) the new common synset has the same
-                // depth but a smaller distance between the two synsets
+                // if 0) there is no LSO available until now, 1) the new common
+                // concept is located deeper in the hierarchy
+                // than our current LSO or 2) the new common concept has the
+                // same
+                // depth but a smaller distance between the two concepts
                 int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
                 int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
 
                 if ((lcs.getPath() == null) || (path1Pos > lcs.getDepth())
                         || ((path1Pos == lcs.getDepth()) && (newPath < oldPath))) {
-                    // we have found a new DCS
+                    // we have found a new LSO
 
                     lcs.setPaths(synset1HypernymPath.subList(0, path1Pos),
                             synset1HypernymPath.subList(path1Pos, synset1HypernymPath.size()),
@@ -63,7 +89,6 @@ public class LeastCommonSubsumerFinder {
             }
         }
     }
-
 
     private class LeastCommonSubsumer {
 

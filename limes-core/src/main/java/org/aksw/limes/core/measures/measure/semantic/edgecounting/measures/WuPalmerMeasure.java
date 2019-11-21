@@ -57,9 +57,9 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
     }
 
     /**
-     * Computes the WuPalmer similarity between two synsets. To do so, it retrieves
+     * Computes the WuPalmer similarity between two concepts. To do so, it retrieves
      * all possible hypernym paths for the two concepts, finds their least
-     * common subsumer synset, calculates the length of the shortest path
+     * common subsumer concept, calculates the length of the shortest path
      * between the concepts which passes via their least common subsumer.
      * 
      * @param synset1,

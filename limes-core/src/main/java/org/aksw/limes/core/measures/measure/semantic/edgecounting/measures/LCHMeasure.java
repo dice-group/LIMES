@@ -29,10 +29,10 @@ public class LCHMeasure extends AEdgeCountingSemanticMeasure {
      * Calculates the actual LCH similarity.
      * 
      * @param synset1,
-     *            an input synset, used to retrieve the depth of the
+     *            an input concept, used to retrieve the depth of the
      *            corresponding hierarchy
      * @param shortestPath,
-     *            the length of the shortest path between two synsets
+     *            the length of the shortest path between two concepts
      * @return the LCH similarity between two concepts
      */
     public double calculate(ISynset synset1, double shortestPath) {
@@ -44,14 +44,14 @@ public class LCHMeasure extends AEdgeCountingSemanticMeasure {
     }
 
     /**
-     * Computes the LCH similarity between two synsets. It retrieves all
+     * Computes the LCH similarity between two concepts. It retrieves all
      * possible hypernym paths for the two concepts and finds the shortest path
      * between two concepts via their least common subsumer.
      * 
      * @param synset1,
-     *            the first input synset
+     *            the first input concept
      * @param synset2,
-     *            the second input synset
+     *            the second input concept
      * @return the LCH similarity between synset1 and synset2
      */
     @Override

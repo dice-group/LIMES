@@ -12,10 +12,27 @@ import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.Pointer;
 
+/**
+ * Computes all the paths from a synset (concept) to the root(s) of the tree
+ * hierarchy. These paths are called hypernym paths.
+ *
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @author Michael Roeder (michael.roeder@uni-paderborn.de)
+ * @version 1.0
+ */
 public class HypernymPathsFinder {
     public static boolean useInstanceHypernyms = true;
     public static boolean useHypernyms = true;
 
+    /**
+     * Retrieves all hypernym paths in a tree hierarchy for a synset (concept) .
+     * 
+     * @param dictionary,
+     *            a semantic dictionary that represents the tree hierarchy
+     * @param synset,
+     *            the input synset
+     * @return all hypernym paths of synset
+     */
     public static ArrayList<ArrayList<ISynsetID>> getHypernymPaths(SemanticDictionary dictionary, ISynset synset) {
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
@@ -25,6 +42,18 @@ public class HypernymPathsFinder {
         return trees;
     }
 
+    /**
+     * Recursive function that computes all hypernym paths in a tree hierarchy
+     * for a synset (concept), by traversing the graph in a BFS manner.
+     * 
+     * @param dictionary,
+     *            a semantic dictionary that represents the tree hierarchy
+     * @param synset,
+     *            the input synset
+     * @param history,
+     *            auxiliary set that stores the traversed paths
+     * @return all hypernym paths of synset
+     */
     public static ArrayList<ArrayList<ISynsetID>> getHypernymPaths(SemanticDictionary dictionary, ISynset synset,
             Set<ISynsetID> history) {
 
