@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.semantic.ASemanticMeasure;
+import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.slf4j.Logger;
@@ -22,12 +22,16 @@ import weka.core.tokenizers.Tokenizer;
 import weka.core.tokenizers.WordTokenizer;
 
 /**
+ * Implements the edge-counting semantic string similarity abstract class.
+ *
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
-public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure implements IEdgeCountingSemanticMeasure {
+public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements IEdgeCountingSemanticMeasure {
 
     private static final Logger logger = LoggerFactory.getLogger(AEdgeCountingSemanticMeasure.class);
 
+    // fixed hierarchy depths for the wordnet database
     protected static final int NOUN_DEPTH = 19;
     protected static final int VERB_DEPTH = 13;
     protected static final int ADJECTIVE_DEPTH = 1;
@@ -52,6 +56,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         this.dictionary = dict;
     }
 
+    /**
+     * Retrieves the hierarchy depth for a given POS.
+     * 
+     * @param posNumber,
+     *            the input POS number id
+     * @return the corresponding hierarchy depth
+     */
     public int getHierarchyDepth(int posNumber) {
         if (posNumber == 1)
             return NOUN_DEPTH;
@@ -68,6 +79,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     }
 
+    /**
+     * Retrieves a IWord for a given IWordID
+     * 
+     * @param wordID,
+     *            the input IWordID
+     * @return the corresponding IWord
+     */
     public IWord getIWord(IWordID wordID) {
         IWord iword = null;
         if (wordID != null)
@@ -75,17 +93,39 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return iword;
     }
 
+    /**
+     * Retrieves an ISynset for a given IWord
+     * 
+     * @param iword,
+     *            the input IWord
+     * @return the corresponding ISynset
+     */
     public ISynset getSynset(IWord iword) {
         if (iword == null)
             return null;
         return iword.getSynset();
     }
 
+    /**
+     * Retrieves a list of IWordID for a given IIndexWord
+     * 
+     * @param w,
+     *            the input IIndexWord
+     * @return the corresponding list of IWordIDs
+     */
     public List<IWordID> getWordIDs(IIndexWord w) {
         List<IWordID> wordIDs = w.getWordIDs();
         return wordIDs;
     }
 
+    /**
+     * Retrieves a list of hypernym paths for a given concept, stored in an
+     * index instance.
+     * 
+     * @param synset,
+     *            the input concept
+     * @return the corresponding list of hypernym paths
+     */
     public ArrayList<ArrayList<ISynsetID>> getPaths(ISynset synset) {
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
@@ -95,14 +135,30 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return paths;
     }
 
-    @Override
+    /**
+     * Calculates the semantic similarity between two concepts.
+     * 
+     * @param synset1,
+     *            the first input concept
+     * @param synset2,
+     *            the second input concept
+     * @return the actual semantic similarity between synset1 and synset2
+     */
     public double getSimilarity(ISynset synset1, ISynset synset2) {
         double sim = 0.0;
-        sim = getSimilarityBetweenSynsets(synset1, synset2);
+        sim = getSimilarityBetweenConcepts(synset1, synset2);
         return sim;
     }
 
-    @Override
+    /**
+     * Calculates the semantic similarity between two IIndexWords.
+     * 
+     * @param w1,
+     *            the first input IIndexWord
+     * @param w2,
+     *            the second input IIndexWord
+     * @return the actual semantic similarity between w1 and w2
+     */
     public double getSimilarity(IIndexWord w1, IIndexWord w2) {
         // test in each semantic similarity
         double sim = 0.0d;
@@ -162,17 +218,38 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return maxSim;
     }
 
-    public String[] tokenize(String[] input) {
+    /**
+     * Tokenizes an array of strings
+     * 
+     * @param strings,
+     *            the input array of strings
+     * @return an array of tokenized strings
+     */
+    public String[] tokenize(String[] strings) {
         String[] tokens = null;
         try {
-            tokens = Tokenizer.tokenize(new WordTokenizer(), input);
+            tokens = Tokenizer.tokenize(new WordTokenizer(), strings);
         } catch (Exception e) {
-            logger.error("Couldn't tokenize: " + input[0]);
+            logger.error("Couldn't tokenize: " + strings[0]);
             e.printStackTrace();
         }
         return tokens;
     }
 
+    /**
+     * Checks if a semantic similarity between two tokens has already been
+     * calculated.
+     * 
+     * @param similaritiesMap,
+     *            the map that stores the semantic similarities between two
+     *            tokens
+     * @param sourceToken,
+     *            the source input token
+     * @param targetToken,
+     *            the target input token
+     * @return the similarity of the tokens, if it exists, or the maximum double
+     *         value
+     */
     public double checkSimilarity(HashMap<String, Double> similaritiesMap, String sourceToken, String targetToken) {
         double similarity = 0.0d;
         String together = sourceToken + "||" + targetToken;
@@ -189,6 +266,14 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return similarity;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
+     */
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
@@ -282,10 +367,21 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return maxSim;
     }
 
+    /**
+     * Closes and removes the semantic dictionary from memory
+     * 
+     */
     public void close() {
         dictionary.removeDictionary();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.
+     * Object, java.lang.Object)
+     */
     @Override
     public double getSimilarity(Object object1, Object object2) {
         if (object1 == null || object2 == null)
@@ -307,7 +403,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         }
     }
 
-    @Override
+    /**
+     * Retrieves the IIndexWord for a given input string
+     * 
+     * @param str,
+     *            the input string
+     * @return the corresponding IIndexWord
+     */
     public IIndexWord getIIndexWord(String str) {
         if (str == null)
             return null;

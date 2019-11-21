@@ -1,24 +1,27 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
-
-import org.aksw.limes.core.measures.measure.semantic.ISemanticMeasure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 
 import edu.mit.jwi.item.ISynset;
 
-public interface IEdgeCountingSemanticMeasure extends ISemanticMeasure {
+/**
+ * Implements the edge-counting semantic string similarity interface.
+ *
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
+ */
+public interface IEdgeCountingSemanticMeasure extends IMeasure {
 
     /**
-     * Calculates the semantic similarity of two synsets using their synset
-     * paths.
+     * Calculates the semantic similarity between two concepts.
      * 
-     * @param synsets1
-     * @param synsets2
-     * @return semantic similarity of two synsets
+     * @param synsets1,
+     *            the first input concept
+     * @param synsets2,
+     *            the second input concept
+     * @return the semantic similarity of two concepts
      */
 
-    public double getSimilarityBetweenSynsets(ISynset synset1, ISynset synset2);
-
-    
-
+    public double getSimilarityBetweenConcepts(ISynset synset1, ISynset synset2);
 
 }

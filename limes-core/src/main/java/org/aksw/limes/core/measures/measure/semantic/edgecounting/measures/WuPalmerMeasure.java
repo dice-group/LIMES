@@ -69,7 +69,7 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
      * @return the LCH similarity between synset1 and synset2
      */
     @Override
-    public double getSimilarityBetweenSynsets(ISynset synset1, ISynset synset2) {
+    public double getSimilarityBetweenConcepts(ISynset synset1, ISynset synset2) {
         ArrayList<ArrayList<ISynsetID>> paths1 = getPaths(synset1);
         ArrayList<ArrayList<ISynsetID>> paths2 = getPaths(synset2);
 
