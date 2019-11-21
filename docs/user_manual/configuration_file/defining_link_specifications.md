@@ -255,13 +255,15 @@ Please note that RDF collections are not supported yet.
 
 ### Semantic Measures
 
-In order to use the semantic similarities incorporated into LIMES, you must follow the next steps:
+In order to use the semantic similarities incorporated into LIMES, you must follow the following steps:
 * Visit https://wordnet.princeton.edu/download/current-version
 * Go to **WordNet 3.1 DATABASE FILES ONLY** and follow the instructions on how to download version 3.1 files
 * Create a folder named wordent/ inside /src/main/resources/
 * Unzip the downloaded package from the wordnet website
 * Place the dict folder inside /src/main/resources/wordnet/
 * Now you are ready to use the semantic similarities
+
+The semantic similarities **require** the WordNet lexical database to run.
 
 To understand the basic idea behind the edge-counting semantic similarites, we define the following:
 * a lexical vocabulary as a directed acyclic graph (DAG)
