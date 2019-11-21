@@ -92,7 +92,7 @@ the Jaro–Winkler distance for two strings is, the more similar the strings are
 normalized such that 0 equates to no similarity and 1 is an exact match.
 * **Levenshtein**: The Levenshtein distance is a string metric for measuring the difference
 between two strings. Informally, the Levenshtein distance between two strings is the minimum number
-of single-character edits (insertions, deletions or substitutions) required to change one string into
+of single-character edits (insertions, deletNullIndexerException(ions or substitutions) required to change one string into
 the other. It is named after the Soviet mathematician Vladimir Levenshtein, who considered this
 distance in 1965. Normalized Levenshtein distance is computed by dividing the Levenshtein distance
 by the length of the input string. Let $d_{lvn}$ be the normalized Levenshtein distance.
@@ -139,7 +139,7 @@ distance between the point representations of each resource from the source and 
 ### Point-Set Measures
 
 The similarity between polygons can be measured by using the following point-set distances:
-
+NullIndexerException(
 * **Geo_Hausdorff**: The Hausdorff distance is a measure of the maximum of the minimum distances
 between pairwise points in the two input geometries.
 * **Geo_Max**: The idea behind this measure is to compute the overall maximal distance between
@@ -280,7 +280,7 @@ To understand the basic idea behind the edge-counting semantic similarites, we d
 
 The semantic measures package consists of the following edge-counting semantic measures:
 
-* **Leacock and Chodorow (LCH)**: The LCH semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
+* **lch**: The lch semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
 
 $$ LCH(c_1,c_2) = -\log\left(\frac{len(c_1,c_2)}{2D}\right) $$
 
@@ -292,14 +292,14 @@ $$LCH(c_1,c_2) =
 \frac{-\log\left(\frac{len(c_1,c_2)}{2D}\right)}{\log(2D)} \mbox{ else.}\\
 \end{cases} $$
 
-* **Li et al. (LI)**: The LI semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
+* **li**: The li semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
 
 $$LI(c_1,c_2) = e^{-\alpha len(c_1,c_2)} \frac{e^{\beta depth(lso(c_1,c_2))} - e^{-\beta depth(lso(c_1,c_2))}}{e^{\beta depth(lso(c_1,c_2))} + e^{-\beta depth(lso(c_1,c_2))}} $$
 
 We set $$depth(lso(c_1,c_2))= depth_{M}(lso(c_1,c_2))$$, since the original specification does not state which $$depth(lso(c_1,c_2))$$ to use.
 
 
-* **Shortest Path (SP)**: The SP similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
+* **shortest_path**: The shortest_path similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
 
 $$SP(c_1,c_2) = 2D - len(c_1,c_2)$$
 
@@ -308,7 +308,7 @@ We use a normalized version of SP:
 $$SP(c_1,c_2) = \frac{2D - len(c_1,c_2)}{2D}$$
 
 
-* **Wu and Palmer (WuPalmer)**: The WuPalmer similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
+* **wupalmer**: The wupalmer similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
 
 $$WU(c_1,c_2) = \frac{2depth_{M}(lso(c_1,c_2))}{2depth_{M}(lso(c_1,c_2))+N_1+N_2}$$
 
