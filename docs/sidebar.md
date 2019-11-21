@@ -37,10 +37,11 @@
             * [Topological measures](user_manual/configuration_file/defining_link_specifications.md#topological-measures)
             * [Temporal measures](user_manual/configuration_file/defining_link_specifications.md#temporal-measures)
             * [Resource set measures](user_manual/configuration_file/defining_link_specifications.md#resource-set-measures)
+            * [Semantic measures](user_manual/configuration_file/defining_link_specifications.md#semantic-measures)
     * [Defining Machine Learning Tasks](user_manual/configuration_file/defining_ml_tasks.md)
 
 
-<!-- * [Known Issues](user_manual/known_issues.md) 
+<!-- * [Known Issues](user_manual/known_issues.md)
     * [Change Log](https://github.com/dice-group/LIMES/blob/master/CHANGES.md)
     * [Example Use Cases](user_manual/usecases.md) -->
 

@@ -253,7 +253,6 @@ the inputs to be sets of RDF resources.
 Please note that RDF collections are not supported yet.
 
 
-
 ### Semantic Measures
 
 In order to use the semantic similarities incorporated into LIMES, you must follow the following steps:
