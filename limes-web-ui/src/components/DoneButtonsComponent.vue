@@ -77,15 +77,14 @@
 
       <!-- supervised active ml dialog -->
       <md-dialog ref="supervisedActiveMLDialog" v-bind:md-esc-to-close="false" v-bind:md-click-outside-to-close="false">
-        <md-dialog-title>Supervised active ml dialog</md-dialog-title>
+        <md-dialog-title>Supervised active ML dialog</md-dialog-title>
 
         <md-dialog-content>  
         	<md-list>
-	          	<div v-for="(i, index) in activeLearningArray">					
+	          	<div v-for="(i, index) in activeLearningArray.examples">					
 				    <md-list-item>
 				      	<span class="activeLearningItem">{{index+1+"."}}</span>
 				      	<span class="activeLearningItem">{{i.source}}</span>
-				      	<span class="activeLearningItem">{{i.predicate}}</span>
 				      	<span class="activeLearningItem">{{i.target}}</span>
 						<md-button class="md-primary" @click="openActiveLearningTable(index)">Show table</md-button>
 					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
@@ -96,22 +95,28 @@
 	        <md-table v-if="activeLearningTableForNum !== null">
 			  <md-table-header>
 			    <md-table-row>
-			      <md-table-head>{{activeLearningArray[activeLearningTableForNum].source}}</md-table-head>
-			      <md-table-head>{{activeLearningArray[activeLearningTableForNum].target}}</md-table-head>
+			      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].source}}</md-table-head>
+			      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].target}}</md-table-head>
 			    </md-table-row>
 			  </md-table-header>
 
 			  <md-table-body>
-			    <md-table-row v-for="(row, index) in 3" :key="index">
-			      <md-table-cell>Dessert Name</md-table-cell>
-			      <md-table-cell v-for="(col, index) in 1" :key="index">Text</md-table-cell>
+			    <md-table-row v-for="(row, index) in activeLearningArray.examples[activeLearningTableForNum].sourceContext" :key="index">
+			      <md-table-cell>
+			      		<span>{{row.predicate}}</span><br>
+				      	<span>{{row.object}}</span>
+			      </md-table-cell>
+			      <md-table-cell v-for="(col, index1) in 1" :key="index1">
+			      		<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].predicate}}</span><br>
+				      	<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].object}}</span>
+			      </md-table-cell>
 			    </md-table-row>
 			  </md-table-body>
 			</md-table> 	  
         </md-dialog-content>
 
         <md-dialog-actions>
-          <md-button class="md-raised md-primary" @click="execute()">Continue execution</md-button>
+          <md-button class="md-raised md-primary" @click="continueExecute()">Continue execution</md-button>
           <md-button class="md-primary" @click="cancelExecution()">Cancel</md-button>
         </md-dialog-actions>
       </md-dialog>
@@ -180,26 +185,100 @@ export default {
 	    notFoundKeyMessage: '',
 	    findStatusMessage: '',
 	    exampleConfigEnable: false,
-	    activeLearningArray: [
-	    	{
-	    		source: "S",
-	    		predicate: "sameAs",
-	    		target: "T",
-	    	},
-	    	{
-	    		source: "S1",
-	    		predicate: "sameAs",
-	    		target: "T1",
-	    	},
-	    	{
-	    		source: "S2",
-	    		predicate: "sameAs",
-	    		target: "T2",
-	    	}
-	    ],
-	    radioButton: [false, false, false],
+	    activeLearningArray: {"requestId" : "6a835f2e725bb8",
+							 "iteration" : 1,
+							 "examples" : [
+							   {
+							     "source" : "http://some.domain.tld/someSourceUri",
+							     "target" : "http://some.domain.tld/someTargetUri",
+							     "sourceContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
+							     	    "object" : "http://some.domain.tld/somObjectUri"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri1"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
+							     	    "object" : "http://some.domain.tld/somObjectUri2"
+							     	  },
+							     ],
+							     "targetContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
+							     	    "object" : "http://some.domain.tld/somObjectUri0"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri10"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
+							     	    "object" : "http://some.domain.tld/somObjectUri20"
+							     	  },
+							     ]
+							   },
+							   {
+							     "source" : "http://some.domain.tld/someSourceUri1",
+							     "target" : "http://some.domain.tld/someTargetUri1",
+							     "sourceContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri1"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri11",
+							     	    "object" : "http://some.domain.tld/somObjectUri11"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri21",
+							     	    "object" : "http://some.domain.tld/somObjectUri21"
+							     	  },
+							     ],
+							     "targetContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri1"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri11",
+							     	    "object" : "http://some.domain.tld/somObjectUri11"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri21",
+							     	    "object" : "http://some.domain.tld/somObjectUri21"
+							     	  },
+							     ]
+							   },
+							 ]
+							},
+	    // [
+	    // 	{
+	    // 		source: "S",
+	    // 		predicate: "sameAs",
+	    // 		target: "T",
+	    // 	},
+	    // 	{
+	    // 		source: "S1",
+	    // 		predicate: "sameAs",
+	    // 		target: "T1",
+	    // 	},
+	    // 	{
+	    // 		source: "S2",
+	    // 		predicate: "sameAs",
+	    // 		target: "T2",
+	    // 	}
+	    // ],
+	    radioButton: [],
 	    activeLearningTableForNum: null,
     }
+  },
+  created() {
+    this.activeLearningArray.examples.forEach(i => {
+    	this.radioButton.push(false);
+    });
   },
 	methods: {
 
@@ -339,6 +418,38 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    cancelExecution(){
 			this.$refs.supervisedActiveMLDialog.close();
+	    },
+	    continueExecute(){
+	    	this.$refs.supervisedActiveMLDialog.close();
+	    	let exampleScores = this.radioButton;
+	    	exampleScores = exampleScores.map(i => {
+	    		let score = -1;
+	    		if(i){
+	    			score = 1;
+	    		}
+	    		return score;
+	    	})
+	    	console.log(exampleScores);
+	    	// send them: http://localhost:8080/activeLearning/6a835f2e725bb8
+	    	fetch(window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId, {
+		        method: 'post',
+		        body: {"exampleScores" : exampleScores},
+		      })
+		        .then(r => r.json().then(x => x.requestId))
+		        .then(r => {
+		          this.jobId = r;
+		          this.jobRunning = true;
+		          this.jobError = false;
+		          this.c = 'Status Loading - waiting for status from server..';
+		          this.$refs.jobDialog.open();
+		          history.pushState({jobId: r}, '', `?jobId=${r}`);
+		          setTimeout(() => this.getStatus(), 1000);
+		        })
+		        .catch(e => {
+		          this.jobError = `Error while starting the job: ${e.toString()}`;
+		          this.jobRunning = false;
+		        });
+	    	//this.execute();
 	    },
 	    // execute button
 	    execute() {
