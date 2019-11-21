@@ -116,55 +116,6 @@ public class MapperFactoryTest {
 
     }
 
-    @Test
-    public void testgetMeasureTypeforSemanticSimilarities() {
-        System.out.println("testgetMeasureTypeforSemanticSimilarities");
-        String expression = null;
-        MeasureType type = null;
-        AMeasure measure = null;
-        AMapper mapper = null;
-
-        expression = "shortest_path(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.SHORTEST_PATH));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof ShortestPathMeasure);
-        mapper = MapperFactory.createMapper(type);
-        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
-        /////////////////////////////////////////////
-        expression = "li(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.LI));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof LiMeasure);
-        mapper = MapperFactory.createMapper(type);
-        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
-
-        /////////////////////////////////////////////
-        expression = "lch(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.LCH));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof LCHMeasure);
-        mapper = MapperFactory.createMapper(type);
-        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
-
-        /////////////////////////////////////////////
-        expression = "wupalmer(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.WUPALMER));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof WuPalmerMeasure);
-        mapper = MapperFactory.createMapper(type);
-        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
-
-        /////////////////////////////////////////////
-        /////////////////////////////////////////////
-        /////////////////////////////////////////////
-        
-
-    }
-
     // @Test
     public void test() {
         MeasureType type = null;

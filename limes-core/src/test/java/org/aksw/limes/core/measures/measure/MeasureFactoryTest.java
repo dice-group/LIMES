@@ -187,45 +187,6 @@ public class MeasureFactoryTest {
 
     }
 
-    @Test
-    public void testgetMeasureTypeforSemanticSimilarities() {
-        System.out.println("testgetMeasureTypeforSemanticSimilarities");
-        String expression = null;
-        MeasureType type = null;
-        AMeasure measure = null;
-
-        expression = "shortest_path(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.SHORTEST_PATH));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof ShortestPathMeasure);
-
-        /////////////////////////////////////////////
-        expression = "li(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.LI));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof LiMeasure);
-
-        /////////////////////////////////////////////
-        expression = "lch(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.LCH));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof LCHMeasure);
-
-        /////////////////////////////////////////////
-        expression = "wupalmer(x.name,y.name)";
-        type = MeasureFactory.getMeasureType(expression);
-        assertTrue(type.equals(MeasureType.WUPALMER));
-        measure = MeasureFactory.createMeasure(type);
-        assertTrue(measure instanceof WuPalmerMeasure);
-
-        /////////////////////////////////////////////
-        /////////////////////////////////////////////
-        /////////////////////////////////////////////
-        
-    }
 
     @Test
     public void mappingApproximation() {
