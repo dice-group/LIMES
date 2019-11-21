@@ -98,7 +98,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(ISynset synset1, ISynset synset2) {
         double sim = 0.0;
-        sim = getSim(synset1, synset2);
+        sim = getSimilarityBetweenSynsets(synset1, synset2);
         return sim;
     }
 

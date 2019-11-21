@@ -16,7 +16,7 @@ public interface IEdgeCountingSemanticMeasure extends ISemanticMeasure {
      * @return semantic similarity of two synsets
      */
 
-    public double getSim(ISynset synset1, ISynset synset2);
+    public double getSimilarityBetweenSynsets(ISynset synset1, ISynset synset2);
 
     
 
