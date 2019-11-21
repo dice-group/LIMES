@@ -61,6 +61,7 @@ The current version of LIMES ships with the following measure packages:
 * Topological measures
 * Temporal measures
 * Resource-set measures
+* Edge-counting semantic measures
 
 More complex distance measures are being added continuously.
 We give more details about each of the measure type in the following sections.
