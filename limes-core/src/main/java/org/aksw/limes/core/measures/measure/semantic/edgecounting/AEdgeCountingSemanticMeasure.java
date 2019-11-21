@@ -36,15 +36,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected AIndex Indexer = null;
     protected SemanticDictionary dictionary = null;
 
-
-    public AEdgeCountingSemanticMeasure( AIndex indexer) {
+    public AEdgeCountingSemanticMeasure(AIndex indexer) {
         dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
         dictionary.openDictionaryFromFile();
         Indexer = indexer;
 
     }
-
 
     public SemanticDictionary getSemanticDictionary() {
         return dictionary;

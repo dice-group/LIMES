@@ -1,6 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.NullIndexerException;
 import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
 import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
 import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
@@ -562,15 +563,27 @@ public class MeasureFactory {
         ///////////////////////
         case SHORTEST_PATH:
             AIndex IndexerSP = createIndexer();
+            if (IndexerSP == null) {
+                throw new NullIndexerException("Cannot initialize " + SHORTEST_PATH + ". Index instance is null.");
+            }
             return new ShortestPathMeasure(IndexerSP);
         case LCH:
             AIndex IndexerLCH = createIndexer();
+            if (IndexerLCH == null) {
+                throw new NullIndexerException("Cannot initialize " + LCH + ". Index instance is null.");
+            }
             return new LCHMeasure(IndexerLCH);
         case LI:
             AIndex IndexerLi = createIndexer();
+            if (IndexerLi == null) {
+                throw new NullIndexerException("Cannot initialize " + LI + ". Index instance is null.");
+            }
             return new LiMeasure(IndexerLi);
         case WUPALMER:
             AIndex IndexerWP = createIndexer();
+            if (IndexerWP == null) {
+                throw new NullIndexerException("Cannot initialize " + WUPALMER + ". Index instance is null.");
+            }
             return new WuPalmerMeasure(IndexerWP);
         default:
             throw new InvalidMeasureException(type.toString());

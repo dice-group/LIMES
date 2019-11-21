@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.factory;
 
+import org.aksw.limes.core.exceptions.NullIndexerException;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
@@ -38,6 +39,10 @@ public class SemanticFactory {
      *
      */
     public static AEdgeCountingSemanticMeasure createMeasure(SemanticType measure, AIndex Indexer) {
+        if (Indexer == null) {
+            throw new NullIndexerException("Cannot initialize " + measure + ". Index instance is null.");
+        }
+
         if (measure == SemanticType.SHORTEST_PATH)
             return new ShortestPathMeasure(Indexer);
         else if (measure == SemanticType.LI)
