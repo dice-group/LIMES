@@ -12,7 +12,7 @@ necessary in complex linking cases.
 LIMES includes a formal grammar for specifying complex configurations of
 arbitrary complexity.
 For this purpose, two categories of binary operations are supported:
-
+../docs/user_manual/configuration_file/defining_link_specifications.md
 1. Metric operations and 
 2. Boolean operations.
 
@@ -254,18 +254,61 @@ Please note that RDF collections are not supported yet.
 
 
 ### Semantic Measures
+
+In order to use the semantic similarities incorporated into LIMES, you must follow the next steps:
+* Visit https://wordnet.princeton.edu/download/current-version
+* Go to **WordNet 3.1 DATABASE FILES ONLY** and follow the instructions on how to download version 3.1 files
+* Create a folder named wordent/ inside /src/main/resources/
+* Unzip the downloaded package from the wordnet website 
+* Place the dict folder inside /src/main/resources/wordnet/
+* Now you are ready to use the semantic similarities
+
+To understand the basic idea behind the edge-counting semantic similarites, we define the following:
+* a lexical vocabulary as a directed acyclic graph (DAG)
+* The set of vertices $V$ is a set of concepts $c_i$, were each $c_i$ stands for a set of synonyms. We denote $|V|$ with $n_V$.
+* $E \subseteq V \times V$ is a set of directed edges $e_{jk} = (c_j, c_k)$. We denote $|E|$ with $n_E$.
+* The edge $e_{jk}$ stand for the hypernymy relations from a parent concept $c_j$ to a child concept $c_k$. We write $c_j \rightarrow c_k$ and we say that $c_j$ is a hypernym of $c_k$. We also define the hyponymy relation as a directed relation from a child concept $c_k$ to a  parent concept. We write $c_j \leftarrow c_k$ and we say that $c_j$ is a hyponym of $c_k$. Hypernymy and hyponymy are transitive.
+* The root $r$ is the unique node of dictionary that has no parent concept.
+* A leaf concept $c_i$ is a concept node with no children concepts.
+* A concept as a common subsumer of $c_1$ and $c_2$ (denoted $cs(c_1,c_2)$) iff that concept a hypernym of both $c_1$ and $c_2$. 
+* The least common subsumer (LSO) of $c_1$ and $c_2$ (denoted $lso(c_1,c_2)$) as ``the most specific concept which is an ancestor of both $c_1$ and $c_2$``
+* We define the directed path from $c_1$ to $c_2$ via a common subsumer $cs(c_1,c_2)$ as: $path(c_1, c_2) = \{c_1 \leftarrow c_i \leftarrow \ldots \leftarrow cs(c_1,c_2) \rightarrow c_j \rightarrow \ldots \rightarrow c_2: i,j,k \in  \mathbb N, i,j,k \leq n_v$. Note that they are multiple $path(c_1, c_2)$ between two concepts.
+* $len(c_1,c_2)$ is the length of the shortest $path(c_1, c_2)$ between two concepts $c_1$ and $c_2$. Note that $len$ define a metric. Hence, it is symmetric and abides by the triangle inequality, i.e., $len(c_1,c_2) \leq len(c_1,c_3) + len(c_2,c_3)$ for any $(c_1, c_2, c_3) \in V^3$.
+* We define $depth_{m}(c_i)$ as the length of the shortest path between $r$ and $c_i$. Analogously, $depth_{M}(c_i)$ as the maximum $depth(c_i)$. We set $D = \max\limits_{c \in V} depth_{M}(c)$.
   
 The semantic measures package consists of the following edge-counting semantic measures: 
 
-* **Leacock and Chodorow (LCH)**: The LCH semantic similarity computes the similarity between two concepts $$c_1, c_2$$ as follows:
-$$ LCH(c_1,c_2) = -\log\left(\frac{len(c_1,c_2)}{2D}\right)$$, where $$len(c_1,c_2)$$ is the is the length of the shortest path between two concepts $c_1$ and $c_2$. 
+* **Leacock and Chodorow (LCH)**: The LCH semantic similarity computes the similarity between two concepts $c_1, c_2$ as follows:
+
+$$ LCH(c_1,c_2) = -\log\left(\frac{len(c_1,c_2)}{2D}\right) $$
+
 We use a normalized version of LCH:
-$$
-LCH(c_1,c_2) = 
+
+$$LCH(c_1,c_2) = 
 \begin{cases}
 1 \mbox{ if } c_1 = c_2\\
 \frac{-\log\left(\frac{len(c_1,c_2)}{2D}\right)}{\log(2D)} \mbox{ else.}\\
 \end{cases} $$
 
+* **Li et al. (LI)**: The LI semantic similarity computes the similarity between two concepts $c_1, c_2$ as follows:
 
+$$LI(c_1,c_2) = e^{-\alpha len(c_1,c_2)} \frac{e^{\beta depth(lso(c_1,c_2))} - e^{-\beta depth(lso(c_1,c_2))}}{e^{\beta depth(lso(c_1,c_2))} + e^{-\beta depth(lso(c_1,c_2))}} $$
+
+We set $depth(lso(c_1,c_2))= $ $depth_{M}(lso(c_1,c_2))$, since the original specification does not state which $depth(lso(c_1,c_2))$ to use. 
+
+
+* **Shortest Path (SP)**: The SP similarity computes the similarity between two concepts $c_1, c_2$ as follows:
+
+$$SP(c_1,c_2) = 2D - len(c_1,c_2)$$
+
+We use a normalized version of SP:
+
+$$SP(c_1,c_2) = \frac{2D - len(c_1,c_2)}{2D}$$
+
+
+* **Wu and Palmer (WuPalmer)**: The WuPalmer similarity computes the similarity between two concepts $c_1, c_2$ as follows:
+
+$$WU(c_1,c_2) = \frac{2depth_{M}(lso(c_1,c_2))}{2depth_{M}(lso(c_1,c_2))+N_1+N_2}$$
+
+where $N_1 = len(lso(c_1,c_2),c_1)$ and $N_2 = len(lso(c_1,c_2),c_2)$
 
