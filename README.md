@@ -29,11 +29,4 @@ Then, update the project on Eclipse.
 * [Developer manual](http://dice-group.github.io/LIMES/#/developer_manual/index)
 
 
-## Working with semantic similarities
-In order to use the semantic similarities incorporated into LIMES, you must follow the next steps:
-* Visit https://wordnet.princeton.edu/download/current-version
-* Go to WordNet 3.1 DATABASE FILES ONLY and follow the instructions on how to download version 3.1 files
-* Create a folder named wordent/ inside /src/main/resources/
-* Unzip the downloaded package from the wordnet website 
-* Place the dict folder inside /src/main/resources/wordnet/
-* Now you are ready to use the semantic similarities
+
