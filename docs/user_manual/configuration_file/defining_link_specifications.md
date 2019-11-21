@@ -257,10 +257,15 @@ Please note that RDF collections are not supported yet.
 
 Before using the semantic similarities incorporated into LIMES, you must follow the following steps:
 * Visit https://wordnet.princeton.edu/download/current-version
-* Go to **WordNet 3.1 DATABASE FILES ONLY** and follow the instructions on how to download version 3.1 files
-* Create a folder named ``wordent/`` inside ``/src/main/resources/``
+* Go to **WordNet 3.0 for UNIX-like systems (including Linux, Mac OS X, Solaris)** and download files from either **Download tar-gzipped: WordNet-3.0.tar.gz** or **Download tar-bzip2'ed: WordNet-3.0.tar.bz2 **
 * Unzip the downloaded package from the wordnet website
-* Place the ``dict`` folder inside ``/src/main/resources/wordnet/``
+* Create a folder named ``wordent/`` inside ``/src/main/resources/``
+* Place the ``dict`` folder of the unziped **WordNet 3.0** package inside ``/src/main/resources/wordnet/``
+* Check if as a user you have read, write and execute privileges
+* Go to **WordNet 3.1 DATABASE FILES ONLY** and download the WordNet 3.1 database files
+* Unzip the downloaded package from the wordnet website
+* Place the **WordNet 3.1** files of the dict folder inside the ``/src/main/resources/wordnet/dict/`` folder that already has the files of **WordNet 3.0**. Allow existing files to be replaced by the new files of **WordNet 3.1** 
+* Check if as a user you have read, write and execute privileges
 * Now you are ready to use the semantic similarities
 
 The semantic similarities **require** the WordNet lexical database to run. Currently, there is no option for downloading the required packages via LIMES. In WordNet, synonyms (words that denote the same concept and are interchangeable in many contexts) are grouped into unordered sets (synsets).
