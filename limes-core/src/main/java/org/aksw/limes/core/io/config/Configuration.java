@@ -11,7 +11,6 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.AddMetric;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Configuration implements IConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
-
 
     private static final String DEFAULT = "default";
 
@@ -48,6 +46,8 @@ public class Configuration implements IConfiguration {
     protected String executionRewriter = DEFAULT;
     protected String executionPlanner = DEFAULT;
     protected String executionEngine = DEFAULT;
+    protected long optimizationTime = 0l;
+    protected double expectedSelectivity = 1.0d;
 
     protected int granularity = 2;
 
@@ -65,7 +65,7 @@ public class Configuration implements IConfiguration {
             double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
             String executionRewriter, String executionPlanner, String executionEngine, int granularity,
             String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
-            String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
+            String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure, long maxOpt, double k) {
         super();
         this.prefixes = prefixes;
         this.sourceInfo = sourceInfo;
@@ -87,6 +87,8 @@ public class Configuration implements IConfiguration {
         this.mlImplementationType = mlImplementationType;
         this.mlTrainingDataFile = mlTrainingDataFile;
         this.mlPseudoFMeasure = mlPseudoFMeasure;
+        this.optimizationTime = maxOpt;
+        this.expectedSelectivity = k;
     }
 
     public void addMlAlgorithmParameter(String mlParameterName, Object mlParameterValue) {
@@ -117,7 +119,7 @@ public class Configuration implements IConfiguration {
         return new HashSet<String>(Arrays.asList("sourceInfo", "targetInfo", "metricExpression", "acceptanceRelation",
                 "verificationRelation", "acceptanceThreshold", "acceptanceFile", "verificationThreshold",
                 "verificationFile", "exemplars", "prefixes", "outputFormat", "executionPlan", "granularity",
-                "recallRegulator", "recallThreshold"));
+                "recallRegulator", "recallThreshold", "optimizationTime", "expectedSelectivity"));
     }
 
     public int getGranularity() {
@@ -181,16 +183,16 @@ public class Configuration implements IConfiguration {
     }
 
     public void setAcceptanceRelation(String acceptanceRelation) {
-    	if(new UrlValidator().isValid(acceptanceRelation)){
-    		this.acceptanceRelation = acceptanceRelation;
-    		return;
-    	}
-        if(acceptanceRelation.contains(":")){
-            String prefix = acceptanceRelation.substring(0,acceptanceRelation.indexOf(":"));
-            if(prefixes.containsKey(prefix)){
+        if (new UrlValidator().isValid(acceptanceRelation)) {
+            this.acceptanceRelation = acceptanceRelation;
+            return;
+        }
+        if (acceptanceRelation.contains(":")) {
+            String prefix = acceptanceRelation.substring(0, acceptanceRelation.indexOf(":"));
+            if (prefixes.containsKey(prefix)) {
                 String prefixURI = prefixes.get(prefix);
                 acceptanceRelation = acceptanceRelation.replace(prefix + ":", prefixURI);
-            }else{
+            } else {
                 logger.error("Undefined prefix: " + prefix);
                 throw new RuntimeException();
             }
@@ -243,23 +245,23 @@ public class Configuration implements IConfiguration {
     }
 
     public void setVerificationRelation(String verificationRelation) {
-    	if(new UrlValidator().isValid(verificationRelation)){
-    		this.verificationRelation = verificationRelation;
-    		return;
-    	}
-        if(verificationRelation.contains(":")){
-            String prefix = verificationRelation.substring(0,verificationRelation.indexOf(":"));
-            if(prefixes.containsKey(prefix)){
+        if (new UrlValidator().isValid(verificationRelation)) {
+            this.verificationRelation = verificationRelation;
+            return;
+        }
+        if (verificationRelation.contains(":")) {
+            String prefix = verificationRelation.substring(0, verificationRelation.indexOf(":"));
+            if (prefixes.containsKey(prefix)) {
                 String prefixURI = prefixes.get(prefix);
                 verificationRelation = verificationRelation.replace(prefix + ":", prefixURI);
-            }else{
+            } else {
                 logger.error("Undefined prefix: " + prefix);
                 throw new RuntimeException();
             }
         }
         this.verificationRelation = verificationRelation;
     }
-    
+
     public void setVerificationThreshold(double verificationThreshold) {
         this.verificationThreshold = verificationThreshold;
     }
@@ -288,6 +290,22 @@ public class Configuration implements IConfiguration {
         this.executionEngine = executionEngine;
     }
 
+    public void setOptimizationTime(long maxOpt) {
+        this.optimizationTime = maxOpt;
+    }
+
+    public long getOptimizationTime() {
+        return this.optimizationTime;
+    }
+
+    public void setExpectedSelectivity(double k) {
+        this.expectedSelectivity = k;
+    }
+
+    public double getExpectedSelectivity() {
+        return this.expectedSelectivity;
+    }
+
     public String getMlTrainingDataFile() {
         return mlTrainingDataFile;
     }
@@ -300,9 +318,11 @@ public class Configuration implements IConfiguration {
                 + acceptanceFile + ", verificationThreshold=" + verificationThreshold + ", verificationFile="
                 + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat
                 + ", executionRewriter=" + executionRewriter + ", executionPlanner=" + executionPlanner
-                + ", executionEngine=" + executionEngine + ", granularity=" + granularity + ", mlAlgorithmName="
-                + mlAlgorithmName + ", mlParameters=" + mlAlgorithmParameters + ", mlImplementationType=" + mlImplementationType
-                + ", mlTrainingDataFile=" + mlTrainingDataFile + ", mlPseudoFMeasure=" + mlPseudoFMeasure + "]";
+                + ", executionEngine=" + executionEngine + ", optimization time=" + optimizationTime
+                + ", expected selectivity=" + expectedSelectivity + ", granularity=" + granularity
+                + ", mlAlgorithmName=" + mlAlgorithmName + ", mlParameters=" + mlAlgorithmParameters
+                + ", mlImplementationType=" + mlImplementationType + ", mlTrainingDataFile=" + mlTrainingDataFile
+                + ", mlPseudoFMeasure=" + mlPseudoFMeasure + "]";
     }
 
     @Override
@@ -331,6 +351,10 @@ public class Configuration implements IConfiguration {
         result = prime * result + ((verificationFile == null) ? 0 : verificationFile.hashCode());
         result = prime * result + ((verificationRelation == null) ? 0 : verificationRelation.hashCode());
         temp = Double.doubleToLongBits(verificationThreshold);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.optimizationTime);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.expectedSelectivity);
         result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
@@ -428,6 +452,10 @@ public class Configuration implements IConfiguration {
         } else if (!verificationRelation.equals(other.verificationRelation))
             return false;
         if (Double.doubleToLongBits(verificationThreshold) != Double.doubleToLongBits(other.verificationThreshold))
+            return false;
+        if (optimizationTime != other.optimizationTime)
+            return false;
+        if (Double.doubleToLongBits(expectedSelectivity) != Double.doubleToLongBits(other.expectedSelectivity))
             return false;
         return true;
     }

@@ -32,8 +32,8 @@ public class ExecutionEngineFactory {
     public static final String SIMPLE = "simple";
 
     /**
-     * Factory function for retrieving an execution engine name from
-     * the set of allowed types.
+     * Factory function for retrieving an execution engine name from the set of
+     * allowed types.
      * 
      * @param name
      *            The name/type of the execution engine.
@@ -68,15 +68,15 @@ public class ExecutionEngineFactory {
      * 
      */
     public static ExecutionEngine getEngine(ExecutionEngineType type, ACache source, ACache target, String sourceVar,
-            String targetVar) {
+            String targetVar, long maxOpt, double k) {
         switch (type) {
-            case DEFAULT:
-            case SIMPLE:
-                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
-            default:
-                logger.error(
-                        "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
-                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
+        case DEFAULT:
+        case SIMPLE:
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar, maxOpt, k);
+        default:
+            logger.error(
+                    "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar, maxOpt, k);
         }
     }
 

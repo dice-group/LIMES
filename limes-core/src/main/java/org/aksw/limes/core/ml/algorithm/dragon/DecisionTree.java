@@ -460,7 +460,7 @@ public class DecisionTree {
 		final Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1,
 				-1);
 		final ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, this.sourceCache,
-				this.targetCache, "?x", "?y");
+				this.targetCache, "?x", "?y", 0, 1.0);
 		final Plan plan = new Plan();
 		plan.addInstruction(inst);
 		return ((SimpleExecutionEngine) ee).executeInstructions(plan);

@@ -27,7 +27,7 @@ public class ExecutionEngineFactoryTest {
 
     @Test
     public void testEqualDefault() {
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, null, null, null, null);
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, null, null, null, null, 0, 1.0);
         assertTrue(engine instanceof SimpleExecutionEngine);
     }
 

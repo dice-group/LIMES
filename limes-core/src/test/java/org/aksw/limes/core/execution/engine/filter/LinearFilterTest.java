@@ -74,7 +74,7 @@ public class LinearFilterTest {
     @Test
     public void simpleFilter() {
         System.out.println("simpleFilter");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -109,11 +109,10 @@ public class LinearFilterTest {
 
     }
 
-
     @Test
     public void complexFilterWithAtomicCondition1() {
         System.out.println("complexFilterWithAtomicCondition1");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -124,7 +123,6 @@ public class LinearFilterTest {
         System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
-        
 
         AMapping m2 = f.filter(m1, "overlap(x.name, y.name)", 0.8, source, target, "?x", "?y");
         System.out.println("Higher threshold: " + m2.getNumberofMappings());
@@ -135,7 +133,6 @@ public class LinearFilterTest {
         System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m3.getNumberofMappings());
 
-
         System.out.println("------------------------");
 
     }
@@ -143,7 +140,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithComplexcCondition1() {
         System.out.println("complexFilterWithComplexcCondition1");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -159,7 +156,6 @@ public class LinearFilterTest {
                 "?x", "?y");
         System.out.println("threshold == 0: " + m01.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m01.getNumberofMappings());
-
 
         AMapping m2 = f.filter(m1, "OR(overlap(x.name, y.name)|0.8,qgrams(x.name, y.name)|0.9)", 0.95, source, target,
                 "?x", "?y");
@@ -179,7 +175,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithAtomicCondition2() {
         System.out.println("complexFilterWithAtomicCondition2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -191,11 +187,9 @@ public class LinearFilterTest {
 
         LinearFilter f = new LinearFilter();
 
-
         AMapping m02 = f.filter(m1, "overlap(x.name, y.name)", 0.3, 0.0, source, target, "?x", "?y");
         System.out.println("0 mainthreshold only: " + m02.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m02.getNumberofMappings());
-
 
         AMapping m2 = f.filter(m1, "overlap(x.name, y.name)", 0.8, 0.95, source, target, "?x", "?y");
         System.out.println("Higher threshold: " + m2.getNumberofMappings());
@@ -206,7 +200,6 @@ public class LinearFilterTest {
         System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
 
-
         System.out.println("------------------------");
 
     }
@@ -214,7 +207,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithComplexcCondition2() {
         System.out.println("complexFilterWithComplexcCondition2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -224,9 +217,9 @@ public class LinearFilterTest {
         System.out.println("Size before: " + m1.getNumberofMappings());
         System.out.println(m1);
 
-        //all thresholds of the condition are 0, all thresholds of filters are 0
+        // all thresholds of the condition are 0, all thresholds of filters are
+        // 0
         LinearFilter f = new LinearFilter();
-       
 
         AMapping m02 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.0, 0.0, source,
                 target, "?x", "?y");
@@ -237,7 +230,6 @@ public class LinearFilterTest {
                 target, "?x", "?y");
         System.out.println("only mainThreshold == 0: " + m03.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m03.getNumberofMappings());
-
 
         AMapping m04 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.0, 0.9, source,
                 target, "?x", "?y");
@@ -260,9 +252,9 @@ public class LinearFilterTest {
         System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
 
-        
-        AMapping m4 = f.filter(m1, "MINUS(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.5)", 0.8, 0.4, source,
-                target, "?x", "?y");
+        AMapping m4 = f.filter(m1,
+                "MINUS(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.5)",
+                0.8, 0.4, source, target, "?x", "?y");
         System.out.println("Final touch " + m4.getNumberofMappings());
         System.out.println(m4);
 
@@ -274,7 +266,7 @@ public class LinearFilterTest {
     @Test
     public void complexReverseFilterWithAtomicCondition() {
         System.out.println("complexReverseFilterWithAtomicCondition");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -285,9 +277,8 @@ public class LinearFilterTest {
         System.out.println(m1);
         System.out.println("\n");
 
-
         LinearFilter f = new LinearFilter();
-       
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         AMapping m02 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.7, 0.0, source, target, "?x", "?y");
@@ -307,8 +298,9 @@ public class LinearFilterTest {
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
         System.out.println("\n");
 
-        AMapping m4 = f.reversefilter(m1, "OR(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.1)", 0.9, 0.4, source,
-                target, "?x", "?y");
+        AMapping m4 = f.reversefilter(m1,
+                "OR(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.1)",
+                0.9, 0.4, source, target, "?x", "?y");
         System.out.println("Final touch " + m4.getNumberofMappings());
         System.out.println(m4);
         System.out.println("------------------------");
@@ -318,7 +310,7 @@ public class LinearFilterTest {
     @Test
     public void filterWithCoEfficient() {
         System.out.println("filterWithCoEfficient");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());

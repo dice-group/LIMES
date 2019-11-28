@@ -131,7 +131,7 @@ public class IsOverlappedByMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -143,7 +143,7 @@ public class IsOverlappedByMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -166,7 +166,7 @@ public class IsOverlappedByMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
         AMapping m = e.execute(ls, p);
         System.out.println(m);
         //////////////////////////////////////////////////////////////////////////////////////////////////

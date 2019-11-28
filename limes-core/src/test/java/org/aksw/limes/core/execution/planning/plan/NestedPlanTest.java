@@ -115,7 +115,7 @@ public class NestedPlanTest {
 		plan.addInstruction(run2);
 		plan.addInstruction(union);
 
-		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
 		AMapping mUnion = ee.executeStatic(plan);
 
 		plan.removeInstruction(union);

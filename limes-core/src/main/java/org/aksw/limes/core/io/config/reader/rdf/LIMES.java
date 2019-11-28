@@ -35,6 +35,8 @@ public class LIMES {
     public static final Property executionPlanner = property("executionPlanner");
     public static final Property executionRewriter = property("executionRewriter");
     public static final Property executionEngine = property("executionEngine");
+    public static final Property optimizationTime = property("optimizationTime");
+    public static final Property expectedSelectivity = property("expectedSelectivity");
     public static final Property granularity = property("granularity");
     public static final Property outputFormat = property("outputFormat");
     public static final Property mlParameterName = property("mlParameterName");

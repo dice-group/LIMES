@@ -159,16 +159,29 @@ public class RDFConfigurationReader extends AConfigurationReader {
             }
             RDFNode exeRewriter = getObject(exeParamResource, LIMES.executionRewriter, false);
             if (exeRewriter != null) {
-                configuration.setExecutionPlanner(exeRewriter.toString());
+                configuration.setExecutionRewriter(exeRewriter.toString());
             } else {
                 logger.info("Use default execution rewriter.");
             }  
             RDFNode exeEngine = getObject(exeParamResource, LIMES.executionEngine, false);
             if (exeEngine != null) {
-                configuration.setExecutionPlanner(exeEngine.toString());
+                configuration.setExecutionEngine(exeEngine.toString());
             } else {
                 logger.info("Use default execution engine.");
             } 
+            RDFNode maxOpt = getObject(exeParamResource, LIMES.optimizationTime, false);
+            if (maxOpt != null) {
+                configuration.setOptimizationTime(Long.parseLong(maxOpt.toString()));
+            } else {
+                logger.info("Use default optimization time.");
+            } 
+            RDFNode k = getObject(exeParamResource, LIMES.expectedSelectivity, false);
+            if (k != null) {
+                configuration.setExpectedSelectivity(Double.parseDouble(k.toString()));
+            } else {
+                logger.info("Use default expected selectivity.");
+            } 
+            
         }else {
             logger.info("Use default execution parameters.");
         }

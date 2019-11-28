@@ -76,6 +76,9 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String MAXOFFSET = "MAXOFFSET";
     protected static final String MINOFFSET = "MINOFFSET";
     protected static final String FUNCTION = "FUNCTION";
+    protected static final String OPTIMIZATION_TIME = "OPTIMIZATION_TIME";
+    protected static final String EXPECTED_SELECTIVITY = "EXPECTED_SELECTIVITY";
+
 
     /**
      * Constructor
@@ -444,7 +447,11 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                 configuration.setExecutionPlanner(getText(child));
                             } else if (child.getNodeName().equals(ENGINE)) {
                                 configuration.setExecutionEngine(getText(child));
-                            }
+                            } else if(child.getNodeName().equals(OPTIMIZATION_TIME)){
+                                configuration.setOptimizationTime(Long.parseLong(getText(child)));
+                            } else if(child.getNodeName().equals(EXPECTED_SELECTIVITY)){
+                                configuration.setExpectedSelectivity(Double.parseDouble(getText(child)));
+                            } 
                         }
                     }
                 }

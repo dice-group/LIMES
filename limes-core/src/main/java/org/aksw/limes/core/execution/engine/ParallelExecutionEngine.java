@@ -28,8 +28,9 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      * @param targetVar
      *            Target variable
      */
-    public ParallelExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
-        super(source, target, sourceVar, targetVar);
+    public ParallelExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt,
+            double k) {
+        super(source, target, sourceVar, targetVar, maxOpt, k);
     }
 
     /**
