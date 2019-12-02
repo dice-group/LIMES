@@ -81,7 +81,7 @@ public class DynamicPlannerTest {
         System.out.println("EmptyPlan");
 
         AMapping m = MappingFactory.createDefaultMapping();
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
         LinkSpecification ls = new LinkSpecification();
 
@@ -99,7 +99,7 @@ public class DynamicPlannerTest {
         System.out.println("AtomicPlan");
         AMapping m = MappingFactory.createDefaultMapping();
 
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
         LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.8);
         try {
@@ -141,7 +141,7 @@ public class DynamicPlannerTest {
         LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
         System.out.println(ls.isAtomic());
         ls = p.normalize(ls);
-        ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y", 0, 1.0);
+        ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
         ee.execute(ls, p);
         
         NestedPlan plan2 = new NestedPlan();

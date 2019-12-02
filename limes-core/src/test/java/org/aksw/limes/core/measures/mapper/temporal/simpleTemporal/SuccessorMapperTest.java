@@ -161,7 +161,7 @@ public class SuccessorMapperTest {
                 "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -173,7 +173,7 @@ public class SuccessorMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -195,7 +195,7 @@ public class SuccessorMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -215,7 +215,7 @@ public class SuccessorMapperTest {
     @Test
     public void complexLS3() {
         System.out.println("complexLS3");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls = new LinkSpecification(
@@ -238,7 +238,7 @@ public class SuccessorMapperTest {
     @Test
     public void complexLS4() {
         System.out.println("complexLS4");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls = new LinkSpecification(
@@ -246,11 +246,11 @@ public class SuccessorMapperTest {
                 1.0);
         AMapping m = e.execute(ls, p);
 
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 

@@ -74,7 +74,7 @@ public class LinearFilterTest {
     @Test
     public void simpleFilter() {
         System.out.println("simpleFilter");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -112,7 +112,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithAtomicCondition1() {
         System.out.println("complexFilterWithAtomicCondition1");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -140,7 +140,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithComplexcCondition1() {
         System.out.println("complexFilterWithComplexcCondition1");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -175,7 +175,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithAtomicCondition2() {
         System.out.println("complexFilterWithAtomicCondition2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -207,7 +207,7 @@ public class LinearFilterTest {
     @Test
     public void complexFilterWithComplexcCondition2() {
         System.out.println("complexFilterWithComplexcCondition2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -266,7 +266,7 @@ public class LinearFilterTest {
     @Test
     public void complexReverseFilterWithAtomicCondition() {
         System.out.println("complexReverseFilterWithAtomicCondition");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());
@@ -310,7 +310,7 @@ public class LinearFilterTest {
     @Test
     public void filterWithCoEfficient() {
         System.out.println("filterWithCoEfficient");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
         plan.setInstructionList(new ArrayList<Instruction>());

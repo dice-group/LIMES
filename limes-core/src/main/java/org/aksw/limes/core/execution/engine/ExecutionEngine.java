@@ -42,7 +42,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
 
     protected long optimizationTime = 0l;
 
-    protected double expectedSelectivity = 1.0;
+    protected double expectedSelectivity = 1.0d;
 
     /**
      * Constructor for an execution engine.
@@ -56,21 +56,49 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      * @param targetVar
      *            Target variable
      */
+    public ExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
+        this.buffer = new ArrayList<>();
+        this.source = source;
+        this.target = target;
+        this.sourceVariable = sourceVar;
+        this.targetVariable = targetVar;
+    }
+
+    /**
+     * Constructor for an execution engine.
+     *
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Source variable
+     * @param targetVar
+     *            Target variable
+     * @param maxOpt,
+     *            optimization time constraint
+     * @param k,
+     *            expected selectivity
+     */
     public ExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt, double k) {
         this.buffer = new ArrayList<>();
         this.source = source;
         this.target = target;
         this.sourceVariable = sourceVar;
         this.targetVariable = targetVar;
+
         if (maxOpt < 0) {
             logger.info("\nOptimization time cannot be negative. Your input value is " + maxOpt
                     + ".\nSetting it to the default value: 0ms.");
+            this.optimizationTime = 0l;
         } else
             this.optimizationTime = maxOpt;
         if (k < 0.0 || k > 1.0) {
             logger.info("\nExpected selectivity must be between 0.0 and 1.0. Your input value is " + k
                     + ".\nSetting it to the default value: 1.0.");
+            this.expectedSelectivity = 1.0d;
         } else
             this.expectedSelectivity = k;
+
     }
 }

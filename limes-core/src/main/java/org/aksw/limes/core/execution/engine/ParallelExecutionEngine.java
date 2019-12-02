@@ -30,7 +30,7 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      */
     public ParallelExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt,
             double k) {
-        super(source, target, sourceVar, targetVar, maxOpt, k);
+        super(source, target, sourceVar, targetVar);
     }
 
     /**

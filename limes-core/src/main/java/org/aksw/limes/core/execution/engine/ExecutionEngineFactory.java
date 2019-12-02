@@ -72,11 +72,11 @@ public class ExecutionEngineFactory {
         switch (type) {
         case DEFAULT:
         case SIMPLE:
-            return new SimpleExecutionEngine(source, target, sourceVar, targetVar, maxOpt, k);
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         default:
             logger.error(
                     "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
-            return new SimpleExecutionEngine(source, target, sourceVar, targetVar, maxOpt, k);
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         }
     }
 

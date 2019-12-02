@@ -105,6 +105,7 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
+        testConf.setOptimizationTime(1000);
 
 //        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
         String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();

@@ -160,7 +160,7 @@ public class PredecessorMapperTest {
                 "tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -176,7 +176,7 @@ public class PredecessorMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|e)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -198,7 +198,7 @@ public class PredecessorMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -222,7 +222,7 @@ public class PredecessorMapperTest {
     @Test
     public void complexLS3() {
         System.out.println("complexLS3");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         LinkSpecification ls = new LinkSpecification(
                 "MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -231,11 +231,11 @@ public class PredecessorMapperTest {
         AMapping m = e.execute(ls, p);
         System.out.println(p.getPlans().get(ls.toString()));
 
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
@@ -249,7 +249,7 @@ public class PredecessorMapperTest {
     @Test
     public void complexLS4() {
         System.out.println("complexLS4");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
         
         LinkSpecification ls = new LinkSpecification(
@@ -258,11 +258,11 @@ public class PredecessorMapperTest {
         p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
         
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
-        e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 

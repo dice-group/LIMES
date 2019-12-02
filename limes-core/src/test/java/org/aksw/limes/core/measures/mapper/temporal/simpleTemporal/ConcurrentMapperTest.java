@@ -160,7 +160,7 @@ public class ConcurrentMapperTest {
                 "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -176,7 +176,7 @@ public class ConcurrentMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -198,7 +198,7 @@ public class ConcurrentMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
@@ -217,7 +217,7 @@ public class ConcurrentMapperTest {
     @Test
     public void complexLS3() {
         System.out.println("complexLS3");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls1 = new LinkSpecification(
@@ -248,7 +248,7 @@ public class ConcurrentMapperTest {
     @Test
     public void complexLS4() {
         System.out.println("complexLS4");
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls1 = new LinkSpecification(

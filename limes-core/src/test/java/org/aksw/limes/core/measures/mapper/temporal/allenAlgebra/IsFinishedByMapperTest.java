@@ -114,7 +114,7 @@ public class IsFinishedByMapperTest {
                 "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -127,7 +127,7 @@ public class IsFinishedByMapperTest {
                 "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -149,7 +149,7 @@ public class IsFinishedByMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
         //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -200,7 +200,7 @@ public class Dragon extends ACoreMLAlgorithm {
         ls = rw.rewrite(ls);
         DynamicPlanner dp = new DynamicPlanner(source, target);
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
-                this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar(), 0, 1.0);
+                this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar());
         this.prediction = ee.execute(ls, dp);
         return this.prediction;
     }

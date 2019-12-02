@@ -120,6 +120,8 @@ public class RDFConfigurationReaderTest {
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
         testConf.setOutputFormat("TAB");
+        testConf.setOptimizationTime(1000);
+        testConf.setExpectedSelectivity(0.8);
 
 //        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
         String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();

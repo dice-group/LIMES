@@ -80,7 +80,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void negativeThreshold() {
         System.out.println("negativeThreshold");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "cosine", "-0.3", -1, -1, 0);
         AMapping mSource = null;
         try {
@@ -97,7 +97,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void emptyMeasure() {
         System.out.println("emptyMeasure");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "", "0.3", -1, -1, 0);
         AMapping mSource = null;
         try {
@@ -114,7 +114,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void bufferTest() {
         System.out.println("bufferTest");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.9", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 15);
@@ -149,7 +149,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void bufferTest2() {
         System.out.println("bufferTest2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.9", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 0);
@@ -184,7 +184,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void BasicUnion() {
         System.out.println("BasicUnion");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 2);
@@ -223,7 +223,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicIntersection() {
         System.out.println("basicIntersection");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction intersection = new Instruction(Command.INTERSECTION, "", "0.4", 0, 1, 2);
@@ -260,7 +260,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicDifference() {
         System.out.println("basicDifference");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction difference = new Instruction(Command.DIFF, "", "0.4", 0, 1, 2);
@@ -298,7 +298,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicXor() {
         System.out.println("basicXor");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction xor = new Instruction(Command.XOR, "", "0.4", 0, 1, 2);
@@ -356,7 +356,7 @@ public class SimpleExecutionEngineTest {
     public void testAtomicLinkSpecification() {
         System.out.println("testAtomicLinkSpecificationRun");
         LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.3);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 
@@ -398,12 +398,12 @@ public class SimpleExecutionEngineTest {
                 0.6);
 
         LinkSpecification ls2 = new LinkSpecification("MAX(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
 
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         cp = new CanonicalPlanner();
         AMapping m2 = ee.execute(ls2, cp);
         System.out.println(m2);
@@ -419,12 +419,12 @@ public class SimpleExecutionEngineTest {
                 0.6);
 
         LinkSpecification ls2 = new LinkSpecification("MIN(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new DynamicPlanner(source, target);
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
 
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         cp = new DynamicPlanner(source, target);
         AMapping m2 = ee.execute(ls2, cp);
         System.out.println(((DynamicPlanner) cp).getPlans());
@@ -440,7 +440,7 @@ public class SimpleExecutionEngineTest {
         System.out.println("testUnion");
         LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,trigrams(x.name,y.name)|0.4)",
                 0.4);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
 
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
@@ -514,7 +514,7 @@ public class SimpleExecutionEngineTest {
         Instruction intersection = new Instruction(Command.INTERSECTION, "", "", 0, 1, 2);
         Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
 
         // 1) run as a NestedPlan calling execute function
@@ -580,7 +580,7 @@ public class SimpleExecutionEngineTest {
         IPlanner cp = new CanonicalPlanner();
 
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         // 1) run as a NestedPlan calling execute function
         NestedPlan plan = cp.plan(ls);
@@ -646,7 +646,7 @@ public class SimpleExecutionEngineTest {
         Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         IPlanner cp = new CanonicalPlanner();
 
@@ -677,7 +677,7 @@ public class SimpleExecutionEngineTest {
         System.out.println("extraTest");
         LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,trigrams(x.name,y.name)|0.4)",
                 0.4);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
 
         Plan plan = cp.plan(ls);
@@ -688,22 +688,4 @@ public class SimpleExecutionEngineTest {
 
     }
     
-    @Test
-    public void changeParameters(){
-        System.out.println("changeParameters");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y", 100, 0.5);
-        assertFalse(ee.optimizationTime == 0);
-        assertTrue(ee.optimizationTime == 100);
-        assertFalse(ee.expectedSelectivity == 1.0);
-        assertTrue(ee.expectedSelectivity == 0.5);
-        
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y", 100, 1.5);
-        assertTrue(ee.expectedSelectivity == 1.0);
-        
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y", 100, -1.5);
-        assertTrue(ee.expectedSelectivity == 1.0);
-        
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y", -100, 0.5);
-        assertTrue(ee.optimizationTime == 0);
-    }
 }

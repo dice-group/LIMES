@@ -113,7 +113,7 @@ public class DuringReverseMapperTest {
                 "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -126,7 +126,7 @@ public class DuringReverseMapperTest {
                 "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
 
@@ -148,7 +148,7 @@ public class DuringReverseMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y", 0, 1.0);
+        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
         //////////////////////////////////////////////////////////////////////////////////////////////////

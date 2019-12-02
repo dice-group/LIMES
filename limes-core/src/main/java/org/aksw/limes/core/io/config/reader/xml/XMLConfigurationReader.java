@@ -79,7 +79,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String OPTIMIZATION_TIME = "OPTIMIZATION_TIME";
     protected static final String EXPECTED_SELECTIVITY = "EXPECTED_SELECTIVITY";
 
-
     /**
      * Constructor
      * 
@@ -124,8 +123,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
             kbinfo.getProperties().add(propertyLabel);
         }
     }
-    
-    
+
     public static void processOptionalProperty(KBInfo kbinfo, String property) {
         String function = "", propertyLabel = "", propertyRename = "";
         // no preprocessing nor renaming
@@ -239,9 +237,9 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 kbinfo.setEndpoint(getText(child));
             } else if (child.getNodeName().equals(GRAPH)) {
                 kbinfo.setGraph(getText(child));
-            } else if(child.getNodeName().equals(MAXOFFSET)) {
+            } else if (child.getNodeName().equals(MAXOFFSET)) {
                 kbinfo.setMaxOffset(Integer.parseInt(getText(child)));
-            } else if(child.getNodeName().equals(MINOFFSET)) {
+            } else if (child.getNodeName().equals(MINOFFSET)) {
                 kbinfo.setMinOffset(Integer.parseInt(getText(child)));
             } else if (child.getNodeName().equals(RESTRICTION)) {
                 String restriction = getText(child).trim();
@@ -262,7 +260,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
             } else if (child.getNodeName().equals(TYPE)) {
                 kbinfo.setType(getText(child));
             } else if (child.getNodeName().equals(FUNCTION)) {
-            	setComplexFunction(kbinfo, getText(child)); 
+                setComplexFunction(kbinfo, getText(child));
             }
         }
 
@@ -271,25 +269,25 @@ public class XMLConfigurationReader extends AConfigurationReader {
         boolean partialTarget = (targetInfo.getMinOffset() > 0 || targetInfo.getMaxOffset() > 0);
         boolean partialSource = (sourceInfo.getMinOffset() > 0 || sourceInfo.getMaxOffset() > 0);
 
-        if(partialTarget && partialSource) {
-             logger.warn("Looks like you requested only subsets from BOTH endpoints!");
+        if (partialTarget && partialSource) {
+            logger.warn("Looks like you requested only subsets from BOTH endpoints!");
         }
 
-        if(kbinfo.getMinOffset() > 0 && kbinfo.getMaxOffset() > 0 && kbinfo.getMinOffset() > kbinfo.getMaxOffset()) {
+        if (kbinfo.getMinOffset() > 0 && kbinfo.getMaxOffset() > 0 && kbinfo.getMinOffset() > kbinfo.getMaxOffset()) {
             logger.error(kb + " query limit missmatch: MINOFFSET > MAXOFFSET");
             throw new RuntimeException();
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
     }
-    
-    
+
     public void setComplexFunction(KBInfo info, String function) {
         String newPropertyName;
-        if(!function.contains(RENAME)){
-            logger.warn("You did not provide a new property name for your function \"" + function + "\" we will use the function name as new property name"
+        if (!function.contains(RENAME)) {
+            logger.warn("You did not provide a new property name for your function \"" + function
+                    + "\" we will use the function name as new property name"
                     + "\n You can provide a new property name using the " + RENAME + " keyword");
             newPropertyName = function;
-        }else{
+        } else {
             String[] funcArr = function.split(RENAME);
             function = funcArr[0];
             newPropertyName = funcArr[1];
@@ -388,13 +386,17 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                     Element e = (Element) child;
                                     String mlParameterName = getText(
                                             e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
-                                    if(mlParameterName.equalsIgnoreCase(Dragon.PARAMETER_PROPERTY_MAPPING)){
-                                        String propMapFile = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
-                                        PropertyMapping propertyMapping = PropMapper.getPropertyMappingFromFile(propMapFile);
-                                    	configuration.addMlAlgorithmParameter(mlParameterName.toLowerCase(), propertyMapping);
-                                    }else{
-                                    	String mlParameterValue = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
-                                    	configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
+                                    if (mlParameterName.equalsIgnoreCase(Dragon.PARAMETER_PROPERTY_MAPPING)) {
+                                        String propMapFile = getText(
+                                                e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                        PropertyMapping propertyMapping = PropMapper
+                                                .getPropertyMappingFromFile(propMapFile);
+                                        configuration.addMlAlgorithmParameter(mlParameterName.toLowerCase(),
+                                                propertyMapping);
+                                    } else {
+                                        String mlParameterValue = getText(
+                                                e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                        configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
                                     }
                                 }
                             }
@@ -447,11 +449,31 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                 configuration.setExecutionPlanner(getText(child));
                             } else if (child.getNodeName().equals(ENGINE)) {
                                 configuration.setExecutionEngine(getText(child));
-                            } else if(child.getNodeName().equals(OPTIMIZATION_TIME)){
-                                configuration.setOptimizationTime(Long.parseLong(getText(child)));
-                            } else if(child.getNodeName().equals(EXPECTED_SELECTIVITY)){
-                                configuration.setExpectedSelectivity(Double.parseDouble(getText(child)));
-                            } 
+                            } else if (child.getNodeName().equals(OPTIMIZATION_TIME)) {
+                                long maxOpt = Long.parseLong(getText(child));
+                                if (maxOpt < 0) {
+                                    logger.info(
+                                            "\nIgnore this message if you chose the default or simple execution engine:"
+                                                    + "\nOptimization time cannot be negative. Your input value is "
+                                                    + maxOpt + ".\nSetting it to the default value: 0ms."
+                                                    + "\n--End of message--");
+                                    configuration.setOptimizationTime(0l);
+                                } else
+                                    configuration.setOptimizationTime(maxOpt);
+
+                            } else if (child.getNodeName().equals(EXPECTED_SELECTIVITY)) {
+                                double k = Double.parseDouble(getText(child));
+                                if (k < 0.0 || k > 1.0) {
+                                    logger.info(
+                                            "\nIgnore this message if you chose the default or simple execution engine:"
+                                                    + "\nExpected selectivity must be between 0.0 and 1.0. Your input value is "
+                                                    + k + ".\nSetting it to the default value: 1.0."
+                                                    + "\n--End of message--");
+                                    configuration.setExpectedSelectivity(1.0d);
+                                } else
+                                    configuration.setExpectedSelectivity(k);
+
+                            }
                         }
                     }
                 }
