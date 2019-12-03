@@ -105,10 +105,11 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
-        testConf.setOptimizationTime(1000);
+        testConf.setOptimizationTime(0);
+        //testConf.setExpectedSelectivity(1.0d);
 
 //        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
-        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
+        String file = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.xml";
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
@@ -150,9 +151,11 @@ public class XMLConfigurationReaderTest {
         testConf.setMlAlgorithmParameters(mlParameters);
 
 //        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
-        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.xml").getPath();
+        String file= System.getProperty("user.dir") + "/src/main/resources/lgd-lgd-ml.xml";
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
+        
+
         
         assertTrue(testConf.equals(fileConf));
     }
@@ -194,6 +197,32 @@ public class XMLConfigurationReaderTest {
         Configuration fileConf = c.read();
         
         assertEquals(testConf, fileConf);
+    }
+    
+    @Test
+    public void test1() {
+        //optimization time = -1000 -> 0
+        //no selectivity from file -> 1.0
+        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.xml";
+        XMLConfigurationReader reader = new XMLConfigurationReader(filename);
+        Configuration config = reader.read();
+        System.out.println(config.toString());
+        
+        
+        assertTrue(config.getOptimizationTime() == 0);
+        assertTrue(config.getExpectedSelectivity() == 1.0);
+    }
+    
+    @Test
+    public void test2() {
+        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd2.xml";
+        XMLConfigurationReader reader = new XMLConfigurationReader(filename);
+        Configuration config = reader.read();
+        System.out.println(config.getExpectedSelectivity());
+        System.out.println(config.getOptimizationTime());
+        
+        assertTrue(config.getOptimizationTime() == 1000);
+        assertTrue(config.getExpectedSelectivity() == 0.65);
     }
 
 }
