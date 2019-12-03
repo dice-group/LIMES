@@ -2,7 +2,6 @@ package org.aksw.limes.core.io.config.reader.xml;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,24 +9,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -105,11 +95,10 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
-        testConf.setOptimizationTime(0);
-        //testConf.setExpectedSelectivity(1.0d);
 
 //        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
-        String file = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
+        System.out.println(file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
@@ -128,6 +117,7 @@ public class XMLConfigurationReaderTest {
         targetInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
 
         String file= System.getProperty("user.dir") + "/resources/lgd-lgd-optional-properties.xml";
+        System.out.println(file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -151,11 +141,10 @@ public class XMLConfigurationReaderTest {
         testConf.setMlAlgorithmParameters(mlParameters);
 
 //        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
-        String file= System.getProperty("user.dir") + "/src/main/resources/lgd-lgd-ml.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.xml").getPath();
+        System.out.println(file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
-        
-
         
         assertTrue(testConf.equals(fileConf));
     }
@@ -166,12 +155,12 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
-    	prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
-    	properties.add("geopos:lat");
-    	properties.add("geopos:long");
+        prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
+        properties.add("geopos:lat");
+        properties.add("geopos:long");
 
-    	LinkedHashMap<String, Map<String, String>> sourceFunctions = new LinkedHashMap<>();
-    	LinkedHashMap<String, Map<String, String>> targetFunctions = new LinkedHashMap<>();
+        LinkedHashMap<String, Map<String, String>> sourceFunctions = new LinkedHashMap<>();
+        LinkedHashMap<String, Map<String, String>> targetFunctions = new LinkedHashMap<>();
         HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         sourceFunctions.put("geom:geometry/geos:asWKT", f);
@@ -198,15 +187,18 @@ public class XMLConfigurationReaderTest {
         
         assertEquals(testConf, fileConf);
     }
+
     
     @Test
     public void test1() {
         //optimization time = -1000 -> 0
         //no selectivity from file -> 1.0
-        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.xml";
+        //
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath(); 
+        System.out.println(filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
-        System.out.println(config.toString());
+        
         
         
         assertTrue(config.getOptimizationTime() == 0);
@@ -215,11 +207,10 @@ public class XMLConfigurationReaderTest {
     
     @Test
     public void test2() {
-        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd2.xml";
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.xml").getPath(); 
+        System.out.println(filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
-        System.out.println(config.getExpectedSelectivity());
-        System.out.println(config.getOptimizationTime());
         
         assertTrue(config.getOptimizationTime() == 1000);
         assertTrue(config.getExpectedSelectivity() == 0.65);

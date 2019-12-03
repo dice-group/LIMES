@@ -105,7 +105,7 @@ public class RDFConfigurationReaderTest {
 
 //        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
 
-        String file = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd-ml.ttl";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.ttl").getPath();
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -125,7 +125,7 @@ public class RDFConfigurationReaderTest {
         testConf.setExpectedSelectivity(0.8);
 
 //        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
-        String file = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.ttl";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
 
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
@@ -148,7 +148,8 @@ public class RDFConfigurationReaderTest {
     
     @Test
     public void test1() {
-        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd.ttl";
+        //Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
         RDFConfigurationReader reader = new RDFConfigurationReader(filename);
         Configuration config = reader.read();
         
@@ -165,7 +166,7 @@ public class RDFConfigurationReaderTest {
     
     @Test
     public void test2() {
-        String filename = System.getProperty("user.dir") + "/src/main/resources/lgd-lgd2.ttl";
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.ttl").getPath();
         RDFConfigurationReader reader = new RDFConfigurationReader(filename);
         Configuration config = reader.read();
         
