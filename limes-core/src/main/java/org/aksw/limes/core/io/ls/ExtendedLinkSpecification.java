@@ -36,7 +36,7 @@ public class ExtendedLinkSpecification extends LinkSpecification {
      *            Global threshold
      */
     public void readSpec(String spec, double theta) {
-
+        spec = spec.trim();
         Parser p = new Parser(spec, theta);
         if (p.isAtomic()) {
             filterExpression = spec;
