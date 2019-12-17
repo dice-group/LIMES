@@ -192,6 +192,16 @@ Three LIMES execution parameters could be set here:
  	* `DEFAULT`: same as `CANONICAL`.
  * `ENGINE`: the user can choose between:
  	* `SIMPLE`: It executes each independent part of the plan sequentially.
+ 	* `PARTIAL_RECALL`: For an input link specification $L$, it finds a link specification $L'$
+      that achieves a lower expected run time than $L$, while
+      abiding a predefined constraint on the expected recall it has to achieve.
+	  A link specification $L'$ is subsumed by a link specification $L$, when the set of links retrieved by executing the plan of $L'$ are a subset of the links retrieved by executing the plan of $L$.
+      Then, it executes each independent part of $L'$'s plan sequentially.
+	  To use the `PARTIAL_RECALL`, the user should set two additional (optional) parameters:
+		* `OPTIMIZATION_TIME`: as the optimization time limit (in milliseconds) that the engine can spend to find $L'$. If not set, the default value is 0. Negative values are also set to 0.
+		* `EXPECTED_SELECTIVITY`: as the expected recall value that $L'$ has to achieve, at least. The values of `EXPECTED_SELECTIVITY` must belong to $[0,1]$. If not set, the default value is 1. Negative and values above 1 are also set to 1.
+      
+	Both `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` parameters are only used when the `PARTIAL_RECALL` is chosen as `ENGINE`. The rest of the `ENGINE` values ignore the `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` values.
  	* `DEFAULT`: same as `SIMPLE`.
 
 If not set, the `DEFAULT` value for each parameter will be used.
