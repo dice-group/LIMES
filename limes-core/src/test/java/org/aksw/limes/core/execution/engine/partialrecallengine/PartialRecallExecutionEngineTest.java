@@ -1,17 +1,21 @@
-package org.aksw.limes.core.execution.engine;
+package org.aksw.limes.core.execution.engine.partialrecallengine;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -19,7 +23,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SimpleExecutionEngineTest {
+public class PartialRecallExecutionEngineTest {
+
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -79,7 +84,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void negativeThreshold() {
         System.out.println("negativeThreshold");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "cosine", "-0.3", -1, -1, 0);
         AMapping mSource = null;
         try {
@@ -96,7 +101,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void emptyMeasure() {
         System.out.println("emptyMeasure");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "", "0.3", -1, -1, 0);
         AMapping mSource = null;
         try {
@@ -113,7 +118,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void bufferTest() {
         System.out.println("bufferTest");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.9", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 15);
@@ -148,7 +153,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void bufferTest2() {
         System.out.println("bufferTest2");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.9", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 0);
@@ -183,7 +188,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void BasicUnion() {
         System.out.println("BasicUnion");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 2);
@@ -222,7 +227,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicIntersection() {
         System.out.println("basicIntersection");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction intersection = new Instruction(Command.INTERSECTION, "", "0.4", 0, 1, 2);
@@ -259,7 +264,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicDifference() {
         System.out.println("basicDifference");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction difference = new Instruction(Command.DIFF, "", "0.4", 0, 1, 2);
@@ -297,7 +302,7 @@ public class SimpleExecutionEngineTest {
     @Test
     public void basicXor() {
         System.out.println("basicXor");
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction xor = new Instruction(Command.XOR, "", "0.4", 0, 1, 2);
@@ -355,7 +360,7 @@ public class SimpleExecutionEngineTest {
     public void testAtomicLinkSpecification() {
         System.out.println("testAtomicLinkSpecificationRun");
         LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.3);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 1000, 0.5);
         IPlanner cp = new CanonicalPlanner();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 
@@ -397,12 +402,12 @@ public class SimpleExecutionEngineTest {
                 0.6);
 
         LinkSpecification ls2 = new LinkSpecification("MAX(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         IPlanner cp = new CanonicalPlanner();
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
 
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         cp = new CanonicalPlanner();
         AMapping m2 = ee.execute(ls2, cp);
         System.out.println(m2);
@@ -418,12 +423,12 @@ public class SimpleExecutionEngineTest {
                 0.6);
 
         LinkSpecification ls2 = new LinkSpecification("MIN(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         IPlanner cp = new DynamicPlanner(source, target);
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
 
-        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         cp = new DynamicPlanner(source, target);
         AMapping m2 = ee.execute(ls2, cp);
         System.out.println(((DynamicPlanner) cp).getPlans());
@@ -439,7 +444,7 @@ public class SimpleExecutionEngineTest {
         System.out.println("testUnion");
         LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,trigrams(x.name,y.name)|0.4)",
                 0.4);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         IPlanner cp = new CanonicalPlanner();
 
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
@@ -513,7 +518,7 @@ public class SimpleExecutionEngineTest {
         Instruction intersection = new Instruction(Command.INTERSECTION, "", "", 0, 1, 2);
         Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         IPlanner cp = new CanonicalPlanner();
 
         // 1) run as a NestedPlan calling execute function
@@ -579,7 +584,7 @@ public class SimpleExecutionEngineTest {
         IPlanner cp = new CanonicalPlanner();
 
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
 
         // 1) run as a NestedPlan calling execute function
         NestedPlan plan = cp.plan(ls);
@@ -645,7 +650,7 @@ public class SimpleExecutionEngineTest {
         Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 
         // engine
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
 
         IPlanner cp = new CanonicalPlanner();
 
@@ -676,7 +681,7 @@ public class SimpleExecutionEngineTest {
         System.out.println("extraTest");
         LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,trigrams(x.name,y.name)|0.4)",
                 0.4);
-        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(source, target, "?x", "?y", 0, 0);
         IPlanner cp = new CanonicalPlanner();
 
         Plan plan = cp.plan(ls);
@@ -686,5 +691,98 @@ public class SimpleExecutionEngineTest {
         System.out.println("---------------------------------");
 
     }
-    
+
+    @Test
+    public void testAtomicLSLiger1() {
+
+        String fileNameOrUri = Thread.currentThread().getContextClassLoader()
+                .getResource("datasets/Amazon-GoogleProducts.xml").getPath();
+        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+        Configuration config = reader.read();
+        ACache sour = HybridCache.getData(config.getSourceInfo());
+        ACache targ = HybridCache.getData(config.getTargetInfo());
+
+        System.out.println("testAtomicLSLiger");
+        LinkSpecification ls = new LinkSpecification("levenshtein(x.surname, y.surname)", 0.3);
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println("---------------------------------");
+    }
+
+    @Test
+    public void testAtomicLSLiger2() {
+
+        String fileNameOrUri = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
+        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+        Configuration config = reader.read();
+        ACache sour = HybridCache.getData(config.getSourceInfo());
+        ACache targ = HybridCache.getData(config.getTargetInfo());
+
+        System.out.println("testAtomicLSLiger");
+        LinkSpecification ls = new LinkSpecification("geo_hausdorff(x.polygon, y.polygon)", 0.001);
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println("---------------------------------");
+
+    }
+
+    @Test
+    public void testAtomicLSLigerOR() {
+
+        String fileNameOrUri = Thread.currentThread().getContextClassLoader()
+                .getResource("datasets/Amazon-GoogleProducts.xml").getPath();
+        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+        Configuration config = reader.read();
+        ACache sour = HybridCache.getData(config.getSourceInfo());
+        ACache targ = HybridCache.getData(config.getTargetInfo());
+
+        System.out.println("testAtomicLSLiger");
+        LinkSpecification ls = new LinkSpecification(
+                "OR(levenshtein(x.title,y.name)|0.2013,overlap(x.description,y.description)|0.5702)", 0.34);
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println("---------------------------------");
+    }
+
+    @Test
+    public void testAtomicLSLigerAND() {
+
+        String fileNameOrUri = Thread.currentThread().getContextClassLoader()
+                .getResource("datasets/Amazon-GoogleProducts.xml").getPath();
+        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+        Configuration config = reader.read();
+        ACache sour = HybridCache.getData(config.getSourceInfo());
+        ACache targ = HybridCache.getData(config.getTargetInfo());
+
+        System.out.println("testAtomicLSLiger");
+        LinkSpecification ls = new LinkSpecification(
+                "AND(levenshtein(x.title,y.name)|0.23,overlap(x.description,y.description)|0.5702)", 0.34);
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println("---------------------------------");
+    }
+
+    @Test
+    public void testAtomicLSLigerMINUS() {
+
+        String fileNameOrUri = Thread.currentThread().getContextClassLoader()
+                .getResource("datasets/Amazon-GoogleProducts.xml").getPath();
+        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+        Configuration config = reader.read();
+        ACache sour = HybridCache.getData(config.getSourceInfo());
+        ACache targ = HybridCache.getData(config.getTargetInfo());
+
+        System.out.println("testAtomicLSLiger");
+        LinkSpecification ls = new LinkSpecification(
+                "MINUS(levenshtein(x.title,y.name)|0.23,overlap(x.description,y.description)|0.5702)", 0.34);
+        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 500, 0.5);
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println("---------------------------------");
+    }
+
 }

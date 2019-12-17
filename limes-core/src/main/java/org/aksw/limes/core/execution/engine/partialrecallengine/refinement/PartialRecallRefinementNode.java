@@ -1,5 +1,6 @@
 package org.aksw.limes.core.execution.engine.partialrecallengine.refinement;
 
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
@@ -18,8 +19,8 @@ public class PartialRecallRefinementNode {
     private Plan plan;
 
     public PartialRecallRefinementNode(LinkSpecification sp, Plan p) {
-        this.spec = sp;
-        this.plan = p;
+        this.setLinkSpecification(sp);
+        this.setPlan(p);
     }
 
     public LinkSpecification getLinkSpecification() {
@@ -27,7 +28,10 @@ public class PartialRecallRefinementNode {
     }
 
     public void setLinkSpecification(LinkSpecification sp) {
-        this.spec = sp;
+        if (sp == null)
+            this.spec = new LinkSpecification();
+        else
+            this.spec = sp;
     }
 
     public Plan getPlan() {
@@ -35,6 +39,9 @@ public class PartialRecallRefinementNode {
     }
 
     public void setPlan(Plan p) {
-        this.plan = p;
+        if (p == null)
+            this.plan = new NestedPlan();
+        else
+            this.plan = p;
     }
 }

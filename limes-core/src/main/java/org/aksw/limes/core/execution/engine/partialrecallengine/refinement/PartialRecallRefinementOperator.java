@@ -16,17 +16,29 @@ public abstract class PartialRecallRefinementOperator {
 
     protected PartialRecallRefinementNode root;
     protected PartialRecallRefinementNode best;
-
-    public PartialRecallRefinementNode getBest() {
-        return best;
-    }
-
     protected double desiredSelectivity = 0.0d;
     protected ACache source;
     protected ACache target;
     protected long timeLimit;
     protected double k;
     protected long maxOpt;
+
+    public double getRecall() {
+        return k;
+    }
+
+    public long getOptimizationTime() {
+        return maxOpt;
+    }
+
+    public PartialRecallRefinementNode getBest() {
+        return best;
+    }
+
+    public double getDesiredSelectivity() {
+        return desiredSelectivity;
+    }
+
     protected List<Double> thresholds = Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0);
 
     protected LinkedList<PartialRecallRefinementNode> buffer = new LinkedList<PartialRecallRefinementNode>();
@@ -35,8 +47,18 @@ public abstract class PartialRecallRefinementOperator {
     public PartialRecallRefinementOperator(ACache s, ACache t, double recall, long optTime, LinkSpecification spec) {
         this.source = s;
         this.target = t;
-        this.k = recall;
-        this.maxOpt = optTime;
+        if (optTime < 0) {
+            logger.info("\nOptimization time cannot be negative. Your input value is " + optTime
+                    + ".\nSetting it to the default value: 0ms.");
+            this.maxOpt = 0l;
+        } else
+            this.maxOpt = optTime;
+        if (recall < 0.0 || recall > 1.0) {
+            logger.info("\nExpected selectivity must be between 0.0 and 1.0. Your input value is " + k
+                    + ".\nSetting it to the default value: 1.0.");
+            this.k = 1.0d;
+        } else
+            this.k = recall;
         this.init(spec);
     }
 
@@ -74,6 +96,9 @@ public abstract class PartialRecallRefinementOperator {
      *         currentThreshold is already 1.0
      */
     protected double next(double currentThreshold) {
+        if (currentThreshold < 0.0d || currentThreshold > 1.0)
+            return -1.0d;
+
         if (Double.compare(currentThreshold, 1.0d) == 0) {
             return -1.0d;
         } else {
@@ -82,7 +107,7 @@ public abstract class PartialRecallRefinementOperator {
                     return f;
             }
         }
-        return -0.1d;
+        return -1.0d;
     }
 
     /**
@@ -122,15 +147,10 @@ public abstract class PartialRecallRefinementOperator {
         this.desiredSelectivity = (double) (initPlan.getSelectivity() * this.k);
 
         this.buffer.addFirst(best);
-        this.total.add(best.toString());
+        this.total.add(best.getLinkSpecification().toString());
 
         // for safe keeping
         this.root = new PartialRecallRefinementNode(spec.clone(), initPlan);
-
-        // logger.info("Approximated spec: " + this.bestEntry.getX());
-        // logger.info("Selectivity original: " +
-        // this.bestEntry.getY().selectivity);
-        // logger.info("Selectivity desired: " + this.DesiredSelectivity);
 
     }
 

@@ -15,6 +15,8 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a planner class used by the partial recall execution engine class.
@@ -31,6 +33,7 @@ import org.aksw.limes.core.measures.measure.MeasureType;
  * @version 1.0
  */
 public class LigerPlanner extends Planner {
+    static Logger logger = LoggerFactory.getLogger(LigerPlanner.class);
 
     /**
      * Source cache.
@@ -100,7 +103,9 @@ public class LigerPlanner extends Planner {
 
             plan.setRuntimeCost(runtimeEstimation);
             plan.setMappingSize(sizeEstimation);
-
+            plan.setSelectivity(sizeEstimation / ((double) source.size() * target.size()));
+            //logger.info("\n atomic sel: " + plan.getSelectivity());
+            //logger.info("\n atomic runtime: " + plan.getRuntimeCost());
             ////////////////////////////////
             plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
         } else {
@@ -129,7 +134,7 @@ public class LigerPlanner extends Planner {
             if (spec.getOperator().equals(LogicOperator.AND)) {
                 plan.setOperator(Instruction.Command.INTERSECTION);
                 selectivity = 1d;
-                for (int i = 1; i < children.size(); i++) {
+                for (int i = 0; i < children.size(); i++) {
                     selectivity = selectivity * children.get(i).getSelectivity();
                 }
                 plan.setSelectivity(0.5 * selectivity);
@@ -145,7 +150,7 @@ public class LigerPlanner extends Planner {
             } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
                 plan.setOperator(Instruction.Command.DIFF);
                 selectivity = children.get(0).getSelectivity();
-                for (int i = 1; i < children.size(); i++) {
+                for (int i = 0; i < children.size(); i++) {
                     selectivity = selectivity * (1 - children.get(i).getSelectivity());
 
                 }

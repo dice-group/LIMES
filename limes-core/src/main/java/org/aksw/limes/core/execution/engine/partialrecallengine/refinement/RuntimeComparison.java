@@ -1,6 +1,5 @@
-package org.aksw.limes.core.execution.engine.partialrecallengine;
+package org.aksw.limes.core.execution.engine.partialrecallengine.refinement;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.aksw.limes.core.execution.engine.partialrecallengine.refinement.PartialRecallRefinementNode;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
@@ -32,19 +30,20 @@ public class RuntimeComparison {
     }
 
     /**
-     * Sorts a map of link specifications based on the runtime estimations of
-     * their corresponding plans. To secure the deterministic nature of the
-     * function, if two link specifications have the same runtime estimation,
-     * the function compares the String representation of the link
-     * specifications.
+     * Sorts a map of link specifications in ascending order based on the
+     * runtime estimations of their corresponding plans. To secure the
+     * deterministic nature of the function, if two link specifications have the
+     * same runtime estimation, the function compares the String representation
+     * of the link specifications.
      * 
      * @param plans,
      *            a map of Link Specifications and their corresponding plans
      * @return an ordered list of link specifications the runtime estimations of
      *         their corresponding plans
      */
-    public static LinkedList<PartialRecallRefinementNode> sortLinkSpecifications(HashMap<LinkSpecification, Plan> plans) {
-        
+    public static LinkedList<PartialRecallRefinementNode> sortLinkSpecifications(
+            HashMap<LinkSpecification, Plan> plans) {
+
         List<Entry<LinkSpecification, Plan>> temp = new LinkedList<Entry<LinkSpecification, Plan>>(plans.entrySet());
 
         Collections.sort(temp, new Comparator<Entry<LinkSpecification, Plan>>() {
@@ -63,7 +62,7 @@ public class RuntimeComparison {
 
         LinkedList<PartialRecallRefinementNode> sortedList = new LinkedList<PartialRecallRefinementNode>();
         for (Entry<LinkSpecification, Plan> entry : temp) {
-            PartialRecallRefinementNode node = new PartialRecallRefinementNode(entry.getKey(),entry.getValue());
+            PartialRecallRefinementNode node = new PartialRecallRefinementNode(entry.getKey(), entry.getValue());
             sortedList.add(node);
         }
         return sortedList;

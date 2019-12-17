@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
-import org.aksw.limes.core.execution.engine.partialrecallengine.RuntimeComparison;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.LigerPlanner;
 import org.aksw.limes.core.io.cache.ACache;
@@ -17,6 +16,11 @@ import org.apache.log4j.Logger;
 public class LigerRefinementOperator extends PartialRecallRefinementOperator {
 
     private HashMap<LinkSpecification, Plan> newNodes = new HashMap<LinkSpecification, Plan>();
+
+    public HashMap<LinkSpecification, Plan> getNewNodes() {
+        return newNodes;
+    }
+
     protected static final Logger logger = Logger.getLogger(LigerRefinementOperator.class.getName());
 
     public LigerRefinementOperator(ACache s, ACache t, double recall, long optTime, LinkSpecification spec) {
@@ -61,7 +65,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
             LinkSpecification bestLS = best.getLinkSpecification();
             Plan bestPlan = best.getPlan();
 
-            if (!currentLSClone.getFullExpression().equals(bestLS.getFullExpression())) {
+            if (!currentLSClone.toString().equals(bestLS.toString())) {
                 int com = RuntimeComparison.comparePlans(currentPlan, bestPlan);
                 if (com < 0) {
                     best.setLinkSpecification(currentLSClone);
@@ -73,21 +77,17 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
                         break;
                     }
                 }
+            }
+            List<LinkSpecification> newLSs = refine(currentLSClone);
 
-                List<LinkSpecification> newLSs = refine(currentLSClone);
+            newNodes = new HashMap<LinkSpecification, Plan>();
+            addSpecifications(newLSs);
 
-                newNodes = new HashMap<LinkSpecification, Plan>();
-                addSpecifications(newLSs);
+            this.total.add(currentLSClone.toString());
 
-                this.total.add(currentLSClone.toString());
-
-                if (newNodes.size() != 0) {
-                    // logger.info("You can expand by " + newPlans.size() +
-                    // "nodes.");
-                    LinkedList<PartialRecallRefinementNode> sorted = RuntimeComparison.sortLinkSpecifications(newNodes);
-                    buffer.addAll(0, sorted);
-                }
-
+            if (newNodes.size() != 0) {
+                LinkedList<PartialRecallRefinementNode> sorted = RuntimeComparison.sortLinkSpecifications(newNodes);
+                buffer.addAll(0, sorted);
             }
 
         }
@@ -104,30 +104,15 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
     public void addSpecifications(List<LinkSpecification> specs) {
         for (LinkSpecification sp : specs) {
             if (!this.total.contains(sp.toString())) {
-                // logger.info("---->New node");
-                // logger.info(sp);
                 LigerPlanner planner = new LigerPlanner(this.source, this.target);
                 Plan plan = planner.plan(sp);
-                // logger.info("Selectivity now: " + plan.selectivity + " || " +
-                // this.DesiredSelectivity + " || " +
-                // this.root.getY().selectivity);
                 int cSel = checkSelectivity(plan.getSelectivity());
                 if (cSel >= 0) {
                     newNodes.put(sp, plan);
-                    // logger.info("Alles gut.Runtime result: "
-                    // +plan.runtimeCost);
-                } /*
-                   * else { logger.info("too low selectivity");
-                   * rejected.add(sp.toString());
-                   * 
-                   * }
-                   */
+                }
                 this.total.add(sp.toString());
 
             }
-            /*
-             * else { logger.info("Seen before"); logger.info(sp); }
-             */
         }
 
     }
@@ -194,18 +179,18 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
      *         atomic specification
      */
     public LinkSpecification refineAtomicLinkSpecification(LinkSpecification currentSpec) {
+        if (currentSpec.isAtomic() == false) {
+            return null;
+        }
         LinkSpecification clone = new LinkSpecification();
         double newThreshold = next(currentSpec.getThreshold());
 
         if (newThreshold == -1.0d) {// don't add it as a plan
-            // logger.info("Cannot optimize anymore");
             clone = null;
         } else {
             clone = currentSpec.clone();
             clone.setThreshold(newThreshold);
-            // logger.info("Child refined: " + newSpec);
         }
-        // logger.info(currentSpec);
         return clone;
     }
 
@@ -231,6 +216,12 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
 
         List<LinkSpecification> specList = new ArrayList<LinkSpecification>();
 
+        // clone parent
+        // clone both children
+        // set clone's children to null
+        // set clones' children as the clones of the original children
+        // set child.parent = clone for both children
+
         if (isLeft) {// left child changed
             for (LinkSpecification leftChild : leftChildren) {
                 for (LinkSpecification rightChild : rightChildren) {
@@ -238,7 +229,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
                     LinkSpecification parentClone = parent.clone();
                     LinkSpecification leftChildClone = leftChild.clone();
                     LinkSpecification rightChildClone = rightChild.clone();
-                    // add clones of childrens
+                    // add clones of children
                     parentClone.setChildren(new ArrayList<LinkSpecification>());
                     parentClone.addChild(leftChildClone);
                     leftChildClone.setParent(parentClone);
@@ -255,12 +246,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
                     LinkSpecification parentClone = parent.clone();
                     LinkSpecification leftChildClone = leftChild.clone();
                     LinkSpecification rightChildClone = rightChild.clone();
-                    // clone parent
-                    // clone both children
-                    // set parent's clone children to null
-                    // set parent's clone children as the clones of the children
-                    // set child.parent = clone for both children
-                    // add clones of childrens
+                    // add clones of children
                     parentClone.setChildren(new ArrayList<LinkSpecification>());
                     parentClone.addChild(leftChildClone);
                     leftChildClone.setParent(parentClone);

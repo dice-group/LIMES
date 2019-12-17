@@ -3,14 +3,11 @@ package org.aksw.limes.core.execution.engine.partialrecallengine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.engine.partialrecallengine.refinement.LigerRefinementOperator;
 import org.aksw.limes.core.execution.engine.partialrecallengine.refinement.PartialRecallRefinementOperator;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
-import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,20 +53,14 @@ public class PartialRecallExecutionEngine extends SimpleExecutionEngine {
         // normalization is necessary cause liger's refinement operator is
         // not defined for XOR
         spec = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
+
         PartialRecallRefinementOperator liger = new LigerRefinementOperator(source, target, expectedSelectivity,
                 optimizationTime, spec);
         liger.optimize();
         LinkSpecification newSpec = liger.getBest().getLinkSpecification();
-
-        AMapping m = MappingFactory.createDefaultMapping();
-        if (planner.isStatic() == false) {
-            m = executeDynamic(newSpec, (DynamicPlanner) planner);
-        } else {
-            NestedPlan plan = planner.plan(newSpec);
-            m = executeStatic(plan);
-        }
-
-        return m;
+        // needed in case of dynamic planner
+        // its normalize function initiliazes important structures
+        return super.execute(newSpec, planner);
     }
 
 }

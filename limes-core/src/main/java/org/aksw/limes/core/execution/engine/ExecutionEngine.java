@@ -22,7 +22,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
     /**
      * List of intermediate mappings.
      */
-    protected List<AMapping> buffer;
+    private List<AMapping> buffer;
     /**
      * Source variable (usually "?x").
      */
@@ -57,7 +57,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      *            Target variable
      */
     public ExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
-        this.buffer = new ArrayList<>();
+        this.setBuffer(new ArrayList<>());
         this.source = source;
         this.target = target;
         this.sourceVariable = sourceVar;
@@ -81,7 +81,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      *            expected selectivity
      */
     public ExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt, double k) {
-        this.buffer = new ArrayList<>();
+        this.setBuffer(new ArrayList<>());
         this.source = source;
         this.target = target;
         this.sourceVariable = sourceVar;
@@ -100,5 +100,13 @@ public abstract class ExecutionEngine implements IExecutionEngine {
         } else
             this.expectedSelectivity = k;
 
+    }
+
+    public List<AMapping> getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(List<AMapping> buffer) {
+        this.buffer = buffer;
     }
 }
