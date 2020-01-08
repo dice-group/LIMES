@@ -40,10 +40,6 @@
 	<build>
 
 		<plugins>
-			<plugin>
-				<groupId>com.amashchenko.maven.plugin</groupId>
-				<artifactId>gitflow-maven-plugin</artifactId>
-			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -73,17 +69,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>com.amashchenko.maven.plugin</groupId>
-					<artifactId>gitflow-maven-plugin</artifactId>
-					<version>1.5.1</version>
-					<configuration>
-						<gitFlowConfig>
-							<versionTagPrefix>v</versionTagPrefix>
-						</gitFlowConfig>
-					</configuration>
-				</plugin>
-
 				<!-- That's a sledge hammer solution - but at least it works ... -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
