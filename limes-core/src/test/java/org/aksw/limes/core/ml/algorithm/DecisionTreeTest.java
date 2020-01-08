@@ -89,7 +89,7 @@ public class DecisionTreeTest {
 				0.0);
 	}
 
-	@Test
+	//@Test
 	public void testLearn() throws UnsupportedMLImplementationException, NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException {
 		this.dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);

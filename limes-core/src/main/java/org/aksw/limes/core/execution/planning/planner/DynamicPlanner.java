@@ -416,7 +416,7 @@ public class DynamicPlanner extends Planner {
                 }
                 // SELECTIVITY
                 double selectivity = 1d;
-                for (int i = 1; i < children.size(); i++) {
+                for (int i = 0; i < children.size(); i++) {
                     // selectivity is not influenced by bestConjuctivePlan
                     selectivity = selectivity * children.get(i).getSelectivity();
                 }

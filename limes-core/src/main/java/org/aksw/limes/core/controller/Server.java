@@ -283,7 +283,7 @@ public class Server {
             MDC.put("requestId", requestId);
             AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
             Configuration config = reader.read();
-            String sourceEndpoint = config.getSourceInfo().getEndpoint();
+	    String sourceEndpoint = config.getSourceInfo().getEndpoint();
             if (uploadFiles.containsKey(sourceEndpoint)) {
                 config.getSourceInfo().setEndpoint(uploadFiles.get(sourceEndpoint));
             }

@@ -33,9 +33,11 @@ pom.xml.releaseBackup
 
 # ignore gitbook builds
 _book
+
 # ignore dist files from vue build
 /limes-web-ui/dist/
 /limes-web-ui/node_modules/
 # misc
 package-lock.json
 release.properties
+

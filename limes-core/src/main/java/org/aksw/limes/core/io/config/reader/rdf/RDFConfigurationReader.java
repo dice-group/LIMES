@@ -35,7 +35,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     private Resource specsSubject;
 
     /**
-     * @param fileNameOrUri file name or URI to be read
+     * @param fileNameOrUri
+     *            file name or URI to be read
      */
     public RDFConfigurationReader(String fileNameOrUri) {
         super(fileNameOrUri);
@@ -44,7 +45,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     /**
      * read RDF model from file/URL
      *
-     * @param fileNameOrUri file name or URI to be read
+     * @param fileNameOrUri
+     *            file name or URI to be read
      * @return Model that contains the data in the fileNameOrUri
      */
     public static Model readModel(String fileNameOrUri) {
@@ -81,7 +83,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     /**
-     * @param configurationModel A model filled with the configurations
+     * @param configurationModel
+     *            A model filled with the configurations
      * @return true if the configurationModel contains all mandatory properties
      */
     public Configuration read(Model configurationModel) {
@@ -98,48 +101,48 @@ public class RDFConfigurationReader extends AConfigurationReader {
         configuration.setTargetInfo(new KBInfo());
         configuration.setPrefixes((HashMap<String, String>) configModel.getNsPrefixMap());
 
-        //1. 2. Source & Target information
+        // 1. 2. Source & Target information
         readKBDescription((Resource) getObject(specsSubject, LIMES.hasSource, true));
         readKBDescription((Resource) getObject(specsSubject, LIMES.hasTarget, true));
 
-        //3. METRIC
+        // 3. METRIC
         if (configModel.contains(specsSubject, LIMES.hasMetric, (RDFNode) null)) {
             Resource metric = (Resource) getObject(specsSubject, LIMES.hasMetric, true);
             configuration.setMetricExpression(getObject(metric, LIMES.expression, true).toString());
         } else
 
-            //4. ML Algorithm
-            if (configModel.contains(specsSubject, LIMES.hasMLAlgorithm, (RDFNode) null)) {
-                Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm, true).asResource();
-                readMLAlgorithmConfigurations(mlAlgorithmUri);
-            } else {
-                logger.error("Neither Metric nor ML Algorithm provided, exit with error ");
-                throw new RuntimeException();
-            }
+        // 4. ML Algorithm
+        if (configModel.contains(specsSubject, LIMES.hasMLAlgorithm, (RDFNode) null)) {
+            Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm, true).asResource();
+            readMLAlgorithmConfigurations(mlAlgorithmUri);
+        } else {
+            logger.error("Neither Metric nor ML Algorithm provided, exit with error ");
+            throw new RuntimeException();
+        }
 
-        //5. ACCEPTANCE file and conditions
+        // 5. ACCEPTANCE file and conditions
         Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
         configuration.setAcceptanceThreshold(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
         configuration.setAcceptanceFile(getObject(acceptance, LIMES.file, true).toString());
         configuration.setAcceptanceRelation(getObject(acceptance, LIMES.relation, true).toString());
 
-        //6. VERIFICATION file and conditions
+        // 6. VERIFICATION file and conditions
         Resource review = (Resource) getObject(specsSubject, LIMES.hasReview, true);
         configuration.setVerificationThreshold(parseDouble(getObject(review, LIMES.threshold, true).toString()));
         configuration.setVerificationFile(getObject(review, LIMES.file, true).toString());
         configuration.setVerificationRelation(getObject(review, LIMES.relation, true).toString());
 
-        //7. EXECUTION 
+        // 7. EXECUTION
         RDFNode exeParamsSubject = getObject(specsSubject, LIMES.hasExecutionParameters, false);
         readExecutionParameters(exeParamsSubject);
 
-        //8. TILING if necessary
+        // 8. TILING if necessary
         RDFNode g = getObject(specsSubject, LIMES.granularity, false);
         if (g != null) {
             configuration.setGranularity(Integer.parseInt(g.toString()));
         }
 
-        //9. OUTPUT format
+        // 9. OUTPUT format
         RDFNode output = getObject(specsSubject, LIMES.outputFormat, false);
         if (output != null) {
             configuration.setOutputFormat(output.toString());
@@ -149,7 +152,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     protected void readExecutionParameters(RDFNode exeParamsSubject) {
-        if(exeParamsSubject != null){
+        if (exeParamsSubject != null) {
             Resource exeParamResource = exeParamsSubject.asResource();
             RDFNode exePlanner = getObject(exeParamResource, LIMES.executionPlanner, false);
             if (exePlanner != null) {
@@ -159,48 +162,76 @@ public class RDFConfigurationReader extends AConfigurationReader {
             }
             RDFNode exeRewriter = getObject(exeParamResource, LIMES.executionRewriter, false);
             if (exeRewriter != null) {
-                configuration.setExecutionPlanner(exeRewriter.toString());
+                configuration.setExecutionRewriter(exeRewriter.toString());
             } else {
                 logger.info("Use default execution rewriter.");
-            }  
+            }
             RDFNode exeEngine = getObject(exeParamResource, LIMES.executionEngine, false);
             if (exeEngine != null) {
-                configuration.setExecutionPlanner(exeEngine.toString());
+                configuration.setExecutionEngine(exeEngine.toString());
             } else {
                 logger.info("Use default execution engine.");
-            } 
-        }else {
+            }
+            RDFNode maxOpt = getObject(exeParamResource, LIMES.optimizationTime, false);
+            if (maxOpt != null) {
+                if (Long.parseLong(maxOpt.toString()) < 0) {
+                    logger.info("\nIgnore this message if you chose the default or simple execution engine:"
+                            + "\nOptimization time cannot be negative. Your input value is " + maxOpt
+                            + ".\nSetting it to the default value: 0ms." + "\n--End of message--");
+                    configuration.setOptimizationTime(0l);
+                } else
+                    configuration.setOptimizationTime(Long.parseLong(maxOpt.toString()));
+            } else {
+                logger.info("\nIgnore this message if you chose the default or simple execution engine:"
+                        + "Use default optimization time: 0ms." + "\n--End of message--");
+                configuration.setOptimizationTime(0l);
+            }
+            RDFNode k = getObject(exeParamResource, LIMES.expectedSelectivity, false);
+            if (k != null) {
+                if (Double.parseDouble(k.toString()) < 0.0 || Double.parseDouble(k.toString()) > 1.0) {
+                    logger.info("\nIgnore this message if you chose the default or simple execution engine:"
+                            + "\nExpected selectivity must be between 0.0 and 1.0. Your input value is " + k
+                            + ".\nSetting it to the default value: 1.0." + "\n--End of message--");
+                    configuration.setExpectedSelectivity(1.0d);
+                } else
+                    configuration.setExpectedSelectivity(Double.parseDouble(k.toString()));
+            } else {
+                logger.info("\nIgnore this message if you chose the default or simple execution engine:"
+                        + "Use default expected selectivity: 1.0" + "\n--End of message--");
+                configuration.setExpectedSelectivity(1.0d);
+            }
+
+        } else {
             logger.info("Use default execution parameters.");
         }
     }
 
     private void readMLAlgorithmConfigurations(Resource mlAlgorithmUri) {
-        // read MLAlgorithm type 
+        // read MLAlgorithm type
         if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.SupervisedMLAlgorithm)) {
             configuration.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
 
             // read training data
             RDFNode trainingDataFile = getObject(mlAlgorithmUri, LIMES.hasTrainingDataFile, true);
             configuration.setTrainingDataFile(trainingDataFile.toString());
-        }
-        else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.UnsupervisedMLAlgorithm)) {
+        } else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.UnsupervisedMLAlgorithm)) {
             configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
 
             // read pseudo-F-Measure
             RDFNode pfm = getObject(mlAlgorithmUri, LIMES.pseudoFMeasure, false);
-            if(pfm != null){
+            if (pfm != null) {
                 EvaluatorType evalType = EvaluatorType.valueOf(pfm.toString());
-                if(evalType == null){
-                    logger.warn(pfm.toString() + " is not valid pseudo-F-Measure, continue with the default pseudo-F-Measure.");
-                }else{
+                if (evalType == null) {
+                    logger.warn(pfm.toString()
+                            + " is not valid pseudo-F-Measure, continue with the default pseudo-F-Measure.");
+                } else {
                     configuration.setMlPseudoFMeasure(evalType);
                 }
             }
 
-        }else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
+        } else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
             configuration.setMlImplementationType(MLImplementationType.SUPERVISED_ACTIVE);
-        }
-        else{
+        } else {
             logger.warn(mlAlgorithmUri + " missing ML type. use the default type: " + LIMES.UnsupervisedMLAlgorithm);
             configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
         }
@@ -222,7 +253,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     /**
      * Read either the source or target dataset description
      *
-     * @param kb knowledge base resource URI
+     * @param kb
+     *            knowledge base resource URI
      */
     public void readKBDescription(Resource kb) {
         KBInfo kbinfo = null;
@@ -233,8 +265,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
         } else if (configModel.contains(kb, RDF.type, LIMES.TargetDataset)) {
             kbinfo = configuration.getTargetInfo();
         } else {
-            logger.error("Dataset type missing, "
-                    + "either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset + " is required.");
+            logger.error("Dataset type missing, " + "either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset
+                    + " is required.");
             throw new RuntimeException();
         }
         // Label
@@ -247,9 +279,9 @@ public class RDFConfigurationReader extends AConfigurationReader {
             kbinfo.setGraph(graph.toString());
         }
 
-        // Restrictions  
+        // Restrictions
         Set<RDFNode> restriction = getObjects(kb, LIMES.restriction, false);
-        if(restriction != null){
+        if (restriction != null) {
             for (RDFNode r : restriction) {
                 String restrictionStr = r.toString();
                 if (restrictionStr.endsWith(".")) {
@@ -266,7 +298,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
 
         // optional properties
         Set<RDFNode> optionalProperties = getObjects(kb, LIMES.optionalProperty, false);
-        if(optionalProperties != null){
+        if (optionalProperties != null) {
             for (RDFNode optionalProperty : optionalProperties) {
                 XMLConfigurationReader.processOptionalProperty(kbinfo, optionalProperty.toString());
             }
@@ -307,8 +339,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
      * @param s
      * @param p
      * @param isMandatory
-     *         if set the program exit in case o not found,
-     *         otherwise a null value returned
+     *            if set the program exit in case o not found, otherwise a null
+     *            value returned
      * @return the object o of triple (s, p, o) if exists, null otherwise
      * @author sherif
      */
@@ -329,9 +361,10 @@ public class RDFConfigurationReader extends AConfigurationReader {
      * @param s
      * @param p
      * @param isMandatory
-     *         if set the program exit in case o not found,
-     *         otherwise a null value returned
-     * @return Set of all objects o of triples (s, p, o) if exist, null otherwise
+     *            if set the program exit in case o not found, otherwise a null
+     *            value returned
+     * @return Set of all objects o of triples (s, p, o) if exist, null
+     *         otherwise
      * @author sherif
      */
     private Set<RDFNode> getObjects(Resource s, Property p, boolean isMandatory) {

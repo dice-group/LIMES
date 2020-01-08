@@ -217,7 +217,8 @@ public class Controller {
                     config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
                     RewriterFactory.getRewriterType(config.getExecutionRewriter()),
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
-                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
+                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()),
+                    config.getOptimizationTime(), config.getExpectedSelectivity());
         }
         long runTime = stopWatch.getTime();
         logger.info("Mapping task finished in " + runTime + " ms");

@@ -205,7 +205,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      * @return A Set of all standard String Measures.
      */
     public Set<String> getMeasures() {
-    	return allowedOperations;
+        return allowedOperations;
     }
     
     @Override
@@ -268,7 +268,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      * @param operationSet
      */
     public void setAllowedOperations(Set<String> operationSet) {
-    	this.allowedOperations = operationSet;
+        this.allowedOperations = operationSet;
     }
     
 }

@@ -28,7 +28,9 @@ limes:executionParameters
 	  a limes:ExecutionParameters ;
 	  limes:executionPlanner "default" ;
 	  limes:executionRewriter "default" ;
-	  limes:executionEngine "default" .
+	  limes:executionEngine "default" ;
+	  limes:optimizationTime "1000";
+	  limes:expectedSelectivity "0.8".
 	  
       
 limes:linkedgeodataTOlinkedgeodataReview

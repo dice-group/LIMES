@@ -132,11 +132,11 @@
 								</data>
 
 
-								<!-- <data> <type>file</type> <src>${basedir}/../sparqlify-core/target/sparqlify-core-${version}.jar</src> 
-									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix> 
+								<!-- <data> <type>file</type> <src>${basedir}/../sparqlify-core/target/sparqlify-core-${version}.jar</src>
+									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix>
 									</mapper> </data> -->
-								<!-- <data> <type>file</type> <src>${project.build.directory}/${project.build.finalName}.jar</src> 
-									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix> 
+								<!-- <data> <type>file</type> <src>${project.build.directory}/${project.build.finalName}.jar</src>
+									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix>
 									</mapper> </data> -->
 							</dataSet>
 
@@ -157,4 +157,3 @@
 		</dependency>
 	</dependencies>
 </project>
-

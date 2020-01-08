@@ -299,11 +299,15 @@
         <!--</dependency>-->
 
         <!-- commons codec for koeln phonetic measure-->
+
+
+        <!-- commons codec for koeln phonetic measure-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.11</version>
         </dependency>
+
       
         <!-- jena-sparql-api -->
         <dependency>
@@ -323,7 +327,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-web</artifactId>
+    <version>2.6.2</version>
+    <scope>test</scope>
+</dependency>
         <dependency>
             <groupId>org.aksw.jena-sparql-api</groupId>
             <artifactId>jena-sparql-api-core</artifactId>
@@ -378,63 +387,63 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.jena</groupId>-->
-            <!--<artifactId>jena-jdbc-driver-mem</artifactId>-->
-            <!--<version>3.9.0</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-api</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-log4j12</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>log4j</artifactId>-->
-                    <!--<groupId>log4j</groupId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.jena</groupId>-->
-            <!--<artifactId>jena-jdbc-driver-remote</artifactId>-->
-            <!--<version>3.9.0</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-api</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-log4j12</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>log4j</artifactId>-->
-                    <!--<groupId>log4j</groupId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.jena</groupId>-->
-            <!--<artifactId>jena-jdbc-driver-tdb</artifactId>-->
-            <!--<version>3.9.0</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-api</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-log4j12</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>log4j</artifactId>-->
-                    <!--<groupId>log4j</groupId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-jdbc-driver-mem</artifactId>
+            <version>3.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-jdbc-driver-remote</artifactId>
+            <version>3.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-jdbc-driver-tdb</artifactId>
+            <version>3.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.geotools</groupId>-->
             <!--<artifactId>gt-main</artifactId>-->
@@ -446,12 +455,13 @@
             <!--<version>3.0.1</version>-->
             <!--<type>bundle</type>-->
         <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.locationtech.jts</groupId>-->
-            <!--<artifactId>jts</artifactId>-->
-            <!--<version>1.16.0</version>-->
-            <!--<type>pom</type>-->
-        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts</artifactId>
+            <version>1.16.0</version>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
@@ -467,6 +477,11 @@
             <artifactId>simmetrics</artifactId>
             <version>1.6.2</version>
         </dependency>
+	<dependency>
+                <groupId>com.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>3.7</version>
+        </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -474,11 +489,20 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>jgraphx</groupId>-->
-            <!--<artifactId>jgraphx</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
+
+	<dependency>
+                <groupId>edu.mit</groupId>
+                 <artifactId>jwi</artifactId>
+                <version>2.4.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jgraphx</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+       
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>

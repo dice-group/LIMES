@@ -11,6 +11,7 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
+import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
@@ -43,8 +44,18 @@ import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
 import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
+import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
+import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
+import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -105,7 +116,7 @@ public class MapperFactoryTest {
 
     }
 
-    @Test
+    // @Test
     public void test() {
         MeasureType type = null;
         AMapper mapper = null;
