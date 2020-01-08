@@ -3,8 +3,8 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting.measures;
 import java.util.ArrayList;
 
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.finders.ShortestPathFinder;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.ShortestPathFinder;
 
 import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.ISynsetID;

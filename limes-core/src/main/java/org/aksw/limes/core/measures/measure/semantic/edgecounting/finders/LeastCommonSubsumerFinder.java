@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.measure.semantic.edgecounting.utils;
+package org.aksw.limes.core.measures.measure.semantic.edgecounting.finders;
 
 import java.util.ArrayList;
 import java.util.List;

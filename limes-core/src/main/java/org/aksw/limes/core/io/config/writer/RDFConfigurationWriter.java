@@ -133,6 +133,8 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(s, LIMES.executionPlanner, configuration.getExecutionPlanner());
 		m.add(s, LIMES.executionRewriter, configuration.getExecutionRewriter());
 		m.add(s, LIMES.executionEngine, configuration.getExecutionEngine());
+		m.add(s, LIMES.optimizationTime, String.valueOf(configuration.getOptimizationTime()));
+		m.add(s, LIMES.expectedSelectivity, String.valueOf(configuration.getExpectedSelectivity()));
 
 		//7. TILING if necessary
 		m.add(s, LIMES.granularity, String.valueOf(configuration.getGranularity()));

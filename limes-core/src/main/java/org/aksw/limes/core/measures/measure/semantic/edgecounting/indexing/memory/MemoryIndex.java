@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.finders.HypernymPathsFinder;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.HypernymPathsFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

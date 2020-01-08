@@ -1,5 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
+import org.aksw.limes.core.execution.engine.partialrecallengine.PartialRecallExecutionEngine;
 import org.aksw.limes.core.io.cache.ACache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class ExecutionEngineFactory {
      * Enum class of allowed execution engine types.
      */
     public enum ExecutionEngineType {
-        DEFAULT, SIMPLE
+        DEFAULT, SIMPLE, PARTIAL_RECALL
     }
 
     /**
@@ -32,8 +33,14 @@ public class ExecutionEngineFactory {
     public static final String SIMPLE = "simple";
 
     /**
-     * Factory function for retrieving an execution engine name from
-     * the set of allowed types.
+     * Execution engine factory field for partial recall (LIGER) execution
+     * engine.
+     */
+    public static final String PARTIAL_RECALL = "partial_recall";
+
+    /**
+     * Factory function for retrieving an execution engine name from the set of
+     * allowed types.
      * 
      * @param name
      *            The name/type of the execution engine.
@@ -45,6 +52,9 @@ public class ExecutionEngineFactory {
         }
         if (name.equalsIgnoreCase(SIMPLE)) {
             return ExecutionEngineType.SIMPLE;
+        }
+        if (name.equalsIgnoreCase(PARTIAL_RECALL)) {
+            return ExecutionEngineType.PARTIAL_RECALL;
         }
         logger.error(
                 "Sorry, " + name + " is not yet implemented. Returning the default execution engine type instead...");
@@ -68,15 +78,17 @@ public class ExecutionEngineFactory {
      * 
      */
     public static ExecutionEngine getEngine(ExecutionEngineType type, ACache source, ACache target, String sourceVar,
-            String targetVar) {
+            String targetVar, long maxOpt, double k) {
         switch (type) {
-            case DEFAULT:
-            case SIMPLE:
-                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
-            default:
-                logger.error(
-                        "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
-                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
+        case DEFAULT:
+        case SIMPLE:
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
+        case PARTIAL_RECALL:
+            return new PartialRecallExecutionEngine(source, target, sourceVar, targetVar, maxOpt,k);
+        default:
+            logger.error(
+                    "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
+            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         }
     }
 
