@@ -44,7 +44,9 @@ public class PartialRecallExecutionEngine extends SimpleExecutionEngine {
      */
     public PartialRecallExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt,
             double k) {
-        super(source, target, sourceVar, targetVar, maxOpt, k);
+        //@todo: @Kleanthi please review
+        //super(source, target, sourceVar, targetVar, maxOpt, k);
+        super(source, target, sourceVar, targetVar);
     }
 
     @Override

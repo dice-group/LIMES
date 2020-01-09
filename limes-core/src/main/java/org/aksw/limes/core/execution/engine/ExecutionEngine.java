@@ -22,7 +22,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
     /**
      * List of intermediate mappings.
      */
-    private List<AMapping> buffer;
+    protected List<AMapping> buffer;
     /**
      * Source variable (usually "?x").
      */
