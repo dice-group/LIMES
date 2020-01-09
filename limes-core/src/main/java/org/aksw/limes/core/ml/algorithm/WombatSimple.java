@@ -44,8 +44,6 @@ public class WombatSimple extends AWombat {
 
     private Tree<RefinementNode> refinementTreeRoot = null;
 
-
-
     /**
      * WombatSimple constructor.
      */
@@ -146,8 +144,11 @@ public class WombatSimple extends AWombat {
         int i = 0;
         Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
         while(itr.hasNext() && i < size) {
-            highestEntropyLinks.add(itr.next());
-            i++;
+            LinkEntropy next = itr.next();
+            if (!trainingData.contains(next.getSourceUri(), next.getTargetUri())) {
+                highestEntropyLinks.add(next);
+                i++;
+            }
         }
         AMapping result = MappingFactory.createDefaultMapping();
         for(LinkEntropy l: highestEntropyLinks){
@@ -174,7 +175,6 @@ public class WombatSimple extends AWombat {
         double bestFMeasure = bestSolutionNode.getFMeasure();
         return new MLResults(bestLS, bestMapping, bestFMeasure, null);
     }
-
 
 
     /**
