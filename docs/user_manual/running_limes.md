@@ -38,9 +38,14 @@ Given this job id, the user can query the server for the status of the job, its 
 The following RESTful operations are currently implemented:
 
 * `submit/` **(POST)** ---
-  used to upload configuration files as multipart/form-data POST messages and returns the
+used to upload configuration files as multipart/form-data POST messages and returns the
   assigned *job_id* in a JSON object.
-  **Accepts XML Configuration file** (See example below)
+  **Accepts XML Configuration file** (See example below)  
+  When an active learning configuration is submitted, it will also return a list of examples. (See `activeLearning/:id`)
+* `activeLearning/:id` **(POST)** ---
+used for active learning. **Accepts a JSON file with the single key `"exampleScores"` whose value is an
+  array of floating point numbers in the interval \[-1,1\], used to score the previously retrieved examples.  
+  Returns the *job_id* and a set of new examples, if any are left to be classified. 
 * `status/:id`  **(GET)** ---
 returns the status (a numerical code) for a given job in a JSON object. 
   The following statuses are currently implemented:
@@ -57,12 +62,12 @@ returns the list of available operators.
 * `list/preprocessings` **(GET)** ---
 returns the list of available preprocessings.
 * `sparql/:urlEncodedEndpointUrl` **(GET, POST, OPTIONS)** ---
-proxy for SPARQL queries. Useful in browser when SPARQL endpoints do not implement CORS headers.
+proxy for SPARQL queries. Useful for browser frontends when SPARQL endpoints do not implement CORS headers.
 * `upload` **(POST)** ---
   used to upload source and/or target files as multipart/form-data POST messages and returns the
             assigned *upload_id* in a JSON object.
 * `uploads/:uploadId/sparql`  **(GET)** ---
-query uploaded files. Useful in browser.
+query uploaded files. Useful for browser frontends.
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.
 * `result/:id/:filename`  **(GET)** ---
@@ -197,7 +202,7 @@ In this component you can define the *Acceptance Threshold* and the *Review Thre
 Here you can choose an output format, including turtle (TTL), n-triples (N3), tab separated values (TAB), comma separated values (CSV).
 
 ### Display config and run
-There are three buttons at the bottom of the page: *Display config*, *Execute*, *Check the state of the previous run*.  
+The re are three buttons at the bottom of the page: *Display config*, *Execute*, *Check the state of the previous run*.  
 * If you click on the *Display config*, you can look at formed xml config. Also, if you want you can save it.
 <img src="../images/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
 
