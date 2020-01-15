@@ -408,7 +408,27 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    // open this window if mlalgorithm.type === 'supervised active'
 	    openActiveWindow(){
-	    	this.$refs.supervisedActiveMLDialog.open();
+	      this.jobError = false;
+	      const config = this.generateConfig();
+	      const configBlob = new Blob([config], {type: 'text/xml'});
+	      const fd = new FormData();
+	      fd.append('config_file', configBlob, 'config.xml');
+	      fetch(window.LIMES_SERVER_URL + '/submit', {
+	        method: 'post',
+	        body: fd,
+	      })
+	        .then(r => r.json())
+	        .then(r => {
+	        	if(r.examples.length === 0){
+	        		alert('There are errors in the configuration!');
+	        	}
+	        	this.activeLearningArray = r;
+	        	this.$refs.supervisedActiveMLDialog.open();
+	        })
+	        .catch(e => {
+	          this.jobError = `Error while starting the job: ${e.toString()}`;
+	        });
+	  
 	    },
 	    openActiveLearningTable(index){
 	    	this.activeLearningTableForNum = index;
@@ -420,7 +440,7 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 			this.$refs.supervisedActiveMLDialog.close();
 	    },
 	    continueExecute(){
-	    	this.$refs.supervisedActiveMLDialog.close();
+	    	
 	    	let exampleScores = this.radioButton;
 	    	exampleScores = exampleScores.map(i => {
 	    		let score = -1;
@@ -429,27 +449,35 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    		}
 	    		return score;
 	    	})
-	    	console.log(exampleScores);
+
 	    	// send them: http://localhost:8080/activeLearning/6a835f2e725bb8
 	    	fetch(window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId, {
 		        method: 'post',
-		        body: {"exampleScores" : exampleScores},
+		        body: JSON.stringify({"exampleScores" : exampleScores}),
 		      })
-		        .then(r => r.json().then(x => x.requestId))
+		        .then(r => r.json())
 		        .then(r => {
-		          this.jobId = r;
-		          this.jobRunning = true;
-		          this.jobError = false;
-		          this.c = 'Status Loading - waiting for status from server..';
-		          this.$refs.jobDialog.open();
-		          history.pushState({jobId: r}, '', `?jobId=${r}`);
-		          setTimeout(() => this.getStatus(), 1000);
+		          this.jobId = r.requestId;
+		          if(r.iteration !== 10 && r.examples.length !== 0){
+		          	alert('Examples length equals 0!')
+		          	this.activeLearningArray = r;
+		          	this.continueExecute();
+		          }
+		          if(r.iteration === 10){
+		          	this.$refs.supervisedActiveMLDialog.close();
+		          	this.jobRunning = true;
+			        this.jobError = false;
+			        this.c = 'Status Loading - waiting for status from server..';
+			        this.$refs.jobDialog.open();
+			        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
+			        setTimeout(() => this.getStatus(), 1000);
+		          }
 		        })
 		        .catch(e => {
+		          alert(e.toString());
 		          this.jobError = `Error while starting the job: ${e.toString()}`;
 		          this.jobRunning = false;
 		        });
-	    	//this.execute();
 	    },
 	    // execute button
 	    execute() {
