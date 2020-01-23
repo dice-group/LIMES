@@ -155,7 +155,7 @@ export default {
       advancedOptionsShow: false,
       exampleConfigEnable: false,
       configurationFile: '',
-      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=_33-manual-metric-and-machine-learning' target='_blank' style='color: #191970;'>User manual: Manual metric and machine learning</a>",
+      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=manual-metric-and-machine-learning' target='_blank' style='color: #191970;'>User manual: Manual metric and machine learning</a>",
       },
     }
   },

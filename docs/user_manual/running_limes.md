@@ -184,13 +184,19 @@ At the top before the Workspace there are two options related to Workspace:
 ### Machine learning
 
 The tab *Machine learning* consists of three parts:
-* *Name*:The machine learning (ML) algorithm name. The currently available ML algorithms include WOMBAT Simple, WOMBAT Complete and EAGLE
+* *Name*: The machine learning (ML) algorithm name. The currently available ML algorithms include WOMBAT Simple, WOMBAT Complete and EAGLE
 * *Type*: The ML algorithm types, which include supervised batch, supervised active and unsupervised
 * *Parameters*: A list of parameters which can be added to the currently selected ML algorithm.
 
-If *Type* is supervised batch or supervised active, you will see the additional input, where you can upload the file with training data.
+If *Type* is supervised batch, you will see the additional input, where you can upload the file with training data.
 
 <img src="../images/ml_web_ui.png" width="800" alt ="ML_web_ui">
+
+If *Type* is supervised active and the user wants to start execution, the *Supervised active ML dialog* window will be shown before actual execution.
+
+<img src="../images/supervised_active_ml_dialog.png" width="800" alt ="supervised_active_ml_dialog">
+
+On this step user have to do 10 iterations of learning. The user should choose the examples to learn the concept. If you want to choose an example, you need to switch radio button to *+*. By default all examples are not chosen. The button *Show table* opens more details. When you are done with the iteration, click on *Continue execution* button, it will lead you to the next iteration of learning. After 10 iterations of learning, the usual execution will be processed.
 
 ## Acceptance and review conditions
 

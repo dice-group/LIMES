@@ -74,7 +74,7 @@ export default {
       messageAboutClasses: "",
       messageAboutProps: "",
       classes: [],
-      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=_32-data-source-target' target='_blank' style='color: #191970;'>User manual: Data source / target</a>",
+      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=data-source-target' target='_blank' style='color: #191970;'>User manual: Data source / target</a>",
       },
     }
   },
