@@ -70,6 +70,11 @@ public class ConsoleOracle implements ActiveLearningOracle {
     }
 
     @Override
+    public void stop() {
+        this.stopped = true;
+    }
+
+    @Override
     public int getIteration() {
         return i;
     }

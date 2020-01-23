@@ -78,6 +78,10 @@ public class MLPipeline {
                 mlm = mla.activeLearn();
                 while (!oracle.isStopped()) {
                     AMapping nextExamplesMapping = mla.getNextExamples(maxIt);
+                    if (nextExamplesMapping.getMap().isEmpty()) {
+                        oracle.stop();
+                        break;
+                    }
                     logger.info(nextExamplesMapping.toString());
                     ActiveLearningExamples activeLearningExamples = new ActiveLearningExamples(nextExamplesMapping, source, target);
                     AMapping classify = oracle.classify(activeLearningExamples);
