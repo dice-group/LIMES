@@ -78,41 +78,42 @@
       <!-- supervised active ml dialog -->
       <md-dialog ref="supervisedActiveMLDialog" v-bind:md-esc-to-close="false" v-bind:md-click-outside-to-close="false">
         <md-dialog-title>Supervised active ML dialog</md-dialog-title>
+        <div style="margin-left: 26px;font-size: 18px;color:#3f51b5;">Iteration: {{activeLearningArray.iteration}} of 10</div>
 
-        <md-dialog-content>  
+        <md-dialog-content ref="focusOnTop">  
         	<md-list>
 	          	<div v-for="(i, index) in activeLearningArray.examples">					
-				    <md-list-item>
-				      	<span class="activeLearningItem">{{index+1+"."}}</span>
-				      	<span class="activeLearningItem">{{i.source}}</span>
-				      	<span class="activeLearningItem">{{i.target}}</span>
+				    <md-list-item style="word-wrap: anywhere;">
+				      	<div class="activeLearningItem">{{index+1+"."}}</div>
+				      	<div class="col activeLearningItem">{{i.source}}</div>
+				      	<div class="col activeLearningItem">{{i.target}}</div>
 						<md-button class="md-primary" @click="openActiveLearningTable(index)">Show table</md-button>
-					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
-					    <md-radio v-model="radioButton[index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton(index)">-</md-radio>	
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">-</md-radio>	
 				    </md-list-item> 
-		        </div> 
-	        </md-list>
-	        <md-table v-if="activeLearningTableForNum !== null">
-			  <md-table-header>
-			    <md-table-row>
-			      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].source}}</md-table-head>
-			      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].target}}</md-table-head>
-			    </md-table-row>
-			  </md-table-header>
+				    <md-table v-if="activeLearningTableForNum !== null && activeLearningTableForNum === index">
+					  <md-table-header>
+					    <md-table-row>
+					      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].source}}</md-table-head>
+					      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].target}}</md-table-head>
+					    </md-table-row>
+					  </md-table-header>
 
-			  <md-table-body>
-			    <md-table-row v-for="(row, index) in activeLearningArray.examples[activeLearningTableForNum].sourceContext" :key="index">
-			      <md-table-cell>
-			      		<span>{{row.predicate}}</span><br>
-				      	<span>{{row.object}}</span>
-			      </md-table-cell>
-			      <md-table-cell v-for="(col, index1) in 1" :key="index1">
-			      		<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].predicate}}</span><br>
-				      	<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].object}}</span>
-			      </md-table-cell>
-			    </md-table-row>
-			  </md-table-body>
-			</md-table> 	  
+					  <md-table-body>
+					    <md-table-row v-for="(row, index) in activeLearningArray.examples[activeLearningTableForNum].sourceContext" :key="index">
+					      <md-table-cell>
+					      		<span>{{row.predicate}}</span><br>
+						      	<span>{{row.object}}</span>
+					      </md-table-cell>
+					      <md-table-cell v-for="(col, index1) in 1" :key="index1">
+					      		<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].predicate}}</span><br>
+						      	<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].object}}</span>
+					      </md-table-cell>
+					    </md-table-row>
+					  </md-table-body>
+					</md-table>
+		        </div> 
+	        </md-list>  
         </md-dialog-content>
 
         <md-dialog-actions>
@@ -185,101 +186,16 @@ export default {
 	    notFoundKeyMessage: '',
 	    findStatusMessage: '',
 	    exampleConfigEnable: false,
-	    activeLearningArray: {"requestId" : "6a835f2e725bb8",
-							 "iteration" : 1,
-							 "examples" : [
-							   {
-							     "source" : "http://some.domain.tld/someSourceUri",
-							     "target" : "http://some.domain.tld/someTargetUri",
-							     "sourceContext" : [
-							     	  {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
-							     	    "object" : "http://some.domain.tld/somObjectUri"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
-							     	    "object" : "http://some.domain.tld/somObjectUri1"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
-							     	    "object" : "http://some.domain.tld/somObjectUri2"
-							     	  },
-							     ],
-							     "targetContext" : [
-							     	  {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
-							     	    "object" : "http://some.domain.tld/somObjectUri0"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
-							     	    "object" : "http://some.domain.tld/somObjectUri10"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
-							     	    "object" : "http://some.domain.tld/somObjectUri20"
-							     	  },
-							     ]
-							   },
-							   {
-							     "source" : "http://some.domain.tld/someSourceUri1",
-							     "target" : "http://some.domain.tld/someTargetUri1",
-							     "sourceContext" : [
-							     	  {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
-							     	    "object" : "http://some.domain.tld/somObjectUri1"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri11",
-							     	    "object" : "http://some.domain.tld/somObjectUri11"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri21",
-							     	    "object" : "http://some.domain.tld/somObjectUri21"
-							     	  },
-							     ],
-							     "targetContext" : [
-							     	  {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
-							     	    "object" : "http://some.domain.tld/somObjectUri1"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri11",
-							     	    "object" : "http://some.domain.tld/somObjectUri11"
-							     	  },
-							          {
-							     	    "predicate" : "http://some.domain.tld/somePredicateUri21",
-							     	    "object" : "http://some.domain.tld/somObjectUri21"
-							     	  },
-							     ]
-							   },
-							 ]
-							},
-	    // [
-	    // 	{
-	    // 		source: "S",
-	    // 		predicate: "sameAs",
-	    // 		target: "T",
-	    // 	},
-	    // 	{
-	    // 		source: "S1",
-	    // 		predicate: "sameAs",
-	    // 		target: "T1",
-	    // 	},
-	    // 	{
-	    // 		source: "S2",
-	    // 		predicate: "sameAs",
-	    // 		target: "T2",
-	    // 	}
-	    // ],
+	    activeLearningArray: {},
 	    radioButton: [],
 	    activeLearningTableForNum: null,
     }
   },
-  created() {
-    this.activeLearningArray.examples.forEach(i => {
-    	this.radioButton.push(false);
-    });
-  },
+  // created() {
+  //   this.activeLearningArray.examples.forEach(i => {
+  //   	this.radioButton.push(false);
+  //   });
+  // },
 	methods: {
 
 		makeDatasource(data, tag){ return `<${tag.toUpperCase()}>
@@ -422,6 +338,10 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	        	if(r.examples.length === 0){
 	        		alert('There are errors in the configuration!');
 	        	}
+	        	this.radioButton = [];
+	        	r.examples.forEach(i => {
+					this.radioButton.push(false);
+				});
 	        	this.activeLearningArray = r;
 	        	this.$refs.supervisedActiveMLDialog.open();
 	        })
@@ -458,20 +378,29 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 		        .then(r => r.json())
 		        .then(r => {
 		          this.jobId = r.requestId;
-		          if(r.iteration !== 10 && r.examples.length !== 0){
+		          if(r.examples.length === 0){
 		          	alert('Examples length equals 0!')
-		          	this.activeLearningArray = r;
-		          	this.continueExecute();
-		          }
-		          if(r.iteration === 10){
-		          	this.$refs.supervisedActiveMLDialog.close();
-		          	this.jobRunning = true;
-			        this.jobError = false;
-			        this.c = 'Status Loading - waiting for status from server..';
-			        this.$refs.jobDialog.open();
-			        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
-			        setTimeout(() => this.getStatus(), 1000);
-		          }
+		          } else {
+			          if(r.iteration !== 10 && r.examples.length !== 0){
+			          	this.radioButton = [];
+			          	r.examples.forEach(i => {
+					    	this.radioButton.push(false);
+					    });
+			          	this.activeLearningArray = r;
+			          	this.$nextTick(() => {
+				            this.$refs.focusOnTop.$el.scrollTop = 0
+				        })
+			          }
+			          if(r.iteration === 10){
+			          	this.$refs.supervisedActiveMLDialog.close();
+			          	this.jobRunning = true;
+				        this.jobError = false;
+				        this.c = 'Status Loading - waiting for status from server..';
+				        this.$refs.jobDialog.open();
+				        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
+				        setTimeout(() => this.getStatus(), 1000);
+			          }
+			      }
 		        })
 		        .catch(e => {
 		          alert(e.toString());

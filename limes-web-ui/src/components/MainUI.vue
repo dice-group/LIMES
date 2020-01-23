@@ -162,7 +162,7 @@ export default {
   beforeMount() {
     let context;
     let filteredOptions;
-    fetch('http://prefix.cc/context')
+    fetch('https://prefix.cc/context')
             .then(function(response) {
               return response.json();
              })

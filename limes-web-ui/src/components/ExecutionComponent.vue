@@ -4,7 +4,7 @@
 
       <md-layout md-gutter="8" style="padding-top: 10px; padding-bottom: 15px;">
         <md-layout md-flex="50">
-          <md-field>
+          <md-field v-pre>
             <label for="planner">Planner</label>
             <md-select v-model="execution.planner" name="planner" id="planner">
               <md-option value="DEFAULT">Default</md-option>
@@ -14,7 +14,7 @@
           </md-field>
         </md-layout>
         <md-layout md-flex="50">
-          <md-field>
+          <md-field v-pre>
             <label for="engine">Engine</label>
             <md-select v-model="execution.engine" name="engine" id="engine">
               <md-option value="DEFAULT">Default</md-option>
