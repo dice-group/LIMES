@@ -12,7 +12,7 @@ public class ConfigurationMigrator {
 
     public static void main(String[] args) throws IOException {
         String inputFile = args[0];
-        String outputFile = args[0];
+        String outputFile = args[1];
         new RDFConfigurationWriter().write(new XMLConfigurationReader(inputFile).read(), outputFile);
     }
 
