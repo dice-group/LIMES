@@ -80,7 +80,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(s, LIMES.hasSource, source);
 		m.add(source, RDF.type, LIMES.SourceDataset);
 		m.add(source, RDFS.label, configuration.getSourceInfo().getId());
-		m.add(source, LIMES.endPoint, ResourceFactory.createResource(configuration.getSourceInfo().getEndpoint()));
+		m.add(source, LIMES.endPoint, configuration.getSourceInfo().getEndpoint());
 		m.add(source, LIMES.type, String.valueOf(configuration.getSourceInfo().getType()));
 		m.add(source, LIMES.variable, configuration.getSourceInfo().getVar());
 		m.add(source, LIMES.pageSize, String.valueOf(configuration.getSourceInfo().getPageSize()));
@@ -107,7 +107,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(s, LIMES.hasTarget, target);
 		m.add(target, RDF.type, LIMES.TargetDataset);
 		m.add(target, RDFS.label, configuration.getTargetInfo().getId());
-		m.add(target, LIMES.endPoint, ResourceFactory.createResource(configuration.getTargetInfo().getEndpoint()));
+		m.add(target, LIMES.endPoint, configuration.getTargetInfo().getEndpoint());
 		m.add(target, LIMES.type, String.valueOf(configuration.getTargetInfo().getType()));
 		m.add(target, LIMES.variable, configuration.getTargetInfo().getVar() + "");
 		m.add(target, LIMES.pageSize, String.valueOf(configuration.getTargetInfo().getPageSize()));
@@ -142,7 +142,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(s, LIMES.hasAcceptance, acceptance);
 		m.add(acceptance, RDF.type, LIMES.Acceptance);
 		m.add(acceptance, LIMES.threshold, String.valueOf(configuration.getAcceptanceThreshold()));
-		m.add(acceptance, LIMES.file, ResourceFactory.createResource(configuration.getAcceptanceFile()));
+		m.add(acceptance, LIMES.file, configuration.getAcceptanceFile());
 		m.add(acceptance, LIMES.relation, ResourceFactory.createResource(configuration.getAcceptanceRelation()));
 
 		//5. VERIFICATION file and conditions
@@ -150,7 +150,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(s, LIMES.hasReview, review);
 		m.add(review, RDF.type, LIMES.Review); 
 		m.add(review, LIMES.threshold, String.valueOf(configuration.getVerificationThreshold()));
-		m.add(review, LIMES.file, ResourceFactory.createResource(configuration.getVerificationFile()));
+		m.add(review, LIMES.file, configuration.getVerificationFile());
 		m.add(review, LIMES.relation, ResourceFactory.createResource(configuration.getVerificationRelation()));
 
 		//6. EXECUTION
