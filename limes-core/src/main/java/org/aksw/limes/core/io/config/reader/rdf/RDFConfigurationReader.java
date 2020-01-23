@@ -304,6 +304,11 @@ public class RDFConfigurationReader extends AConfigurationReader {
             }
         }
 
+        // complex functions
+        for (RDFNode function : getObjects(kb, LIMES.function, false)) {
+            XMLConfigurationReader.setComplexFunction(kbinfo, function.toString());
+        }
+
         // Page size
         kbinfo.setPageSize(parseInt(getObject(kb, LIMES.pageSize, true).toString()));
 
@@ -376,8 +381,6 @@ public class RDFConfigurationReader extends AConfigurationReader {
         if (isMandatory && result.size() == 0) {
             logger.error("Missing mandatory property: " + p + ", Exit with error.");
             throw new RuntimeException();
-        } else if (result.size() == 0) {
-            return null;
         }
         return result;
     }
