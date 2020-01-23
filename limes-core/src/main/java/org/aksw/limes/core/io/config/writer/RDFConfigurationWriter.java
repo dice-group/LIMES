@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.config.writer;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.LIMES;
@@ -89,6 +90,17 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		for (String p : configuration.getSourceInfo().getProperties()) {
 			m.add(source, LIMES.property, p);
 		}
+        for (String p : configuration.getSourceInfo().getOptionalProperties()) {
+            m.add(source, LIMES.optionalProperty, p);
+        }
+        for (Map.Entry<String, Map<String, String>> p : configuration.getSourceInfo().getFunctions().entrySet()) {
+            for (Map.Entry<String, String> entry : p.getValue().entrySet()) {
+                // super hacky but thats the way it is right now... should be right in 99% of cases...
+                if (p.getKey().equals(entry.getKey()) && entry.getValue().contains(",")) {
+                    m.add(source, LIMES.function, entry.getValue() + " RENAME " + entry.getKey());
+                }
+            }
+        }
 
 		// 2. Target
 		Resource target = ResourceFactory.createResource(uri + "_target");
@@ -105,6 +117,18 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		for (String p : configuration.getTargetInfo().getProperties()) {
 			m.add(target, LIMES.property, p);
 		}
+
+        for (String p : configuration.getTargetInfo().getOptionalProperties()) {
+            m.add(target, LIMES.optionalProperty, p);
+        }
+        for (Map.Entry<String, Map<String, String>> p : configuration.getTargetInfo().getFunctions().entrySet()) {
+            for (Map.Entry<String, String> entry : p.getValue().entrySet()) {
+                // super hacky but thats the way it is right now... should be right in 99% of cases...
+                if (p.getKey().equals(entry.getKey()) && entry.getValue().contains(",")) {
+                    m.add(target, LIMES.function, entry.getValue() + " RENAME " + entry.getKey());
+                }
+            }
+        }
 
 		// 3. Metric
 		Resource metric = ResourceFactory.createResource(uri + "_metric");

@@ -280,7 +280,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
         kbinfo.setPrefixes(configuration.getPrefixes());
     }
 
-    public void setComplexFunction(KBInfo info, String function) {
+    public static void setComplexFunction(KBInfo info, String function) {
         String newPropertyName;
         if (!function.contains(RENAME)) {
             logger.warn("You did not provide a new property name for your function \"" + function
