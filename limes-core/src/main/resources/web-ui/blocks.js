@@ -736,8 +736,7 @@ let MLParameters = {
 		"complexity penalty weight": { "default": 1, "min": 0, "max": 1 },
 		"beta": { "default": 1, "min": 0, "max": Number.MAX_VALUE },
 		"verbose": false,
-		"atomic measures": { "default": "jaccard, trigrams, cosine, qgrams"},
+		"atomic measures": { "default": "jaccard, cosine, qgrams"},
 		"save mapping": true,
-	},
-	"EAGLE": {},
+	}
 }

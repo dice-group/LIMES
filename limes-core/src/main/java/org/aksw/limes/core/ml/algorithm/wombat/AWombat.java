@@ -450,7 +450,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double propertyLearningRate = 0.9;
         double overallPenaltyWeight = 0.5d;
         boolean verbose = false;
-        Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
+        Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "cosine", "qgrams"));
 
         learningParameters = new ArrayList<>();
         learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class,
