@@ -196,7 +196,7 @@ If *Type* is supervised active and the user wants to start execution, the *Super
 
 <img src="../images/supervised_active_ml_dialog.png" width="800" alt ="supervised_active_ml_dialog">
 
-On this step user have to do 10 iterations of learning. The user should choose the examples to learn the concept. If you want to choose an example, you need to switch radio button to *+*. By default all examples are not chosen. The button *Show table* opens more details. When you are done with the iteration, click on *Continue execution* button, it will lead you to the next iteration of learning. After 10 iterations of learning, the usual execution will be processed.
+On this step user have to do some iterations of learning. The user should choose the examples to learn the concept. If you want to choose an example, you need to switch radio button to "*+*". The "*+*" means that the score of the example will be assigned to 1, in case of "*-*" to -1. By default all examples are not chosen, hence all radio buttons are checked as "*-*". The button *Show table* opens more details. When you are done with the iteration, click on *Continue execution* button, it will lead you to the next iteration of learning. After all available iterations of learning, the usual execution will be processed. If you want to skip iteration, click on the button *Skip iteration*, it will assign all scores to 0 and continue with the next iteration.
 
 ## Acceptance and review conditions
 

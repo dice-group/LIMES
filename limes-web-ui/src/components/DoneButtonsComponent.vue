@@ -78,7 +78,7 @@
       <!-- supervised active ml dialog -->
       <md-dialog ref="supervisedActiveMLDialog" v-bind:md-esc-to-close="false" v-bind:md-click-outside-to-close="false">
         <md-dialog-title>Supervised active ML dialog</md-dialog-title>
-        <div style="margin-left: 26px;font-size: 18px;color:#3f51b5;">Iteration: {{activeLearningArray.iteration}} of 10</div>
+        <div style="margin-left: 26px;font-size: 18px;color:#3f51b5;">Iteration: {{activeLearningArray.iteration}}</div>
 
         <md-dialog-content ref="focusOnTop">  
         	<md-list>
@@ -117,8 +117,8 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-          <md-button class="md-raised md-primary" @click="continueExecute()">Continue execution</md-button>
-          <md-button class="md-primary" @click="cancelExecution()">Cancel</md-button>
+          <md-button class="md-raised md-primary" @click="skipIteration()">Skip iteration</md-button>	
+          <md-button class="md-raised md-primary" @click="continueExecute(false)">Continue execution</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -346,6 +346,7 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	        	this.$refs.supervisedActiveMLDialog.open();
 	        })
 	        .catch(e => {
+	          alert(e.toString());	
 	          this.jobError = `Error while starting the job: ${e.toString()}`;
 	        });
 	  
@@ -356,19 +357,27 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    changeRadioButton(index){
 			this.radioButton[index] = !this.radioButton[index];
 	    },
-	    cancelExecution(){
-			this.$refs.supervisedActiveMLDialog.close();
-	    },
-	    continueExecute(){
-	    	
+	    calculateScores(isSkip){
 	    	let exampleScores = this.radioButton;
 	    	exampleScores = exampleScores.map(i => {
-	    		let score = -1;
-	    		if(i){
-	    			score = 1;
-	    		}
-	    		return score;
-	    	})
+	    		if(isSkip){
+	    			return 0;
+	    		} else {
+		    		let score = -1;
+		    		if(i){
+		    			score = 1;
+		    		}
+		    		return score;
+		    	}
+	    	});
+	    	return exampleScores;
+	    },
+	    skipIteration(){	
+	    	this.continueExecute(true);
+	    },
+	    continueExecute(isSkip){
+	    	
+	    	let exampleScores = this.calculateScores(isSkip);
 
 	    	// send them: http://localhost:8080/activeLearning/6a835f2e725bb8
 	    	fetch(window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId, {
@@ -378,29 +387,24 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 		        .then(r => r.json())
 		        .then(r => {
 		          this.jobId = r.requestId;
-		          if(r.examples.length === 0){
-		          	alert('Examples length equals 0!')
+		          if(r.examples !== undefined && r.examples.length !== 0){
+		          	this.radioButton = [];
+		          	r.examples.forEach(i => {
+				    	this.radioButton.push(false);
+				    });
+		          	this.activeLearningArray = r;
+		          	this.$nextTick(() => {
+			            this.$refs.focusOnTop.$el.scrollTop = 0
+			        })
 		          } else {
-			          if(r.iteration !== 10 && r.examples.length !== 0){
-			          	this.radioButton = [];
-			          	r.examples.forEach(i => {
-					    	this.radioButton.push(false);
-					    });
-			          	this.activeLearningArray = r;
-			          	this.$nextTick(() => {
-				            this.$refs.focusOnTop.$el.scrollTop = 0
-				        })
-			          }
-			          if(r.iteration === 10){
-			          	this.$refs.supervisedActiveMLDialog.close();
-			          	this.jobRunning = true;
-				        this.jobError = false;
-				        this.c = 'Status Loading - waiting for status from server..';
-				        this.$refs.jobDialog.open();
-				        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
-				        setTimeout(() => this.getStatus(), 1000);
-			          }
-			      }
+		          	this.$refs.supervisedActiveMLDialog.close();
+		          	this.jobRunning = true;
+			        this.jobError = false;
+			        this.c = 'Status Loading - waiting for status from server..';
+			        this.$refs.jobDialog.open();
+			        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
+			        setTimeout(() => this.getStatus(), 1000);
+		          }
 		        })
 		        .catch(e => {
 		          alert(e.toString());
