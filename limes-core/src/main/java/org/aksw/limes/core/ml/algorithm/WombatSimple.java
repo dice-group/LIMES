@@ -164,7 +164,7 @@ public class WombatSimple extends AWombat {
         trainingData = MappingOperations.union(trainingData, oracleMapping);
         boolean hasPositiveExamples = trainingData.getMap().entrySet().stream()
                 .flatMap(e -> e.getValue().values().stream())
-                .anyMatch(x -> x == 0);
+                .anyMatch(x -> x == 1);
         if (hasPositiveExamples) {
             updateScores(refinementTreeRoot);
             isUnsupervised = false;
