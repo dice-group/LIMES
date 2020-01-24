@@ -83,10 +83,10 @@
         <md-dialog-content ref="focusOnTop">  
         	<md-list>
 	          	<div v-for="(i, index) in activeLearningArray.examples">					
-				    <md-list-item style="word-wrap: anywhere;">
+				    <md-list-item style="overflow:auto; word-wrap:break-word;">
 				      	<div class="activeLearningItem">{{index+1+"."}}</div>
-				      	<div class="col activeLearningItem">{{i.source}}</div>
-				      	<div class="col activeLearningItem">{{i.target}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.source}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.target}}</div>
 						<md-button class="md-primary" @click="openActiveLearningTable(index)">Show table</md-button>
 					    <md-radio v-model="radioButton[index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
 					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">-</md-radio>	
