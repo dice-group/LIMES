@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.naturalLanguage;
+package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
 
 
 import java.io.IOException;
@@ -28,8 +28,9 @@ public class runNlg {
 		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.62,AND(AND(overlap(x.title,y.title)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.title,y.title)|0.51)|0.51)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.venue,y.venue)|0.51)";
 		String ls5="AND(AND(cosine(x.title,z.title)|0.52,AND(AND(qgrams(x.title,z.title)|0.36,euclidean(x.authors,z.authors)|0.83)|0.53,cosine(x.year,z.year)|0.83)|0.53)|0.53,euclidean(x.year,z.year)|0.83)";
 
-		linkSpec.readSpec(ls4, 0.8);
-		AMapping slection = lsPostProcessor.slection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
+		linkSpec.readSpec(ls4, 0.7);
+		AMapping slection = lsPostProcessor.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
+		
 		lsPostProcessor.summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
 	}
 

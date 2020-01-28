@@ -1,5 +1,6 @@
-package org.aksw.limes.core.io.ls.NLGLS.naturalLanguage;
+package org.aksw.limes.core.io.ls.NLGLS.nlgDE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -14,50 +15,61 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 
-import simplenlg.features.Feature;
-import simplenlg.features.Tense;
-import simplenlg.framework.CoordinatedPhraseElement;
-import simplenlg.framework.NLGElement;
-import simplenlg.framework.NLGFactory;
-import simplenlg.framework.PhraseElement;
-import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.XMLLexicon;
-import simplenlg.phrasespec.NPPhraseSpec;
-import simplenlg.phrasespec.SPhraseSpec;
-import simplenlg.realiser.english.Realiser;
+import simplenlgde.features.DiscourseFunction;
+import simplenlgde.features.Feature;
+import simplenlgde.features.InternalFeature;
+import simplenlgde.features.NumberAgreement;
+import simplenlgde.features.Tense;
+import simplenlgde.framework.CoordinatedPhraseElement;
+import simplenlgde.framework.DocumentElement;
+import simplenlgde.framework.NLGElement;
+import simplenlgde.framework.NLGFactory;
+import simplenlgde.framework.PhraseElement;
+import simplenlgde.lexicon.Lexicon;
+import simplenlgde.lexicon.XMLLexicon;
+import simplenlgde.phrasespec.AdjPhraseSpec;
+import simplenlgde.phrasespec.NPPhraseSpec;
+import simplenlgde.phrasespec.SPhraseSpec;
+import simplenlgde.realiser.Realiser;
 
-public class LsPostProcessor {
-
+public class LsPostProcessorDE {
+	private static Lexicon lexicon=Lexicon.getDefaultLexicon();
+	List<NLGElement> allNLGElement;
 	void postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-		LinkSpecSummery linkSpecsSummery= new LinkSpecSummery();
-		LsPreProcessor lsPreProcessor=new LsPreProcessor();
-		Lexicon lexicon = new XMLLexicon();                      
+		List<NLGElement> allNLGElement=new ArrayList<NLGElement>();
+		LinkSpecSummeryDE linkSpecsSummery= new LinkSpecSummeryDE();
+		LsPreProcessorDE lsPreProcessor=new LsPreProcessorDE();
+		//Lexicon lexicon ;//= new XMLLexicon();                      
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 		SPhraseSpec clause=nlgFactory.createClause();
 		SPhraseSpec clause1=nlgFactory.createClause();
 		SPhraseSpec clause2=nlgFactory.createClause();
-
-		List<NLGElement> allNLGElement = linkSpecsSummery.fullMeasureNLG(linkSpec);
-		clause1.setObject("The" +" link");
-		clause1.setVerb("generate");
-		clause1.setFeature(Feature.TENSE,Tense.FUTURE);
+		//List<NLGElement> allNLGElement=new ArrayList<NLGElement>();
+		clause1.setSubject("Der" +" Link");
+		clause1.setVerb("generieren");
+		//clause1.setFeature(Feature.TENSE,Tense.FUTURE);
 		clause1.setFeature(Feature.PASSIVE, true);
-		clause1.addPostModifier("if");
+		
 		Realiser clause1Realiser = new Realiser(lexicon);
 		NLGElement clause1Realised = clause1Realiser.realise(clause1);
+		allNLGElement = linkSpecsSummery.fullMeasureNLG(linkSpec);
+		allNLGElement.add(0, clause1Realised);
 
-		System.out.println(clause1Realised);
+		//System.out.println(clause1Realised);
 		if(!linkSpec.isAtomic()) {
 			clause.setSubject(linkSpecsSummery.previousSubject);
-			clause.setVerb("have");
+			clause.setVerb("haben");
 			clause.setObject(linkSpecsSummery.objCollection);
+			//clause.setFeature(Feature.COMPLEMENTISER, "wenn");
+			//clause1.addComplement(clause);
 			Realiser clauseRealiser = new Realiser(lexicon);
 			NLGElement clauseRealised = clauseRealiser.realise(clause);
 			clause=new SPhraseSpec(nlgFactory);
 			allNLGElement.add(clauseRealised);
 			for(NLGElement ele:allNLGElement) {
-
-				System.out.println(ele);
+				DocumentElement s = nlgFactory.createSentence(ele);
+				List<NLGElement> components = s.getComponents();
+				System.out.println(components);
 			}
 		}
 
@@ -72,32 +84,46 @@ public class LsPostProcessor {
 			//String rightProp2 = LSPreProcessor.leftProperty(linkSpecification);
 			//String leftProp2 = LSPreProcessor.rightProperty(linkSpecification);
 			double d=linkSpec.getThreshold();
-			NPPhraseSpec firstSubject = LinkSpecSummery.subject(coordinate,resourceValue,rightProp2, leftProp2);
+			NPPhraseSpec firstSubject = LinkSpecSummeryDE.subject(coordinate,resourceValue,rightProp2, leftProp2);
 
 			String stringTheta="";
 
-			if(d==1) 
-			{
-				stringTheta=" exact match of";
-				name.addPreModifier(stringTheta);
-				//name.addPostModifier(stringTheta);
+			NPPhraseSpec subject = nlgFactory.createNounPhrase();
+			if(d==1) {
+				stringTheta=" Übereinstimmung";
+				AdjPhraseSpec adjective = nlgFactory.createAdjectivePhrase("genau");
+				adjective.setFeature(Feature.IS_COMPARATIVE, true);
+				subject = nlgFactory.createNounPhrase(stringTheta);
+				subject.addModifier(adjective);
+				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+				subject.addComplement(name);//.addPreModifier(stringTheta);
+
 			}
-			if(d==0) 
-			{
-				stringTheta=    "complete mismatch of";
-				name.addPreModifier(stringTheta);
+			if(d==0) {
+				stringTheta =    "Nichtübereinstimmung";
+
+				AdjPhraseSpec adjective = nlgFactory.createAdjectivePhrase("vollständig");
+				adjective.setFeature(Feature.IS_COMPARATIVE, true);
+				subject = nlgFactory.createNounPhrase(stringTheta);
+				subject.addModifier(adjective);
+				//subject = nlgFactory.createNounPhrase(stringTheta);
+				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+				subject.addComplement(name);
 			}
-			if(d>0&& d<1)
-			{
+			if(d>0&& d<1) {
 				Realiser clause2Realiser = new Realiser(lexicon);
 				NLGElement thetaRealised = clause2Realiser.realise(theta);
+
 				String	thetaAString=thetaRealised.toString();
-				stringTheta=thetaAString +" of ";
-				name.addPreModifier(stringTheta);
+				subject = nlgFactory.createNounPhrase(thetaAString);
+				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+				subject.addComplement(name);
 			}
+			if(!rightProp2.equals(leftProp2))
+				firstSubject.setFeature(Feature.NUMBER, NumberAgreement.PLURAL);
 			clause2.setSubject(firstSubject);
-			clause2.setVerb("have");
-			clause2.setObject(name);
+			clause2.setVerb("haben");
+			clause2.setObject(subject);
 			Realiser clauseRealiser = new Realiser(lexicon);
 			NLGElement clauseRealised = clauseRealiser.realise(clause2);
 			System.out.println(clauseRealised);
@@ -111,7 +137,7 @@ public class LsPostProcessor {
 		FMeasure fMeasure=new FMeasure();
 		if(linkSpec.isAtomic()) 
 		{
-			AMapping slection = slection(linkSpec,source, target);
+			AMapping slection = selection(linkSpec,source, target);
 			double f=fMeasure.calculate(slection, new GoldStandard(referenceMapping));
 			double r=fMeasure.recall(slection, new GoldStandard(referenceMapping));
 			double p=fMeasure.precision(slection, new GoldStandard(referenceMapping));
@@ -122,11 +148,12 @@ public class LsPostProcessor {
 			}
 		}
 		else {
-			AMapping slection = slection(linkSpec,source, target);
+			AMapping slection = selection(linkSpec,source, target);
 			//if(userScore==roundPercentage1) {
 			double f=fMeasure.calculate(slection, new GoldStandard(referenceMapping));
 			double r=fMeasure.recall(slection, new GoldStandard(referenceMapping));
 			double p=fMeasure.precision(slection, new GoldStandard(referenceMapping));
+
 			if(f>=userScore) {
 				System.out.println("|| F_Meausre ||  Recall    ||  Precision ||");
 				System.out.println(" ||  "+ f+ "  ||  " +r+ " || "+p+" ||");
@@ -135,14 +162,15 @@ public class LsPostProcessor {
 				LinkSpecification linkSpecification = linkSpec.getChildren().get(i);
 				if(linkSpecification.isAtomic())
 				{
-					AMapping slection1 = slection(linkSpecification,source, target);
+					AMapping slection1 = selection(linkSpecification,source, target);
 					double f1=fMeasure.calculate(slection1, new GoldStandard(referenceMapping));
 					double r1=fMeasure.recall(slection1, new GoldStandard(referenceMapping));
 					double p1=fMeasure.precision(slection1, new GoldStandard(referenceMapping));
 					if(f1>=userScore) {
 						System.out.println(" || F_Meausre  ||  Recall    ||  Precision ||");
 						System.out.println(" ||  "+ f1+ "  ||  " +r1+ "  ||     "+p1+" ||");
-						postProcessor(linkSpecification);}
+						postProcessor(linkSpecification);
+					}
 				}
 				else 
 					summarization(linkSpecification,source,target,referenceMapping, userScore);
@@ -150,7 +178,7 @@ public class LsPostProcessor {
 		}
 
 	}
-	public  AMapping slection(LinkSpecification linkSpec, ACache source, ACache target) throws UnsupportedMLImplementationException {
+	public  AMapping selection(LinkSpecification linkSpec, ACache source, ACache target) throws UnsupportedMLImplementationException {
 
 		AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
 				MLImplementationType.SUPERVISED_BATCH);

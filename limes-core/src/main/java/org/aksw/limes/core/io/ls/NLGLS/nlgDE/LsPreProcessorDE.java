@@ -1,24 +1,27 @@
-package org.aksw.limes.core.io.ls.NLGLS.naturalLanguage;
+package org.aksw.limes.core.io.ls.NLGLS.nlgDE;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
-import simplenlg.features.Feature;
-import simplenlg.features.InternalFeature;
-import simplenlg.framework.CoordinatedPhraseElement;
-import simplenlg.framework.NLGFactory;
-import simplenlg.framework.PhraseElement;
-import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.XMLLexicon;
-import simplenlg.phrasespec.NPPhraseSpec;
-import simplenlg.phrasespec.PPPhraseSpec;
+import simplenlgde.features.DiscourseFunction;
+import simplenlgde.features.Feature;
+import simplenlgde.features.InternalFeature;
+import simplenlgde.framework.CoordinatedPhraseElement;
+import simplenlgde.framework.NLGElement;
+import simplenlgde.framework.NLGFactory;
+import simplenlgde.framework.PhraseElement;
+import simplenlgde.lexicon.Lexicon;
+import simplenlgde.phrasespec.NPPhraseSpec;
+import simplenlgde.phrasespec.PPPhraseSpec;
+import simplenlgde.phrasespec.SPhraseSpec;
+import simplenlgde.realiser.Realiser;
 
-public class LsPreProcessor {
+public class LsPreProcessorDE {
 
 	protected static String leftProp;
 	protected static String rightProp;
 
-	protected static Lexicon lexicon = new XMLLexicon();                     
+	protected static Lexicon lexicon=Lexicon.getDefaultLexicon();//= new XMLLexicon();                     
 	protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
 
 	public NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
@@ -33,8 +36,10 @@ public class LsPreProcessor {
 		atomicMeasureString =convert(atomicMeasureString) ;
 
 		NPPhraseSpec n2=nlgFactory.createNounPhrase(atomicMeasureString);
-		NPPhraseSpec similarity=nlgFactory.createNounPhrase(" similarity");
-		n2.setDeterminer("a");
+		NPPhraseSpec similarity=nlgFactory.createNounPhrase(" Ähnlichkeit");
+		n2.setDeterminer("eine");
+		//n2.setFeature(Feature.NUMBER,NumberAgreement.SINGULAR);
+		//n2.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
 		n2.addPostModifier(similarity);
 
 		return n2;
@@ -51,7 +56,7 @@ public class LsPreProcessor {
 		}
 
 		if(leftProp.contains("_")) {
-			leftProp=leftProp.replace("_", " ");
+			leftProp=leftProp.replace("_", "");
 		}
 
 		return leftProp;
@@ -67,7 +72,7 @@ public class LsPreProcessor {
 		}
 
 		if(rightProp.contains("_"))
-			rightProp=rightProp.replace("_", " ");
+			rightProp=rightProp.replace("_", "");
 
 
 		return rightProp;
@@ -83,7 +88,7 @@ public class LsPreProcessor {
 		}
 
 		if(leftProp.contains("_")) {
-			leftProp=leftProp.replace("_", " ");
+			leftProp=leftProp.replace("_", "");
 		}
 		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
 				fullExpression.indexOf(")"));
@@ -92,21 +97,26 @@ public class LsPreProcessor {
 		}
 
 		if(rightProp.contains("_"))
-			rightProp=rightProp.replace("_", " ");
+			rightProp=rightProp.replace("_", "");
 
-		PhraseElement leftP=nlgFactory.createNounPhrase("the","resource");
-		leftP.setFeature(Feature.POSSESSIVE, true);
 		PhraseElement leftPValue=nlgFactory.createNounPhrase(leftProp);
-		leftPValue.setFeature(InternalFeature.SPECIFIER, leftP);
-		leftPValue.addComplement("of the source");
-		//PhraseElement leftSource=nlgFactory.createNounPhrase("the","resource");
-		PhraseElement rightP=nlgFactory.createNounPhrase("the","resource");
-		rightP.setFeature(Feature.POSSESSIVE, true);
-		PhraseElement rightPValue=nlgFactory.createNounPhrase(rightProp);
-		rightPValue.setFeature(InternalFeature.SPECIFIER, rightP);
-		rightPValue.addComplement("of the target");
-		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase(leftPValue,rightPValue);
-
+		PhraseElement leftP=nlgFactory.createNounPhrase("die Ressource");
+		leftPValue.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+		leftP.addComplement(leftPValue);
+		PhraseElement Datenquelle=nlgFactory.createNounPhrase("die Datenquelle");
+		Datenquelle.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+		leftP.addComplement(Datenquelle);
+		
+		NPPhraseSpec rightPValue=nlgFactory.createNounPhrase(rightProp);
+		PhraseElement rightP=nlgFactory.createNounPhrase("die Ressource");
+		rightPValue.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+		rightP.addComplement(rightPValue);
+		PhraseElement Datenziel=nlgFactory.createNounPhrase("das Datenziel");
+		Datenziel.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+		rightP.addComplement(Datenziel);
+		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase();
+		coordinate_1.addCoordinate(leftP);
+		coordinate_1.addCoordinate(rightP);
 		return coordinate_1;
 	}
 	public  NPPhraseSpec Theta(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
@@ -120,7 +130,7 @@ public class LsPreProcessor {
 
 		PPPhraseSpec pp = nlgFactory.createPrepositionPhrase();
 		pp.addComplement(theta);
-		pp.setPreposition("of");
+		pp.setPreposition("von");
 		return theta;
 	}
 
@@ -135,19 +145,19 @@ public class LsPreProcessor {
 		}
 
 		if(leftProp.contains("_")) {
-			leftProp=leftProp.replace("_", " ");
+			leftProp=leftProp.replace("_", "");
 		}
-		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(")"));
 		if(rightProp.contains("#")) {
 			rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
 		}
 
 		if(rightProp.contains("_"))
-			rightProp=rightProp.replace("_", " ");
+			rightProp=rightProp.replace("_", "");
 
 
-		NPPhraseSpec resource=nlgFactory.createNounPhrase("resource");
+		NPPhraseSpec resource=nlgFactory.createNounPhrase("Ressource");
 		resource.setFeature(Feature.POSSESSIVE, true);
 		NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(leftProp);
 		return resourceValue;

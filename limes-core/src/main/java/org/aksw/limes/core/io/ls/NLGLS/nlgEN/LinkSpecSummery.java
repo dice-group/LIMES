@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.naturalLanguage;
+package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
 
 import java.util.ArrayList;
 import java.util.List;
