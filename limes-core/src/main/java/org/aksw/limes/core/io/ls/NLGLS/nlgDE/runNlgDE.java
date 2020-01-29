@@ -25,13 +25,13 @@ public class runNlgDE {
 		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.62,AND(AND(overlap(x.title,y.title)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.title,y.title)|0.51)|0.51)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.venue,y.venue)|0.51)";
 		String ls5="AND(AND(cosine(x.title,z.title)|0.52,AND(AND(qgrams(x.title,z.title)|0.36,euclidean(x.authors,z.authors)|0.83)|0.53,cosine(x.year,z.year)|0.83)|0.53)|0.53,euclidean(x.year,z.year)|0.83)";
 		String ls6="or(qgrams(x.title,y.name)|1,trigrams(x.authors,y.authors)|1)";
-		linkSpec.readSpec(ls6, 1);
+		linkSpec.readSpec(ls1, 1);
 		//AMapping slection = lsPostProcessor.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
 
 		
 		lsPostProcessor.postProcessor(linkSpec);//summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.2);
       
-	
+		lsPostProcessor.realisng(LsPostProcessorDE.allNLGElement);
 	
 	
 	}

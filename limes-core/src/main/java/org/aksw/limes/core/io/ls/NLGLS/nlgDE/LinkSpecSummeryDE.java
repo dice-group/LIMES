@@ -11,16 +11,15 @@ import org.slf4j.LoggerFactory;
 import simplenlgde.features.DiscourseFunction;
 import simplenlgde.features.Feature;
 import simplenlgde.features.InternalFeature;
+import simplenlgde.features.NumberAgreement;
 import simplenlgde.framework.CoordinatedPhraseElement;
 import simplenlgde.framework.NLGElement;
 import simplenlgde.framework.NLGFactory;
 import simplenlgde.framework.PhraseElement;
 import simplenlgde.framework.StringElement;
 import simplenlgde.lexicon.Lexicon;
-import simplenlgde.lexicon.XMLLexicon;
 import simplenlgde.phrasespec.AdjPhraseSpec;
 import simplenlgde.phrasespec.NPPhraseSpec;
-import simplenlgde.phrasespec.PPPhraseSpec;
 import simplenlgde.phrasespec.SPhraseSpec;
 import simplenlgde.realiser.Realiser;
 
@@ -62,7 +61,8 @@ public class LinkSpecSummeryDE {
 			CoordinatedPhraseElement coordinate = lsPreProcessor.coordinate(linkspec);
 			double d=linkspec.getLowThreshold();
 
-		}else {
+		}
+		else {
 
 			for (int i=0;i<linkspec.getChildren().size();i++) {
 				String operatorAsString =linkspec.getOperator().toString().toLowerCase();
@@ -89,9 +89,6 @@ public class LinkSpecSummeryDE {
 					//String rightProp2 = LSPreProcessor.leftProperty(linkSpecification);
 					//String leftProp2 = LSPreProcessor.rightProperty(linkSpecification);
 					NPPhraseSpec firstSubject = subject(coordinate,resourceValue,rightProp2, leftProp2);
-					Realiser realiserClause = new Realiser(lexicon);
-					NLGElement sub = realiserClause.realise(firstSubject);
-					
 					double d=linkSpecification.getThreshold();
 
 					String stringTheta="";
@@ -105,6 +102,7 @@ public class LinkSpecSummeryDE {
 						name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
 						subject.addComplement(name);//.addPreModifier(stringTheta);
 
+
 					}
 					if(d==0) {
 						stringTheta =    "Nichtübereinstimmung";
@@ -116,6 +114,8 @@ public class LinkSpecSummeryDE {
 						//subject = nlgFactory.createNounPhrase(stringTheta);
 						name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
 						subject.addComplement(name);
+
+
 					}
 					if(d>0&& d<1) {
 						Realiser clause2Realiser = new Realiser(lexicon);
@@ -145,12 +145,16 @@ public class LinkSpecSummeryDE {
 							previousStringTheta = stringTheta;
 						}
 
-					}else {
-						if (!(objCollection.getChildren().isEmpty())) {							
-							clause.setSubject(previousSubject);
-							clause.setVerb("haben");							
+					}
+					else
+					{
+						if (!(objCollection.getChildren().isEmpty())) {	
+							NPPhraseSpec tempS=nlgFactory.createNounPhrase(previousSubject);
+							if(previousSubject.contains("die Ressource"))
+								tempS.setPlural(true);
+							clause.setSubject(tempS);
+							clause.setVerb("haben");
 							clause.setObject(objCollection);
-
 							//the clause
 							Realiser clauseRealiser = new Realiser(lexicon);
 							NLGElement clauseRealised = clauseRealiser.realise(clause);
@@ -168,7 +172,8 @@ public class LinkSpecSummeryDE {
 						}
 
 					}					
-				}else 
+				}
+				else 
 				{
 					fullMeasureNLG(linkSpecification);
 				}
@@ -197,17 +202,16 @@ public class LinkSpecSummeryDE {
 		String sameResourceAsString=sameResource.toString();
 		String p=    sameResourceAsString+" von "+"der Datenquelle "+"und "+"dem Datenziel"+" Ressourcen";
 
-		//NLGElement complementElement = new StringElement(p);
-		//PPPhraseSpec pp = nlgFactory.createPrepositionPhrase(p);
 		if(rightProp.equals(leftProp)) {
 			NPPhraseSpec subject1 = nlgFactory.createNounPhrase(p);
+			subject1.setFeature(Feature.NUMBER, NumberAgreement.SINGULAR);
 			//subject1.addComplement(pp);
 			return subject1;
 		}
 		else {
 			NLGElement diffrentResource = clause22Realiser.realise(coordinate);
 			NPPhraseSpec subject2 = nlgFactory.createNounPhrase(diffrentResource.toString());
-			//subject2.addComplement(coordinate);
+			subject2.setFeature(Feature.NUMBER, NumberAgreement.PLURAL);//setFeature(Feature.NUMBER, );
 			return subject2;
 
 		}

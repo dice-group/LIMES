@@ -7,14 +7,11 @@ import simplenlgde.features.DiscourseFunction;
 import simplenlgde.features.Feature;
 import simplenlgde.features.InternalFeature;
 import simplenlgde.framework.CoordinatedPhraseElement;
-import simplenlgde.framework.NLGElement;
 import simplenlgde.framework.NLGFactory;
 import simplenlgde.framework.PhraseElement;
 import simplenlgde.lexicon.Lexicon;
 import simplenlgde.phrasespec.NPPhraseSpec;
 import simplenlgde.phrasespec.PPPhraseSpec;
-import simplenlgde.phrasespec.SPhraseSpec;
-import simplenlgde.realiser.Realiser;
 
 public class LsPreProcessorDE {
 
