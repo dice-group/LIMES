@@ -1,6 +1,4 @@
 package org.aksw.limes.core.io.ls.NLGLS.nlgDE;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -19,13 +17,11 @@ import simplenlgde.features.DiscourseFunction;
 import simplenlgde.features.Feature;
 import simplenlgde.features.InternalFeature;
 import simplenlgde.features.NumberAgreement;
-import simplenlgde.features.Tense;
 import simplenlgde.framework.CoordinatedPhraseElement;
 import simplenlgde.framework.NLGElement;
 import simplenlgde.framework.NLGFactory;
 import simplenlgde.framework.PhraseElement;
 import simplenlgde.lexicon.Lexicon;
-import simplenlgde.lexicon.XMLLexicon;
 import simplenlgde.phrasespec.AdjPhraseSpec;
 import simplenlgde.phrasespec.NPPhraseSpec;
 import simplenlgde.phrasespec.SPhraseSpec;
@@ -33,12 +29,12 @@ import simplenlgde.phrasespec.VPPhraseSpec;
 import simplenlgde.realiser.Realiser;
 
 public class LsPostProcessorDE {
-	
+
 	private static Lexicon lexicon=Lexicon.getDefaultLexicon();
 	public static List<NLGElement> allNLGElement;
-	
+
 	void postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-	
+
 		LinkSpecSummeryDE linkSpecsSummery= new LinkSpecSummeryDE();
 		LsPreProcessorDE lsPreProcessor=new LsPreProcessorDE();                     
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
@@ -72,53 +68,74 @@ public class LsPostProcessorDE {
 			//String rightProp2 = LSPreProcessor.leftProperty(linkSpecification);
 			//String leftProp2 = LSPreProcessor.rightProperty(linkSpecification);
 			double d=linkSpec.getThreshold();
-			//NPPhraseSpec firstSubject = nlgFactory.createNounPhrase();
 			NPPhraseSpec firstSubject = LinkSpecSummeryDE.subject(coordinate,resourceValue,rightProp2, leftProp2);
 			String stringTheta="";
 
-			NPPhraseSpec subject = nlgFactory.createNounPhrase();
-			if(d==1) {
+			if(d==1)
+			{
 				stringTheta=" Übereinstimmung";
 				AdjPhraseSpec adjective = nlgFactory.createAdjectivePhrase("genau");
 				adjective.setFeature(Feature.IS_COMPARATIVE, true);
-				subject = nlgFactory.createNounPhrase(stringTheta);
+				NPPhraseSpec subject = nlgFactory.createNounPhrase(stringTheta);
 				subject.addModifier(adjective);
 				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
 				subject.addComplement(name);
 
-			}
-			if(d==0) {
-				stringTheta =    "Nichtübereinstimmung";
+				clause2.setSubject(firstSubject);
+				VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
+				clause2.setVerb(verb);
+				clause2.setObject(subject);
+				Realiser clauseRealiser = new Realiser(lexicon);
+				NLGElement clauseRealised = clauseRealiser.realise(clause2);
+				System.out.println(clauseRealised);
+				clause2=new SPhraseSpec(nlgFactory);
 
+			}
+			if(d==0) 
+			{
+				stringTheta =    "Nichtübereinstimmung";
 				AdjPhraseSpec adjective = nlgFactory.createAdjectivePhrase("vollständig");
 				adjective.setFeature(Feature.IS_COMPARATIVE, true);
-				subject = nlgFactory.createNounPhrase(stringTheta);
+				NPPhraseSpec subject = nlgFactory.createNounPhrase(stringTheta);
 				subject.addModifier(adjective);
 				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
+
+				clause2.setSubject(firstSubject);
+				VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
+				clause2.setVerb(verb);
+				clause2.setObject(subject);
+				Realiser clauseRealiser = new Realiser(lexicon);
+				NLGElement clauseRealised = clauseRealiser.realise(clause2);
+				System.out.println(clauseRealised);
+				clause2=new SPhraseSpec(nlgFactory);
 				subject.addComplement(name);
 			}
-			if(d>0&& d<1) {
+			if(d>0&& d<1) 
+			{
+
 				Realiser clause2Realiser = new Realiser(lexicon);
 				NLGElement thetaRealised = clause2Realiser.realise(theta);
 
 				String	thetaAString=thetaRealised.toString();
-				subject = nlgFactory.createNounPhrase(thetaAString);
+				NPPhraseSpec subject  = nlgFactory.createNounPhrase(thetaAString);
 				name.setFeature(InternalFeature.CASE, DiscourseFunction.GENITIVE);
 				subject.addComplement(name);
+
+				clause2.setSubject(firstSubject);
+				VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
+				clause2.setVerb(verb);
+				clause2.setObject(subject);
+				Realiser clauseRealiser = new Realiser(lexicon);
+				NLGElement clauseRealised = clauseRealiser.realise(clause2);
+				System.out.println(clauseRealised);
+				clause2=new SPhraseSpec(nlgFactory);
+
 			}
-			clause2.setSubject(firstSubject);
 
-
-
-			VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
-			clause2.setVerb(verb);
-			clause2.setObject(subject);
-			Realiser clauseRealiser = new Realiser(lexicon);
-			NLGElement clauseRealised = clauseRealiser.realise(clause2);
-			System.out.println(clauseRealised);
 
 		}
 	}
+
 	// ACache source, ACache target
 	void summarization(LinkSpecification linkSpec,ACache source, ACache target,
 			AMapping referenceMapping, double userScore)
@@ -134,6 +151,8 @@ public class LsPostProcessorDE {
 				System.out.println("|| F_Meausre ||  Recall    ||  Precision ||");
 				System.out.println(" ||  "+ f+ "  ||  " +r+ " || "+p+" ||");
 				postProcessor(linkSpec);
+
+				//realisng();
 			}
 		}
 		else {
@@ -146,7 +165,10 @@ public class LsPostProcessorDE {
 			if(f>=userScore) {
 				System.out.println("|| F_Meausre ||  Recall    ||  Precision ||");
 				System.out.println(" ||  "+ f+ "  ||  " +r+ " || "+p+" ||");
-				postProcessor(linkSpec);}
+				postProcessor(linkSpec);
+				realisng();
+				System.out.println(" I am here");
+			}
 			for (int i=0;i<linkSpec.getChildren().size();i++) {
 				LinkSpecification linkSpecification = linkSpec.getChildren().get(i);
 				if(linkSpecification.isAtomic())
@@ -159,6 +181,7 @@ public class LsPostProcessorDE {
 						System.out.println(" || F_Meausre  ||  Recall    ||  Precision ||");
 						System.out.println(" ||  "+ f1+ "  ||  " +r1+ "  ||     "+p1+" ||");
 						postProcessor(linkSpecification);
+						//realisng();
 					}
 				}
 				else 
@@ -180,14 +203,12 @@ public class LsPostProcessorDE {
 		return mapping;
 	}
 
-	public void realisng(List<NLGElement> nlgElements) {
+	public void realisng() {
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 		SPhraseSpec clause=nlgFactory.createClause();
 		SPhraseSpec clause1=nlgFactory.createClause();
 		SPhraseSpec clause2=nlgFactory.createClause();
-		clause.setSubject("Der" +" Link");
-		clause.setVerb("generieren");
-		clause.setFeature(Feature.PASSIVE, true);
+		SPhraseSpec clause3=nlgFactory.createClause();
 		Realiser clause1Realiser = new Realiser(lexicon);
 
 		for(int i=0;i<allNLGElement.size();i++)
@@ -197,41 +218,52 @@ public class LsPostProcessorDE {
 			String str=allNLGElement.get(i).getRealisation();
 
 			if(str.length()>2&&str.contains("haben")) {
+				VPPhraseSpec AuxVerb = nlgFactory.createVerbPhrase("passieren");
+				//AuxVerb.setFeature(Feature.PASSIVE, true);
+				clause.setSubject("Der Link");
+				clause.setVerb(AuxVerb);
+				//clause.setFeature(Feature.PASSIVE, true);
 				temp1=str.substring( 0,str.lastIndexOf("haben"));
 				NPPhraseSpec subject = nlgFactory.createNounPhrase(temp1);
 				subject.setPlural(true);
 				clause1.setSubject(subject);
-				//clause1.setSubject(temp1);
 				VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
 				clause1.setVerb(verb);
 				temp1=str.substring( str.lastIndexOf("haben")+5,str.length());
 				clause1.setObject(temp1);
-				//clause1.setFeature(Feature.COMPLEMENTISER, "wenn");
-				//clause.addComplement(clause1);
-				NLGElement clause1Realised = clause1Realiser.realise(clause1);
+				clause1.setFeature(Feature.COMPLEMENTISER, "wenn");
+				clause.addComplement(clause1);
+				NLGElement clause1Realised = clause1Realiser.realise(clause);
+				clause=new SPhraseSpec(nlgFactory);
 				System.out.println(clause1Realised);
 			}
 
 			if(str.equals("und")||str.equals("oder"))
 				System.out.println(str);
 
-				if (str.length()>2&&str.contains("hat ")) {
-					temp2=str.substring( 0,str.lastIndexOf("hat"));
-					NPPhraseSpec subject1 = nlgFactory.createNounPhrase(temp2);
-					subject1.setFeature(Feature.NUMBER, NumberAgreement.SINGULAR) ;
-					clause2.setSubject(subject1);
-					VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
-					clause2.setVerb(verb);
-					temp2=str.substring( str.lastIndexOf("hat")+3,str.length());
-					clause2.setObject(temp2);
-					//clause1.setFeature(Feature.COMPLEMENTISER, "wenn");
-					//clause.addComplement(clause1);
-					NLGElement clause1Realised = clause1Realiser.realise(clause2);
-					System.out.println(clause1Realised);
+			if (str.length()>2&&str.contains("hat ")) {
+				VPPhraseSpec AuxVerb = nlgFactory.createVerbPhrase("passieren");
+				//SPhraseSpec clause3=nlgFactory.createClause();
+				clause3.setSubject("Der Link");
+				clause3.setVerb(AuxVerb);
+				//clause3.setFeature(Feature.PASSIVE, true);
+				temp2=str.substring( 0,str.lastIndexOf("hat"));
+				NPPhraseSpec subject1 = nlgFactory.createNounPhrase(temp2);
+				subject1.setFeature(Feature.NUMBER, NumberAgreement.SINGULAR) ;
+				clause2.setSubject(subject1);
+				VPPhraseSpec verb = nlgFactory.createVerbPhrase("haben");
+				clause2.setVerb(verb);
+				temp2=str.substring( str.lastIndexOf("hat")+3,str.length());
+				clause2.setObject(temp2);
+				clause2.setFeature(Feature.COMPLEMENTISER, "wenn");
+				clause3.addComplement(clause2);
+				NLGElement clause1Realised = clause1Realiser.realise(clause3);
+				clause3=new SPhraseSpec(nlgFactory);
+				System.out.println(clause1Realised);
 
 
 
-				}
+			}
 			//System.out.println(str);
 		}
 

@@ -1,7 +1,9 @@
 package org.aksw.limes.core.io.ls.NLGLS.nlgDE;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -133,7 +135,10 @@ public class LinkSpecSummeryDE {
 					Realiser firstSubjectRealiser = new Realiser(lexicon);
 					NLGElement firstSubjectRealised = firstSubjectRealiser.realise(firstSubject);
 					if (previousSubject.equals(firstSubjectRealised.toString())) {
-						objCollection.addCoordinate(operatorAsString);
+						if(operatorAsString.equals("and"))
+						objCollection.addCoordinate("und");
+						if(operatorAsString.equals("or"))
+							objCollection.addCoordinate("oder");
 						objCollection.setFeature(Feature.CONJUNCTION, "");
 						if (previousStringTheta.equals(stringTheta)) {	
 							objCollection.setFeature(Feature.CONJUNCTION, "");
