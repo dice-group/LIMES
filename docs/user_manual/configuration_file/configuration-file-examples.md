@@ -49,6 +49,8 @@ The following shows the whole configuration file for LIMES explicated in the sec
         <REWRITER>default</REWRITER>
         <PLANNER>default</PLANNER>
         <ENGINE>default</ENGINE>
+		<OPTIMIZATION_TIME>1000</OPTIMIZATION_TIME>
+		<EXPECTED_SELECTIVITY>0.5</EXPECTED_SELECTIVITY>
     </EXECUTION>
     
     <OUTPUT>TAB</OUTPUT>
@@ -90,10 +92,12 @@ limes:executionParameters
       a limes:ExecutionParameters ;
       limes:executionPlanner "default" ;
       limes:executionRewriter "default" ;
-      limes:executionEngine "default" .
+      limes:executionEngine "default" ;
+      limes:optimizationTime "1000";
+      limes:expectedSelectivity "0.8".
       
       
-limes:linkedgeodataTOlinkedgeodataReview
+limes:linkedgeodataTOlinkedgeodataReviEXPECTED_SELECTIVITYew
       a       limes:Review ;
       limes:file "lgd_relaybox_near.nt" ;
       limes:relation "lgdo:near" ;
@@ -184,6 +188,8 @@ The following configuration file uses the machine learning algorithm of the Womb
         <REWRITER>default</REWRITER>
         <PLANNER>default</PLANNER>
         <ENGINE>default</ENGINE>
+	    <OPTIMIZATION_TIME>1000</OPTIMIZATION_TIME>
+	    <EXPECTED_SELECTIVITY>0.5</EXPECTED_SELECTIVITY>
     </EXECUTION>
     
     <OUTPUT>TAB</OUTPUT>
@@ -223,7 +229,9 @@ limes:executionParameters
       a limes:ExecutionParameters ;
       limes:executionPlanner "default" ;
       limes:executionRewriter "default" ;
-      limes:executionEngine "default" .
+      limes:executionEngine "default" ;
+      limes:optimizationTime "1000";
+      limes:expectedSelectivity "0.8".
       
       
 limes:linkedgeodataTOlinkedgeodataReview

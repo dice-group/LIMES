@@ -5,6 +5,11 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue)
+
 window.SPARQL_ENDPOINT = "/sparql/";
 window.PREPROCESSING_LIST = window.LIMES_SERVER_URL+"/list/preprocessings";
 window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";

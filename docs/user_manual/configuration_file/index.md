@@ -13,7 +13,7 @@ The `metadata` tag always consists of the following bits of XML:
 
 ## Prefixes
 
-Defining a prefix in a LIMES file demands setting two values: 
+Defining a prefix in a LIMES file demands setting two values:
  The `namespace` that will be addressed by the prefix's `label`
 
 ```xml
@@ -49,14 +49,14 @@ LIMES computes links between items contained in two Linked Data sources dubbed s
 </TARGET>
 ```
 
-Six properties need to be set. 
+Six properties need to be set.
 
 * Each data source must be given an ID via the tag `ID`.
-* The endpoint of the data source needs to be explicated via the `ENDPOINT` tag. 
+* The endpoint of the data source needs to be explicated via the `ENDPOINT` tag.
     + If the data is to be queried from a SPARQL end point, the `ENDPOINT` tag must be set to the corresponding SPARQL endpoint URI.
     + In case the data is stored in a local file (CSV, N3, TURTLE, etc.), `ENDPOINT` tag must be set to the absolute path of the file containing the data.
 * The `VAR` tag describes the variable associated with the aformentioned endpoint. This variable is also used later, when specifying the metric used to link the entities retrieved from the source and target endpoints.
-* The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping even the value is set. If the SPARQL endpoint does not limit the number of triples it returns or if the input is a file, the value of `PAGESIZE` should be set to -1. 
+* The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping even the value is set. If the SPARQL endpoint does not limit the number of triples it returns or if the input is a file, the value of `PAGESIZE` should be set to -1.
 * The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only use instances of MESH concepts. Additionally, multiple `RESTRICTION` tags are allowed per data source.
 * The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`. If you are not sure if all your entities have a certain property you can use the `OPTIONAL_PROPERTY` tag instead of `PROPERTY`. Additionally, multiple `PROPERTY` tags are allowed per data source.
 
@@ -65,13 +65,13 @@ Optional properties can be set to segment the requested dataset.
 * The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
 * The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
 
-### Pre-processing Functions
+### Preprocessing Functions
 #### Simple
 
 Currently, LIMES supports the following set of pre-processing functions:
 * `nolang` for removing language tags
 * `lowercase` for converting the input string into lower case
-* `uppercase` for converting the input string into upper case 
+* `uppercase` for converting the input string into upper case
 * `number` for ensuring that only the numeric characters, "." and "," are contained in the input string
 * `replace(String a,String b)` for replacing each occurrence of `a` with `b`
 * `regexreplace(String x,String b)` for replacing each occurrence the regular excepression `x` with `b`
@@ -111,7 +111,7 @@ In addition, the following allows splitting the values of `foaf:homepage` into t
 </SOURCE>
 ```
 
-#### Complex 
+#### Complex
 
 It is also possible to use complex pre-processing functions, i.e. functions that manipulate multiple values at once.
 Currently the following complex pre-processing functions are available:
@@ -145,18 +145,18 @@ A source type can be set via `TYPE`. The default type is set to `SPARQL`
 (for a SPARQL endpoint) but LIMES also supports reading files directly from
 the hard-drive. The supported data formats are:
 * `CSV`: Character-separated file can be loaded directly into LIMES.
-  Note that the separation character is set to `TAB` as a default. 
-  The user can alter this setting programmatically. 
+  Note that the separation character is set to `TAB` as a default.
+  The user can alter this setting programmatically.
 * `N3` (which also reads `NT` files) reads files in the `N3` language.
-* `N-TRIPLE` reads files in W3C's core 
+* `N-TRIPLE` reads files in W3C's core
   [N-Triples format](http://www.w3.org/TR/rdf-testcases/\#ntriples)
 * `TURTLE` allows reading files in the
   `Turtle` [syntax](http://www.w3.org/TR/turtle/).
 
 Moreover, if you want to download data from a SPARQL endpoint, there is
-no need to set the `<TYPE>` tag. 
+no need to set the `<TYPE>` tag.
 Instead, if you want to read the source (or target) data from a file,
-you should fill `<ENDPOINT>` tag with the absolute path of the input file, 
+you should fill `<ENDPOINT>` tag with the absolute path of the input file,
 .g. `<ENDPOINT>C:/Files/dbpedia.nt</ENDPOINT>`, and you should also set the
 `<TYPE>` tag  with the type of the input data, for example `<TYPE>NT</TYPE>`.
 
@@ -192,8 +192,18 @@ Three LIMES execution parameters could be set here:
  	* `DEFAULT`: same as `CANONICAL`.
  * `ENGINE`: the user can choose between:
  	* `SIMPLE`: It executes each independent part of the plan sequentially.
+ 	* `PARTIAL_RECALL`: For an input link specification $L$, it finds a link specification $L'$
+      that achieves a lower expected run time than $L$, while
+      abiding a predefined constraint on the expected recall it has to achieve.
+	  A link specification $L'$ is subsumed by a link specification $L$, when the set of links retrieved by executing the plan of $L'$ are a subset of the links retrieved by executing the plan of $L$.
+      Then, it executes each independent part of $L'$'s plan sequentially.
+	  To use the `PARTIAL_RECALL`, the user should set two additional (optional) parameters:
+		* `OPTIMIZATION_TIME`: as the optimization time limit (in milliseconds) that the engine can spend to find $L'$. If not set, the default value is 0. Negative values are also set to 0.
+		* `EXPECTED_SELECTIVITY`: as the expected recall value that $L'$ has to achieve, at least. The values of `EXPECTED_SELECTIVITY` must belong to $[0,1]$. If not set, the default value is 1. Negative and values above 1 are also set to 1.
+      
+	Both `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` parameters are only used when the `PARTIAL_RECALL` is chosen as `ENGINE`. The rest of the `ENGINE` values ignore the `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` values.
  	* `DEFAULT`: same as `SIMPLE`.
- 
+
 If not set, the `DEFAULT` value for each parameter will be used.
 
 ## Machine Learning (optional)
@@ -211,7 +221,7 @@ For example:
     <NAME>wombat simple</NAME>
     <TYPE>supervised batch</TYPE>
     <TRAINING>trainingData.nt</TRAINING>
-    <PARAMETER> 
+    <PARAMETER>
         <NAME>max execution time in minutes</NAME>
         <VALUE>60</VALUE>
     </PARAMETER>
@@ -227,7 +237,7 @@ The user can choose positive integers to set the granularity of HYPPO, HR3 or OR
     <GRANULARITY>2</GRANULARITY>.
 
 ## Acceptance Condition
-Filling the acceptance condition consists of setting the threshold value to the minimum value that two instances must have in order to satisfy a relation. This can be carried out as exemplified below. 
+Filling the acceptance condition consists of setting the threshold value to the minimum value that two instances must have in order to satisfy a relation. This can be carried out as exemplified below.
 
 ```xml
 <ACCEPTANCE>
@@ -252,8 +262,8 @@ Setting the condition upon which links must be reviewed manually is very similar
 </REVIEW>
 ```
 
-All instances that have a similarity between the threshold set in `REVIEW` (0.95 in our example) and the threshold set in `ACCEPTANCE` (0.98 in our example) will be written in the review file and linked via the relation set in `REVIEW`. 
- 
+All instances that have a similarity between the threshold set in `REVIEW` (0.95 in our example) and the threshold set in `ACCEPTANCE` (0.98 in our example) will be written in the review file and linked via the relation set in `REVIEW`.
+
 ## Output Format
 The user can choose between `TAB` and `N3` as output format by setting
 

@@ -14,6 +14,10 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.JaccardSimilarity;
  */
 public class JaccardMeasure extends StringMeasure {
 
+    public JaccardMeasure() {
+    }
+
+
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a + "";
         String p2 = b + "";

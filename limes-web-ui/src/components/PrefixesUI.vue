@@ -1,7 +1,7 @@
 <template>
 <md-whiteframe md-tag="section" style="margin-top: 20px; flex: 1; padding-top: 15px; padding-left: 15px;">
-      <div class="md-title">Prefixes</div>
-
+      <!-- <div class="md-title">Prefixes</div> -->
+      <div class="md-title" style="display: inline-block;" v-b-tooltip.html.right="tooltipTitle">Prefixes</div>
       <md-layout>
         <div style="padding-top: 20px;" v-if="!prefixes.length">No prefixes defined..</div>
         <md-chip v-for="prefix in prefixes" md-deletable v-on:delete="deleteChip(prefix)" :key="prefix.label" style="margin-left: 3px">
@@ -63,6 +63,7 @@ export default {
       type: Object,
     },
   },
+
   data() {
     return {
       label: '',
@@ -70,6 +71,8 @@ export default {
       focused: false,
       optionsShown: false,
       afterFilteredOptions: this.filteredOptions,
+      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=prefixes' target='_blank' style='color: #191970;'>User manual: Prefixes</a>",
+      },
     };
   },
   methods: {

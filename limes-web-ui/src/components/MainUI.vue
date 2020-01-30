@@ -38,6 +38,7 @@
         </div>
 
         <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px;">
+          <div class="md-title" style="display: inline-block;padding-left: 15px;padding-bottom: 15px;" v-b-tooltip.html.right="tooltipTitle">Manual metric and machine learning</div>
             <md-tabs @change="manualMetricClicked">
               <ManualMetric 
               v-bind:metrics="metrics" 
@@ -154,12 +155,14 @@ export default {
       advancedOptionsShow: false,
       exampleConfigEnable: false,
       configurationFile: '',
+      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=manual-metric-and-machine-learning' target='_blank' style='color: #191970;'>User manual: Manual metric and machine learning</a>",
+      },
     }
   },
   beforeMount() {
     let context;
     let filteredOptions;
-    fetch('http://prefix.cc/context')
+    fetch('https://prefix.cc/context')
             .then(function(response) {
               return response.json();
              })

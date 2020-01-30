@@ -76,4 +76,5 @@ public class PredecessorMapper extends SimpleTemporalMapper {
         return 1000d;
     }
 
+
 }

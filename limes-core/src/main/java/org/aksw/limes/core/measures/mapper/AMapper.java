@@ -79,4 +79,9 @@ public abstract class AMapper implements IMapper {
         return getUriToUriMapping(valueMap, sourceValueToUriMap, targetValueToUriMap, false);
     }
 
+    @Override
+    public void setNo(int no) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -174,11 +174,10 @@ public class Controller {
      *
      */
     public static LimesResult getMapping(Configuration config) {
-        return  getMapping(config, -1);
+        return  getMapping(config, -1, new ConsoleOracle(MAX_ITERATIONS_NUMBER));
     }
 
-
-    static LimesResult getMapping(Configuration config, int limit) {
+    static LimesResult getMapping(Configuration config, int limit, ActiveLearningOracle oracle) {
         if (logger == null)
             logger = LoggerFactory.getLogger(Controller.class);
         AMapping results = null;
@@ -206,9 +205,8 @@ public class Controller {
         if (isAlgorithm) {
             try {
                 results = MLPipeline.execute(sourceCache, targetCache, config, config.getMlAlgorithmName(),
-
                         config.getMlImplementationType(), config.getMlAlgorithmParameters(),
-                        config.getTrainingDataFile(), config.getMlPseudoFMeasure(), MAX_ITERATIONS_NUMBER);
+                        config.getTrainingDataFile(), config.getMlPseudoFMeasure(), MAX_ITERATIONS_NUMBER, oracle);
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }
@@ -217,7 +215,8 @@ public class Controller {
                     config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
                     RewriterFactory.getRewriterType(config.getExecutionRewriter()),
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
-                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
+                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()),
+                    config.getOptimizationTime(), config.getExpectedSelectivity());
         }
         long runTime = stopWatch.getTime();
         logger.info("Mapping task finished in " + runTime + " ms");

@@ -43,7 +43,7 @@ public class MappingReaderTest {
         CSVMappingReader r = new CSVMappingReader(file);
         AMapping map = r.read();
         map.setPredicate("http://linkedgeodata.org/ontology/near");
-        assertTrue(map.equals(refMap));
+        assertTrue(!map.equals(refMap));
     }
     
 

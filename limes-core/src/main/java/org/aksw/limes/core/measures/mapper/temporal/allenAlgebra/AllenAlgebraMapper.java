@@ -78,5 +78,4 @@ public abstract class AllenAlgebraMapper extends AMapper implements IAllenAlgebr
     public ArrayList<Integer> getRequiredAtomicRelations() {
         return requiredAtomicRelations;
     }
-
 }

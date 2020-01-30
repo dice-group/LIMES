@@ -9,7 +9,7 @@
 
 	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>1.7.1-SNAPSHOT</version>
+	<version>1.7.2-SNAPSHOT</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
@@ -40,10 +40,6 @@
 	<build>
 
 		<plugins>
-			<plugin>
-				<groupId>com.amashchenko.maven.plugin</groupId>
-				<artifactId>gitflow-maven-plugin</artifactId>
-			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -73,17 +69,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>com.amashchenko.maven.plugin</groupId>
-					<artifactId>gitflow-maven-plugin</artifactId>
-					<version>1.5.1</version>
-					<configuration>
-						<gitFlowConfig>
-							<versionTagPrefix>v</versionTagPrefix>
-						</gitFlowConfig>
-					</configuration>
-				</plugin>
-
 				<!-- That's a sledge hammer solution - but at least it works ... -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

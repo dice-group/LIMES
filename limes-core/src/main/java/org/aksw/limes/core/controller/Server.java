@@ -13,6 +13,7 @@ import org.aksw.limes.core.io.preprocessing.PreprocessingFunctionFactory;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -48,10 +49,10 @@ public class Server {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
-    public static final String STORAGE_DIR_PATH = "./.server-storage/";
-    public static final String LOG_DIR_PATH = STORAGE_DIR_PATH + "logs/";
-    public static final String CONFIG_FILE_PREFIX = "limes_cfg_";
-    public static final String CONFIG_FILE_SUFFIX = "xml";
+    private static final String STORAGE_DIR_PATH = "./.server-storage/";
+    private static final String LOG_DIR_PATH = STORAGE_DIR_PATH + "logs/";
+    private static final String CONFIG_FILE_PREFIX = "limes_cfg_";
+    private static final String CONFIG_FILE_SUFFIX = "xml";
 
     private static final Gson GSON = new GsonBuilder().create();
     private static final int FILE_SIZE_THRESHOLD = 1024;
@@ -60,6 +61,7 @@ public class Server {
     private static Server instance = null;
 
     private final Map<String, CompletableFuture<Void>> requests = new HashMap<>();
+    private final Map<String, AsynchronousServerOracle> oracles = new HashMap<>();
     private Map<String, String> uploadFiles = new HashMap<>();
     private final File uploadDir = new File(STORAGE_DIR_PATH);
     private int port = -1;
@@ -82,7 +84,7 @@ public class Server {
                         .forEach(File::delete);
             }
         } catch (IOException e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         this.limit = limit;
         if (this.port > 0) {
@@ -98,6 +100,7 @@ public class Server {
         staticFiles.expireTime(7200);
         enableCORS("*","GET, POST, OPTIONS","");
         post("/submit", this::handleSubmit);
+        post("/activeLearning/:id", this::handleActiveLearning);
         get("/status/:id", this::handleStatus);
         get("/logs/:id", this::handleLogs);
         get("/results/:id", this::handleResults);
@@ -114,12 +117,12 @@ public class Server {
             logger.error("Error in processing request" + req.uri(), e);
             res.status(500);
             res.type("application/json");
-            res.body(GSON.toJson(new ErrorMessage(e)));
+            res.body(GSON.toJson(new ServerMessage.ErrorMessage(e)));
         });
         notFound((req, res) -> {
             res.type("application/json");
             res.status(404);
-            return GSON.toJson(new ErrorMessage(-2, "Route not known"));
+            return GSON.toJson(new ServerMessage.ErrorMessage(-2, "Route not known"));
         });
         init();
         awaitInitialization();
@@ -209,17 +212,16 @@ public class Server {
                 }
             }
         } else {
-            return GSON.toJson(new ErrorMessage(1, "Only Requests of type \"multipart/form-data\" are allowed"));
+            return GSON.toJson(new ServerMessage.ErrorMessage(1, "Only Requests of type \"multipart/form-data\" are allowed"));
         }
         res.status(200);
-        return GSON.toJson(new UploadMessage(partUploads));
+        return GSON.toJson(new ServerMessage.UploadMessage(partUploads));
     }
 
-    private Server(){
-    }
+    private Server() { }
 
     private Object handleOperators(Request req, Response res) {
-        OperatorsMessage result = new OperatorsMessage(
+        ServerMessage.OperatorsMessage result = new ServerMessage.OperatorsMessage(
                 Arrays.stream(LogicOperator.values())
                         .map(Enum::name)
                         .collect(Collectors.toList())
@@ -229,7 +231,7 @@ public class Server {
     }
 
     private Object handleMeasures(Request req, Response res) {
-        MeasuresMessage result = new MeasuresMessage(
+        ServerMessage.MeasuresMessage result = new ServerMessage.MeasuresMessage(
                 Arrays.stream(MeasureType.values())
                         .map(Enum::name)
                         .map(String::toLowerCase)
@@ -240,20 +242,20 @@ public class Server {
     }
 
     private Object handlePreprocessings(Request req, Response res) {
-        PreprocessingsMessage result = new PreprocessingsMessage(
+        ServerMessage.PreprocessingsMessage result = new ServerMessage.PreprocessingsMessage(
                 PreprocessingFunctionFactory.listTypes().stream()
                         .map(pp -> {
                             APreprocessingFunction ppf =
                                     PreprocessingFunctionFactory.getPreprocessingFunction(
                                             PreprocessingFunctionFactory.getPreprocessingType(pp)
                                     );
-                            return new PreprocessingsMessage.PPInfo(
+                            return new ServerMessage.PreprocessingsMessage.PPInfo(
                                     pp,
                                     ppf.minNumberOfArguments(),
                                     ppf.maxNumberOfArguments(),
                                     ppf.isComplex());
                         })
-                        .filter(ppi -> !ppi.isComplex)
+                        .filter(ppi -> !ppi.isComplex())
                         .collect(Collectors.toList())
         );
         res.status(200);
@@ -279,10 +281,17 @@ public class Server {
             throw new RuntimeException("Not able to create directory " + workingDir.getAbsolutePath());
         }
         final String requestId = id;
+        AsynchronousServerOracle oracle;
+        AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
+        Configuration config = reader.read();
+        if (config.getMlImplementationType() != MLImplementationType.SUPERVISED_ACTIVE) {
+            oracle = null;
+        } else {
+            oracle = new AsynchronousServerOracle();
+            oracles.put(requestId, oracle);
+        }
         requests.put(requestId, CompletableFuture.completedFuture(null).thenAcceptAsync($->{
             MDC.put("requestId", requestId);
-            AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
-            Configuration config = reader.read();
             String sourceEndpoint = config.getSourceInfo().getEndpoint();
             if (uploadFiles.containsKey(sourceEndpoint)) {
                 config.getSourceInfo().setEndpoint(uploadFiles.get(sourceEndpoint));
@@ -291,7 +300,7 @@ public class Server {
             if (uploadFiles.containsKey(targetEndpoint)) {
                 config.getTargetInfo().setEndpoint(uploadFiles.get(targetEndpoint));
             }
-            LimesResult mappings = Controller.getMapping(config, limit);
+            LimesResult mappings = Controller.getMapping(config, limit, oracle);
             String outputFormat = config.getOutputFormat();
             ISerializer output = SerializerFactory.createSerializer(outputFormat);
             output.setPrefixes(config.getPrefixes());
@@ -303,19 +312,32 @@ public class Server {
                     acceptanceFile.getAbsolutePath());
         }).exceptionally((e)-> {e.printStackTrace();return null;}));
         res.status(200);
-        return GSON.toJson(new SubmitMessage(id));
+
+        return GSON.toJson(oracle == null ? new ServerMessage.SubmitMessage(id) : new ServerMessage.ActiveLearningMessage(id, oracle));
     }
+
+    private Object handleActiveLearning(Request req, Response res) throws Exception {
+        //todo: catch ids not in active learning currently
+        ServerMessage.ScoresMessage scores = GSON.fromJson(req.raw().getReader(), ServerMessage.ScoresMessage.class);
+        String id = sanitizeId(req.params("id"));
+        AsynchronousServerOracle oracle = oracles.get(id);
+        oracle.completeClassification(scores.getExampleScores());
+        res.status(200);
+        return GSON.toJson(oracle.isStopped() ? new ServerMessage.SubmitMessage(id) : new ServerMessage.ActiveLearningMessage(id, oracle));
+    }
+
+
 
     private Object handleStatus(Request req, Response res) {
         String id = sanitizeId(req.params("id"));
-        StatusMessage result;
+        ServerMessage.StatusMessage result;
         // @todo: implement job queuing and status id 0 to limit level of parallelism
         if (!requests.containsKey(id)) {
-            result = new StatusMessage(-1, "Request ID not found");
+            result = new ServerMessage.StatusMessage(-1, "Request ID not found");
         } else if (!requests.get(id).isDone()) {
-            result = new StatusMessage(1, "Request is being processed");
+            result = new ServerMessage.StatusMessage(1, "Request is being processed");
         } else {
-            result = new StatusMessage(2, "Request has been processed");
+            result = new ServerMessage.StatusMessage(2, "Request has been processed");
         }
         res.status(200);
         return GSON.toJson(result);
@@ -346,7 +368,7 @@ public class Server {
             return "";
         } else {
             res.status(404);
-            return GSON.toJson(new ErrorMessage(1, "Logfile not found"));
+            return GSON.toJson(new ServerMessage.ErrorMessage(1, "Logfile not found"));
         }
     }
 
@@ -375,7 +397,7 @@ public class Server {
         } else {
             // 404 - Not Found
             res.status(404);
-            return GSON.toJson(new ErrorMessage(1, "Result file not found"));
+            return GSON.toJson(new ServerMessage.ErrorMessage(1, "Result file not found"));
         }
     }
 
@@ -386,10 +408,10 @@ public class Server {
             List<String> availableFiles = Arrays
                     .stream(Objects.requireNonNull(dir.listFiles()))
                     .map(File::getName).collect(Collectors.toList());
-            return GSON.toJson(new ResultsMessage(availableFiles));
+            return GSON.toJson(new ServerMessage.ResultsMessage(availableFiles));
         } else {
             res.status(404);
-            return GSON.toJson(new ErrorMessage(1, "Request ID not found"));
+            return GSON.toJson(new ServerMessage.ErrorMessage(1, "Request ID not found"));
         }
     }
 
@@ -425,132 +447,6 @@ public class Server {
             response.header("Access-Control-Allow-Headers", headers);
             response.type("application/json");
         });
-    }
-
-    private static class ServerMessage {
-
-        protected boolean success = true;
-
-    }
-
-    private static class ErrorMessage extends ServerMessage {
-
-        private Error error;
-
-        private static class Error {
-            private int code;
-            private String message;
-        }
-
-        ErrorMessage(Throwable e) {
-            this(-1, e.getMessage());
-        }
-
-        ErrorMessage(int code, String message) {
-            this.success = false;
-            this.error = new Error();
-            this.error.code = code;
-            this.error.message = message;
-        }
-
-    }
-
-    private static class StatusMessage extends ServerMessage {
-
-        private Status status;
-
-        private static class Status {
-            int code;
-            String description;
-        }
-
-        private StatusMessage(int status, String description) {
-            this.status = new Status();
-            this.status.code = status;
-            this.status.description = description;
-        }
-    }
-
-    private static class ResultsMessage extends ServerMessage {
-
-        private List<String> availableFiles;
-
-        private ResultsMessage(List<String> availableFiles) {
-            this.availableFiles = availableFiles;
-        }
-    }
-
-    private static class MeasuresMessage extends ServerMessage {
-
-        private List<String> availableMeasures;
-
-        private MeasuresMessage(List<String> availableMeasures) {
-            this.availableMeasures = availableMeasures;
-        }
-    }
-
-    private static class OperatorsMessage extends ServerMessage {
-
-        private List<String> availableOperators;
-
-        private OperatorsMessage(List<String> availableOperators) {
-            this.availableOperators = availableOperators;
-        }
-    }
-
-    static class PreprocessingsMessage extends ServerMessage {
-
-        static class PPInfo {
-
-            private String name;
-            private int minArgs;
-            private int maxArgs;
-            private boolean isComplex;
-
-            PPInfo(String name, int minArgs, int maxArgs, boolean isComplex) {
-                this.name = name;
-                this.minArgs = minArgs;
-                this.maxArgs = maxArgs;
-                this.isComplex = isComplex;
-            }
-        }
-
-        private List<PPInfo> availablePreprocessings;
-
-        private PreprocessingsMessage(List<PPInfo> availablePreprocessings) {
-            this.availablePreprocessings = availablePreprocessings;
-        }
-    }
-
-    private static class SubmitMessage extends ServerMessage {
-
-        private String requestId;
-
-        private SubmitMessage(String requestId) {
-            this.requestId = requestId;
-        }
-    }
-
-    private static class UploadMessage extends ServerMessage {
-
-        private List<UploadInfo> uploads = new ArrayList<>();
-
-        static class UploadInfo {
-
-            private String partName;
-            private String uploadId;
-
-            UploadInfo(String partName, String uploadId) {
-                this.partName = partName;
-                this.uploadId = uploadId;
-            }
-        }
-
-        private UploadMessage(Map<String, String> partUploads) {
-            for (Map.Entry<String, String> upload : partUploads.entrySet()) {
-                this.uploads.add(new UploadInfo(upload.getKey(), upload.getValue()));
-            }
-        }
     }
 
 }

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.aksw.limes</groupId>
 		<artifactId>limes-full</artifactId>
-		<version>1.7.1-SNAPSHOT</version>
+		<version>1.7.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>limes-debian-cli</artifactId>
@@ -132,11 +132,11 @@
 								</data>
 
 
-								<!-- <data> <type>file</type> <src>${basedir}/../sparqlify-core/target/sparqlify-core-${version}.jar</src> 
-									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix> 
+								<!-- <data> <type>file</type> <src>${basedir}/../sparqlify-core/target/sparqlify-core-${version}.jar</src>
+									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix>
 									</mapper> </data> -->
-								<!-- <data> <type>file</type> <src>${project.build.directory}/${project.build.finalName}.jar</src> 
-									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix> 
+								<!-- <data> <type>file</type> <src>${project.build.directory}/${project.build.finalName}.jar</src>
+									<mapper> <type>perm</type> <prefix>/usr/share/lib/${deb.packageName}</prefix>
 									</mapper> </data> -->
 							</dataSet>
 
@@ -153,8 +153,7 @@
 		<dependency>
 			<groupId>org.aksw.limes</groupId>
 			<artifactId>limes-core</artifactId>
-			<version>1.7.1-SNAPSHOT</version>
+			<version>1.7.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
-

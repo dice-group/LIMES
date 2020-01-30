@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.4",
     "core-js": "^2.6.5",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",

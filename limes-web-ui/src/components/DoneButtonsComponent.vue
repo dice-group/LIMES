@@ -75,13 +75,60 @@
         </md-dialog-actions>
       </md-dialog>
 
+      <!-- supervised active ml dialog -->
+      <md-dialog ref="supervisedActiveMLDialog" v-bind:md-esc-to-close="false" v-bind:md-click-outside-to-close="false">
+        <md-dialog-title>Supervised active ML dialog</md-dialog-title>
+        <div style="margin-left: 26px;font-size: 18px;color:#3f51b5;">Iteration: {{activeLearningArray.iteration}}</div>
+
+        <md-dialog-content ref="focusOnTop">  
+        	<md-list>
+	          	<div v-for="(i, index) in activeLearningArray.examples">					
+				    <md-list-item style="overflow:auto; word-wrap:break-word;">
+				      	<div class="activeLearningItem">{{index+1+"."}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.source}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.target}}</div>
+						<md-button class="md-primary" @click="openActiveLearningTable(index)">Show table</md-button>
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton(index)">+</md-radio>
+					    <md-radio v-model="radioButton[index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton(index)">-</md-radio>	
+				    </md-list-item> 
+				    <md-table v-if="activeLearningTableForNum !== null && activeLearningTableForNum === index">
+					  <md-table-header>
+					    <md-table-row>
+					      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].source}}</md-table-head>
+					      <md-table-head>{{activeLearningArray.examples[activeLearningTableForNum].target}}</md-table-head>
+					    </md-table-row>
+					  </md-table-header>
+
+					  <md-table-body>
+					    <md-table-row v-for="(row, index) in activeLearningArray.examples[activeLearningTableForNum].sourceContext" :key="index">
+					      <md-table-cell>
+					      		<span>{{row.predicate}}</span><br>
+						      	<span>{{row.object}}</span>
+					      </md-table-cell>
+					      <md-table-cell v-for="(col, index1) in 1" :key="index1">
+					      		<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].predicate}}</span><br>
+						      	<span>{{activeLearningArray.examples[activeLearningTableForNum].targetContext[index].object}}</span>
+					      </md-table-cell>
+					    </md-table-row>
+					  </md-table-body>
+					</md-table>
+		        </div> 
+	        </md-list>  
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-raised md-primary" @click="skipIteration()">Skip iteration</md-button>	
+          <md-button class="md-raised md-primary" @click="continueExecute(false)">Continue execution</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
 
       <!-- visible part -->
       <md-layout>
         <md-button class="md-raised md-flex" v-on:click="showConfig()">Display config</md-button>
       </md-layout>
       <md-layout>
-        <md-button class="md-raised md-primary md-flex" v-on:click="execute()">Execute</md-button>
+        <md-button class="md-raised md-primary md-flex" v-on:click="mlalgorithm.type === 'supervised active' ? openActiveWindow() : execute()">Execute</md-button>
       </md-layout>
       <md-layout>
         <md-button class="md-raised md-flex" v-on:click="showDialogForPreviousRun()">Check the state of the previous run</md-button>
@@ -139,8 +186,16 @@ export default {
 	    notFoundKeyMessage: '',
 	    findStatusMessage: '',
 	    exampleConfigEnable: false,
+	    activeLearningArray: {},
+	    radioButton: [],
+	    activeLearningTableForNum: null,
     }
   },
+  // created() {
+  //   this.activeLearningArray.examples.forEach(i => {
+  //   	this.radioButton.push(false);
+  //   });
+  // },
 	methods: {
 
 		makeDatasource(data, tag){ return `<${tag.toUpperCase()}>
@@ -266,6 +321,96 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    saveXML(){
 	      this.forceFileDownload(this.generateConfig(),'file.xml');
+	    },
+	    // open this window if mlalgorithm.type === 'supervised active'
+	    openActiveWindow(){
+	      this.jobError = false;
+	      const config = this.generateConfig();
+	      const configBlob = new Blob([config], {type: 'text/xml'});
+	      const fd = new FormData();
+	      fd.append('config_file', configBlob, 'config.xml');
+	      fetch(window.LIMES_SERVER_URL + '/submit', {
+	        method: 'post',
+	        body: fd,
+	      })
+	        .then(r => r.json())
+	        .then(r => {
+	        	if(r.examples.length === 0){
+	        		alert('There are errors in the configuration!');
+	        	}
+	        	this.radioButton = [];
+	        	r.examples.forEach(i => {
+					this.radioButton.push(false);
+				});
+	        	this.activeLearningArray = r;
+	        	this.$refs.supervisedActiveMLDialog.open();
+	        })
+	        .catch(e => {
+	          alert(e.toString());	
+	          this.jobError = `Error while starting the job: ${e.toString()}`;
+	        });
+	  
+	    },
+	    openActiveLearningTable(index){
+	    	this.activeLearningTableForNum = index;
+	    },
+	    changeRadioButton(index){
+			this.radioButton[index] = !this.radioButton[index];
+	    },
+	    calculateScores(isSkip){
+	    	let exampleScores = this.radioButton;
+	    	exampleScores = exampleScores.map(i => {
+	    		if(isSkip){
+	    			return 0;
+	    		} else {
+		    		let score = -1;
+		    		if(i){
+		    			score = 1;
+		    		}
+		    		return score;
+		    	}
+	    	});
+	    	return exampleScores;
+	    },
+	    skipIteration(){	
+	    	this.continueExecute(true);
+	    },
+	    continueExecute(isSkip){
+	    	
+	    	let exampleScores = this.calculateScores(isSkip);
+
+	    	// send them: http://localhost:8080/activeLearning/6a835f2e725bb8
+	    	fetch(window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId, {
+		        method: 'post',
+		        body: JSON.stringify({"exampleScores" : exampleScores}),
+		      })
+		        .then(r => r.json())
+		        .then(r => {
+		          this.jobId = r.requestId;
+		          if(r.examples !== undefined && r.examples.length !== 0){
+		          	this.radioButton = [];
+		          	r.examples.forEach(i => {
+				    	this.radioButton.push(false);
+				    });
+		          	this.activeLearningArray = r;
+		          	this.$nextTick(() => {
+			            this.$refs.focusOnTop.$el.scrollTop = 0
+			        })
+		          } else {
+		          	this.$refs.supervisedActiveMLDialog.close();
+		          	this.jobRunning = true;
+			        this.jobError = false;
+			        this.c = 'Status Loading - waiting for status from server..';
+			        this.$refs.jobDialog.open();
+			        history.pushState({jobId: r.requestId}, '', `?jobId=${r.requestId}`);
+			        setTimeout(() => this.getStatus(), 1000);
+		          }
+		        })
+		        .catch(e => {
+		          alert(e.toString());
+		          this.jobError = `Error while starting the job: ${e.toString()}`;
+		          this.jobRunning = false;
+		        });
 	    },
 	    // execute button
 	    execute() {

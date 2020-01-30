@@ -27,6 +27,7 @@ public class QGramSimilarityMeasure extends StringMeasure {
         tokenizer = new NGramTokenizer();
     }
 
+
     public double getSimilarity(String x, String y) {
         Set<String> yTokens = tokenizer.tokenize(y, q);
         Set<String> xTokens = tokenizer.tokenize(x, q);

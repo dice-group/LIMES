@@ -28,7 +28,7 @@
           </md-select> 
 
       </md-input-container>
-      <md-input-container v-if="data.enabled && (data.type==='supervised batch' || data.type==='supervised active')">
+      <md-input-container v-if="data.enabled && data.type==='supervised batch'">
         <label>Training</label>
         <!-- <md-input v-model="data.training" placeholder="Training"></md-input> -->
         <md-file v-model="data.training"></md-file>

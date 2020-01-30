@@ -63,22 +63,22 @@ export default {
 	      }*/
 	      let sourceProperty = this.$store.state.source.properties[num] 
 	      	|| this.$store.state.source.optionalProperties[num];
+	      	
+
 	      if(!sourceProperty && this.$store.state.source.properties.length < 2){
-	      	if(i.getChildren().length && i.getChildren()[0].type.indexOf("optional") !== -1){
+	      	if(i.getChildren().length && i.getChildren()[0].toString().toLowerCase().indexOf("optional") !== -1){
 		      	sourceProperty = this.$store.state.source.optionalProperties[num-1];
-		    }
-		    if(i.getChildren().length && i.getChildren()[0].type === "sourceproperty"){
+		    } else {
 		      	sourceProperty = this.$store.state.source.properties[num-1];
-		    } 
+			}
 		  }
 
 	      let targetProperty = this.$store.state.target.properties[num]
 	      	|| this.$store.state.target.optionalProperties[num];
 	      if(!targetProperty && this.$store.state.target.properties.length < 2){
-	      	if(i.getChildren().length && i.getChildren()[0].type.indexOf("optional") !== -1){
+	      	if(i.getChildren().length && i.getChildren()[0].toString().toLowerCase().indexOf("optional") !== -1){
 		      	targetProperty = this.$store.state.target.optionalProperties[num-1];
-		    }
-		    if(i.getChildren().length && i.getChildren()[0].type === "targetproperty"){
+		    } else {
 		      	targetProperty = this.$store.state.target.properties[num-1];
 		    } 
 		  }
@@ -94,7 +94,7 @@ export default {
 			  sourceProperty = sourceProperty.split("AS")[0].trim();
 			  if(srdP.indexOf("RENAME") !== -1){
 				 sourceProperty = srdP.split("RENAME")[1].trim(); 
-				 if(this.$store.state.source.renameName.length){
+				 if(this.$store.state.source.renameName && this.$store.state.source.renameName.length){
 				 	sourceProperty = this.$store.state.source.renameName;
 				 }
 			  }
@@ -104,7 +104,7 @@ export default {
 			  targetProperty = targetProperty.split("AS")[0].trim();
 			  if(tgtP.indexOf("RENAME") !== -1){
 				targetProperty = tgtP.split("RENAME")[1].trim();
-				if(this.$store.state.target.renameName.length){
+				if(this.$store.state.target.renameName && this.$store.state.target.renameName.length){
 				 	targetProperty = this.$store.state.target.renameName;
 				}
 			  }

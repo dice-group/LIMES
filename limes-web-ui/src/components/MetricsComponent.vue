@@ -1,7 +1,7 @@
 <template>
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">Metrics</div>
-      <md-chips v-model="metrics" md-static></md-chips>
+      <md-chips class="chip-metric" v-model="metrics" md-static></md-chips>
     </md-whiteframe>
 </template>
 

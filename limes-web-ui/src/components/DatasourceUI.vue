@@ -1,6 +1,6 @@
 <template>
   <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
-    <div class="md-title">{{ title }}</div>
+    <div class="md-title" style="display: inline-block;" v-b-tooltip.html.right="tooltipTitle">{{ title }}</div>
     <md-layout md-column>
       <Endpoint      
       v-bind:source="source"
@@ -74,6 +74,8 @@ export default {
       messageAboutClasses: "",
       messageAboutProps: "",
       classes: [],
+      tooltipTitle: { title: "<a href='http://dice-group.github.io/LIMES/#/user_manual/running_limes?id=data-source-target' target='_blank' style='color: #191970;'>User manual: Data source / target</a>",
+      },
     }
   },
   mounted(){

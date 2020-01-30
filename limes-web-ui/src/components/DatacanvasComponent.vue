@@ -1,8 +1,8 @@
 <template>
 	<md-layout>
-      <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
+      <div id="blocklyArea" style="height: 550px; width: 100%;"></div>
       <div id="blocklyDiv" style="position: absolute"></div>
-	    <xml id="toolbox" ref=toolbox style="display: none"> 
+	    <xml v-pre id="toolbox" ref=toolbox style="display: none"> 
 	          <block type="sourceproperty"></block>
 	          <block type="targetproperty"></block>
 	          <block type="optionalsourceproperty"></block>
@@ -273,7 +273,7 @@ export default {
           //addRootBlock(Blockly.Blocks['start']);
 
           let onFirstComment = (event) => {
-            console.log("change");
+            //console.log("change");
 
 
             // this.$store.state.source.properties.splice(0);

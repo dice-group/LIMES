@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.IQueryModule;
@@ -18,17 +19,16 @@ import org.aksw.limes.core.io.query.QueryModuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * This cache implements a hybrid between memory and file cache. It generates a
- * hash for each data source associated with it and serializes the content of the
- * corresponding data source into a file. If another mapping task is associated
- * with the same data source, it retrieves the corresponding data from the file,
- * which is obviously more efficient for online data sources (no HTTP latency,
- * offline processing, etc.). Else, it retrieves the data, generates a hash and
- * caches it on the hard drive.
- * Enhancing it with folders: specify the folder, where the application has
- * permissions to read and write files.
+ * hash for each data source associated with it and serializes the content of
+ * the corresponding data source into a file. If another mapping task is
+ * associated with the same data source, it retrieves the corresponding data
+ * from the file, which is obviously more efficient for online data sources (no
+ * HTTP latency, offline processing, etc.). Else, it retrieves the data,
+ * generates a hash and caches it on the hard drive. Enhancing it with folders:
+ * specify the folder, where the application has permissions to read and write
+ * files.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Lyko
@@ -39,22 +39,24 @@ public class HybridCache extends MemoryCache implements Serializable {
     private static final long serialVersionUID = -2268344215686055231L;
     static Logger logger = LoggerFactory.getLogger(HybridCache.class.getName());
     // maps uris to instance. A bit redundant as instance contain their URI
-    protected HashMap<String, Instance> instanceMap;
-    //Iterator for getting next instance
+    protected TreeMap<String, Instance> instanceMap;
+    // Iterator for getting next instance
     protected Iterator<Instance> instanceIterator;
 
     // pointing to the parent folder of the "cache" folder
     private File folder = new File("");
 
     public HybridCache() {
-        instanceMap = new HashMap<String, Instance>();
+        instanceMap = new TreeMap<String, Instance>();
     }
 
     /**
-     * Create cache specifying the parent folder. Make shure the Application has write permissions there.
+     * Create cache specifying the parent folder. Make shure the Application has
+     * write permissions there.
      *
      * @param folder
-     *         File pointing to the the parent folder of the (to-be-created) "cache" folder.
+     *            File pointing to the the parent folder of the (to-be-created)
+     *            "cache" folder.
      */
     public HybridCache(File folder) {
         this();
@@ -65,9 +67,10 @@ public class HybridCache extends MemoryCache implements Serializable {
      * Tries to load the content of the cache from a file
      *
      * @param file
-     *         File from which the content is to be loaded
+     *            File from which the content is to be loaded
      * @return A Hybrid cache
-     * @throws IOException if file not found
+     * @throws IOException
+     *             if file not found
      */
     public static HybridCache loadFromFile(File file) throws IOException {
         String path = file.getAbsolutePath();
@@ -94,18 +97,19 @@ public class HybridCache extends MemoryCache implements Serializable {
     }
 
     /**
-     * Method to get Data of the specified endpoint, and cache it to the "cache" folder in the folder specified.
+     * Method to get Data of the specified endpoint, and cache it to the "cache"
+     * folder in the folder specified.
      *
      * @param folder
-     *         Path to the parent folder of the "cache" folder.
+     *            Path to the parent folder of the "cache" folder.
      * @param kb
-     *         Endpoint specification.
+     *            Endpoint specification.
      * @return HybridCache of the data
      */
     public static HybridCache getData(File folder, KBInfo kb) {
 
         HybridCache cache = new HybridCache(folder);
-        //1. Try to get content from a serialization
+        // 1. Try to get content from a serialization
         String hash = kb.hashCode() + "";
         File cacheFile = new File(folder + "cache/" + hash + ".ser");
         logger.info("Checking for file " + cacheFile.getAbsolutePath());
@@ -120,15 +124,17 @@ public class HybridCache extends MemoryCache implements Serializable {
                 logger.info("Cached data loaded successfully from file " + cacheFile.getAbsolutePath());
                 logger.info("Size = " + cache.size());
             }
-        } //2. If it does not work, then get it from data sourceInfo as specified
+        } // 2. If it does not work, then get it from data sourceInfo as
+          // specified
         catch (Exception e) {
-            
+
             // need to add a QueryModuleFactory
             logger.info("No cached data found for " + kb.getId());
             IQueryModule module = QueryModuleFactory.getQueryModule(kb.getType(), kb);
             module.fillCache(cache);
 
-            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
+            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists()
+                    || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
                 new File(folder.getAbsolutePath() + File.separatorChar + "cache").mkdir();
             }
             cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + hash + ".ser"));
@@ -141,7 +147,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      * This method is used by learners which do not have prefix information.
      *
      * @param kb
-     *         Info to the knowledge base to query
+     *            Info to the knowledge base to query
      * @return A cache filled with the entities to link
      */
     public static HybridCache getNoPrefixData(KBInfo kb) {
@@ -149,17 +155,18 @@ public class HybridCache extends MemoryCache implements Serializable {
     }
 
     /**
-     * This method is used by learners which do not have prefix information and with a specified folder containing the cache folder.
+     * This method is used by learners which do not have prefix information and
+     * with a specified folder containing the cache folder.
      *
      * @param folder
-     *         Path to parent folder of the supposed cache folder.
+     *            Path to parent folder of the supposed cache folder.
      * @param kb
-     *         Info to the knowledge base to query
+     *            Info to the knowledge base to query
      * @return A cache filled with the entities to link
      */
     public static HybridCache getNoPrefixData(File folder, KBInfo kb) {
         HybridCache cache = new HybridCache();
-        //1. Try to get content from a serialization
+        // 1. Try to get content from a serialization
         File cacheFile = new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser");
         try {
             if (cacheFile.exists()) {
@@ -172,17 +179,20 @@ public class HybridCache extends MemoryCache implements Serializable {
                 logger.info("Cached data loaded successfully from file " + cacheFile.getAbsolutePath());
                 logger.info("Size = " + cache.size());
             }
-        } //2. If it does not work, then get it from data sourceInfo as specified
+        } // 2. If it does not work, then get it from data sourceInfo as
+          // specified
         catch (Exception e) {
             // need to add a QueryModuleFactory
             logger.info("No cached data found for " + kb.getId());
             NoPrefixSparqlQueryModule module = new NoPrefixSparqlQueryModule(kb);
             module.fillCache(cache);
 
-            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
+            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists()
+                    || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
                 new File(folder.getAbsolutePath() + File.separatorChar + "cache").mkdir();
             }
-            cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser"));
+            cache.saveToFile(
+                    new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser"));
         }
 
         return cache;
@@ -214,6 +224,7 @@ public class HybridCache extends MemoryCache implements Serializable {
         return new ArrayList<Instance>(instanceMap.values());
     }
 
+
     public void addInstance(Instance i) {
         if (!instanceMap.containsKey(i.getUri())) {
             instanceMap.put(i.getUri(), i);
@@ -222,7 +233,7 @@ public class HybridCache extends MemoryCache implements Serializable {
 
     /**
      * @param uri
-     *         URI to look for
+     *            URI to look for
      * @return The instance with the URI uri if it is in the cache, else null
      */
     public Instance getInstance(String uri) {
@@ -244,11 +255,11 @@ public class HybridCache extends MemoryCache implements Serializable {
      * Adds a new spo statement to the cache
      *
      * @param s
-     *         The URI of the instance linked to o via p
+     *            The URI of the instance linked to o via p
      * @param p
-     *         The property which links s and o
+     *            The property which links s and o
      * @param o
-     *         The value of the property of p for the entity s
+     *            The value of the property of p for the entity s
      */
     public void addTriple(String s, String p, String o) {
         if (instanceMap.containsKey(s)) {
@@ -263,11 +274,12 @@ public class HybridCache extends MemoryCache implements Serializable {
 
     /**
      * @param uri
-     *         The URI to looks for
-     * @return True if an instance with the URI uri is found in the cache, else false
+     *            The URI to looks for
+     * @return True if an instance with the URI uri is found in the cache, else
+     *         false
      */
     public boolean containsUri(String uri) {
-        return instanceMap.containsKey(uri);
+        return instanceMap.containsKey(uri.toString());
     }
 
     public void resetIterator() {
@@ -285,7 +297,7 @@ public class HybridCache extends MemoryCache implements Serializable {
 
     /**
      * @param i
-     *         The instance to look for
+     *            The instance to look for
      * @return true if the URI of the instance is found in the cache
      */
     public boolean containsInstance(Instance i) {
@@ -293,11 +305,11 @@ public class HybridCache extends MemoryCache implements Serializable {
     }
 
     /**
-     * Tries to serialize the content of the cache to a file. If it fails,
-     * no file is written to avoid the corruption of future data sources.
+     * Tries to serialize the content of the cache to a file. If it fails, no
+     * file is written to avoid the corruption of future data sources.
      *
      * @param file
-     *         File wherein the content of the cache is to be serialized
+     *            File wherein the content of the cache is to be serialized
      */
     public void saveToFile(File file) {
         FileOutputStream out;
@@ -315,7 +327,7 @@ public class HybridCache extends MemoryCache implements Serializable {
     }
 
     /**
-     * Returns the file  pointing to the parent folder of cache.
+     * Returns the file pointing to the parent folder of cache.
      *
      * @return File folder
      */
@@ -327,7 +339,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      * Set the parent folder of the cache sub folder.
      *
      * @param folder
-     *         Pointing to the parent folder holding the cache.
+     *            Pointing to the parent folder holding the cache.
      */
     public void setFolder(File folder) {
         this.folder = folder;

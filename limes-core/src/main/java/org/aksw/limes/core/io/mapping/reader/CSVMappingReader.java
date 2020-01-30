@@ -98,11 +98,11 @@ public class CSVMappingReader extends AMappingReader {
                 split = DataCleaner.separate(line, delimiter, 2);
                 // check if it's the line with the properties
                 if (!split[0].startsWith("id")) {
-                    if (!split[0].startsWith("<")) {
+                    //if (!split[0].startsWith("<")) {
                         m.add(split[0], split[1], 1.0);
-                    } else {
-                        m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
-                    }
+                    //} else {
+                    //    m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
+                    //}
                 }
                 line = reader.readLine();
             }

@@ -11,7 +11,8 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class CosineMeasure extends StringMeasure {
+public class CosineMeasure extends StringMeasure  {
+
 
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a + "";
@@ -106,5 +107,7 @@ public class CosineMeasure extends StringMeasure {
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
     }
+
+    
 
 }
