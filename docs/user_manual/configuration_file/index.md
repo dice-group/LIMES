@@ -178,7 +178,7 @@ variable `y` is associated) with the `linkedct:condition` (with which the
 variable `x` is associated).
 
 For detailed instructions on how to assemble a valid link specification
-and a complete catalogue of all measure types included in LIMES, see [Defining Link Specifications](defining_link_specifications.md)
+and a complete catalogue of all measure types included in LIMES, see [Defining Link Specifications](user_manual/configuration_file/defining_link_specifications.md)
 
 
 ## Execution (optional)
