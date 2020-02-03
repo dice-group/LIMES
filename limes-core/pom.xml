@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.aksw.limes</groupId>
         <artifactId>limes-full</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.7.2-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -493,7 +493,7 @@
 	<dependency>
                 <groupId>edu.mit</groupId>
                  <artifactId>jwi</artifactId>
-                <version>2.4.1-SNAPSHOT</version>
+                <version>2.4.0</version>
         </dependency>
 
         <dependency>
