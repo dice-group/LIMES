@@ -99,21 +99,21 @@ public class LimesResult {
                 "\n\t}," +
                 "\n\t\"pseudoPRF\" : {" +
                 "\n\t\t\"acceptance\" : {" +
-                "\n\t\t\t\"precision\" : %f," +
-                "\n\t\t\t\"recall\" : %f," +
-                "\n\t\t\t\"f-measure\" : %f" +
+                "\n\t\t\t\"precision\" : %s," +
+                "\n\t\t\t\"recall\" : %s," +
+                "\n\t\t\t\"f-measure\" : %s" +
                 "\n\t\t}," +
                 "\n\t\t\"all\" : {" +
-                "\n\t\t\t\"precision\" : %f," +
-                "\n\t\t\t\"recall\" : %f," +
-                "\n\t\t\t\"f-measure\" : %f" +
-                "\n\t\t}," +
+                "\n\t\t\t\"precision\" : %s," +
+                "\n\t\t\t\"recall\" : %s," +
+                "\n\t\t\t\"f-measure\" : %s" +
+                "\n\t\t}" +
                 "\n\t}" +
                 "\n}",
                 this.runTime, this.sourceCache.size(), this.targetCache.size(),
                 this.verificationMapping.size(), this.acceptanceMapping.size(),
-                pseudoPrecisionForAcceptance, pseudoRecallForAcceptance, pseudoFMeasureForAcceptance,
-                pseudoPrecisionForAll, pseudoRecallForAll, pseudoFMeasureForAll);
+                Double.toString(pseudoPrecisionForAcceptance), Double.toString(pseudoRecallForAcceptance), Double.toString(pseudoFMeasureForAcceptance),
+                Double.toString(pseudoPrecisionForAll), Double.toString(pseudoRecallForAll), Double.toString(pseudoFMeasureForAll));
     }
 
     private AMapping filterReferenceCompliant(AMapping input, Set<String> referenceS, Set<String> referenceT) {
@@ -150,19 +150,19 @@ public class LimesResult {
         return stats + String.format("," +
                 "\n\t\"PRF\" : {" +
                 "\n\t\t\"acceptance\" : {" +
-                "\n\t\t\t\"precision\" : %f," +
-                "\n\t\t\t\"recall\" : %f," +
-                "\n\t\t\t\"f-measure\" : %f" +
+                "\n\t\t\t\"precision\" : %s," +
+                "\n\t\t\t\"recall\" : %s," +
+                "\n\t\t\t\"f-measure\" : %s" +
                 "\n\t\t}," +
                 "\n\t\t\"all\" : {" +
-                "\n\t\t\t\"precision\" : %f," +
-                "\n\t\t\t\"recall\" : %f," +
-                "\n\t\t\t\"f-measure\" : %f" +
-                "\n\t\t}," +
+                "\n\t\t\t\"precision\" : %s," +
+                "\n\t\t\t\"recall\" : %s," +
+                "\n\t\t\t\"f-measure\" : %s" +
+                "\n\t\t}" +
                 "\n\t}" +
                 "\n}",
-                precisionForAcceptance, recallForAcceptance, fMeasureForAcceptance,
-                precisionForAll, recallForAll, fMeasureForAll);
+                Double.toString(precisionForAcceptance), Double.toString(recallForAcceptance), Double.toString(fMeasureForAcceptance),
+                Double.toString(precisionForAll), Double.toString(recallForAll), Double.toString(fMeasureForAll));
     }
 
     public void forceOneToOneMapping() {
