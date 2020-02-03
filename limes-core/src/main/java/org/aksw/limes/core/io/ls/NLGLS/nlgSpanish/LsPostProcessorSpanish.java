@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
+package org.aksw.limes.core.io.ls.NLGLS.nlgSpanish;
 
 import java.util.List;
 
@@ -21,16 +21,16 @@ import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.spanish.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
-import simplenlg.realiser.english.Realiser;
+import simplenlg.realiser.spanish.Realiser;
 
-public class LsPostProcessor {
+public class LsPostProcessorSpanish {
 
 	void postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-		LinkSpecSummery linkSpecsSummery= new LinkSpecSummery();
-		LsPreProcessor lsPreProcessor=new LsPreProcessor();
+		LinkSpecSummerySpanish linkSpecsSummery= new LinkSpecSummerySpanish();
+		LsPreProcessorSpanish lsPreProcessor=new LsPreProcessorSpanish();
 		Lexicon lexicon = new XMLLexicon();                      
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 		SPhraseSpec clause=nlgFactory.createClause();
@@ -72,7 +72,7 @@ public class LsPostProcessor {
 			//String rightProp2 = LSPreProcessor.leftProperty(linkSpecification);
 			//String leftProp2 = LSPreProcessor.rightProperty(linkSpecification);
 			double d=linkSpec.getThreshold();
-			NPPhraseSpec firstSubject = LinkSpecSummery.subject(coordinate,resourceValue,rightProp2, leftProp2);
+			NPPhraseSpec firstSubject = LinkSpecSummerySpanish.subject(coordinate,resourceValue,rightProp2, leftProp2);
 
 			String stringTheta="";
 

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
+package org.aksw.limes.core.io.ls.NLGLS.nlgSpanish;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +14,19 @@ import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.spanish.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
-import simplenlg.realiser.english.Realiser;
+import simplenlg.realiser.spanish.Realiser;
 
 /**
  * @author Abdullah Ahmed
  *
  */
-public class LinkSpecSummery {
+public class LinkSpecSummerySpanish {
 
-	private static Logger logger = LoggerFactory.getLogger(LinkSpecSummery.class);
+	private static Logger logger = LoggerFactory.getLogger(LinkSpecSummerySpanish.class);
 	private static List<NLGElement> allOperator=new ArrayList<NLGElement>();
 	private static String AggregationResult = "";
 	private static Lexicon lexicon = new XMLLexicon();                 
@@ -47,7 +47,7 @@ public class LinkSpecSummery {
 	protected  List<NLGElement> fullMeasureNLG(LinkSpecification linkspec) throws UnsupportedMLImplementationException {
 
 		SPhraseSpec clause = nlgFactory.createClause();
-		LsPreProcessor lsPreProcessor=new LsPreProcessor();
+		LsPreProcessorSpanish lsPreProcessor=new LsPreProcessorSpanish();
 		if(linkspec.isAtomic()) {
 
 			NPPhraseSpec name = lsPreProcessor.atomicSimilarity(linkspec);

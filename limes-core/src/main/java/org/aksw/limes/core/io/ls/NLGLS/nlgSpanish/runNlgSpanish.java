@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
+package org.aksw.limes.core.io.ls.NLGLS.nlgSpanish;
 
 
 import java.io.IOException;
@@ -11,14 +11,14 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.spanish.XMLLexicon;
 
-public class runNlg {
+public class runNlgSpanish {
 
 	protected static Lexicon lexicon = new XMLLexicon(); 
 	public static void main(String[] args) throws UnsupportedMLImplementationException, IOException {
 
-		LsPostProcessor lsPostProcessor=new LsPostProcessor() ;
+		LsPostProcessorSpanish lsPostProcessorSpanish=new LsPostProcessorSpanish() ;
 		LinkSpecification linkSpec=new LinkSpecification();
 		EvaluationData eval = DataSetChooser.getData(DataSets.DBLPACM);
 
@@ -29,9 +29,9 @@ public class runNlg {
 		String ls5="AND(AND(cosine(x.title,z.title)|0.52,AND(AND(qgrams(x.title,z.title)|0.36,euclidean(x.authors,z.authors)|0.83)|0.53,cosine(x.year,z.year)|0.83)|0.53)|0.53,euclidean(x.year,z.year)|0.83)";
 
 		linkSpec.readSpec(ls4, 0.7);
-		AMapping slection = lsPostProcessor.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
+		AMapping slection = lsPostProcessorSpanish.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
 		
-		lsPostProcessor.summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
+		lsPostProcessorSpanish.summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
 	}
 
 

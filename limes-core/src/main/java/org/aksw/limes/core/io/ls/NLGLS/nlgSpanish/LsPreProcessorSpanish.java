@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
+package org.aksw.limes.core.io.ls.NLGLS.nlgSpanish;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -9,11 +9,11 @@ import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.spanish.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 
-public class LsPreProcessor {
+public class LsPreProcessorSpanish {
 
 	protected static String leftProp;
 	protected static String rightProp;
