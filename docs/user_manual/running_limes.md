@@ -122,7 +122,7 @@ curl http://localhost:8080/logs/7538819321022935531
 LIMES Web UI is an additional tool to write configuration file in the XML using web interface and execute it using the LIMES server.
 LIMES Web UI consists of six main components: *prefixes*, *data source / target* , *manual metric*, *machine learning*, *acceptance/review conditions* and *output*.
 
-<img src="../images/full_limes_with_marks.png" width="800" alt ="Overview">
+<img src="./images/full_limes_with_marks.png" width="800" alt ="Overview">
 
 ## Prefixes
 
@@ -130,7 +130,7 @@ The Prefixes component consists of two parts:
 * Currently added prefixes. They look like chips, containing the label of the prefix and a hover tooltip with the namespace.
 * Add new prefix (optional). In most cases, our interface is able to automatically find the common prefixes from [prefix.cc](https://prefix.cc/context). In case the user want to add a prefix manually, (s)he can type the prefix, choose the its respective URI  from the dropdown list (if any) or manually type it.  Then, the user click on *Add* and the prefix will be added as a new chip. Again, this process is necessary for common prefixes. 
 
-<img src="../images/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
+<img src="./images/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
 
 ## Data source / target
 
@@ -140,7 +140,7 @@ The Data source and data target consists of the two similar components, which in
 * *Restriction*: Contains of three parameters splitted by space (?s rdf:type some:Type). The third parameter will be changed automatically after changing the restriction class. 
 * *Restriction class*: A dropdown list of restriction classes according to the endpoint. You can start typing the name of the class and the list will be filtered automatically. After choosing the restriction class, you will get all the properties related to this class.
 
-<img src="../images/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
+<img src="./images/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
 
 ## Manual metric and machine learning
 
@@ -179,7 +179,7 @@ At the top before the Workspace there are two options related to Workspace:
 * *Export workspace to xml*: You can download an xml file of the current Workspace with connected blocks. 
 * *Select file for the importing to the workspace*: You can upload the xml file of the saved Workspace to change the current Workspace.
   
-<img src="../images/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
+<img src="./images/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
 
 ### Machine learning
 
@@ -190,18 +190,18 @@ The tab *Machine learning* consists of three parts:
 
 If *Type* is supervised batch, you will see the additional input, where you can upload the file with training data.
 
-<img src="../images/ml_web_ui.png" width="800" alt ="ML_web_ui">
+<img src="./images/ml_web_ui.png" width="800" alt ="ML_web_ui">
 
 If *Type* is supervised active and the user wants to start execution, the *Supervised active ML dialog* window will be shown before actual execution.
 
-<img src="../images/supervised_active_ml_dialog.png" width="800" alt ="supervised_active_ml_dialog">
+<img src="./images/supervised_active_ml_dialog.png" width="800" alt ="supervised_active_ml_dialog">
 
 On this step user have to do some iterations of learning. The user should choose the examples to learn the concept. If you want to choose an example, you need to switch radio button to "*+*". The "*+*" means that the score of the example will be assigned to 1, in case of "*-*" to -1. By default all examples are not chosen, hence all radio buttons are checked as "*-*". The button *Show table* opens more details. When you are done with the iteration, click on *Continue execution* button, it will lead you to the next iteration of learning. After all available iterations of learning, the usual execution will be processed. If you want to skip iteration, click on the button *Skip iteration*, it will assign all scores to 0 and continue with the next iteration.
 
 ## Acceptance and review conditions
 
 In this component you can define the *Acceptance Threshold* and the *Review Threshold*. In addition, you can rename the names of files, which can be created after execution. Besides, you can change the *Relation*. Instead of prefix you can write the namespace and its respective URI will be automatically found by the interface, converted to a prefix (if it exists in prefix.cc, otherwise you have to manually add it).
-<img src="../images/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
+<img src="./images/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
 
 ## Output
 
@@ -210,13 +210,13 @@ Here you can choose an output format, including turtle (TTL), n-triples (N3), ta
 ### Display config and run
 The re are three buttons at the bottom of the page: *Display config*, *Execute*, *Check the state of the previous run*.  
 * If you click on the *Display config*, you can look at formed xml config. Also, if you want you can save it.
-<img src="../images/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
+<img src="./images/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
 
 * The *Execute* button will immediately start the process of executing this xml config. You can have a look at the log messages by clicking on the link *Show log*.
 
-<img src="../images/job_status_web_ui.png" width="400" alt ="job_status_web_ui">  
+<img src="./images/job_status_web_ui.png" width="400" alt ="job_status_web_ui">  
   
 * *Check the state of the previous run* button. The execution can take time. To look at the result later, you must copy the *execution key*.
 In order to get the result of the previous run, you should click on *Check the state of the previous run* button. Here you can paste the *execution key*, which you copied when you ran the execution. Then click on *Check* and you will get the result. If the run is finished without errors and result is not empty, then you can download *accepted links* and *reviewed links* files.  
   
-<img src="../images/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 
+<img src="./images/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 
