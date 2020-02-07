@@ -33,8 +33,8 @@ public class LsPreProcessorSpanish {
 		atomicMeasureString =convert(atomicMeasureString) ;
 
 		NPPhraseSpec n2=nlgFactory.createNounPhrase(atomicMeasureString);
-		NPPhraseSpec similarity=nlgFactory.createNounPhrase(" similarity");
-		n2.setDeterminer("a");
+		NPPhraseSpec similarity=nlgFactory.createNounPhrase(" similar"); // should be written in Spanish
+		n2.setDeterminer("una");
 		n2.addPostModifier(similarity);
 
 		return n2;

@@ -12,7 +12,7 @@ import simplenlg.features.Tense;
 import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.XMLLexicon;
+import simplenlg.lexicon.english.XMLLexicon;
 import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 

@@ -35,15 +35,18 @@ public class runNlgDE {
 		String ls5   ="AND(AND(cosine(x.title,y.title)|0.52,AND(AND(qgrams(x.title,y.title)|0.36,jaccard(x.authors,y.authors)|0.83)|0.53,cosine(x.year,y.year)|0.83)|0.53)|0.53,euclidean(x.year,y.year)|0.83)";
 		String ls5_b ="AND(AND(jaccard(x.title,y.title)|0.52,AND(AND(qgrams(x.title,y.title)|0.36,jaccard(x.authors,y.authors)|0.83),cosine(x.year,y.year)|0.83) ),euclidean(x.year,y.year)|0.83)" ;
 
-		String ls6="or(qgrams(x.name,y.name)|1,qgrams(x.name,y.name)|1)";
+		String ls6="or(qgrams(x.name,y.title)|1,qgrams(x.name,y.name)|1)";
 		String ls7="qgrams(x.title,y.name)";
+		String ls8="OR(jaccard(x.name,y.name)|1,trigrams(x.name,y.description)|0.61)";
 
+		String scholar= "OR(OR(cosine(x.title,y.title)|0.66,jaccard(x.title,y.authors)|0.43)|0.0,trigram(x.authors,y.title)|0.43)";
+		String amazon="OR(OR(cosine(x.title,y.name)|0.48,cosine(x.description,y.description)|0.43)|0.0,jaccard(x.title,y.description)|0.43)";
 		//allLS.add(ls1);
 		//allLS.add(ls2);
 		//allLS.add(ls3);
 		//allLS.add(ls4);
-		allLS.add(ls5);
-int counter=1;
+		allLS.add(amazon);
+		int counter=1;
 		for(String str: allLS) {
 			LsPostProcessorDE lsPostProcessorDe=new LsPostProcessorDE() ;
 			LinkSpecification linkSpec=new LinkSpecification();

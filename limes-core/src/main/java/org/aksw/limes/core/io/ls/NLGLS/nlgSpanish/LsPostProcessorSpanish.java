@@ -38,18 +38,18 @@ public class LsPostProcessorSpanish {
 		SPhraseSpec clause2=nlgFactory.createClause();
 
 		List<NLGElement> allNLGElement = linkSpecsSummery.fullMeasureNLG(linkSpec);
-		clause1.setObject("The" +" link");
-		clause1.setVerb("generate");
+		clause1.setObject("el" +" link"); // should be written in Spanish
+		clause1.setVerb("generar"); // should be written in Spanish
 		clause1.setFeature(Feature.TENSE,Tense.FUTURE);
 		clause1.setFeature(Feature.PASSIVE, true);
-		clause1.addPostModifier("if");
+		clause1.addPostModifier("se"); // should be written in Spanish
 		Realiser clause1Realiser = new Realiser(lexicon);
 		NLGElement clause1Realised = clause1Realiser.realise(clause1);
 
 		System.out.println(clause1Realised);
 		if(!linkSpec.isAtomic()) {
 			clause.setSubject(linkSpecsSummery.previousSubject);
-			clause.setVerb("have");
+			clause.setVerb("haber"); // should be written in Spanish
 			clause.setObject(linkSpecsSummery.objCollection);
 			Realiser clauseRealiser = new Realiser(lexicon);
 			NLGElement clauseRealised = clauseRealiser.realise(clause);
@@ -78,13 +78,13 @@ public class LsPostProcessorSpanish {
 
 			if(d==1) 
 			{
-				stringTheta=" exact match of";
+				stringTheta=" exact match of"; // should be written in Spanish
 				name.addPreModifier(stringTheta);
 				//name.addPostModifier(stringTheta);
 			}
 			if(d==0) 
 			{
-				stringTheta=    "complete mismatch of";
+				stringTheta=    "complete mismatch of"; // should be written in Spanish
 				name.addPreModifier(stringTheta);
 			}
 			if(d>0&& d<1)
@@ -92,11 +92,11 @@ public class LsPostProcessorSpanish {
 				Realiser clause2Realiser = new Realiser(lexicon);
 				NLGElement thetaRealised = clause2Realiser.realise(theta);
 				String	thetaAString=thetaRealised.toString();
-				stringTheta=thetaAString +" of ";
+				stringTheta=thetaAString +" of "; // should be written in Spanish
 				name.addPreModifier(stringTheta);
 			}
 			clause2.setSubject(firstSubject);
-			clause2.setVerb("have");
+			clause2.setVerb("have"); // should be written in Spanish
 			clause2.setObject(name);
 			Realiser clauseRealiser = new Realiser(lexicon);
 			NLGElement clauseRealised = clauseRealiser.realise(clause2);

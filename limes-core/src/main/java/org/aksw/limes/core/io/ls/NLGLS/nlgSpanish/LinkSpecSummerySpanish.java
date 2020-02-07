@@ -91,11 +91,11 @@ public class LinkSpecSummerySpanish {
 					String stringTheta="";
 
 					if(d==1) {
-						stringTheta=" exact match of";
+						stringTheta=" iguale emparejamiento de"; // should be written in Spanish
 						name.addPreModifier(stringTheta);
 					}
 					if(d==0) {
-						stringTheta=    "complete mismatch of";
+						stringTheta=    "completamente diferente de"; // should be written in Spanish
 						name.addPreModifier(stringTheta);
 					}
 					if(d>0&& d<1) {
@@ -103,7 +103,7 @@ public class LinkSpecSummerySpanish {
 						NLGElement thetaRealised = clause2Realiser.realise(theta);
 
 						String	thetaAString=thetaRealised.toString();
-						stringTheta=thetaAString +" of ";
+						stringTheta=thetaAString +" de ";
 						name.addPreModifier(stringTheta);
 					}
 					measureName = lsPreProcessor.atomicSimilarity(linkSpecification);
@@ -128,7 +128,7 @@ public class LinkSpecSummerySpanish {
 					}else {
 						if (!(objCollection.getChildren().isEmpty())) {							
 							clause.setSubject(previousSubject);
-							clause.setVerb("have");							
+							clause.setVerb("haber");							
 							clause.setObject(objCollection);
 
 							//the clause
@@ -180,7 +180,7 @@ public class LinkSpecSummerySpanish {
 		Realiser clause22Realiser = new Realiser(lexicon);
 		NLGElement sameResource = clause22Realiser.realise(resourceValue);
 		String sameResourceAsString=sameResource.toString();
-		String p=    "the "+sameResourceAsString+" of "+"the source "+"and "+"the target"+" resources";
+		String p=    "the "+sameResourceAsString+" of "+"the source "+"and "+"the target"+" resources"; // should be written in Spanish
 		PPPhraseSpec pp = nlgFactory.createPrepositionPhrase(p);
 		if(rightProp.equals(leftProp)) {
 			subject1.addComplement(pp);

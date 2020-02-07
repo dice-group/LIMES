@@ -27,11 +27,15 @@ public class runNlgSpanish {
 		String ls3="AND(AND(trigrams(x.title,y.title)|0.38,trigrams(x.title,y.title)|0.38)|0.68,OR(trigrams(x.authors,y.authors)|0.44,jaccard(x.title,y.title)|0.68)|0.68)";
 		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.62,AND(AND(overlap(x.title,y.title)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.title,y.title)|0.51)|0.51)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.venue,y.venue)|0.51)";
 		String ls5="AND(AND(cosine(x.title,z.title)|0.52,AND(AND(qgrams(x.title,z.title)|0.36,euclidean(x.authors,z.authors)|0.83)|0.53,cosine(x.year,z.year)|0.83)|0.53)|0.53,euclidean(x.year,z.year)|0.83)";
-
-		linkSpec.readSpec(ls4, 0.7);
-		AMapping slection = lsPostProcessorSpanish.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
 		
-		lsPostProcessorSpanish.summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
+		
+		String ls8="OR(jaccard(x.name,y.name)|1,trigrams(x.name,y.description)|0.61)";
+		linkSpec.readSpec(ls8, 0.7);
+		
+		
+		//AMapping slection = lsPostProcessorSpanish.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
+		
+		lsPostProcessorSpanish.postProcessor(linkSpec);//summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
 	}
 
 

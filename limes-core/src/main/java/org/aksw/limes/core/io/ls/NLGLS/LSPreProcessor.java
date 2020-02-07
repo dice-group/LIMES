@@ -8,7 +8,7 @@ import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.XMLLexicon;
+import simplenlg.lexicon.english.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 
