@@ -18,12 +18,14 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.apache.log4j.Logger;
 
 
 public class ISWC2020Chalange {
 
-	public static void main(String[] args) {
+	private static final Logger logger = Logger.getLogger(ISWC2020Chalange.class);
 
+	public static void main(String[] args) {
 		String sourceFile = "/home/abdullah/iswc2020/offers_corpus_english_v2.json"; //=="one"
 		String targetFile = "/home/abdullah/iswc2020/offers_corpus_english_v2.json"; //=="two"
 		//String trainingFile= args[2];
@@ -83,15 +85,18 @@ public class ISWC2020Chalange {
 		traingDataSize.add(2,"/home/abdullah/iswc2020/"+category+"_train_large.json");
 		traingDataSize.add(3,"/home/abdullah/iswc2020/"+category+"_train_xlarge.json");
 
-
+		logger.info(category+" added");
 
 		for(int i=0;i>traingDataSize.size();i++) {
+			logger.info("data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader("/home/abdullah/iswc2020/"+category+"_gs.json");
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 
-
+			logger.info("training map size= "+trainingMaping.size());
+			logger.info("training map  "+trainingMaping);
+			logger.info("goldstandard map size= "+trainingMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -111,7 +116,7 @@ public class ISWC2020Chalange {
 			}
 			AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
 
-
+			logger.info("wombar mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
