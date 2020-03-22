@@ -117,7 +117,7 @@
                     </filters>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.aksw.limes.core.controller.Controller</mainClass>
+                            <mainClass>org.aksw.limes.core.evaluation.ISWC2020Chalange</mainClass>
                             <manifestEntries>
                                 <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
                                 <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
@@ -250,6 +250,25 @@
             <version>1.7.21</version>
         </dependency>
 
+
+	<!-- https://mvnrepository.com/artifact/org.json/json -->
+	<dependency>
+  	  <groupId>org.json</groupId>
+  	  <artifactId>json</artifactId>
+  	  <version>20190722</version>
+	</dependency>
+
+
+	<!--dependency>
+		<groupId>com.github.cliftonlabs</groupId>
+		<artifactId>json-simple</artifactId>
+		<version>3.1.0</version>
+	</dependency-->
+<!--dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency-->
         <dependency>
             <groupId>de.vandermeer</groupId>
             <artifactId>asciitable</artifactId>

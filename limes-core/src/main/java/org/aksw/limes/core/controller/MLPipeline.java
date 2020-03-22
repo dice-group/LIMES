@@ -14,6 +14,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
+import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -55,7 +56,11 @@ public class MLPipeline {
         	AMappingReader mappingReader;
         	if(trainingDataFile.endsWith(".csv")){
         		mappingReader = new CSVMappingReader(trainingDataFile);
-        	}else{
+        	}
+        	if(trainingDataFile.endsWith(".json")) {
+        		mappingReader=new JsonMappingReader(trainingDataFile);
+        	}
+        	else{
         		mappingReader = new RDFMappingReader(trainingDataFile);
         	}
             trainingDataMap = mappingReader.read();

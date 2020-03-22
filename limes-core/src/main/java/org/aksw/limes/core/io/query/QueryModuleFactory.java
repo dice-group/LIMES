@@ -19,6 +19,10 @@ public class QueryModuleFactory {
         if (name.toLowerCase().startsWith("csv")) {
             return new CsvQueryModule(kbinfo);
         }
+        
+        if (name.toLowerCase().startsWith("json")) {
+            return new JsonQueryModule(kbinfo);
+        }
         //processes N3 files
         else if (name.toLowerCase().startsWith("n3") || name.toLowerCase().startsWith("nt")) {
             kbinfo.setType("N3");
