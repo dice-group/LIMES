@@ -12,6 +12,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
@@ -58,15 +59,16 @@ public class ISWC2020Chalange {
 		ACache tc = HybridCache.getData(targetInfo);
 
 		List<String> categorys=new ArrayList<String>();
-		categorys.add(0,"computers");
-		categorys.add(1,"cameras");
-		categorys.add(2,"watches");
-		categorys.add(3,"shoes");
-		categorys.add(4,"all");
+		categorys.add("computers");
+		categorys.add("cameras");
+		categorys.add("watches");
+		categorys.add("shoes");
+		categorys.add("all");
 
 		for(String category:categorys) {
 			long startTime = System.nanoTime();
-			experiment(sc,tc, category);
+			List<AMapping> mappings=experiment(sc,tc, category);
+			System.out.println("mappings size...."+mappings.size());
 			long endTime = System.nanoTime();
 			long timeElapsed = endTime - startTime;
 			System.out.println(category+" Execution time in milliseconds : " + timeElapsed / 1000000);
@@ -77,20 +79,33 @@ public class ISWC2020Chalange {
 
 	}
 
-	private static void experiment(ACache sc  , ACache tc, String category) {
+	public static List<AMapping> experiment(ACache sc  , ACache tc, String category) {
 
-		List<String> traingDataSize=new ArrayList<String>();
-		traingDataSize.add(0,"/home/abdullah/iswc2020/"+category+"_train_small.json");
-		traingDataSize.add(1,"/home/abdullah/iswc2020/"+category+"_train_medium.json");
-		traingDataSize.add(2,"/home/abdullah/iswc2020/"+category+"_train_large.json");
-		traingDataSize.add(3,"/home/abdullah/iswc2020/"+category+"_train_xlarge.json");
+		List<AMapping> allMappings = new ArrayList<AMapping>();
+		AMapping resultMap = MappingFactory.createDefaultMapping();
+		List<String> traingDataSize = new ArrayList<String>();
+
+		String string = "/home/abdullah/iswc2020/"+category+"_train_small.json";
+		logger.info("data 1 added "+ string);
+		traingDataSize.add(string);
+		String string2 = "/home/abdullah/iswc2020/"+category+"_train_medium.json";
+		logger.info("data 2 added "+ string2);
+		traingDataSize.add(string2);
+		String string3 = "/home/abdullah/iswc2020/"+category+"_train_large.json";
+		logger.info("data 3 added "+ string3);
+		traingDataSize.add(string3);
+		String string4 = "/home/abdullah/iswc2020/"+category+"_train_xlarge.json";
+		logger.info("data 4 added "+ string4);
+		traingDataSize.add(string4);
 
 		logger.info(category+" added");
 
-		for(int i=0;i>traingDataSize.size();i++) {
-			logger.info("data.... "+traingDataSize.get(i));
+		for(int i = 0;i> traingDataSize.size();i++) {
+			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
-			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader("/home/abdullah/iswc2020/"+category+"_gs.json");
+			String string5="/home/abdullah/iswc2020/"+category+"_gs.json";
+			logger.info("gold standard adedd... "+string5);
+			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(string5);
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 
@@ -114,8 +129,8 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
-
+			resultMap = wombatSimple.predict(sc, tc, mlModel);
+			allMappings.add(resultMap);
 			logger.info("wombar mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
@@ -125,8 +140,9 @@ public class ISWC2020Chalange {
 			System.out.println(category+" Experiment "+i);
 			System.out.println("f , r, p");
 			System.out.println(f+" , "+r+" , "+p);
-
+			//return resultMap;
 		}
+		return allMappings;
 	}
 }
 
