@@ -1,4 +1,4 @@
-
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,4 +122,4 @@ public class ISWC2020Chalange {
 		}
 	}
 }
-
+ */

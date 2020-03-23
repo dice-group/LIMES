@@ -135,7 +135,7 @@ public class ISWC2020Chalange {
 		traingDataSize.add(string4);
 		logger.info("training size... "+traingDataSize.size());
 
-		for(int i = 0;i> traingDataSize.size();i++) {
+		for(int i = 0;i< traingDataSize.size();i++) {
 			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			String string5="/home/abdullah/iswc2020/computers_gs.json";
