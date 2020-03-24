@@ -2,7 +2,10 @@ package org.aksw.limes.core.evaluation;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
@@ -19,6 +22,7 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.apache.log4j.Logger;
 
 
@@ -40,9 +44,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setPageSize(2000);
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 
 		targetInfo.setEndpoint(targetFile);
@@ -50,9 +54,9 @@ public class ISWC2020Chalange {
 		targetInfo.setPageSize(2000);
 		targetInfo.setId("targetKbId");
 		targetInfo.addProperty("title");
-		targetInfo.addProperty("description");
-		targetInfo.addProperty("brand");
-		targetInfo.addProperty("price");
+		//	targetInfo.addProperty("description");
+		//targetInfo.addProperty("brand");
+		//targetInfo.addProperty("price");
 		//targetInfo.setEndpoint("target");
 		targetInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
@@ -122,8 +126,11 @@ public class ISWC2020Chalange {
 		List<String> traingDataSize = new ArrayList<String>();
 
 		String string = "/home/abdullah/iswc2020/computers_train_small.json";
+
 		logger.info("data 1 added "+ string);
+
 		traingDataSize.add(string);
+		/*
 		String string2 = "/home/abdullah/iswc2020/computers_train_medium.json";
 		logger.info("data 2 added "+ string2);
 		traingDataSize.add(string2);
@@ -133,6 +140,8 @@ public class ISWC2020Chalange {
 		String string4 = "/home/abdullah/iswc2020/computers_train_xlarge.json";
 		logger.info("data 4 added "+ string4);
 		traingDataSize.add(string4);
+		 */
+
 		logger.info("training size... "+traingDataSize.size());
 
 		for(int i = 0;i< traingDataSize.size();i++) {
@@ -156,6 +165,12 @@ public class ISWC2020Chalange {
 
 			}
 
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 10);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
+
 			wombatSimple.init(null, sc, tc);
 			MLResults mlModel = null;
 			try {
@@ -164,6 +179,8 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+
 			resultMap = wombatSimple.predict(sc, tc, mlModel);
 			allMappings.add(resultMap);
 			logger.info("wombar mapping... "+resultMap.size());
@@ -189,6 +206,7 @@ public class ISWC2020Chalange {
 		String string = "/home/abdullah/iswc2020/watches_train_small.json";
 		logger.info("data 1 added "+ string);
 		traingDataSize.add(string);
+		/*
 		String string2 = "/home/abdullah/iswc2020/watches_train_medium.json";
 		logger.info("data 2 added "+ string2);
 		traingDataSize.add(string2);
@@ -199,8 +217,8 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ string4);
 		traingDataSize.add(string4);
 
-
-		for(int i = 0;i> traingDataSize.size();i++) {
+		 */
+		for(int i = 0;i< traingDataSize.size();i++) {
 			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			String string5="/home/abdullah/iswc2020/watches_gs.json";
@@ -221,6 +239,12 @@ public class ISWC2020Chalange {
 
 			}
 
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 10);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
+
 			wombatSimple.init(null, sc, tc);
 			MLResults mlModel = null;
 			try {
@@ -229,6 +253,9 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+
+
 			resultMap = wombatSimple.predict(sc, tc, mlModel);
 			allMappings.add(resultMap);
 			logger.info("wombar mapping... "+resultMap.size());
@@ -257,6 +284,7 @@ public class ISWC2020Chalange {
 		String string = "/home/abdullah/iswc2020/cameras_train_small.json";
 		logger.info("data 1 added "+ string);
 		traingDataSize.add(string);
+		/*
 		String string2 = "/home/abdullah/iswc2020/cameras_train_medium.json";
 		logger.info("data 2 added "+ string2);
 		traingDataSize.add(string2);
@@ -267,8 +295,8 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ string4);
 		traingDataSize.add(string4);
 
-
-		for(int i = 0;i> traingDataSize.size();i++) {
+		 */
+		for(int i = 0;i< traingDataSize.size();i++) {
 			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			String string5="/home/abdullah/iswc2020/cameras_gs.json";
@@ -288,6 +316,12 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
+
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 10);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
 			wombatSimple.init(null, sc, tc);
 			MLResults mlModel = null;
@@ -323,6 +357,7 @@ public class ISWC2020Chalange {
 		String string = "/home/abdullah/iswc2020/shoes_train_small.json";
 		logger.info("data 1 added "+ string);
 		traingDataSize.add(string);
+		/*
 		String string2 = "/home/abdullah/iswc2020/shoes_train_medium.json";
 		logger.info("data 2 added "+ string2);
 		traingDataSize.add(string2);
@@ -333,8 +368,8 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ string4);
 		traingDataSize.add(string4);
 
-
-		for(int i = 0;i> traingDataSize.size();i++) {
+		 */
+		for(int i = 0;i< traingDataSize.size();i++) {
 			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			String string5="/home/abdullah/iswc2020/shoes_gs.json";
@@ -354,6 +389,11 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 10);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
 			wombatSimple.init(null, sc, tc);
 			MLResults mlModel = null;
@@ -388,6 +428,7 @@ public class ISWC2020Chalange {
 		String string = "/home/abdullah/iswc2020/all_train_small.json";
 		logger.info("data 1 added "+ string);
 		traingDataSize.add(string);
+		/*
 		String string2 = "/home/abdullah/iswc2020/all_train_medium.json";
 		logger.info("data 2 added "+ string2);
 		traingDataSize.add(string2);
@@ -398,8 +439,8 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ string4);
 		traingDataSize.add(string4);
 
-
-		for(int i = 0;i> traingDataSize.size();i++) {
+		 */
+		for(int i = 0;i< traingDataSize.size();i++) {
 			logger.info("training data.... "+traingDataSize.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingDataSize.get(i));
 			String string5="/home/abdullah/iswc2020/all_gs.json";
@@ -420,6 +461,12 @@ public class ISWC2020Chalange {
 
 			}
 
+
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 10);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, sc, tc);
 			MLResults mlModel = null;
 			try {
