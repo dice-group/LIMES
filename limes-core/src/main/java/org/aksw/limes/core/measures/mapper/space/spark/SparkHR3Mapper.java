@@ -11,6 +11,8 @@ import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.spark.api.java.function.FilterFunction;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
@@ -115,7 +117,7 @@ public class SparkHR3Mapper extends AMapper {
         source.printSchema();
         // index source
         Dataset<Row> sourceBlocks = source
-                .flatMap(row -> {
+                .flatMap((FlatMapFunction<Row, Row>) row -> {
                     Instance i = new Instance(row.getString(0));
                     i.addProperty("lat", row.getString(1));
                     i.addProperty("long", row.getString(2));
@@ -126,7 +128,7 @@ public class SparkHR3Mapper extends AMapper {
                 }, inputEncoder);
         // index target
         Dataset<Row> targetBlocks = target
-                .flatMap(row -> {
+                .flatMap((FlatMapFunction<Row, Row>) row -> {
                     Instance i = new Instance(row.getString(0));
                     i.addProperty("lat", row.getString(1));
                     i.addProperty("long", row.getString(2));
@@ -138,7 +140,7 @@ public class SparkHR3Mapper extends AMapper {
         targetBlocks.repartition(targetBlocks.col("blockId"));
         // join generates link candidates and filter only keeps links with similarity >= threshold
         Dataset<Row> result = sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
-                .map(rows -> {
+                .map((MapFunction<Tuple2<Row, Row>, Row>) rows -> {
                     final Instance s = new Instance(rows._1().getString(3));
                     s.addProperty("lat", Double.toString(rows._1().getDouble(1)));
                     s.addProperty("long", Double.toString(rows._1().getDouble(2)));
@@ -149,7 +151,7 @@ public class SparkHR3Mapper extends AMapper {
                     final double sim = spaceMeasure.getSimilarity(s, t, finalProperty1, finalProperty2);
                     return RowFactory.create(s.getUri(), t.getUri(), sim);
                 }, outputEncoder)
-                .filter(row -> row.getDouble(2) >= threshold);
+                .filter((FilterFunction<Row>) row -> row.getDouble(2) >= threshold);
         result.printSchema();
         return result;
     }
