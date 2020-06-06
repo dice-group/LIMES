@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.aksw.limes.core.io.cache.ACache;
@@ -24,24 +25,15 @@ public class JsonQueryModule implements IQueryModule {
 
 	Logger logger = LoggerFactory.getLogger(JsonQueryModule.class.getName());
 	KBInfo kb;
-	//private String SEP = ",";
-
-
 	public JsonQueryModule(KBInfo kbinfo) {
 		kb = kbinfo;
 	}
-	/*
-	public void setSeparation(String s) {
-		SEP = s;
-	}
-
-	 */
 
 	@Override
 	public void fillCache(ACache c) {
 
 		try {
-			// in case a CSV is use, endpoint is the file to read
+			// in case a JSON is use, endpoint is the file to read
 			BufferedReader reader;
 			try{
 				reader = new BufferedReader(new FileReader(new File(kb.getEndpoint())));
@@ -54,22 +46,24 @@ public class JsonQueryModule implements IQueryModule {
 			Iterator<String> iterator = strings.iterator();
 			while(iterator.hasNext()) {
 				JSONObject obj = new JSONObject(iterator.next());
-				//Iterator<String> keys = obj.keys();
-				Object subject=obj.get("id");
-				for(String propertyLabel: kb.getProperties()) {
-					//	String propertyLabel = keys.next();
-					//	if(!propertyLabel.equals("id")) {
-					Object value= obj.get(propertyLabel);
-					//if(!value.equals(null))
-					c.addTriple(subject.toString(), propertyLabel, value.toString());
+				if(obj.get("category").toString().equals(kb.getCatogery().get(0))) {
+					Object subject=obj.get("id");
+					for(String propertyLabel: kb.getProperties()) {
+						Object value= obj.get(propertyLabel);
+						c.addTriple(subject.toString(), propertyLabel, value.toString());
+					}
+				}
+				if(kb.getCatogery().get(0).equals("all")) {
 
-					//	}
+					Object subject=obj.get("id");
+					for(String propertyLabel: kb.getProperties()) {
+						Object value= obj.get(propertyLabel);
+						c.addTriple(subject.toString(), propertyLabel, value.toString());
 
-
+					}
 				}
 
 			}
-
 
 			reader.close();
 			logger.info("Retrieved " + c.size() + " statements");
@@ -77,18 +71,14 @@ public class JsonQueryModule implements IQueryModule {
 			logger.error(MarkerFactory.getMarker("FATAL"),"Exception:" + e.getMessage());
 			e.printStackTrace();
 		}
-
-
-
-
 		// TODO Auto-generated method stub
-
 	}
+
 	public AMapping jsonToMapping(String fileName) {
 		AMapping mapping=MappingFactory.createDefaultMapping();
 
 		try {
-			// in case a CSV is use, endpoint is the file to read
+			// in case a JSON is use, endpoint is the file to read
 			BufferedReader reader;
 			try{
 				reader = new BufferedReader(new FileReader(new File(fileName)));
@@ -106,24 +96,14 @@ public class JsonQueryModule implements IQueryModule {
 				Object target=obj.get("id_right");
 				Object score=obj.get("label");
 				mapping.add(source.toString(), target.toString(), Double.valueOf(score.toString()));
-
 			}
-
-
 			reader.close();
 			logger.info("Retrieved " + mapping.size() + " statements");
 		} catch (Exception e) {
 			logger.error(MarkerFactory.getMarker("FATAL"),"Exception:" + e.getMessage());
 			e.printStackTrace();
 		}
-
-
-
-
 		// TODO Auto-generated method stub
-
 		return mapping;
-
 	}
-
 }

@@ -56,8 +56,8 @@ public class XMLConfigurationReaderTest {
                 2000,                                                             //int pageSize
                 "sparql",                                                         //String type
                 -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
-        );
+                -1  ,                                                              //int maxoffset
+       null );
 
         targetInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
@@ -72,8 +72,8 @@ public class XMLConfigurationReaderTest {
                 2000,                                                             //int pageSize
                 "sparql",                                                         //String type
                 -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
-        );
+                -1 ,                                                               //int maxoffset
+        null);
         
         testConf = new Configuration();
         testConf.setPrefixes(prefixes);

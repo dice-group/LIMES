@@ -37,8 +37,8 @@ public class FileQueryModuleTest {
                 1000,                                                                //int pageSize
                 "N3",                                                                //String type
                 -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
-        );
+                -1 ,                                                               //int maxoffset
+       null );
         FileQueryModule fqm = new FileQueryModule(kbinfo);
         HybridCache cache = new HybridCache();
         fqm.fillCache(cache);

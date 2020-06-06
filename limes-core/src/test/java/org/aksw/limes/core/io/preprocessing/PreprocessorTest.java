@@ -98,8 +98,8 @@ public class PreprocessorTest {
                 1000,                                                            //int pageSize
                 "sparql",                                                         //String type
                 -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
-        );
+                -1,                                                               //int maxoffset
+        null);
 		cache = new HybridCache();
 		Instance testInstance1 = new Instance(TEST_INSTANCE + "1");
 

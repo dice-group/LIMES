@@ -37,8 +37,8 @@ public class ResilientSparqlQueryModuleTest {
                 1000,                                                          //int pageSize
                 "sparql",                                                         //String type
                 -1,                                                               //int minOffset
-                2000                                                                //int maxoffset
-        );
+                2000 ,                                                               //int maxoffset
+        null);
 
         ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);
         ACache cache = new HybridCache();
