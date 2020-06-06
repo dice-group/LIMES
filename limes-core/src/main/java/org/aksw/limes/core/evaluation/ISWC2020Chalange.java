@@ -117,14 +117,14 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			logger.info("training map size= "+trainingMaping.size());
+			
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-
-			logger.info("training map size= "+trainingMaping.size());
-			logger.info("training map  "+trainingMaping);
-			logger.info("goldstandard map size= "+trainingMaping.size());
+			//logger.info("training map  "+trainingMaping);
+			logger.info("goldstandard map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -158,8 +158,8 @@ public class ISWC2020Chalange {
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			//System.out.println(" Experiment Computers "+i);
-			System.out.println("Ex, f , r, p");
-			System.out.println("Ex. computer "+ i+", "+f+" , "+r+" , "+p);
+			System.out.println(" Ex, LS, f , r, p");
+			System.out.println("Ex. computer "+ i+", "+mlModel.getLinkSpecification()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
 		}
 		return allMappings;
@@ -206,14 +206,13 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			logger.info("training map size= "+trainingMaping.size());
+			
 			logger.info("gold standard adedd... "+watchesGoldStandatdData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(watchesGoldStandatdData);
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-
-			logger.info("training map size= "+trainingMaping.size());
-			logger.info("training map  "+trainingMaping);
-			logger.info("goldstandard map size= "+trainingMaping.size());
+			logger.info("goldstandard map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -249,8 +248,8 @@ public class ISWC2020Chalange {
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			//System.out.println(" Experiment Watches "+i);
-			System.out.println("Ex, f , r, p");
-			System.out.println("Ex. watches "+ i+", "+f+" , "+r+" , "+p);
+			System.out.println("Ex, LS, f , r, p");
+			System.out.println("Ex. watches "+ i+", "+mlModel.getLinkSpecification()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
 		}
 		return allMappings;
@@ -298,14 +297,13 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			logger.info("training map size= "+trainingMaping.size());
+			
 			logger.info("gold standard adedd... "+cameraGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(cameraGoldStandardData);
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-
-			logger.info("training map size= "+trainingMaping.size());
-			logger.info("training map  "+trainingMaping);
-			logger.info("goldstandard map size= "+trainingMaping.size());
+			logger.info("goldstandard map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -338,8 +336,8 @@ public class ISWC2020Chalange {
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			//System.out.println(" Experiment Cameras "+i);
-			System.out.println("Ex, f , r, p");
-			System.out.println("Ex. camera "+ i+", "+f+" , "+r+" , "+p);
+			System.out.println("Ex, LS, f , r, p");
+			System.out.println("Ex. camera "+ i+", "+mlModel.getLinkSpecification()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
 		}
 		return allMappings;
@@ -386,14 +384,13 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			logger.info("training map size= "+trainingMaping.size());
+			
 			logger.info("gold standard adedd... "+shoesGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(shoesGoldStandardData);
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-
-			logger.info("training map size= "+trainingMaping.size());
-			logger.info("training map  "+trainingMaping);
-			logger.info("goldstandard map size= "+trainingMaping.size());
+			logger.info("goldstandard map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -424,8 +421,8 @@ public class ISWC2020Chalange {
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
-			System.out.println("Ex, f , r, p");
-			System.out.println("Ex. shoes "+ i+", "+f+" , "+r+" , "+p);
+			System.out.println("Ex, LS, f , r, p");
+			System.out.println("Ex. shoes "+ i+", "+mlModel.getLinkSpecification()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
 		}
 		return allMappings;
@@ -472,15 +469,13 @@ public class ISWC2020Chalange {
 
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			logger.info("training map size= "+trainingMaping.size());
+			
 			logger.info("gold standard adedd... "+allGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(allGoldStandardData);
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-
-			logger.info("training map size= "+trainingMaping.size());
-			logger.info("training map  "+trainingMaping);
-			logger.info("goldstandard map size= "+trainingMaping.size());
+			logger.info("goldstandard map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -512,8 +507,8 @@ public class ISWC2020Chalange {
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
-			System.out.println("Ex, f , r, p");
-			System.out.println("Ex. all "+ i+", "+f+" , "+r+" , "+p);
+			System.out.println("Ex, LS, f , r, p");
+			System.out.println("Ex. all "+ i+", "+mlModel.getLinkSpecification()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
 		}
 		return allMappings;
