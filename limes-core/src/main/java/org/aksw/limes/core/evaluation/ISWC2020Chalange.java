@@ -85,8 +85,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addCatogery("Computers_and_Accessories");
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 
 		ACache sc = HybridCache.getData(sourceInfo);
@@ -175,8 +175,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addCatogery("Jewelry");
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 
 		ACache sc = HybridCache.getData(sourceInfo);
@@ -267,8 +267,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addCatogery("Camera_and_Photo");
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 
@@ -354,8 +354,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addCatogery("Shoes");
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 
@@ -438,8 +438,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addCatogery("all");
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 

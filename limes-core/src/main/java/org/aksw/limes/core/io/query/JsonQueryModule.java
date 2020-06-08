@@ -95,7 +95,9 @@ public class JsonQueryModule implements IQueryModule {
 				Object source=obj.get("id_left");
 				Object target=obj.get("id_right");
 				Object score=obj.get("label");
-				mapping.add(source.toString(), target.toString(), Double.valueOf(score.toString()));
+				if(Double.valueOf(score.toString())>0) {
+					mapping.add(source.toString(), target.toString(), Double.valueOf(score.toString()));
+				}
 			}
 			reader.close();
 			logger.info("Retrieved " + mapping.size() + " statements");
