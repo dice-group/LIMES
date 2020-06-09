@@ -131,28 +131,23 @@ public class ISWC2020Chalange {
 						MLImplementationType.SUPERVISED_BATCH).asSupervised();
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
-
 			}
-
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
-			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
-			//wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
-
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			resultMap = wombatSimple.predict(sc, sc, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
-
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
@@ -160,7 +155,6 @@ public class ISWC2020Chalange {
 			//System.out.println(" Experiment Computers "+i);
 			System.out.println(" Ex, LS, f , r, p");
 			System.out.println("Ex. computer "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
-			//return resultMap;
 		}
 		return allMappings;
 	}
@@ -219,15 +213,13 @@ public class ISWC2020Chalange {
 						MLImplementationType.SUPERVISED_BATCH).asSupervised();
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
-
 			}
-
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
-			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
-			//wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
-
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
@@ -236,21 +228,15 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-
-
 			resultMap = wombatSimple.predict(sc, sc, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
-
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
-			//System.out.println(" Experiment Watches "+i);
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. watches "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
-			//return resultMap;
 		}
 		return allMappings;
 	}
@@ -312,12 +298,12 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
-			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
-			//wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
@@ -329,7 +315,7 @@ public class ISWC2020Chalange {
 			}
 			resultMap = wombatSimple.predict(sc, sc, mlModel);
 			allMappings.add(resultMap);
-			System.out.println("wombar mapping... "+resultMap.size());
+			System.out.println("wombat mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
@@ -399,11 +385,12 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
-			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
-			//wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
@@ -484,13 +471,12 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-
-
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "qgrams"));
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 3);
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
-			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 300);
-			//wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
+			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
+			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
