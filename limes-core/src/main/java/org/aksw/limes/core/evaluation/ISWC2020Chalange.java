@@ -134,7 +134,7 @@ public class ISWC2020Chalange {
 			}
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -216,7 +216,7 @@ public class ISWC2020Chalange {
 			}
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -300,7 +300,7 @@ public class ISWC2020Chalange {
 			}
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -387,7 +387,7 @@ public class ISWC2020Chalange {
 			}
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -473,7 +473,7 @@ public class ISWC2020Chalange {
 			}
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
-			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 500);
+			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
