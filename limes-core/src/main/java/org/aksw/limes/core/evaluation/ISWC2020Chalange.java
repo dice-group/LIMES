@@ -119,7 +119,7 @@ public class ISWC2020Chalange {
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training map size= "+trainingMaping.size());
-			
+
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
@@ -145,6 +145,8 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
+			System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
+			System.out.println("parameter: "+wombatSimple.getParameters());
 			resultMap = wombatSimple.predict(sc, sc, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
@@ -202,7 +204,7 @@ public class ISWC2020Chalange {
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training map size= "+trainingMaping.size());
-			
+
 			logger.info("gold standard adedd... "+watchesGoldStandatdData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(watchesGoldStandatdData);
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
@@ -285,7 +287,7 @@ public class ISWC2020Chalange {
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training map size= "+trainingMaping.size());
-			
+
 			logger.info("gold standard adedd... "+cameraGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(cameraGoldStandardData);
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
@@ -372,7 +374,7 @@ public class ISWC2020Chalange {
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training map size= "+trainingMaping.size());
-			
+
 			logger.info("gold standard adedd... "+shoesGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(shoesGoldStandardData);
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
@@ -458,7 +460,7 @@ public class ISWC2020Chalange {
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training map size= "+trainingMaping.size());
-			
+
 			logger.info("gold standard adedd... "+allGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(allGoldStandardData);
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
@@ -481,6 +483,8 @@ public class ISWC2020Chalange {
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMaping);
+				System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
+				System.out.println("parameter: "+wombatSimple.getParameters());
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
