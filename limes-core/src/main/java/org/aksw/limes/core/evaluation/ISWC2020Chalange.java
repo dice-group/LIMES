@@ -32,7 +32,14 @@ public class ISWC2020Chalange {
 		long endTime ;
 		long timeElapsed;
 		List<AMapping> mappings=new ArrayList<AMapping>();
-
+		
+		logger.info(" Cameras start .....");
+		startTime=System.nanoTime();
+		mappings=experimentCameras();
+		System.out.println("mappings size...."+mappings.size());
+		endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
@@ -48,14 +55,6 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Watches execution time in milliseconds : " + timeElapsed / 1000000);
-
-		logger.info(" Cameras start .....");
-		startTime=System.nanoTime();
-		mappings=experimentCameras();
-		System.out.println("mappings size...."+mappings.size());
-		endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
 
 		logger.info(" Shoes start .....");
 		startTime=System.nanoTime();
@@ -84,9 +83,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Computers_and_Accessories");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 
 		ACache sc = HybridCache.getData(sourceInfo);
@@ -132,7 +131,8 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
@@ -170,9 +170,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Jewelry");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 
 		ACache sc = HybridCache.getData(sourceInfo);
@@ -216,7 +216,8 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
@@ -254,9 +255,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Camera_and_Photo");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 
@@ -300,7 +301,8 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
@@ -341,9 +343,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Shoes");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 
@@ -387,7 +389,8 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
@@ -426,9 +429,9 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("all");
 		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("description");
+		//sourceInfo.addProperty("brand");
+		//sourceInfo.addProperty("price");
 		sourceInfo.setType("json");
 		ACache sc = HybridCache.getData(sourceInfo);
 
@@ -473,7 +476,8 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
