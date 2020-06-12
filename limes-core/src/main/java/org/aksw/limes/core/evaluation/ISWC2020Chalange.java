@@ -13,6 +13,7 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
@@ -606,7 +607,7 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-
+			dragon.getMl().setDefaultParameters();
 			dragon.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
@@ -685,6 +686,7 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
+			dragon.getMl().setDefaultParameters();
 			dragon.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
@@ -760,7 +762,7 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-
+			dragon.getMl().setDefaultParameters();
 			dragon.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
@@ -840,7 +842,7 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
-
+			dragon.getMl().setDefaultParameters();
 			dragon.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
@@ -920,6 +922,7 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 
 			}
+			dragon.getMl().setDefaultParameters();
 			dragon.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
