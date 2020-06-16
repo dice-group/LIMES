@@ -15,6 +15,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
+import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
