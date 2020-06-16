@@ -578,11 +578,11 @@ public class ISWC2020Chalange {
 		for (String s : sample.getMap().keySet()) {
 			if (sc.containsUri(s)) {
 				sourceSample.addInstance(sc.getInstance(s));
-				sourceTargetCaches.add(0, sourceSample);
+				sourceTargetCaches.add(sourceSample);
 				for (String t : sample.getMap().get(s).keySet())
 					if (sc.containsUri(t)) {
 						targetSample.addInstance(sc.getInstance(t));
-						sourceTargetCaches.add(1, targetSample);}
+						sourceTargetCaches.add(targetSample);}
 					else
 						logger.warn("Instance " + t + " does not exist in the target dataset");
 			} else {
