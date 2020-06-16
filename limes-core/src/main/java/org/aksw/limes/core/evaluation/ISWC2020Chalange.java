@@ -158,8 +158,8 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
-			System.out.println("parameter: "+wombatSimple.getParameters());
+			//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
+			//System.out.println("parameter: "+wombatSimple.getParameters());
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative,sc);
 			List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
