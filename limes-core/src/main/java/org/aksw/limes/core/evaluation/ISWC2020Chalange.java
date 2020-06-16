@@ -161,7 +161,7 @@ public class ISWC2020Chalange {
 			}
 			//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
 			//System.out.println("parameter: "+wombatSimple.getParameters());
-			List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(trainingMaping,sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
 			allMappings.add(resultMap);
