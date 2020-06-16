@@ -125,17 +125,17 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
-			//System.out.println("training  map size= "+trainingMaping.size());
-			System.out.println("training posative map size= "+trainingMapingPosative.size());
+			//AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training  map size= "+trainingMaping.size());
+			//System.out.println("training posative map size= "+trainingMapingPosative.size());
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
 			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			//logger.info("training map  "+trainingMaping);
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
-			//System.out.println("goldstandard  map size= "+goldStandardMaping.size());
+			System.out.println("goldstandard  map size= "+goldStandardMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -154,22 +154,22 @@ public class ISWC2020Chalange {
 			wombatSimple.init(null, sc, sc);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPosative);
+				mlModel = wombatSimple.learn(trainingMaping);
 				//mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
 			//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
 			//System.out.println("parameter: "+wombatSimple.getParameters());
-			List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative,sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
 			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
 			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
