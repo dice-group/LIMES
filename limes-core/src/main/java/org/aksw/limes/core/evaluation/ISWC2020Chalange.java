@@ -91,8 +91,8 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("price");
-		sourceInfo.addProperty("specTableContent");
+		//sourceInfo.addProperty("price");
+		//sourceInfo.addProperty("specTableContent");
 
 		sourceInfo.setType("json");
 
@@ -143,10 +143,11 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -188,8 +189,8 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Jewelry");
 		sourceInfo.addProperty("title");
-		//sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("description");
+		sourceInfo.addProperty("brand");
 		//sourceInfo.addProperty("price");
 		//sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
@@ -239,9 +240,10 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -280,8 +282,8 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Camera_and_Photo");
 		sourceInfo.addProperty("title");
-		//sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("description");
+		sourceInfo.addProperty("brand");
 		//sourceInfo.addProperty("price");
 		//sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
@@ -333,9 +335,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -380,8 +383,8 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Shoes");
 		sourceInfo.addProperty("title");
-		//sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("description");
+		sourceInfo.addProperty("brand");
 		//sourceInfo.addProperty("price");
 		//sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
@@ -432,9 +435,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -479,8 +483,8 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("all");
 		sourceInfo.addProperty("title");
-		//sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("description");
+		sourceInfo.addProperty("brand");
 		//sourceInfo.addProperty("price");
 		//sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
@@ -532,9 +536,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
