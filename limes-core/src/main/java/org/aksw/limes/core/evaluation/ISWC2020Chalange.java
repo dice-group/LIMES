@@ -89,10 +89,10 @@ public class ISWC2020Chalange {
 		sourceInfo.setId("sourceKbId");
 		sourceInfo.addCatogery("Computers_and_Accessories");
 		sourceInfo.addProperty("title");
-		//sourceInfo.addProperty("description");
-		//sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
+		sourceInfo.addProperty("description");
+		sourceInfo.addProperty("brand");
+		sourceInfo.addProperty("price");
+		sourceInfo.addProperty("specTableContent");
 
 		sourceInfo.setType("json");
 
@@ -143,8 +143,8 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
+			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
