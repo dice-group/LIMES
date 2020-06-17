@@ -28,7 +28,7 @@ public class ISWC2020Chalange {
 
 	private static final Logger logger = Logger.getLogger(ISWC2020Chalange.class);
 	private static final String sourceFile = "/home/abdullah/iswc2020/offers_corpus_english_v2.json";
-	private static final String testFile="/home/abdullah/LIMES/limes-core/resources/testset_1500.json";
+	private static final String testFile="/home/abdullah/iswc2020/LIMES/limes-core/resources/testset_1500.json";
 	public static void main(String[] args) {
 
 		long startTime ;
@@ -37,7 +37,7 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		/*
+		
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
@@ -45,7 +45,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
-
+/*
 		logger.info(" Cameras start .....");
 		startTime=System.nanoTime();
 		mappings=experimentCameras();
@@ -69,7 +69,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Shoes execution time in milliseconds : " + timeElapsed / 1000000);
-		 */
+		 
 		logger.info(" All start .....");
 		startTime=System.nanoTime();
 		mappings=experimentAll();
@@ -78,7 +78,7 @@ public class ISWC2020Chalange {
 		timeElapsed = endTime - startTime;
 		System.out.println(" All execution time in milliseconds : " + timeElapsed / 1000000);
 
-
+*/
 	}
 
 
