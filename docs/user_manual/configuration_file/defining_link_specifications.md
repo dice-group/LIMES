@@ -220,6 +220,7 @@ If the Tmp_Successor measure is used in a complex LS, the CANONICAL planner shou
 
 
 Moreover, LIMES support the following temporal relations between POI resources based on Allen's algebra:
+
 * **Tmp_After**: The first POI takes place after the second POI takes place.
 * **Tmp_Before**: The first POI takes place before the second POI takes place.
 * **Tmp_During**: The first POI take place during the second POI takes place.
@@ -235,12 +236,15 @@ Moreover, LIMES support the following temporal relations between POI resources b
 * **Tmp_Is_xBy**: reverse of Tmp_Meets
 
 Below, an example of an atomic LS that consists of the temporal measure Tmp_Finishes and a threshold $\theta = 1.0$ is given:
+
 `Tmp_Finishes(x.beginDate1|endDate1, y.beginDate2|endDate2) | 0.8`
+
 where beginDate1 and beginDate2 are properties of the source and target KB respectively, whose values
 indicate the begin of a temporal event instance and endDate1 and endDate2 are properties of the source
 and target KB respectively, whose values indicate the end of a temporal event instance.
 Both begin and end properties for both source and target MUST be included in an atomic LS whose
 measure is temporal. The allowed date and time formats are:
+
 * `yyyy-MM-dd'T'HH:mm:ss.SSSXXX` e.g. `2015-05-20T08:21:04.123Z` or `2015-05-20T08:21:04.12Z`
 * `yyyy-MM-dd'T'HH:mm:ss.SSS` e.g. `2015-05-20T08:21:04.123` or `2015-05-20T08:21:04.12` or `2015-05-20T08:21:04.1`
 * `yyyy-MM-dd'T'HH:mm:ssXXX` e.g. `2015-05-20T08:21:04Z` or `2015-05-20T08:21:04+02:00`
