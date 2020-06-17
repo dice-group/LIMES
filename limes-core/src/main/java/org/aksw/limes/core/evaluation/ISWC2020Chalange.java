@@ -13,6 +13,7 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.JsonMappingReader;
+import org.aksw.limes.core.io.query.JsonQueryModule;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
@@ -37,7 +38,7 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		
+
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
@@ -45,7 +46,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
-/*
+		/*
 		logger.info(" Cameras start .....");
 		startTime=System.nanoTime();
 		mappings=experimentCameras();
@@ -69,7 +70,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Shoes execution time in milliseconds : " + timeElapsed / 1000000);
-		 
+
 		logger.info(" All start .....");
 		startTime=System.nanoTime();
 		mappings=experimentAll();
@@ -78,11 +79,13 @@ public class ISWC2020Chalange {
 		timeElapsed = endTime - startTime;
 		System.out.println(" All execution time in milliseconds : " + timeElapsed / 1000000);
 
-*/
+		 */
 	}
 
 
 	public static List<AMapping> experimentComputers() {
+		String computerGoldStandardData="/home/abdullah/iswc2020/computers_gs.json";
+
 		KBInfo sourceInfo = new KBInfo();
 		sourceInfo.setEndpoint(sourceFile);
 		sourceInfo.setVar("?x");
@@ -92,13 +95,41 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
-
+		sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
-
 		ACache	sc= new HybridCache();
 		sc = HybridCache.getData(sourceInfo);
+
+		KBInfo sourceInfoLeft = new KBInfo();
+		sourceInfoLeft.setEndpoint(computerGoldStandardData);
+		sourceInfoLeft.setVar("?x");
+		sourceInfoLeft.setPageSize(2000);
+		sourceInfoLeft.setId("sourceKbId");
+		sourceInfoLeft.addCatogery("Computers_and_Accessories");
+		sourceInfoLeft.addProperty("title_left");
+		sourceInfoLeft.addProperty("description_left");
+		sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.setType("json");
+		ACache	scLeft= new HybridCache();
+		JsonQueryModule jsonModelLeft=new JsonQueryModule();
+		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+
+		KBInfo sourceInfoRight = new KBInfo();
+		sourceInfoRight.setEndpoint(computerGoldStandardData);
+		sourceInfoRight.setVar("?x");
+		sourceInfoRight.setPageSize(2000);
+		sourceInfoRight.setId("sourceKbId");
+		sourceInfoRight.addCatogery("Computers_and_Accessories");
+		sourceInfoRight.addProperty("title_right");
+		sourceInfoRight.addProperty("description_right");
+		sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.setType("json");
+		ACache	scRight= new HybridCache();
+		JsonQueryModule jsonModelRight=new JsonQueryModule();
+		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
+
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -121,27 +152,18 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ computerTrainXlarge);
 		logger.info("training size... "+traingData.size());
 
-		String computerGoldStandardData="/home/abdullah/iswc2020/computers_gs.json";
+
 
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPositive=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
-			//System.out.println("training  map size= "+trainingMaping.size());
 			System.out.println("training posative map size= "+trainingMapingPositive.size());
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
 			AMapping goldStandardMapingPositive=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPositive.size());
-			
-			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMaping=jsonMappingReaderTesting.read();
-			System.out.println("testing  map size= "+testingMaping.size());
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
-			//logger.info("training map  "+trainingMaping);
-		
-			//System.out.println("goldstandard  map size= "+goldStandardMaping.size());
+
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -165,22 +187,13 @@ public class ISWC2020Chalange {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
-			//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
-			//System.out.println("parameter: "+wombatSimple.getParameters());
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPositive,sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
-			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
+			resultMap = wombatSimple.predict(scLeft, scRight, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPositive));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPositive));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPositive));
-			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
-			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
-			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
-			//System.out.println(" Experiment Computers "+i);
 			System.out.println(" Ex, LS, f , r, p");
 			System.out.println("Ex. computer "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 		}
@@ -189,6 +202,7 @@ public class ISWC2020Chalange {
 
 	public static List<AMapping> experimentWatches() {
 
+		String watchesGoldStandatdData="/home/abdullah/iswc2020/watches_gs.json";
 		KBInfo sourceInfo = new KBInfo();
 		sourceInfo.setEndpoint(sourceFile);
 		sourceInfo.setVar("?x");
@@ -198,11 +212,40 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
+		sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
 		ACache	sc= new HybridCache();
 		sc = HybridCache.getData(sourceInfo);
+
+		KBInfo sourceInfoLeft = new KBInfo();
+		sourceInfoLeft.setEndpoint(watchesGoldStandatdData);
+		sourceInfoLeft.setVar("?x");
+		sourceInfoLeft.setPageSize(2000);
+		sourceInfoLeft.setId("sourceKbId");
+		sourceInfoLeft.addCatogery("Jewelry");
+		sourceInfoLeft.addProperty("title_left");
+		sourceInfoLeft.addProperty("description_left");
+		sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.setType("json");
+		ACache	scLeft= new HybridCache();
+		JsonQueryModule jsonModelLeft=new JsonQueryModule();
+		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+
+		KBInfo sourceInfoRight = new KBInfo();
+		sourceInfoRight.setEndpoint(watchesGoldStandatdData);
+		sourceInfoRight.setVar("?x");
+		sourceInfoRight.setPageSize(2000);
+		sourceInfoRight.setId("sourceKbId");
+		sourceInfoRight.addCatogery("Jewelry");
+		sourceInfoRight.addProperty("title_right");
+		sourceInfoRight.addProperty("description_right");
+		sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.setType("json");
+		ACache	scRight= new HybridCache();
+		JsonQueryModule jsonModelRight=new JsonQueryModule();
+		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -224,27 +267,17 @@ public class ISWC2020Chalange {
 		traingData.add(watchesTrainXlarge);
 		logger.info("data 4 added "+ watchesTrainXlarge);
 
-		String watchesGoldStandatdData="/home/abdullah/iswc2020/watches_gs.json";
 
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
-			//System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+watchesGoldStandatdData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(watchesGoldStandatdData);
 			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
-			//System.out.println("goldstandard map size= "+goldStandardMaping.size());
-			
-			
-			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMaping=jsonMappingReaderTesting.read();
-			System.out.println("testing map size= "+testingMaping.size());
-			
+
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -269,19 +302,13 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
-			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
+			resultMap = wombatSimple.predict(scLeft, scRight, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 			FMeasure fmeausre =new FMeasure();
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
-			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
-			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
-			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. watches "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 		}
@@ -289,6 +316,9 @@ public class ISWC2020Chalange {
 	}
 
 	public static List<AMapping> experimentCameras() {
+
+		String cameraGoldStandardData="/home/abdullah/iswc2020/cameras_gs.json";
+
 		KBInfo sourceInfo = new KBInfo();
 		sourceInfo.setEndpoint(sourceFile);
 		sourceInfo.setVar("?x");
@@ -298,12 +328,40 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
+		sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
-
-		ACache sc = new HybridCache();
+		ACache	sc= new HybridCache();
 		sc = HybridCache.getData(sourceInfo);
+
+		KBInfo sourceInfoLeft = new KBInfo();
+		sourceInfoLeft.setEndpoint(cameraGoldStandardData);
+		sourceInfoLeft.setVar("?x");
+		sourceInfoLeft.setPageSize(2000);
+		sourceInfoLeft.setId("sourceKbId");
+		sourceInfoLeft.addCatogery("Camera_and_Photo");
+		sourceInfoLeft.addProperty("title_left");
+		sourceInfoLeft.addProperty("description_left");
+		sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.setType("json");
+		ACache	scLeft= new HybridCache();
+		JsonQueryModule jsonModelLeft=new JsonQueryModule();
+		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+
+		KBInfo sourceInfoRight = new KBInfo();
+		sourceInfoRight.setEndpoint(cameraGoldStandardData);
+		sourceInfoRight.setVar("?x");
+		sourceInfoRight.setPageSize(2000);
+		sourceInfoRight.setId("sourceKbId");
+		sourceInfoRight.addCatogery("Camera_and_Photo");
+		sourceInfoRight.addProperty("title_right");
+		sourceInfoRight.addProperty("description_right");
+		sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.setType("json");
+		ACache	scRight= new HybridCache();
+		JsonQueryModule jsonModelRight=new JsonQueryModule();
+		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -325,26 +383,16 @@ public class ISWC2020Chalange {
 		traingData.add(camerasTrainXlarge);
 		logger.info("data 4 added "+ camerasTrainXlarge);
 
-		String cameraGoldStandardData="/home/abdullah/iswc2020/cameras_gs.json";
-
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
-			//System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+cameraGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(cameraGoldStandardData);
 			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
-			//System.out.println("goldstandard  map size= "+goldStandardMaping.size());
-			
-			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMaping=jsonMappingReaderTesting.read();
-			System.out.println("testing map size= "+testingMaping.size());
-			
+
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -371,10 +419,7 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
-			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
+			resultMap = wombatSimple.predict(scLeft, scRight, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombat mapping... "+resultMap.size());
 
@@ -383,10 +428,6 @@ public class ISWC2020Chalange {
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
 
-			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
-			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
-			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
-			//System.out.println(" Experiment Cameras "+i);
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. camera "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
@@ -395,6 +436,8 @@ public class ISWC2020Chalange {
 	}
 
 	public static List<AMapping> experimentShoes() {
+		
+		String shoesGoldStandardData="/home/abdullah/iswc2020/shoes_gs.json";
 
 		KBInfo sourceInfo = new KBInfo();
 		sourceInfo.setEndpoint(sourceFile);
@@ -405,11 +448,40 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
+		sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
-		ACache	sc = new HybridCache();
+		ACache	sc= new HybridCache();
 		sc = HybridCache.getData(sourceInfo);
+
+		KBInfo sourceInfoLeft = new KBInfo();
+		sourceInfoLeft.setEndpoint(shoesGoldStandardData);
+		sourceInfoLeft.setVar("?x");
+		sourceInfoLeft.setPageSize(2000);
+		sourceInfoLeft.setId("sourceKbId");
+		sourceInfoLeft.addCatogery("Shoes");
+		sourceInfoLeft.addProperty("title_left");
+		sourceInfoLeft.addProperty("description_left");
+		sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.setType("json");
+		ACache	scLeft= new HybridCache();
+		JsonQueryModule jsonModelLeft=new JsonQueryModule();
+		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+
+		KBInfo sourceInfoRight = new KBInfo();
+		sourceInfoRight.setEndpoint(shoesGoldStandardData);
+		sourceInfoRight.setVar("?x");
+		sourceInfoRight.setPageSize(2000);
+		sourceInfoRight.setId("sourceKbId");
+		sourceInfoRight.addCatogery("Shoes");
+		sourceInfoRight.addProperty("title_right");
+		sourceInfoRight.addProperty("description_right");
+		sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.setType("json");
+		ACache	scRight= new HybridCache();
+		JsonQueryModule jsonModelRight=new JsonQueryModule();
+		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -431,25 +503,16 @@ public class ISWC2020Chalange {
 		traingData.add(shoesTrainXlarge);
 		logger.info("data 4 added "+ shoesTrainXlarge);
 
-		String shoesGoldStandardData="/home/abdullah/iswc2020/shoes_gs.json";
-
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
-			//System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+shoesGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(shoesGoldStandardData);
 			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
-			//System.out.println("goldstandard map size= "+goldStandardMaping.size());
-			
-			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMaping=jsonMappingReaderTesting.read();
-			System.out.println("testing map size= "+testingMaping.size());
+
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -471,15 +534,11 @@ public class ISWC2020Chalange {
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
-				//mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
-			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
+			resultMap = wombatSimple.predict(scLeft, scRight, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombat mapping... "+resultMap.size());
 
@@ -488,9 +547,6 @@ public class ISWC2020Chalange {
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
 
-			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
-			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
-			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			allMappings.add(resultMap);
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. shoes "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
@@ -501,6 +557,8 @@ public class ISWC2020Chalange {
 
 	public static List<AMapping> experimentAll() {
 
+		String allGoldStandardData="/home/abdullah/iswc2020/all_gs.json";
+
 		KBInfo sourceInfo = new KBInfo();
 		sourceInfo.setEndpoint(sourceFile);
 		sourceInfo.setVar("?x");
@@ -510,11 +568,40 @@ public class ISWC2020Chalange {
 		sourceInfo.addProperty("title");
 		sourceInfo.addProperty("description");
 		sourceInfo.addProperty("brand");
-		//sourceInfo.addProperty("price");
-		//sourceInfo.addProperty("specTableContent");
+		sourceInfo.addProperty("specTableContent");
 		sourceInfo.setType("json");
-		ACache	sc = new HybridCache();
+		ACache	sc= new HybridCache();
 		sc = HybridCache.getData(sourceInfo);
+
+		KBInfo sourceInfoLeft = new KBInfo();
+		sourceInfoLeft.setEndpoint(allGoldStandardData);
+		sourceInfoLeft.setVar("?x");
+		sourceInfoLeft.setPageSize(2000);
+		sourceInfoLeft.setId("sourceKbId");
+		sourceInfoLeft.addCatogery("all");
+		sourceInfoLeft.addProperty("title_left");
+		sourceInfoLeft.addProperty("description_left");
+		sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.setType("json");
+		ACache	scLeft= new HybridCache();
+		JsonQueryModule jsonModelLeft=new JsonQueryModule();
+		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+
+		KBInfo sourceInfoRight = new KBInfo();
+		sourceInfoRight.setEndpoint(allGoldStandardData);
+		sourceInfoRight.setVar("?x");
+		sourceInfoRight.setPageSize(2000);
+		sourceInfoRight.setId("sourceKbId");
+		sourceInfoRight.addCatogery("all");
+		sourceInfoRight.addProperty("title_right");
+		sourceInfoRight.addProperty("description_right");
+		sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.setType("json");
+		ACache	scRight= new HybridCache();
+		JsonQueryModule jsonModelRight=new JsonQueryModule();
+		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -536,23 +623,17 @@ public class ISWC2020Chalange {
 		traingData.add(allTrainXlarge);
 		logger.info("data 4 added "+ allTrainXlarge);
 
-		String allGoldStandardData="/home/abdullah/iswc2020/all_gs.json";
-
 		for(int i = 0;i< traingData.size();i++) {
 
 			logger.info("training data.... "+traingData.get(i));
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			//AMapping trainingMaping=jsonMappingReaderTraining.read();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
-			//System.out.println("training p map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+allGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(allGoldStandardData);
 			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			System.out.println("goldstandard Posative map size= "+goldStandardMapingPosative.size());
-			//System.out.println("goldstandard map size= "+goldStandardMaping.size());
-			
+
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
 			AMapping testingMaping=jsonMappingReaderTesting.read();
 			System.out.println("testing  map size= "+testingMaping.size());
@@ -576,17 +657,11 @@ public class ISWC2020Chalange {
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
-				//mlModel = wombatSimple.learn(trainingMaping);
-				//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
-				//System.out.println("parameter: "+wombatSimple.getParameters());
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
-			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
-			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
+			resultMap = wombatSimple.predict(scLeft, scRight, mlModel);
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 
@@ -594,10 +669,6 @@ public class ISWC2020Chalange {
 			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
 			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
-
-			//double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
-			//double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
-			//double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. all "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
@@ -605,7 +676,7 @@ public class ISWC2020Chalange {
 		return allMappings;
 	}
 
-
+	/*
 	private static List<ACache> fillSampleSourceTargetCaches(AMapping sample, ACache sc) {
 		List<ACache> sourceTargetCaches =new ArrayList<ACache>();
 		ACache sourceSample=new HybridCache();
@@ -626,6 +697,8 @@ public class ISWC2020Chalange {
 		}
 		return sourceTargetCaches;
 	}
+
+	 */
 }
 
 
