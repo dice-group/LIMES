@@ -9,7 +9,7 @@
 
 	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>1.7.3-SNAPSHOT</version>
+	<version>1.7.3</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
@@ -23,7 +23,7 @@
     <scm>
         <url>https://github.com/dice-group/LIMES</url>
         <connection>scm:git:https://github.com/dice-group/LIMES.git</connection>
-        <tag>HEAD</tag>
+        <tag>1.7.3</tag>
     </scm>
 
 
