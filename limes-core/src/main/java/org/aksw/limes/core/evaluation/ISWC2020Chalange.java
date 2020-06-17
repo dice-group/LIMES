@@ -37,7 +37,7 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		/*
+		
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
@@ -45,7 +45,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
-*/
+/*
 		logger.info(" Cameras start .....");
 		startTime=System.nanoTime();
 		mappings=experimentCameras();
@@ -136,8 +136,8 @@ public class ISWC2020Chalange {
 			System.out.println("goldstandard posative map size= "+goldStandardMapingPositive.size());
 			
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMapingPositive=jsonMappingReaderTesting.readP();
-			System.out.println("testing posative map size= "+testingMapingPositive.size());
+			AMapping testingMaping=jsonMappingReaderTesting.read();
+			System.out.println("testing  map size= "+testingMaping.size());
 			//AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			//logger.info("training map  "+trainingMaping);
 		
@@ -167,7 +167,7 @@ public class ISWC2020Chalange {
 			}
 			//System.out.println("ls "+mlModel.getLinkSpecification().getFullExpression());
 			//System.out.println("parameter: "+wombatSimple.getParameters());
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMapingPositive, sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPositive,sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping,sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
@@ -242,8 +242,8 @@ public class ISWC2020Chalange {
 			
 			
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMapingPositive=jsonMappingReaderTesting.readP();
-			System.out.println("testing posative map size= "+testingMapingPositive.size());
+			AMapping testingMaping=jsonMappingReaderTesting.read();
+			System.out.println("testing map size= "+testingMaping.size());
 			
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -269,7 +269,7 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMapingPositive, sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
@@ -342,8 +342,8 @@ public class ISWC2020Chalange {
 			//System.out.println("goldstandard  map size= "+goldStandardMaping.size());
 			
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMapingPositive=jsonMappingReaderTesting.readP();
-			System.out.println("testing posative map size= "+testingMapingPositive.size());
+			AMapping testingMaping=jsonMappingReaderTesting.read();
+			System.out.println("testing map size= "+testingMaping.size());
 			
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -371,7 +371,7 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMapingPositive, sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
@@ -448,8 +448,8 @@ public class ISWC2020Chalange {
 			//System.out.println("goldstandard map size= "+goldStandardMaping.size());
 			
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMapingPositive=jsonMappingReaderTesting.readP();
-			System.out.println("testing posative map size= "+testingMapingPositive.size());
+			AMapping testingMaping=jsonMappingReaderTesting.read();
+			System.out.println("testing map size= "+testingMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -476,7 +476,7 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMapingPositive, sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
@@ -554,8 +554,8 @@ public class ISWC2020Chalange {
 			//System.out.println("goldstandard map size= "+goldStandardMaping.size());
 			
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMapingPositive=jsonMappingReaderTesting.readP();
-			System.out.println("testing posative map size= "+testingMapingPositive.size());
+			AMapping testingMaping=jsonMappingReaderTesting.read();
+			System.out.println("testing  map size= "+testingMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -583,7 +583,7 @@ public class ISWC2020Chalange {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			List<ACache> caches=fillSampleSourceTargetCaches(testingMapingPositive, sc);
+			List<ACache> caches=fillSampleSourceTargetCaches(testingMaping, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMapingPosative, sc);
 			//List<ACache> caches=fillSampleSourceTargetCaches(goldStandardMaping, sc);
 			resultMap = wombatSimple.predict(caches.get(0), caches.get(1), mlModel);
