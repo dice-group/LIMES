@@ -7,6 +7,7 @@ import eu.medsea.mimeutil.MimeUtil;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
+import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
 import org.aksw.limes.core.io.preprocessing.PreprocessingFunctionFactory;
@@ -197,7 +198,9 @@ public class Server {
             throw new IOException("Not able to create directory " + workingDir.getAbsolutePath());
         }
         Map<String, String> partUploads = new HashMap<>();
-        req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(workingDir.getAbsolutePath(), MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD));
+        MultipartConfigElement mpCfg =
+                new MultipartConfigElement(workingDir.getAbsolutePath(), MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD);
+        req.attribute("org.eclipse.jetty.multipartConfig", mpCfg);
         if (req.contentType().contains("multipart/form-data")) {
             for (Part part : req.raw().getParts()) {
                 try (InputStream is = part.getInputStream()) {
@@ -282,7 +285,7 @@ public class Server {
         }
         final String requestId = id;
         AsynchronousServerOracle oracle;
-        AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
+        AConfigurationReader reader = new RDFConfigurationReader(tempFile.toAbsolutePath().toString());
         Configuration config = reader.read();
         if (config.getMlImplementationType() != MLImplementationType.SUPERVISED_ACTIVE) {
             oracle = null;
