@@ -37,7 +37,7 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		
+		/*
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
@@ -45,7 +45,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
-/*
+*/
 		logger.info(" Cameras start .....");
 		startTime=System.nanoTime();
 		mappings=experimentCameras();
@@ -53,7 +53,7 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
-
+/*
 		logger.info(" Watches start .....");
 		startTime=System.nanoTime();
 		mappings=experimentWatches();
