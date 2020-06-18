@@ -94,7 +94,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setVar("?x");
 		sourceInfoLeft.setPageSize(2000);
 		sourceInfoLeft.setId("sourceKbId");
-		sourceInfoLeft.addCatogery("Computers_and_Accessories");
+		//sourceInfoLeft.addCatogery("Computers_and_Accessories");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
@@ -106,14 +106,13 @@ public class ISWC2020Chalange {
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
 		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
-		System.out.println("cache:  "+scLeft.getAllProperties());
-
+		
 		KBInfo sourceInfoRight = new KBInfo();
 		sourceInfoRight.setEndpoint(computerGoldStandardData);
 		sourceInfoRight.setVar("?x");
 		sourceInfoRight.setPageSize(2000);
 		sourceInfoRight.setId("sourceKbId");
-		sourceInfoRight.addCatogery("Computers_and_Accessories");
+		//sourceInfoRight.addCatogery("Computers_and_Accessories");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
@@ -155,7 +154,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setVar("?x");
 			sourceInfoTrainLeft.setPageSize(2000);
 			sourceInfoTrainLeft.setId("sourceKbId");
-			sourceInfoTrainLeft.addCatogery("Computers_and_Accessories");
+			//sourceInfoTrainLeft.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
 			sourceInfoTrainLeft.addProperty("brand_left");
@@ -173,7 +172,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setVar("?x");
 			sourceInfoTrainRight.setPageSize(2000);
 			sourceInfoTrainRight.setId("sourceKbId");
-			sourceInfoTrainRight.addCatogery("Computers_and_Accessories");
+			//sourceInfoTrainRight.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
 			sourceInfoTrainRight.addProperty("brand_right");
@@ -203,10 +202,10 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.25);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -240,7 +239,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setVar("?x");
 		sourceInfoLeft.setPageSize(2000);
 		sourceInfoLeft.setId("sourceKbId");
-		sourceInfoLeft.addCatogery("Jewelry");
+		//sourceInfoLeft.addCatogery("Jewelry");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
@@ -258,7 +257,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setVar("?x");
 		sourceInfoRight.setPageSize(2000);
 		sourceInfoRight.setId("sourceKbId");
-		sourceInfoRight.addCatogery("Jewelry");
+		//sourceInfoRight.addCatogery("Jewelry");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
@@ -300,7 +299,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setVar("?x");
 			sourceInfoTrainLeft.setPageSize(2000);
 			sourceInfoTrainLeft.setId("sourceKbId");
-			sourceInfoTrainLeft.addCatogery("Jewelry");
+			//sourceInfoTrainLeft.addCatogery("Jewelry");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
 			sourceInfoTrainLeft.addProperty("brand_left");
@@ -318,7 +317,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setVar("?x");
 			sourceInfoTrainRight.setPageSize(2000);
 			sourceInfoTrainRight.setId("sourceKbId");
-			sourceInfoTrainRight.addCatogery("Jewelry");
+			//sourceInfoTrainRight.addCatogery("Jewelry");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
 			sourceInfoTrainRight.addProperty("brand_right");
@@ -348,10 +347,10 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.25);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -386,7 +385,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setVar("?x");
 		sourceInfoLeft.setPageSize(2000);
 		sourceInfoLeft.setId("sourceKbId");
-		sourceInfoLeft.addCatogery("Camera_and_Photo");
+		//sourceInfoLeft.addCatogery("Camera_and_Photo");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
@@ -404,7 +403,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setVar("?x");
 		sourceInfoRight.setPageSize(2000);
 		sourceInfoRight.setId("sourceKbId");
-		sourceInfoRight.addCatogery("Camera_and_Photo");
+		//sourceInfoRight.addCatogery("Camera_and_Photo");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
@@ -446,7 +445,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setVar("?x");
 			sourceInfoTrainLeft.setPageSize(2000);
 			sourceInfoTrainLeft.setId("sourceKbId");
-			sourceInfoTrainLeft.addCatogery("Camera_and_Photo");
+			//sourceInfoTrainLeft.addCatogery("Camera_and_Photo");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
 			sourceInfoTrainLeft.addProperty("brand_left");
@@ -464,7 +463,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setVar("?x");
 			sourceInfoTrainRight.setPageSize(2000);
 			sourceInfoTrainRight.setId("sourceKbId");
-			sourceInfoTrainRight.addCatogery("Camera_and_Photo");
+			//sourceInfoTrainRight.addCatogery("Camera_and_Photo");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
 			sourceInfoTrainRight.addProperty("brand_right");
@@ -495,10 +494,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.25);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -537,7 +536,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setVar("?x");
 		sourceInfoLeft.setPageSize(2000);
 		sourceInfoLeft.setId("sourceKbId");
-		sourceInfoLeft.addCatogery("Shoes");
+		//sourceInfoLeft.addCatogery("Shoes");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
@@ -555,7 +554,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setVar("?x");
 		sourceInfoRight.setPageSize(2000);
 		sourceInfoRight.setId("sourceKbId");
-		sourceInfoRight.addCatogery("Shoes");
+		//sourceInfoRight.addCatogery("Shoes");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
@@ -595,7 +594,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setVar("?x");
 			sourceInfoTrainLeft.setPageSize(2000);
 			sourceInfoTrainLeft.setId("sourceKbId");
-			sourceInfoTrainLeft.addCatogery("Shoes");
+			//sourceInfoTrainLeft.addCatogery("Shoes");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
 			sourceInfoTrainLeft.addProperty("brand_left");
@@ -613,7 +612,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setVar("?x");
 			sourceInfoTrainRight.setPageSize(2000);
 			sourceInfoTrainRight.setId("sourceKbId");
-			sourceInfoTrainRight.addCatogery("Shoes");
+			//sourceInfoTrainRight.addCatogery("Shoes");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
 			sourceInfoTrainRight.addProperty("brand_right");
@@ -643,10 +642,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.25);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -796,10 +795,10 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","cosine"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.25);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
