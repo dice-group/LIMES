@@ -784,9 +784,9 @@ public class ISWC2020Chalange {
 			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
-			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
-			AMapping testingMaping=jsonMappingReaderTesting.read();
-			System.out.println("testing  map size= "+testingMaping.size());
+			//JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
+			//AMapping testingMaping=jsonMappingReaderTesting.read();
+			//System.out.println("testing  map size= "+testingMaping.size());
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
 				wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
