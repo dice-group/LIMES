@@ -38,7 +38,14 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		
+
+		logger.info(" Computers start .....");
+		startTime=System.nanoTime();
+		mappings=experimentComputers();
+		System.out.println("mappings size...."+mappings.size());
+		endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
 		
 		logger.info(" Cameras start .....");
 		startTime=System.nanoTime();
@@ -48,13 +55,6 @@ public class ISWC2020Chalange {
 		timeElapsed = endTime - startTime;
 		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
 		
-		logger.info(" Computers start .....");
-		startTime=System.nanoTime();
-		mappings=experimentComputers();
-		System.out.println("mappings size...."+mappings.size());
-		endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
 		
 		logger.info(" Watches start .....");
 		startTime=System.nanoTime();
@@ -97,7 +97,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setId("sourceKbId");
 		sourceInfoLeft.addCatogery("Computers_and_Accessories");
 		sourceInfoLeft.addProperty("title_left");
-		sourceInfoLeft.addProperty("description_left");
+		//sourceInfoLeft.addProperty("description_left");
 		//sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
@@ -115,7 +115,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setId("sourceKbId");
 		sourceInfoRight.addCatogery("Computers_and_Accessories");
 		sourceInfoRight.addProperty("title_right");
-		sourceInfoRight.addProperty("description_right");
+		//sourceInfoRight.addProperty("description_right");
 		//sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -157,7 +157,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setId("sourceKbId");
 			sourceInfoTrainLeft.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainLeft.addProperty("title_left");
-			sourceInfoTrainLeft.addProperty("description_left");
+			//sourceInfoTrainLeft.addProperty("description_left");
 			//sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
@@ -175,7 +175,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setId("sourceKbId");
 			sourceInfoTrainRight.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainRight.addProperty("title_right");
-			sourceInfoTrainRight.addProperty("description_right");
+			//sourceInfoTrainRight.addProperty("description_right");
 			//sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
@@ -242,7 +242,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setId("sourceKbId");
 		sourceInfoLeft.addCatogery("Jewelry");
 		sourceInfoLeft.addProperty("title_left");
-		sourceInfoLeft.addProperty("description_left");
+		//sourceInfoLeft.addProperty("description_left");
 		//sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
@@ -260,7 +260,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setId("sourceKbId");
 		sourceInfoRight.addCatogery("Jewelry");
 		sourceInfoRight.addProperty("title_right");
-		sourceInfoRight.addProperty("description_right");
+		//sourceInfoRight.addProperty("description_right");
 		//sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -302,7 +302,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setId("sourceKbId");
 			sourceInfoTrainLeft.addCatogery("Jewelry");
 			sourceInfoTrainLeft.addProperty("title_left");
-			sourceInfoTrainLeft.addProperty("description_left");
+			//sourceInfoTrainLeft.addProperty("description_left");
 			//sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
@@ -320,7 +320,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setId("sourceKbId");
 			sourceInfoTrainRight.addCatogery("Jewelry");
 			sourceInfoTrainRight.addProperty("title_right");
-			sourceInfoTrainRight.addProperty("description_right");
+			//sourceInfoTrainRight.addProperty("description_right");
 			//sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
@@ -388,7 +388,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setId("sourceKbId");
 		sourceInfoLeft.addCatogery("Camera_and_Photo");
 		sourceInfoLeft.addProperty("title_left");
-		sourceInfoLeft.addProperty("description_left");
+		//sourceInfoLeft.addProperty("description_left");
 		//sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
@@ -406,7 +406,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setId("sourceKbId");
 		sourceInfoRight.addCatogery("Camera_and_Photo");
 		sourceInfoRight.addProperty("title_right");
-		sourceInfoRight.addProperty("description_right");
+		//sourceInfoRight.addProperty("description_right");
 		//sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -448,7 +448,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setId("sourceKbId");
 			sourceInfoTrainLeft.addCatogery("Camera_and_Photo");
 			sourceInfoTrainLeft.addProperty("title_left");
-			sourceInfoTrainLeft.addProperty("description_left");
+			//sourceInfoTrainLeft.addProperty("description_left");
 			//sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
@@ -466,7 +466,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setId("sourceKbId");
 			sourceInfoTrainRight.addCatogery("Camera_and_Photo");
 			sourceInfoTrainRight.addProperty("title_right");
-			sourceInfoTrainRight.addProperty("description_right");
+			//sourceInfoTrainRight.addProperty("description_right");
 			//sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
@@ -539,7 +539,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setId("sourceKbId");
 		sourceInfoLeft.addCatogery("Shoes");
 		sourceInfoLeft.addProperty("title_left");
-		sourceInfoLeft.addProperty("description_left");
+		//sourceInfoLeft.addProperty("description_left");
 		//sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
@@ -557,7 +557,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setId("sourceKbId");
 		sourceInfoRight.addCatogery("Shoes");
 		sourceInfoRight.addProperty("title_right");
-		sourceInfoRight.addProperty("description_right");
+		//sourceInfoRight.addProperty("description_right");
 		//sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -597,7 +597,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setId("sourceKbId");
 			sourceInfoTrainLeft.addCatogery("Shoes");
 			sourceInfoTrainLeft.addProperty("title_left");
-			sourceInfoTrainLeft.addProperty("description_left");
+			//sourceInfoTrainLeft.addProperty("description_left");
 			//sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
@@ -615,7 +615,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setId("sourceKbId");
 			sourceInfoTrainRight.addCatogery("Shoes");
 			sourceInfoTrainRight.addProperty("title_right");
-			sourceInfoTrainRight.addProperty("description_right");
+			//sourceInfoTrainRight.addProperty("description_right");
 			//sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
@@ -687,7 +687,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.setId("sourceKbId");
 		sourceInfoLeft.addCatogery("all");
 		sourceInfoLeft.addProperty("title_left");
-		sourceInfoLeft.addProperty("description_left");
+		//sourceInfoLeft.addProperty("description_left");
 		//sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
@@ -705,7 +705,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.setId("sourceKbId");
 		sourceInfoRight.addCatogery("all");
 		sourceInfoRight.addProperty("title_right");
-		sourceInfoRight.addProperty("description_right");
+		//sourceInfoRight.addProperty("description_right");
 		//sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -747,7 +747,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.setId("sourceKbId");
 			sourceInfoTrainLeft.addCatogery("all");
 			sourceInfoTrainLeft.addProperty("title_left");
-			sourceInfoTrainLeft.addProperty("description_left");
+			//sourceInfoTrainLeft.addProperty("description_left");
 			//sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
@@ -765,7 +765,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.setId("sourceKbId");
 			sourceInfoTrainRight.addCatogery("all");
 			sourceInfoTrainRight.addProperty("title_right");
-			sourceInfoTrainRight.addProperty("description_right");
+			//sourceInfoTrainRight.addProperty("description_right");
 			//sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
