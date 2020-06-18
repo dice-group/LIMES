@@ -38,13 +38,6 @@ public class ISWC2020Chalange {
 		List<AMapping> mappings=new ArrayList<AMapping>();
 
 		logger.info(" WOMBAT start .....");
-		logger.info(" Cameras start .....");
-		startTime=System.nanoTime();
-		mappings=experimentCameras();
-		System.out.println("mappings size...."+mappings.size());
-		endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
 		
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
@@ -53,6 +46,15 @@ public class ISWC2020Chalange {
 		endTime = System.nanoTime();
 		timeElapsed = endTime - startTime;
 		System.out.println(" Computers execution time in milliseconds : " + timeElapsed / 1000000);
+		
+		logger.info(" Cameras start .....");
+		startTime=System.nanoTime();
+		mappings=experimentCameras();
+		System.out.println("mappings size...."+mappings.size());
+		endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
+		
 
 		logger.info(" Watches start .....");
 		startTime=System.nanoTime();
@@ -186,12 +188,12 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPositive=jsonMappingReaderTraining.readP();
-			System.out.println("training posative map size= "+trainingMapingPositive.size());
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
-			AMapping goldStandardMapingPositive=jsonMappingReaderGoldStandard.readP();
-			System.out.println("goldstandard posative map size= "+goldStandardMapingPositive.size());
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -204,14 +206,14 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPositive);
+				mlModel = wombatSimple.learn(trainingMaping);
 				//mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
@@ -220,9 +222,9 @@ public class ISWC2020Chalange {
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPositive));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPositive));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPositive));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			System.out.println(" Ex, LS, f , r, p");
 			System.out.println("Ex. computer "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 		}
@@ -331,12 +333,12 @@ public class ISWC2020Chalange {
 
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			System.out.println("training posative map size= "+trainingMapingPosative.size());
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+watchesGoldStandatdData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(watchesGoldStandatdData);
-			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -349,14 +351,14 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPosative);
+				mlModel = wombatSimple.learn(trainingMaping);
 				//mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
@@ -366,9 +368,9 @@ public class ISWC2020Chalange {
 			allMappings.add(resultMap);
 			System.out.println("wombar mapping... "+resultMap.size());
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. watches "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 		}
@@ -477,12 +479,12 @@ public class ISWC2020Chalange {
 
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			System.out.println("training posative map size= "+trainingMapingPosative.size());
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+cameraGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(cameraGoldStandardData);
-			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -496,7 +498,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -504,7 +506,7 @@ public class ISWC2020Chalange {
 			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPosative);
+				mlModel = wombatSimple.learn(trainingMaping);
 				//mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
@@ -515,9 +517,9 @@ public class ISWC2020Chalange {
 			System.out.println("wombat mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. camera "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
@@ -625,12 +627,12 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			System.out.println("training posative map size= "+trainingMapingPosative.size());
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+shoesGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(shoesGoldStandardData);
-			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			System.out.println("goldstandard posative map size= "+goldStandardMapingPosative.size());
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
 			try {
@@ -644,7 +646,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -652,7 +654,7 @@ public class ISWC2020Chalange {
 			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPosative);
+				mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -662,9 +664,9 @@ public class ISWC2020Chalange {
 			System.out.println("wombat mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 
 			allMappings.add(resultMap);
 			System.out.println("Ex, LS, f , r, p");
@@ -775,12 +777,12 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
-			System.out.println("training posative map size= "+trainingMapingPosative.size());
+			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+allGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(allGoldStandardData);
-			AMapping goldStandardMapingPosative=jsonMappingReaderGoldStandard.readP();
-			System.out.println("goldstandard Posative map size= "+goldStandardMapingPosative.size());
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
 			AMapping testingMaping=jsonMappingReaderTesting.read();
@@ -797,14 +799,14 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
-				mlModel = wombatSimple.learn(trainingMapingPosative);
+				mlModel = wombatSimple.learn(trainingMaping);
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -814,9 +816,9 @@ public class ISWC2020Chalange {
 			System.out.println("wombar mapping... "+resultMap.size());
 
 			FMeasure fmeausre =new FMeasure();
-			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMapingPosative));
-			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMapingPosative));
+			double f=fmeausre.calculate(resultMap, new GoldStandard(goldStandardMaping));
+			double r=fmeausre.recall(resultMap, new GoldStandard(goldStandardMaping));
+			double p=fmeausre.precision(resultMap, new GoldStandard(goldStandardMaping));
 			System.out.println("Ex, LS, f , r, p");
 			System.out.println("Ex. all "+ i+", "+mlModel.getLinkSpecification().getFullExpression()+", "+f+" , "+r+" , "+p);
 			//return resultMap;
