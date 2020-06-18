@@ -99,7 +99,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addCatogery("Computers_and_Accessories");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
-		//sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
@@ -117,7 +117,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addCatogery("Computers_and_Accessories");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
-		//sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
@@ -159,7 +159,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
-			//sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
@@ -177,7 +177,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addCatogery("Computers_and_Accessories");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
-			//sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
@@ -207,7 +207,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			//wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.6);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -244,7 +244,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addCatogery("Jewelry");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
-		//sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
@@ -262,7 +262,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addCatogery("Jewelry");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
-		//sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("price_right");
@@ -304,7 +304,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addCatogery("Jewelry");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
-			//sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
@@ -322,7 +322,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addCatogery("Jewelry");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
-			//sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
@@ -352,7 +352,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-	        //wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+	        wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -390,7 +390,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addCatogery("Camera_and_Photo");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
-		//sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
@@ -408,7 +408,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addCatogery("Camera_and_Photo");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
-		//sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
@@ -450,7 +450,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addCatogery("Camera_and_Photo");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
-			//sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
@@ -468,7 +468,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addCatogery("Camera_and_Photo");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
-			//sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
@@ -499,7 +499,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			//wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -541,7 +541,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addCatogery("Shoes");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
-		//sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
@@ -559,7 +559,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addCatogery("Shoes");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
-		//sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
@@ -599,7 +599,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addCatogery("Shoes");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
-			//sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
@@ -617,7 +617,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addCatogery("Shoes");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
-			//sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
@@ -647,7 +647,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			//wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -689,7 +689,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addCatogery("all");
 		sourceInfoLeft.addProperty("title_left");
 		sourceInfoLeft.addProperty("description_left");
-		//sourceInfoLeft.addProperty("brand_left");
+		sourceInfoLeft.addProperty("brand_left");
 		//sourceInfoLeft.addProperty("specTableContent_left");
 		//sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
@@ -707,7 +707,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addCatogery("all");
 		sourceInfoRight.addProperty("title_right");
 		sourceInfoRight.addProperty("description_right");
-		//sourceInfoRight.addProperty("brand_right");
+		sourceInfoRight.addProperty("brand_right");
 		//sourceInfoRight.addProperty("specTableContent_right");
 		//sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
@@ -749,7 +749,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addCatogery("all");
 			sourceInfoTrainLeft.addProperty("title_left");
 			sourceInfoTrainLeft.addProperty("description_left");
-			//sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
 			//sourceInfoTrainLeft.addProperty("specTableContent_left");
 			//sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
@@ -767,7 +767,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addCatogery("all");
 			sourceInfoTrainRight.addProperty("title_right");
 			sourceInfoTrainRight.addProperty("description_right");
-			//sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("brand_right");
 			//sourceInfoTrainRight.addProperty("specTableContent_right");
 			//sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
@@ -800,7 +800,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-	        //wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
+	        wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
