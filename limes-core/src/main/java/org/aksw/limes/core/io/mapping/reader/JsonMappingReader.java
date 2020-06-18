@@ -50,9 +50,9 @@ public class JsonMappingReader extends AMappingReader {
 				//Iterator<String> keys = obj.keys();
 				Object source=obj.get("id_left");
 				Object target=obj.get("id_right");
-				//Object score=obj.get("label");
+				Object score=obj.get("label");
 				//if(Double.valueOf(score.toString())>0) {
-					mapping.add(source.toString(), target.toString(), 0);
+					mapping.add(source.toString(), target.toString(), Double.valueOf(score.toString()));
 				//}
 
 			}
