@@ -206,7 +206,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.3);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.6);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -351,7 +351,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -498,7 +498,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -646,7 +646,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
@@ -799,7 +799,7 @@ public class ISWC2020Chalange {
 			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
-			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.30);
+			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.60);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
