@@ -87,7 +87,7 @@ public class ISWC2020Chalange {
 	public static List<AMapping> experimentComputers() {
 		///home/abdullah/dataset/
 		String computerGoldStandardData="/home/abdullah/iswc2020/computers_gs.json";
-		//String computerGoldStandardData="/home/abdullah/dataset/ISWC2020/computers_gs.json";
+	//	String computerGoldStandardData="/home/abdullah/dataset/ISWC2020/computers_gs.json";
 
 
 		KBInfo sourceInfoLeft = new KBInfo();
