@@ -188,11 +188,11 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			AMapping trainingMaping=jsonMappingReaderTraining.readP();
 			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+computerGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(computerGoldStandardData);
-			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
@@ -333,11 +333,11 @@ public class ISWC2020Chalange {
 
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			AMapping trainingMaping=jsonMappingReaderTraining.readP();
 			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+watchesGoldStandatdData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(watchesGoldStandatdData);
-			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
@@ -479,11 +479,11 @@ public class ISWC2020Chalange {
 
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			AMapping trainingMaping=jsonMappingReaderTraining.readP();
 			System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+cameraGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(cameraGoldStandardData);
-			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
@@ -627,11 +627,11 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			AMapping trainingMaping=jsonMappingReaderTraining.readP();
 			System.out.println("training map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+shoesGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(shoesGoldStandardData);
-			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			SupervisedMLAlgorithm wombatSimple = null;
@@ -777,11 +777,11 @@ public class ISWC2020Chalange {
 			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
 
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
-			AMapping trainingMaping=jsonMappingReaderTraining.read();
+			AMapping trainingMaping=jsonMappingReaderTraining.readP();
 			System.out.println("training  map size= "+trainingMaping.size());
 			logger.info("gold standard adedd... "+allGoldStandardData);
 			JsonMappingReader jsonMappingReaderGoldStandard=new JsonMappingReader(allGoldStandardData);
-			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.read();
+			AMapping goldStandardMaping=jsonMappingReaderGoldStandard.readP();
 			System.out.println("goldstandard map size= "+goldStandardMaping.size());
 
 			//JsonMappingReader jsonMappingReaderTesting=new JsonMappingReader(testFile);
