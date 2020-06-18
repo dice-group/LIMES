@@ -39,6 +39,15 @@ public class ISWC2020Chalange {
 
 		logger.info(" WOMBAT start .....");
 		
+		
+		logger.info(" Cameras start .....");
+		startTime=System.nanoTime();
+		mappings=experimentCameras();
+		System.out.println("mappings size...."+mappings.size());
+		endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println(" Camerass execution time in milliseconds : " + timeElapsed / 1000000);
+		
 		logger.info(" Computers start .....");
 		startTime=System.nanoTime();
 		mappings=experimentComputers();
