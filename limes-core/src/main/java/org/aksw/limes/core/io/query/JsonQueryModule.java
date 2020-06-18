@@ -126,10 +126,7 @@ public class JsonQueryModule implements IQueryModule {
 							Object value= obj.get(propertyLabel);
 							scLeft.addTriple(subject.toString(), "cluster_id", value.toString());
 						}
-						
-
-
-
+		
 					}
 				//}
 				if(kbinfo.getCatogery().get(0).equals("all")) {
