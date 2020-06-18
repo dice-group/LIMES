@@ -101,7 +101,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("specTableContent_left");
 		sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
-		sourceInfoLeft.addProperty("keyValuePairs_left");
+		//sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -119,7 +119,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("specTableContent_right");
 		sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
-		sourceInfoRight.addProperty("keyValuePairs_right");
+		//sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -161,7 +161,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addProperty("specTableContent_left");
 			sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
-			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			//sourceInfoTrainLeft.addProperty("keyValuePairs_left");
 			sourceInfoTrainLeft.setType("json");
 			ACache	scTrainLeft= new HybridCache();
 			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
@@ -179,7 +179,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addProperty("specTableContent_right");
 			sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
-			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			//sourceInfoTrainRight.addProperty("keyValuePairs_right");
 			
 			sourceInfoTrainRight.setType("json");
 			ACache	scTrainRight= new HybridCache();
@@ -245,8 +245,8 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
 		sourceInfoLeft.addProperty("price_left");
-		sourceInfoLeft.addProperty("cluster_id_left");
-		sourceInfoLeft.addProperty("keyValuePairs_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		//sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -264,7 +264,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("specTableContent_right");
 		sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("price_right");
-		sourceInfoRight.addProperty("keyValuePairs_right");
+		//sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -306,7 +306,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addProperty("specTableContent_left");
 			sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
-			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			//sourceInfoTrainLeft.addProperty("keyValuePairs_left");
 			sourceInfoTrainLeft.setType("json");
 			ACache	scTrainLeft= new HybridCache();
 			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
@@ -324,7 +324,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addProperty("specTableContent_right");
 			sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
-			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			//sourceInfoTrainRight.addProperty("keyValuePairs_right");
 			sourceInfoTrainRight.setType("json");
 			ACache	scTrainRight= new HybridCache();
 			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
@@ -392,7 +392,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("specTableContent_left");
 		sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
-		sourceInfoLeft.addProperty("keyValuePairs_left");
+		//sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -410,7 +410,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("specTableContent_right");
 		sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
-		sourceInfoRight.addProperty("keyValuePairs_right");
+		//sourceInfoRight.addProperty("keyValuePairs_right");
 		
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
@@ -452,7 +452,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addProperty("specTableContent_left");
 			sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
-			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			//sourceInfoTrainLeft.addProperty("keyValuePairs_left");
 			sourceInfoTrainLeft.setType("json");
 			ACache	scTrainLeft= new HybridCache();
 			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
@@ -470,7 +470,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addProperty("specTableContent_right");
 			sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
-			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			//sourceInfoTrainRight.addProperty("keyValuePairs_right");
 			sourceInfoTrainRight.setType("json");
 			ACache	scTrainRight= new HybridCache();
 			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
@@ -543,7 +543,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("specTableContent_left");
 		sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
-		sourceInfoLeft.addProperty("keyValuePairs_left");
+		//sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -561,7 +561,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("specTableContent_right");
 		sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
-		sourceInfoRight.addProperty("keyValuePairs_right");
+		//sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -601,7 +601,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addProperty("specTableContent_left");
 			sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
-			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			//sourceInfoTrainLeft.addProperty("keyValuePairs_left");
 			sourceInfoTrainLeft.setType("json");
 			ACache	scTrainLeft= new HybridCache();
 			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
@@ -619,7 +619,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addProperty("specTableContent_right");
 			sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
-			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			//sourceInfoTrainRight.addProperty("keyValuePairs_right");
 			sourceInfoTrainRight.setType("json");
 			ACache	scTrainRight= new HybridCache();
 			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
@@ -691,7 +691,7 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("specTableContent_left");
 		sourceInfoLeft.addProperty("price_left");
 		//sourceInfoLeft.addProperty("cluster_id_left");
-		sourceInfoLeft.addProperty("keyValuePairs_left");
+		//sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -709,7 +709,7 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("specTableContent_right");
 		sourceInfoRight.addProperty("price_right");
 		//sourceInfoRight.addProperty("cluster_id_right");
-		sourceInfoRight.addProperty("keyValuePairs_right");
+		//sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -751,7 +751,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainLeft.addProperty("specTableContent_left");
 			sourceInfoTrainLeft.addProperty("price_left");
 			//sourceInfoTrainLeft.addProperty("cluster_id_left");
-			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			//sourceInfoTrainLeft.addProperty("keyValuePairs_left");
 			sourceInfoTrainLeft.setType("json");
 			ACache	scTrainLeft= new HybridCache();
 			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
@@ -769,7 +769,7 @@ public class ISWC2020Chalange {
 			sourceInfoTrainRight.addProperty("specTableContent_right");
 			sourceInfoTrainRight.addProperty("price_right");
 			//sourceInfoTrainRight.addProperty("cluster_id_right");
-			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			//sourceInfoTrainRight.addProperty("keyValuePairs_right");
 			sourceInfoTrainRight.setType("json");
 			ACache	scTrainRight= new HybridCache();
 			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
