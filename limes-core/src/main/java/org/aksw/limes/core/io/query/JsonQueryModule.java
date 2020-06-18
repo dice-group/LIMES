@@ -114,6 +114,20 @@ public class JsonQueryModule implements IQueryModule {
 							Object value= obj.get(propertyLabel);
 							scLeft.addTriple(subject.toString(), "specTableContent", value.toString());
 						}
+						if(propertyLabel.equals("price_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "price", value.toString());
+						}
+						if(propertyLabel.equals("keyValuePairs_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "keyValuePairs", value.toString());
+						}
+						if(propertyLabel.equals("cluster_id_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "cluster_id", value.toString());
+						}
+						
+
 
 
 					}
@@ -138,6 +152,20 @@ public class JsonQueryModule implements IQueryModule {
 							Object value= obj.get(propertyLabel);
 							scLeft.addTriple(subject.toString(), "specTableContent", value.toString());
 						}
+						
+						if(propertyLabel.equals("price_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "price", value.toString());
+						}
+						if(propertyLabel.equals("keyValuePairs_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "keyValuePairs", value.toString());
+						}
+						if(propertyLabel.equals("cluster_id_left")) {
+							Object value= obj.get(propertyLabel);
+							scLeft.addTriple(subject.toString(), "cluster_id", value.toString());
+						}
+						
 					}
 				}
 
@@ -187,6 +215,20 @@ public class JsonQueryModule implements IQueryModule {
 							Object value= obj.get(propertyLabel);
 							scRight.addTriple(subject.toString(), "specTableContent", value.toString());
 						}
+						
+						if(propertyLabel.equals("price_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "price", value.toString());
+						}
+						if(propertyLabel.equals("keyValuePairs_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "keyValuePairs", value.toString());
+						}
+						if(propertyLabel.equals("cluster_id_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "cluster_id", value.toString());
+						}
+						
 
 
 					}
@@ -210,6 +252,18 @@ public class JsonQueryModule implements IQueryModule {
 						if(propertyLabel.equals("specTableContent_right")) {
 							Object value= obj.get(propertyLabel);
 							scRight.addTriple(subject.toString(), "specTableContent", value.toString());
+						}
+						if(propertyLabel.equals("price_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "price", value.toString());
+						}
+						if(propertyLabel.equals("keyValuePairs_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "keyValuePairs", value.toString());
+						}
+						if(propertyLabel.equals("cluster_id_right")) {
+							Object value= obj.get(propertyLabel);
+							scRight.addTriple(subject.toString(), "cluster_id", value.toString());
 						}
 					}
 				}

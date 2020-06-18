@@ -82,23 +82,12 @@ public class ISWC2020Chalange {
 		 */
 	}
 
-
+	
 	public static List<AMapping> experimentComputers() {
+		///home/abdullah/dataset/
 		String computerGoldStandardData="/home/abdullah/iswc2020/computers_gs.json";
+		//String computerGoldStandardData="/home/abdullah/dataset/ISWC2020/computers_gs.json";
 
-		KBInfo sourceInfo = new KBInfo();
-		sourceInfo.setEndpoint(sourceFile);
-		sourceInfo.setVar("?x");
-		sourceInfo.setPageSize(2000);
-		sourceInfo.setId("sourceKbId");
-		sourceInfo.addCatogery("Computers_and_Accessories");
-		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("specTableContent");
-		sourceInfo.setType("json");
-		ACache	sc= new HybridCache();
-		sc = HybridCache.getData(sourceInfo);
 
 		KBInfo sourceInfoLeft = new KBInfo();
 		sourceInfoLeft.setEndpoint(computerGoldStandardData);
@@ -110,10 +99,14 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.addProperty("price_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
 		scLeft = jsonModelLeft.fillLeftCache(sourceInfoLeft);
+		System.out.println("cache:  "+scLeft.getAllProperties());
 
 		KBInfo sourceInfoRight = new KBInfo();
 		sourceInfoRight.setEndpoint(computerGoldStandardData);
@@ -125,11 +118,13 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
 		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.addProperty("price_right");
+		//sourceInfoRight.addProperty("cluster_id_right");
+		sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
 		scRight = jsonModelRight.fillRightCache(sourceInfoRight);
-
 
 		List<AMapping> allMappings = new ArrayList<AMapping>();
 		AMapping resultMap = MappingFactory.createDefaultMapping();
@@ -152,10 +147,46 @@ public class ISWC2020Chalange {
 		logger.info("data 4 added "+ computerTrainXlarge);
 		logger.info("training size... "+traingData.size());
 
-
-
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
+
+			KBInfo sourceInfoTrainLeft = new KBInfo();
+			sourceInfoTrainLeft.setEndpoint(traingData.get(i));
+			sourceInfoTrainLeft.setVar("?x");
+			sourceInfoTrainLeft.setPageSize(2000);
+			sourceInfoTrainLeft.setId("sourceKbId");
+			sourceInfoTrainLeft.addCatogery("Computers_and_Accessories");
+			sourceInfoTrainLeft.addProperty("title_left");
+			sourceInfoTrainLeft.addProperty("description_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("specTableContent_left");
+			sourceInfoTrainLeft.addProperty("price_left");
+			//sourceInfoTrainLeft.addProperty("cluster_id_left");
+			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			sourceInfoTrainLeft.setType("json");
+			ACache	scTrainLeft= new HybridCache();
+			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
+			scTrainLeft = jsonModelTrainLeft.fillLeftCache(sourceInfoTrainLeft);
+
+			KBInfo sourceInfoTrainRight = new KBInfo();
+			sourceInfoTrainRight.setEndpoint(traingData.get(i));
+			sourceInfoTrainRight.setVar("?x");
+			sourceInfoTrainRight.setPageSize(2000);
+			sourceInfoTrainRight.setId("sourceKbId");
+			sourceInfoTrainRight.addCatogery("Computers_and_Accessories");
+			sourceInfoTrainRight.addProperty("title_right");
+			sourceInfoTrainRight.addProperty("description_right");
+			sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("specTableContent_right");
+			sourceInfoTrainRight.addProperty("price_right");
+			//sourceInfoTrainRight.addProperty("cluster_id_right");
+			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			
+			sourceInfoTrainRight.setType("json");
+			ACache	scTrainRight= new HybridCache();
+			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
+			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
+
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPositive=jsonMappingReaderTraining.readP();
 			System.out.println("training posative map size= "+trainingMapingPositive.size());
@@ -179,7 +210,7 @@ public class ISWC2020Chalange {
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
-			wombatSimple.init(null, sc, sc);
+			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPositive);
@@ -203,20 +234,7 @@ public class ISWC2020Chalange {
 	public static List<AMapping> experimentWatches() {
 
 		String watchesGoldStandatdData="/home/abdullah/iswc2020/watches_gs.json";
-		KBInfo sourceInfo = new KBInfo();
-		sourceInfo.setEndpoint(sourceFile);
-		sourceInfo.setVar("?x");
-		sourceInfo.setPageSize(2000);
-		sourceInfo.setId("sourceKbId");
-		sourceInfo.addCatogery("Jewelry");
-		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("specTableContent");
-		sourceInfo.setType("json");
-		ACache	sc= new HybridCache();
-		sc = HybridCache.getData(sourceInfo);
-
+		
 		KBInfo sourceInfoLeft = new KBInfo();
 		sourceInfoLeft.setEndpoint(watchesGoldStandatdData);
 		sourceInfoLeft.setVar("?x");
@@ -227,6 +245,9 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.addProperty("price_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -242,6 +263,9 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
 		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.addProperty("price_right");
+		//sourceInfoRight.addProperty("price_right");
+		sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -270,6 +294,44 @@ public class ISWC2020Chalange {
 
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
+
+			KBInfo sourceInfoTrainLeft = new KBInfo();
+			sourceInfoTrainLeft.setEndpoint(traingData.get(i));
+			sourceInfoTrainLeft.setVar("?x");
+			sourceInfoTrainLeft.setPageSize(2000);
+			sourceInfoTrainLeft.setId("sourceKbId");
+			sourceInfoTrainLeft.addCatogery("Jewelry");
+			sourceInfoTrainLeft.addProperty("title_left");
+			sourceInfoTrainLeft.addProperty("description_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("specTableContent_left");
+			sourceInfoTrainLeft.addProperty("price_left");
+			//sourceInfoTrainLeft.addProperty("cluster_id_left");
+			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			sourceInfoTrainLeft.setType("json");
+			ACache	scTrainLeft= new HybridCache();
+			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
+			scTrainLeft = jsonModelTrainLeft.fillLeftCache(sourceInfoTrainLeft);
+
+			KBInfo sourceInfoTrainRight = new KBInfo();
+			sourceInfoTrainRight.setEndpoint(traingData.get(i));
+			sourceInfoTrainRight.setVar("?x");
+			sourceInfoTrainRight.setPageSize(2000);
+			sourceInfoTrainRight.setId("sourceKbId");
+			sourceInfoTrainRight.addCatogery("Jewelry");
+			sourceInfoTrainRight.addProperty("title_right");
+			sourceInfoTrainRight.addProperty("description_right");
+			sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("specTableContent_right");
+			sourceInfoTrainRight.addProperty("price_right");
+			//sourceInfoTrainRight.addProperty("cluster_id_right");
+			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			sourceInfoTrainRight.setType("json");
+			ACache	scTrainRight= new HybridCache();
+			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
+			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
+
+
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
@@ -293,7 +355,7 @@ public class ISWC2020Chalange {
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
-			wombatSimple.init(null, sc, sc);
+			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
@@ -319,20 +381,6 @@ public class ISWC2020Chalange {
 
 		String cameraGoldStandardData="/home/abdullah/iswc2020/cameras_gs.json";
 
-		KBInfo sourceInfo = new KBInfo();
-		sourceInfo.setEndpoint(sourceFile);
-		sourceInfo.setVar("?x");
-		sourceInfo.setPageSize(2000);
-		sourceInfo.setId("sourceKbId");
-		sourceInfo.addCatogery("Camera_and_Photo");
-		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("specTableContent");
-		sourceInfo.setType("json");
-		ACache	sc= new HybridCache();
-		sc = HybridCache.getData(sourceInfo);
-
 		KBInfo sourceInfoLeft = new KBInfo();
 		sourceInfoLeft.setEndpoint(cameraGoldStandardData);
 		sourceInfoLeft.setVar("?x");
@@ -343,6 +391,9 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.addProperty("price_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -358,6 +409,10 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
 		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.addProperty("price_right");
+		//sourceInfoRight.addProperty("cluster_id_right");
+		sourceInfoRight.addProperty("keyValuePairs_right");
+		
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -385,6 +440,44 @@ public class ISWC2020Chalange {
 
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
+
+			KBInfo sourceInfoTrainLeft = new KBInfo();
+			sourceInfoTrainLeft.setEndpoint(traingData.get(i));
+			sourceInfoTrainLeft.setVar("?x");
+			sourceInfoTrainLeft.setPageSize(2000);
+			sourceInfoTrainLeft.setId("sourceKbId");
+			sourceInfoTrainLeft.addCatogery("Camera_and_Photo");
+			sourceInfoTrainLeft.addProperty("title_left");
+			sourceInfoTrainLeft.addProperty("description_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("specTableContent_left");
+			sourceInfoTrainLeft.addProperty("price_left");
+			//sourceInfoTrainLeft.addProperty("cluster_id_left");
+			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			sourceInfoTrainLeft.setType("json");
+			ACache	scTrainLeft= new HybridCache();
+			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
+			scTrainLeft = jsonModelTrainLeft.fillLeftCache(sourceInfoTrainLeft);
+
+			KBInfo sourceInfoTrainRight = new KBInfo();
+			sourceInfoTrainRight.setEndpoint(traingData.get(i));
+			sourceInfoTrainRight.setVar("?x");
+			sourceInfoTrainRight.setPageSize(2000);
+			sourceInfoTrainRight.setId("sourceKbId");
+			sourceInfoTrainRight.addCatogery("Camera_and_Photo");
+			sourceInfoTrainRight.addProperty("title_right");
+			sourceInfoTrainRight.addProperty("description_right");
+			sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("specTableContent_right");
+			sourceInfoTrainRight.addProperty("price_right");
+			//sourceInfoTrainRight.addProperty("cluster_id_right");
+			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			sourceInfoTrainRight.setType("json");
+			ACache	scTrainRight= new HybridCache();
+			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
+			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
+
+
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
@@ -410,7 +503,7 @@ public class ISWC2020Chalange {
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
-			wombatSimple.init(null, sc, sc);
+			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
@@ -436,22 +529,8 @@ public class ISWC2020Chalange {
 	}
 
 	public static List<AMapping> experimentShoes() {
-		
-		String shoesGoldStandardData="/home/abdullah/iswc2020/shoes_gs.json";
 
-		KBInfo sourceInfo = new KBInfo();
-		sourceInfo.setEndpoint(sourceFile);
-		sourceInfo.setVar("?x");
-		sourceInfo.setPageSize(2000);
-		sourceInfo.setId("sourceKbId");
-		sourceInfo.addCatogery("Shoes");
-		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("specTableContent");
-		sourceInfo.setType("json");
-		ACache	sc= new HybridCache();
-		sc = HybridCache.getData(sourceInfo);
+		String shoesGoldStandardData="/home/abdullah/iswc2020/shoes_gs.json";
 
 		KBInfo sourceInfoLeft = new KBInfo();
 		sourceInfoLeft.setEndpoint(shoesGoldStandardData);
@@ -463,6 +542,9 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.addProperty("price_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -478,6 +560,9 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
 		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.addProperty("price_right");
+		//sourceInfoRight.addProperty("cluster_id_right");
+		sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -505,6 +590,42 @@ public class ISWC2020Chalange {
 
 		for(int i = 0;i< traingData.size();i++) {
 			logger.info("training data.... "+traingData.get(i));
+			KBInfo sourceInfoTrainLeft = new KBInfo();
+			sourceInfoTrainLeft.setEndpoint(traingData.get(i));
+			sourceInfoTrainLeft.setVar("?x");
+			sourceInfoTrainLeft.setPageSize(2000);
+			sourceInfoTrainLeft.setId("sourceKbId");
+			sourceInfoTrainLeft.addCatogery("Shoes");
+			sourceInfoTrainLeft.addProperty("title_left");
+			sourceInfoTrainLeft.addProperty("description_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("specTableContent_left");
+			sourceInfoTrainLeft.addProperty("price_left");
+			//sourceInfoTrainLeft.addProperty("cluster_id_left");
+			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			sourceInfoTrainLeft.setType("json");
+			ACache	scTrainLeft= new HybridCache();
+			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
+			scTrainLeft = jsonModelTrainLeft.fillLeftCache(sourceInfoTrainLeft);
+
+			KBInfo sourceInfoTrainRight = new KBInfo();
+			sourceInfoTrainRight.setEndpoint(traingData.get(i));
+			sourceInfoTrainRight.setVar("?x");
+			sourceInfoTrainRight.setPageSize(2000);
+			sourceInfoTrainRight.setId("sourceKbId");
+			sourceInfoTrainRight.addCatogery("Shoes");
+			sourceInfoTrainRight.addProperty("title_right");
+			sourceInfoTrainRight.addProperty("description_right");
+			sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("specTableContent_right");
+			sourceInfoTrainRight.addProperty("price_right");
+			//sourceInfoTrainRight.addProperty("cluster_id_right");
+			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			sourceInfoTrainRight.setType("json");
+			ACache	scTrainRight= new HybridCache();
+			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
+			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
+
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
@@ -530,7 +651,7 @@ public class ISWC2020Chalange {
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
 
-			wombatSimple.init(null, sc, sc);
+			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
@@ -559,20 +680,6 @@ public class ISWC2020Chalange {
 
 		String allGoldStandardData="/home/abdullah/iswc2020/all_gs.json";
 
-		KBInfo sourceInfo = new KBInfo();
-		sourceInfo.setEndpoint(sourceFile);
-		sourceInfo.setVar("?x");
-		sourceInfo.setPageSize(2000);
-		sourceInfo.setId("sourceKbId");
-		sourceInfo.addCatogery("all");
-		sourceInfo.addProperty("title");
-		sourceInfo.addProperty("description");
-		sourceInfo.addProperty("brand");
-		sourceInfo.addProperty("specTableContent");
-		sourceInfo.setType("json");
-		ACache	sc= new HybridCache();
-		sc = HybridCache.getData(sourceInfo);
-
 		KBInfo sourceInfoLeft = new KBInfo();
 		sourceInfoLeft.setEndpoint(allGoldStandardData);
 		sourceInfoLeft.setVar("?x");
@@ -583,6 +690,9 @@ public class ISWC2020Chalange {
 		sourceInfoLeft.addProperty("description_left");
 		sourceInfoLeft.addProperty("brand_left");
 		sourceInfoLeft.addProperty("specTableContent_left");
+		sourceInfoLeft.addProperty("price_left");
+		//sourceInfoLeft.addProperty("cluster_id_left");
+		sourceInfoLeft.addProperty("keyValuePairs_left");
 		sourceInfoLeft.setType("json");
 		ACache	scLeft= new HybridCache();
 		JsonQueryModule jsonModelLeft=new JsonQueryModule();
@@ -598,6 +708,9 @@ public class ISWC2020Chalange {
 		sourceInfoRight.addProperty("description_right");
 		sourceInfoRight.addProperty("brand_right");
 		sourceInfoRight.addProperty("specTableContent_right");
+		sourceInfoRight.addProperty("price_right");
+		//sourceInfoRight.addProperty("cluster_id_right");
+		sourceInfoRight.addProperty("keyValuePairs_right");
 		sourceInfoRight.setType("json");
 		ACache	scRight= new HybridCache();
 		JsonQueryModule jsonModelRight=new JsonQueryModule();
@@ -626,6 +739,43 @@ public class ISWC2020Chalange {
 		for(int i = 0;i< traingData.size();i++) {
 
 			logger.info("training data.... "+traingData.get(i));
+
+			KBInfo sourceInfoTrainLeft = new KBInfo();
+			sourceInfoTrainLeft.setEndpoint(traingData.get(i));
+			sourceInfoTrainLeft.setVar("?x");
+			sourceInfoTrainLeft.setPageSize(2000);
+			sourceInfoTrainLeft.setId("sourceKbId");
+			sourceInfoTrainLeft.addCatogery("all");
+			sourceInfoTrainLeft.addProperty("title_left");
+			sourceInfoTrainLeft.addProperty("description_left");
+			sourceInfoTrainLeft.addProperty("brand_left");
+			sourceInfoTrainLeft.addProperty("specTableContent_left");
+			sourceInfoTrainLeft.addProperty("price_left");
+			//sourceInfoTrainLeft.addProperty("cluster_id_left");
+			sourceInfoTrainLeft.addProperty("keyValuePairs_left");
+			sourceInfoTrainLeft.setType("json");
+			ACache	scTrainLeft= new HybridCache();
+			JsonQueryModule jsonModelTrainLeft=new JsonQueryModule();
+			scTrainLeft = jsonModelTrainLeft.fillLeftCache(sourceInfoTrainLeft);
+
+			KBInfo sourceInfoTrainRight = new KBInfo();
+			sourceInfoTrainRight.setEndpoint(traingData.get(i));
+			sourceInfoTrainRight.setVar("?x");
+			sourceInfoTrainRight.setPageSize(2000);
+			sourceInfoTrainRight.setId("sourceKbId");
+			sourceInfoTrainRight.addCatogery("all");
+			sourceInfoTrainRight.addProperty("title_right");
+			sourceInfoTrainRight.addProperty("description_right");
+			sourceInfoTrainRight.addProperty("brand_right");
+			sourceInfoTrainRight.addProperty("specTableContent_right");
+			sourceInfoTrainRight.addProperty("price_right");
+			//sourceInfoTrainRight.addProperty("cluster_id_right");
+			sourceInfoTrainRight.addProperty("keyValuePairs_right");
+			sourceInfoTrainRight.setType("json");
+			ACache	scTrainRight= new HybridCache();
+			JsonQueryModule jsonModelTrainRight=new JsonQueryModule();
+			scTrainRight = jsonModelTrainRight.fillRightCache(sourceInfoTrainRight);
+
 			JsonMappingReader jsonMappingReaderTraining=new JsonMappingReader(traingData.get(i));
 			AMapping trainingMapingPosative=jsonMappingReaderTraining.readP();
 			System.out.println("training posative map size= "+trainingMapingPosative.size());
@@ -653,7 +803,7 @@ public class ISWC2020Chalange {
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20);
 			wombatSimple.setParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, 600);
 			wombatSimple.setParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measure);
-			wombatSimple.init(null, sc, sc);
+			wombatSimple.init(null, scTrainLeft, scTrainRight);
 			MLResults mlModel = null;
 			try {
 				mlModel = wombatSimple.learn(trainingMapingPosative);
