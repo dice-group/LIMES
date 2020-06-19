@@ -204,7 +204,7 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
@@ -349,7 +349,7 @@ public class ISWC2020Chalange {
 				e.printStackTrace();
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 	        wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
@@ -496,7 +496,7 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
@@ -644,7 +644,7 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 			wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
@@ -797,7 +797,7 @@ public class ISWC2020Chalange {
 
 			}
 			//Set<String> measure = new HashSet<>(Arrays.asList("jaccard", "euclidean","cosine","JaroWinkler"));
-			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams"));
+			Set<String> measure = new HashSet<>(Arrays.asList("jaccard","qgrams","levenshtein"));
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, 5);
 			wombatSimple.setParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, 5000);
 	        wombatSimple.setParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, 0.15);
