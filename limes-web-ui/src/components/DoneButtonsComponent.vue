@@ -12,6 +12,17 @@
         </md-dialog-actions>
       </md-dialog>
 
+      <!-- spinner dialog -->
+      <md-dialog ref="spinnerDialog">
+        <md-dialog-title></md-dialog-title>
+
+        <md-dialog-content>
+          <div class="md-flex">
+            <md-spinner md-indeterminate v-if="spinnerRunning"></md-spinner>
+          </div>
+        </md-dialog-content>
+      </md-dialog>
+
       <!-- job status dialog -->
       <md-dialog ref="jobDialog">
         <md-dialog-title>Job status</md-dialog-title>
@@ -34,6 +45,7 @@
               <ul>
                 <li v-for="r in results"><a v-bind:href=" limesServerUrl + '/result/' + jobId + '/' + r " target="_blank">{{r}}</a></li>
               </ul>
+            <md-button class="md-primary" @click="exploreResults()">Explore the results</md-button>
           </div>
           <div>Save the execution key for checking the state later: <span class="executionKey">{{jobId}}</span></div>
         </md-dialog-content>
@@ -72,6 +84,61 @@
           <md-button v-bind:disabled="isDisabled" class="md-primary" @click="saveAccepted()">Save accepted links</md-button>
           <md-button v-bind:disabled="isDisabled" class="md-primary" @click="saveReviewed()">Save reviewed links</md-button>
           <md-button class="md-primary" @click="closePreviousRun()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
+      <!-- explore the results dialog -->
+      <md-dialog ref="exploreResultsDialog">
+        <md-dialog-title>Explore the results</md-dialog-title>
+        <div style="margin-left: 26px;font-size: 18px;color:#3f51b5;">Iteration: {{exploreResultsArray.iteration}}</div>
+
+        <md-dialog-content ref="focusOnTop">  
+        	<md-list className="resultsList">
+	          	<div v-for="(i, index) in iteratorResults">					
+				    <md-list-item style="overflow:auto; word-wrap:break-word;">
+				      	<div class="activeLearningItem">{{(pageNum*10-10)+index+1+"."}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.source}}</div>
+				      	<div class="col activeLearningItem" style="overflow:auto; word-wrap:break-word;">{{i.target}}</div>
+						<md-button class="md-primary" @click="openActiveLearningTable((pageNum*10-10)+index)">Show table</md-button>
+					    <md-radio v-model="radioButton[(pageNum*10-10)+index]" v-bind:md-value="true" class="md-primary" @change="changeRadioButton((pageNum*10-10)+index)">+</md-radio>
+					    <md-radio v-model="radioButton[(pageNum*10-10)+index]" v-bind:md-value="false" class="md-primary" @change="changeRadioButton((pageNum*10-10)+index)">-</md-radio>	
+				    </md-list-item> 
+				    <md-table v-if="activeLearningTableForNum !== null && activeLearningTableForNum === (pageNum*10-10)+index">
+					  <md-table-header>
+					    <md-table-row>
+					      <md-table-head>{{iteratorResults[activeLearningTableForNum].source}}</md-table-head>
+					      <md-table-head>{{iteratorResults[activeLearningTableForNum].target}}</md-table-head>
+					    </md-table-row>
+					  </md-table-header>
+
+					  <md-table-body>
+					    <md-table-row v-for="(row, index) in iteratorResults[activeLearningTableForNum].sourceContext" :key="index">
+					      <md-table-cell>
+					      		<span>{{row.predicate}}</span><br>
+						      	<span>{{row.object}}</span>
+					      </md-table-cell>
+					      <md-table-cell v-for="(col, index1) in 1" :key="index1">
+					      		<span>{{iteratorResults[activeLearningTableForNum].targetContext[index].predicate}}</span><br>
+						      	<span>{{iteratorResults[activeLearningTableForNum].targetContext[index].object}}</span>
+					      </md-table-cell>
+					    </md-table-row>
+					  </md-table-body>
+					</md-table>
+		        </div> 
+	        </md-list>
+	        <paginate
+		      :pageCount="Math.ceil(exploreResultsArray.examples.length/10)"
+		      :containerClass="'pagination'"
+		      :clickHandler="clickCallback"
+		      :container-class="'resultsList'"
+		      :page-range="3"
+    		  :margin-pages="2">
+			</paginate>  
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-raised md-primary" @click="skipIteration('explore')">Skip iteration</md-button>	
+          <md-button class="md-raised md-primary" @click="continueExecute(false,'explore')">Continue execution</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -117,8 +184,8 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-          <md-button class="md-raised md-primary" @click="skipIteration()">Skip iteration</md-button>	
-          <md-button class="md-raised md-primary" @click="continueExecute(false)">Continue execution</md-button>
+          <md-button class="md-raised md-primary" @click="skipIteration('')">Skip iteration</md-button>	
+          <md-button class="md-raised md-primary" @click="continueExecute(false,'')">Continue execution</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -170,6 +237,7 @@ export default {
     return {
     	configText: '',
     	// execution progress
+    	spinnerRunning: false,
 	    jobId: '',
 	    jobRunning: false,
 	    jobShowResult: false,
@@ -187,6 +255,45 @@ export default {
 	    findStatusMessage: '',
 	    exampleConfigEnable: false,
 	    activeLearningArray: {},
+	    exploreResultsArray: {"requestId" : "6a835f2e725bb8",
+							 "iteration" : 1,
+							 "examples" : [
+							   {
+							     "source" : "http://some.domain.tld/someSourceUri",
+							     "target" : "http://some.domain.tld/someTargetUri",
+							     "sourceContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
+							     	    "object" : "http://some.domain.tld/somObjectUri"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri1"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
+							     	    "object" : "http://some.domain.tld/somObjectUri2"
+							     	  },
+							     ],
+							     "targetContext" : [
+							     	  {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri",
+							     	    "object" : "http://some.domain.tld/somObjectUri0"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri1",
+							     	    "object" : "http://some.domain.tld/somObjectUri10"
+							     	  },
+							          {
+							     	    "predicate" : "http://some.domain.tld/somePredicateUri2",
+							     	    "object" : "http://some.domain.tld/somObjectUri20"
+							     	  },
+							     ]
+							   },
+							 ]
+							},
+		iteratorResults: null,
+		pageNum: 1,
 	    radioButton: [],
 	    activeLearningTableForNum: null,
     }
@@ -324,6 +431,8 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    // open this window if mlalgorithm.type === 'supervised active'
 	    openActiveWindow(){
+	      this.spinnerRunning = true;
+	      this.$refs.spinnerDialog.open();
 	      this.jobError = false;
 	      const config = this.generateConfig();
 	      const configBlob = new Blob([config], {type: 'text/xml'});
@@ -343,6 +452,8 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 					this.radioButton.push(false);
 				});
 	        	this.activeLearningArray = r;
+	        	this.spinnerRunning = false;
+	      		this.$refs.spinnerDialog.close();
 	        	this.$refs.supervisedActiveMLDialog.open();
 	        })
 	        .catch(e => {
@@ -372,15 +483,22 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    	});
 	    	return exampleScores;
 	    },
-	    skipIteration(){	
-	    	this.continueExecute(true);
+	    skipIteration(exploreResultsString){
+	    	if(exploreResultsString.length){
+	    		this.continueExecute(true, exploreResultsString);
+	    	} else{
+				this.continueExecute(true);
+	    	}	
 	    },
-	    continueExecute(isSkip){
-	    	
+	    continueExecute(isSkip, exploreResultsString){
+	    	let backendUrl = window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId;
+	    	if(exploreResultsString.length){
+	    		backendUrl = window.LIMES_SERVER_URL + '/exploreResults/'+this.exploreResultsArray.requestId;//another url
+	    	}
 	    	let exampleScores = this.calculateScores(isSkip);
 
 	    	// send them: http://localhost:8080/activeLearning/6a835f2e725bb8
-	    	fetch(window.LIMES_SERVER_URL + '/activeLearning/'+this.activeLearningArray.requestId, {
+	    	fetch(backendUrl, {
 		        method: 'post',
 		        body: JSON.stringify({"exampleScores" : exampleScores}),
 		      })
@@ -414,7 +532,7 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    },
 	    // execute button
 	    execute() {
-	      this.limesServerUrl = window.LIMES_SERVER_URL;	
+	      this.limesServerUrl = window.LIMES_SERVER_URL;
 	      this.jobError = false;
 	      const config = this.generateConfig();
 	      const configBlob = new Blob([config], {type: 'text/xml'});
@@ -486,6 +604,10 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	    closeStatus() {
 	      history.pushState({}, '', '?');
 	      this.$refs.jobDialog.close();
+	    },
+	    exploreResults(){
+	      this.$refs.exploreResultsDialog.open();
+	      this.iteratorResults = this.exploreResultsArray.examples.slice(0,10);
 	    },
 
 	    //button check the state of the previous one 
@@ -563,6 +685,114 @@ ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 	        })
 	      }
 	    },
+		clickCallback (pageNum){
+	      console.log(pageNum)
+	      this.pageNum = pageNum;
+	      let size = 10;
+	      let from = pageNum*size-size;
+	      let to = pageNum*size;
+	      console.log(from, to);
+	      this.iteratorResults = this.exploreResultsArray.examples.slice(from, to);
+	    },
 	}
 }
 </script>
+
+<style lang="css">
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.pagination > li {
+  display: inline;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #337ab7;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  z-index: 3;
+  color: #23527c;
+  background-color: #eee;
+  border-color: #ddd;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.pagination-lg > li > a,
+.pagination-lg > li > span {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+}
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.pagination-sm > li > a,
+.pagination-sm > li > span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+</style> 
