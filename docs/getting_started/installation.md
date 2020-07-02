@@ -28,7 +28,7 @@ cd limes/limes-core/
 mvn clean package shade:shade -Dcheckstyle.skip=true -Dmaven.test.skip=true
 ```
 After a successful installation, a target directory should have been created containing the
-limes-core-${version}-SNAPSHOT.jar (version depending on POM configuration).
+limes-core-\${version}-SNAPSHOT.jar (version depending on POM configuration).
 
 ### Desktop GUI (Deprecated)
 
@@ -50,7 +50,7 @@ cd limes/limes-gui/
 mvn jfx:jar -Dcheckstyle.skip=true -Dmaven.test.skip=true
 ```
 
-The .jar will be placed in limes-gui/target/jfx/app/limes-gui-${version}-SNAPSHOT-jfx.jar
+The .jar will be placed in limes-gui/target/jfx/app/limes-gui-\${version}-SNAPSHOT-jfx.jar
 Note that in order to run the jar, the `lib/` folder generated alongside it has to be on the same folder
 as the jar.
 
