@@ -23,8 +23,7 @@ Then, update the project on Eclipse.
 
 ## More details
 
-* [Web UI](https://limes.demos.dice-research.org/)  
-* [Project web site](https://dice.cs.uni-paderborn.de/projects/active-projects/limes/)
+* [Demo](https://dice-research.org/LIMES)
 * [User manual](http://dice-group.github.io/LIMES/#/user_manual/index)
 * [Developer manual](http://dice-group.github.io/LIMES/#/developer_manual/index)
 
