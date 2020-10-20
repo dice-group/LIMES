@@ -265,10 +265,19 @@ Setting the condition upon which links must be reviewed manually is very similar
 All instances that have a similarity between the threshold set in `REVIEW` (0.95 in our example) and the threshold set in `ACCEPTANCE` (0.98 in our example) will be written in the review file and linked via the relation set in `REVIEW`.
 
 ## Output Format
-The user can choose between `TAB` and `N3` as output format by setting
+
+The resulting mapping is written to a file on disk.
+The user can choose between the following options as output format:
+
+- ˋTABˋ
+- ˋCSVˋ
+- ˋNTˋ
+- ˋTTLˋ
+
+Example:
 
 ```xml
-<OUTPUT>N3</OUTPUT>
+<OUTPUT>NT</OUTPUT>
 ```
 
 Finally, the LIMES configuration file should be concluded with
