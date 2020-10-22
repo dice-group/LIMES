@@ -50,7 +50,7 @@ public class Server {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
-    private static final String STORAGE_DIR_PATH = "./.server-storage/";
+    private static final String STORAGE_DIR_PATH = ".server-storage/";
     private static final String LOG_DIR_PATH = STORAGE_DIR_PATH + "logs/";
     private static final String CONFIG_FILE_PREFIX = "limes_cfg_";
     private static final String CONFIG_FILE_SUFFIX = "xml";
@@ -270,8 +270,10 @@ public class Server {
         Part configFile = req.raw().getPart("config_file");
         String fileName = getFileName(configFile);
         String suffix = FilenameUtils.getExtension(fileName);
-        final Path tempFile = Files.createTempFile(uploadDir.toPath(), CONFIG_FILE_PREFIX, "." + (
-                suffix.equals("") ? CONFIG_FILE_SUFFIX : suffix));
+        if (suffix.isEmpty()) {
+            suffix = CONFIG_FILE_SUFFIX;
+        }
+        final Path tempFile = Files.createTempFile(uploadDir.toPath(), CONFIG_FILE_PREFIX, "." + suffix);
         try (InputStream is = configFile.getInputStream()) {
             Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
         }
@@ -285,7 +287,8 @@ public class Server {
         }
         final String requestId = id;
         AsynchronousServerOracle oracle;
-        AConfigurationReader reader = new RDFConfigurationReader(tempFile.toAbsolutePath().toString());
+
+        AConfigurationReader reader = suffix.equalsIgnoreCase("xml") ? new XMLConfigurationReader(tempFile.toAbsolutePath().toString()) : new RDFConfigurationReader(tempFile.toAbsolutePath().toString());
         Configuration config = reader.read();
         if (config.getMlImplementationType() != MLImplementationType.SUPERVISED_ACTIVE) {
             oracle = null;
