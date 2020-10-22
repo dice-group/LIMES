@@ -15,9 +15,9 @@ public interface IEdgeCountingSemanticMeasure extends IMeasure {
     /**
      * Calculates the semantic similarity between two concepts.
      * 
-     * @param synsets1,
+     * @param synset1,
      *            the first input concept
-     * @param synsets2,
+     * @param synset2,
      *            the second input concept
      * @return the semantic similarity of two concepts
      */

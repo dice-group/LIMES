@@ -183,7 +183,7 @@ public class Dragon extends ACoreMLAlgorithm {
     /**
      * Creates a training set out of the oracleMapping and uses {@link J48} to
      * build a decision tree The decision tree gets parsed to a
-     * {@link LinkSpecification} by {@link TreeParser}
+     * {@link LinkSpecification}
      * 
      * @param oracleMapping
      * @return res wrapper containing learned link specification

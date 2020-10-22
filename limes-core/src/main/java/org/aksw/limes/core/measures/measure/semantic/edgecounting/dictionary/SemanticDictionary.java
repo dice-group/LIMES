@@ -105,7 +105,7 @@ public class SemanticDictionary {
     /**
      * Retrieves the corresponding IWord of an IWordID in wordnet
      * 
-     * @param IWordID,
+     * @param wordID,
      *            the input IWordID
      * 
      * @return the resulting IWord
@@ -131,7 +131,7 @@ public class SemanticDictionary {
     /**
      * Retrieves the corresponding ISynset of ISynsetID in wordnet
      * 
-     * @param ISynsetID,
+     * @param hypernymId,
      *            the input ISynsetID
      * 
      * @return the resulting ISynset
