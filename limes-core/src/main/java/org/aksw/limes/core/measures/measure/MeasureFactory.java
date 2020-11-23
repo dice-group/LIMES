@@ -56,6 +56,7 @@ import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
 import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
 import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
 import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
+import org.apache.jena.reasoner.rulesys.builtins.MakeSkolem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +85,8 @@ public class MeasureFactory {
     public static final String QGRAMS = "qgrams";
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
+  //  public static final String METAPHONE = "metaphone";
+  //  public static final String KOELNERPHONETIC = "koelnerPhonetic";
     public static final String TRIGRAM = "trigram";
 
     // vector space measures
@@ -192,6 +195,7 @@ public class MeasureFactory {
         if (measure.startsWith(SOUNDEX)) {
             return MeasureType.SOUNDEX;
         }
+      
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
         }

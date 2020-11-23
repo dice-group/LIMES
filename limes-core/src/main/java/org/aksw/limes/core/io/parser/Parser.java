@@ -50,6 +50,7 @@ public class Parser implements IParser {
         // tests for operation labels. If they can be found, then our expression
         // is not atomic
         String copy = expression.toLowerCase();
+        //System.out.println("copy: "+copy);
         try {
             if (MeasureFactory.getMeasureType(copy) != null)
                 return true;

@@ -9,7 +9,7 @@ import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 
@@ -43,7 +43,7 @@ public class LsPreProcessor {
 	public  String leftProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		String fullExpression = linkSpec.getFullExpression();
-		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(","));
 		if(leftProp.contains("#")) {
 			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
@@ -75,7 +75,7 @@ public class LsPreProcessor {
 
 	public  CoordinatedPhraseElement coordinate(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 		String fullExpression = linkSpec.getFullExpression();
-		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(","));
 		if(leftProp.contains("#")) {
 			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
@@ -127,7 +127,7 @@ public class LsPreProcessor {
 	public NPPhraseSpec resourceValue(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		String fullExpression = linkSpec.getFullExpression();
-		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(","));
 		if(leftProp.contains("#")) {
 			leftProp=leftProp.substring(leftProp.indexOf("#")+1);

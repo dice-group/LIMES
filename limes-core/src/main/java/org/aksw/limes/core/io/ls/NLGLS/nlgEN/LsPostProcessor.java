@@ -1,5 +1,6 @@
 package org.aksw.limes.core.io.ls.NLGLS.nlgEN;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -21,14 +22,14 @@ import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.lexicon.Lexicon;
-import simplenlg.lexicon.english.XMLLexicon;
+import simplenlg.lexicon.XMLLexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
 public class LsPostProcessor {
 
-	void postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	public String postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 		LinkSpecSummery linkSpecsSummery= new LinkSpecSummery();
 		LsPreProcessor lsPreProcessor=new LsPreProcessor();
 		Lexicon lexicon = new XMLLexicon();                      
@@ -36,7 +37,7 @@ public class LsPostProcessor {
 		SPhraseSpec clause=nlgFactory.createClause();
 		SPhraseSpec clause1=nlgFactory.createClause();
 		SPhraseSpec clause2=nlgFactory.createClause();
-
+		String finlalStr="";
 		List<NLGElement> allNLGElement = linkSpecsSummery.fullMeasureNLG(linkSpec);
 		clause1.setObject("The" +" link");
 		clause1.setVerb("generate");
@@ -45,8 +46,8 @@ public class LsPostProcessor {
 		clause1.addPostModifier("if");
 		Realiser clause1Realiser = new Realiser(lexicon);
 		NLGElement clause1Realised = clause1Realiser.realise(clause1);
-
-		System.out.println(clause1Realised);
+		String intro=clause1Realised.toString();
+		//System.out.println(clause1Realised);
 		if(!linkSpec.isAtomic()) {
 			clause.setSubject(linkSpecsSummery.previousSubject);
 			clause.setVerb("have");
@@ -55,10 +56,18 @@ public class LsPostProcessor {
 			NLGElement clauseRealised = clauseRealiser.realise(clause);
 			clause=new SPhraseSpec(nlgFactory);
 			allNLGElement.add(clauseRealised);
-			for(NLGElement ele:allNLGElement) {
 
-				System.out.println(ele);
+			List<String> lsVerbalization=new ArrayList<String>();
+
+			String str="";
+			for(NLGElement ele:allNLGElement) {
+				str+=" " +ele;
+				//System.out.println(ele);
 			}
+
+			 finlalStr="\""+linkSpec.getFullExpression() +"\""+","+"\""+intro +str+"\"";
+			//System.out.println(finlalStr);
+			//return finlalStr;
 		}
 
 		else {
@@ -103,6 +112,7 @@ public class LsPostProcessor {
 			System.out.println(clauseRealised);
 
 		}
+		return finlalStr;
 	}
 	// ACache source, ACache target
 	void summarization(LinkSpecification linkSpec,ACache source, ACache target,
@@ -127,7 +137,7 @@ public class LsPostProcessor {
 			double f=fMeasure.calculate(slection, new GoldStandard(referenceMapping));
 			double r=fMeasure.recall(slection, new GoldStandard(referenceMapping));
 			double p=fMeasure.precision(slection, new GoldStandard(referenceMapping));
-			
+
 			if(f>=userScore) {
 				System.out.println("|| F_Meausre ||  Recall    ||  Precision ||");
 				System.out.println(" ||  "+ f+ "  ||  " +r+ " || "+p+" ||");
