@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -57,10 +56,10 @@ public class SparqlQueryModule implements IQueryModule {
         // run query
         logger.info("Querying the endpoint.");
         int offset = 0;
-        if(kb.getMinOffset() > 0) {
+        if (kb.getMinOffset() > 0) {
             offset = kb.getMinOffset();
         }
-        
+
         boolean moreResults = false;
         int counter = 0;
         String basicQuery = query;
@@ -69,9 +68,9 @@ public class SparqlQueryModule implements IQueryModule {
             if(kb.getMaxOffset() > 0) {
                 nextOffset = Math.min(kb.getMaxOffset(), nextOffset);
             }
-            
+
             logger.info("Getting statements " + offset + " to " + nextOffset);
-            
+
             if (kb.getPageSize() > 0) {
                 int limit = kb.getPageSize();
                 if(kb.getMaxOffset() > 0) {
@@ -84,7 +83,7 @@ public class SparqlQueryModule implements IQueryModule {
                     query = query + " LIMIT " + kb.getMaxOffset();
                 }
             }
-            
+
             Query sparqlQuery = QueryFactory.create(query, Syntax.syntaxARQ);
             QueryExecution qexec;
 
@@ -108,7 +107,7 @@ public class SparqlQueryModule implements IQueryModule {
             ResultSet results = qexec.execSelect();
 
             // write
-            String uri, propertyLabel, rawValue, value;
+            String uri, value;
             try {
                 if (results.hasNext()) {
                     moreResults = true;
@@ -119,42 +118,30 @@ public class SparqlQueryModule implements IQueryModule {
 
                 while (results.hasNext()) {
                     QuerySolution soln = results.nextSolution();
-                    {
-                        try {
-                            uri = soln.get(kb.getVar().substring(1)).toString();
-                            for (int i = 0; i < kb.getProperties().size(); i++) {
-                                propertyLabel = kb.getProperties().get(i);
-                                if (soln.contains("v" + i)) {
-                                    rawValue = soln.get("v" + i).toString();
-                                    // remove localization information, e.g. @en
-                                    for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                        value = Preprocessor.process(rawValue,
-                                                kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                        cache.addTriple(uri, propertyDub, value);
-                                    }
-                                }
+                    try {
+                        uri = soln.get(kb.getVar().substring(1)).toString();
+                        int i = 1;
+                        for (String propertyLabel : kb.getProperties()) {
+                            if (soln.contains("v" + i)) {
+                                value = soln.get("v" + i).toString();
+                                cache.addTriple(uri, propertyLabel, value);
                             }
-                            if(kb.getOptionalProperties() != null){
-                                for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
-                                    propertyLabel = kb.getOptionalProperties().get(i);
-                                    if (soln.contains("v" + i)) {
-                                        rawValue = soln.get("v" + i).toString();
-                                        // remove localization information, e.g. @en
-                                        for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                            value = Preprocessor.process(rawValue,
-                                                    kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                            cache.addTriple(uri, propertyDub, value);
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            logger.warn("Error while processing: " + soln.toString());
-                            logger.warn("Following exception occured: " + e.getMessage());
-                            e.printStackTrace();
-                            throw new RuntimeException();
-
+                            i++;
                         }
+                        if(kb.getOptionalProperties() != null){
+                            for (String propertyLabel : kb.getOptionalProperties()) {
+                                if (soln.contains("v" + i)) {
+                                    value = soln.get("v" + i).toString();
+                                    cache.addTriple(uri, propertyLabel, value);
+                                }
+                            }
+                            i++;
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Error while processing: " + soln.toString());
+                        logger.warn("Following exception occurred: " + e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException();
                     }
                     counter++;
                 }
@@ -182,7 +169,9 @@ public class SparqlQueryModule implements IQueryModule {
         }
         // fill in variable for the different properties to be retrieved
         query = query + "SELECT DISTINCT " + kb.getVar();
-        for (int i = 0; i < kb.getProperties().size(); i++) {
+        final int numVars = kb.getProperties().size() +
+                (kb.getOptionalProperties() == null ? 0 : kb.getOptionalProperties().size());
+        for (int i = 1; i <= numVars; i++) {
             query = query + " ?v" + i;
         }
         query = query + "\n";
@@ -208,15 +197,16 @@ public class SparqlQueryModule implements IQueryModule {
             }
         }
         // properties
+        int varCount = 1;
+        int i = 1;
         String propertiesStr;
         if (kb.getProperties().size() > 0) {
             propertiesStr = "";
-            for (int i = 0; i < kb.getProperties().size(); i++) {
-                propertiesStr = propertiesStr + kb.getVar() + " " + kb.getProperties().get(i) + " ?v" + i + " .\n";
+            for (String property : kb.getProperties()) {
+                propertiesStr = propertiesStr + kb.getVar() + " " + property + " ?v" + i++ + " .\n";
             }
             // some endpoints and parsers do not support property paths. We
             // replace them here with variables
-            int varCount = 1;
             while (propertiesStr.contains("/")) {
                 propertiesStr = propertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
                 varCount++;
@@ -227,14 +217,13 @@ public class SparqlQueryModule implements IQueryModule {
         // optional properties
         String optionalPropertiesStr;
         if (kb.getOptionalProperties() != null && kb.getOptionalProperties().size() > 0) {
-            logger.info("Optipnal properties are " + kb.getOptionalProperties());
+            logger.info("Optional properties are " + kb.getOptionalProperties());
             optionalPropertiesStr = "OPTIONAL {\n";
-            for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
-                optionalPropertiesStr += kb.getVar() + " " + kb.getOptionalProperties().get(i) + " ?v" + i + " .\n";
+            for (String optionalProperty : kb.getOptionalProperties()) {
+                optionalPropertiesStr += kb.getVar() + " " + optionalProperty + " ?v" + i++ + " .\n";
             }
             // some endpoints and parsers do not support property paths. We
             // replace them here with variables
-            int varCount = 1;
             while (optionalPropertiesStr.contains("/")) {
                 optionalPropertiesStr = optionalPropertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
                 varCount++;
@@ -249,7 +238,6 @@ public class SparqlQueryModule implements IQueryModule {
             if (q[ql].contains("regex"))
                 query = query + q[ql] + "\n";
             else if (q[ql].contains("^")) {
-                System.out.println(q[ql]);
                 String[] sp = q[ql].replaceAll("\\^", "").split(" ");
                 query = query + sp[2] + " " + sp[1] + " " + sp[0] + " " + sp[3] + "\n";
             } else {

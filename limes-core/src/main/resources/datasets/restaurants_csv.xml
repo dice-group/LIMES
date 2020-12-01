@@ -31,7 +31,7 @@
 	</PREFIX>
 <SOURCE>
 		<ID>restaurant1</ID>
-		<ENDPOINT>src/main/resources/datasets/Restaurants/restaurant1.nt.csv</ENDPOINT>
+		<ENDPOINT>datasets/Restaurants/restaurant1.nt.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION>?x rdf:type http://www.okkam.org/ontology_restaurant1.owl#Restaurant</RESTRICTION>
@@ -45,7 +45,7 @@
 	
 	<TARGET>
 		<ID>restaurant2</ID>
-		<ENDPOINT>src/main/resources/datasets/Restaurants/restaurant2.nt.csv</ENDPOINT>
+		<ENDPOINT>datasets/Restaurants/restaurant2.nt.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION>?x rdf:type http://www.okkam.org/ontology_restaurant2.owl#Restaurant</RESTRICTION>

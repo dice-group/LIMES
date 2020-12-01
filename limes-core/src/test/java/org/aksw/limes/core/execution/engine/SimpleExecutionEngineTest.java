@@ -89,10 +89,10 @@ public class SimpleExecutionEngineTest {
             e.printStackTrace();
         }
 
-        
         System.out.println("---------------------------------");
 
     }
+
     @Test
     public void emptyMeasure() {
         System.out.println("emptyMeasure");
@@ -106,10 +106,10 @@ public class SimpleExecutionEngineTest {
             e.printStackTrace();
         }
 
-        
         System.out.println("---------------------------------");
 
     }
+
     @Test
     public void bufferTest() {
         System.out.println("bufferTest");
@@ -122,26 +122,26 @@ public class SimpleExecutionEngineTest {
         smallPlan1.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(smallPlan1);
         System.out.println("Small plan 1: " + m1.getNumberofMappings());
-        assertTrue(ee.buffer.get(0).equals(m1));
+        assertTrue(ee.getBuffer().get(0).equals(m1));
 
         Plan smallPlan2 = new Plan();
         smallPlan2.addInstruction(run2);
         AMapping m2 = ee.executeInstructions(smallPlan2);
         System.out.println("Small plan 2: " + m2.getNumberofMappings());
-        assertTrue(ee.buffer.get(1).equals(m2));
+        assertTrue(ee.getBuffer().get(1).equals(m2));
 
         Plan plan2 = new Plan();
         plan2.addInstruction(run1);
         plan2.addInstruction(run2);
         plan2.addInstruction(union);
         AMapping mUnion2 = ee.executeInstructions(plan2);
-        assertTrue(ee.buffer.get(15).equals(mUnion2));
+        assertTrue(ee.getBuffer().get(15).equals(mUnion2));
         System.out.println("Union mapping: " + mUnion2.getNumberofMappings());
 
-        System.out.println("Size of buffer: " + ee.buffer.size());
+        System.out.println("Size of buffer: " + ee.getBuffer().size());
         System.out.println("---------------------------------");
-        assertTrue(ee.buffer.get(10).getMap().isEmpty());
-        assertTrue(ee.buffer.size() == 16);
+        assertTrue(ee.getBuffer().get(10).getMap().isEmpty());
+        assertTrue(ee.getBuffer().size() == 16);
 
     }
 
@@ -157,25 +157,25 @@ public class SimpleExecutionEngineTest {
         smallPlan1.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(smallPlan1);
         System.out.println("Small plan 1: " + m1.getNumberofMappings());
-        assertTrue(ee.buffer.get(0).equals(m1));
+        assertTrue(ee.getBuffer().get(0).equals(m1));
 
         Plan smallPlan2 = new Plan();
         smallPlan2.addInstruction(run2);
         AMapping m2 = ee.executeInstructions(smallPlan2);
         System.out.println("Small plan 2: " + m2.getNumberofMappings());
-        assertTrue(ee.buffer.get(1).equals(m2));
+        assertTrue(ee.getBuffer().get(1).equals(m2));
 
         Plan plan2 = new Plan();
         plan2.addInstruction(run1);
         plan2.addInstruction(run2);
         plan2.addInstruction(union);
         AMapping mUnion2 = ee.executeInstructions(plan2);
-        assertTrue(ee.buffer.size() == 3);
+        assertTrue(ee.getBuffer().size() == 3);
 
-        assertTrue(ee.buffer.get(2).equals(mUnion2));
+        assertTrue(ee.getBuffer().get(2).equals(mUnion2));
         System.out.println("Union mapping: " + mUnion2.getNumberofMappings());
 
-        System.out.println("Size of buffer: " + ee.buffer.size());
+        System.out.println("Size of buffer: " + ee.getBuffer().size());
         System.out.println("---------------------------------");
 
     }
@@ -303,7 +303,7 @@ public class SimpleExecutionEngineTest {
         Instruction xor = new Instruction(Command.XOR, "", "0.4", 0, 1, 2);
         AMapping mSource = ee.executeRun(run1);
         System.out.println("Source : " + mSource.getNumberofMappings());
-        
+
         LinearFilter f = new LinearFilter();
         AMapping mleft = ee.executeUnion(mSource, mSource);
         mleft = f.filter(mleft, 0.4);
@@ -376,7 +376,6 @@ public class SimpleExecutionEngineTest {
         plan3.addInstruction(run1);
         AMapping m4 = ee.executeStatic(plan3);
         System.out.println("nestedPlan (with Instruction) + execute: " + m4.getNumberofMappings());
-        /////////////////////////////////////////////////////////////////////
 
         assertTrue(m.getNumberofMappings() == m2.getNumberofMappings());
         assertTrue(m2.getNumberofMappings() == m3.getNumberofMappings());
@@ -390,55 +389,51 @@ public class SimpleExecutionEngineTest {
 
         System.out.println("---------------------------------");
     }
-    @Test 
-    public void testMax(){
+
+    @Test
+    public void testMax() {
         System.out.println("testMax");
         LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.2,trigrams(x.name,y.name)|0.8)",
                 0.6);
-        
-        LinkSpecification ls2 = new LinkSpecification("MAX(qgrams(x.surname,y.surname),trigrams(x.name,y.name))",
-                0.6);
+
+        LinkSpecification ls2 = new LinkSpecification("MAX(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
-        
+
         ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         cp = new CanonicalPlanner();
         AMapping m2 = ee.execute(ls2, cp);
         System.out.println(m2);
-        
-        assertTrue(m.equals(m2));
-        
+
+        assertTrue(!m.equals(m2));
 
     }
-    
-    @Test 
-    public void testMin(){
+
+    @Test
+    public void testMin() {
         System.out.println("testMin");
         LinkSpecification ls = new LinkSpecification("AND(qgrams(x.surname,y.surname)|0.2,trigrams(x.name,y.name)|0.8)",
                 0.6);
-        
-        LinkSpecification ls2 = new LinkSpecification("MIN(qgrams(x.surname,y.surname),trigrams(x.name,y.name))",
-                0.6);
+
+        LinkSpecification ls2 = new LinkSpecification("MIN(qgrams(x.surname,y.surname),trigrams(x.name,y.name))", 0.6);
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new DynamicPlanner(source, target);
         AMapping m = ee.execute(ls, cp);
         System.out.println(m);
-        
+
         ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         cp = new DynamicPlanner(source, target);
         AMapping m2 = ee.execute(ls2, cp);
-        //System.out.println(((DynamicPlanner) cp).getPlans());
+        System.out.println(((DynamicPlanner) cp).getPlans());
 
-        
         System.out.println(m2);
-        
+
         assertTrue(!m.equals(m2));
 
     }
-    
-   
+
     @Test
     public void testUnion() {
         System.out.println("testUnion");
@@ -482,7 +477,6 @@ public class SimpleExecutionEngineTest {
         AMapping m4 = ee.executeStatic(plan3);
         System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
-        /////////////////////////////////////////////////////////////////////
         System.out.println("Size of left child: " + mSource.size());
         System.out.println("Size of right child: " + mTarget.size());
         assertTrue(m.getNumberofMappings() == m2.getNumberofMappings());
@@ -549,7 +543,6 @@ public class SimpleExecutionEngineTest {
         AMapping m4 = ee.executeStatic(plan3);
         System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
-        /////////////////////////////////////////////////////////////////////
         System.out.println("Size of left child: " + mSource.size());
         System.out.println("Size of right child: " + mTarget.size());
 
@@ -588,7 +581,7 @@ public class SimpleExecutionEngineTest {
         // engine
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
-        /// 1) run as a NestedPlan calling execute function
+        // 1) run as a NestedPlan calling execute function
         NestedPlan plan = cp.plan(ls);
         AMapping m = ee.executeStatic(plan);
         System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
@@ -615,7 +608,6 @@ public class SimpleExecutionEngineTest {
         AMapping m4 = ee.executeStatic(plan3);
         System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
-        /////////////////////////////////////////////////////////////////////
         System.out.println("Size of left child: " + mSource.size());
         System.out.println("Size of right child: " + mTarget.size());
         assertTrue(m.getNumberofMappings() == m2.getNumberofMappings());
@@ -657,11 +649,11 @@ public class SimpleExecutionEngineTest {
 
         IPlanner cp = new CanonicalPlanner();
 
-        /// 1) run as a NestedPlan calling execute function
+        // 1) run as a NestedPlan calling execute function
         NestedPlan plan = cp.plan(ls);
         AMapping m = ee.executeStatic(plan);
         System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
-        
+
         // 4) run as a nestedplan with ONLY instruction calling execute function
         Plan plan3 = new NestedPlan();
         plan3.addInstruction(run1);
@@ -671,13 +663,10 @@ public class SimpleExecutionEngineTest {
         AMapping m4 = ee.executeInstructions(plan3);
         System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
-        /////////////////////////////////////////////////////////////////////
-       
         assertTrue(m.getNumberofMappings() == m4.getNumberofMappings());
 
         assertTrue(m.toString().equals(m4.toString()));
 
-   
         System.out.println("---------------------------------");
 
     }
@@ -690,7 +679,6 @@ public class SimpleExecutionEngineTest {
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         IPlanner cp = new CanonicalPlanner();
 
-
         Plan plan = cp.plan(ls);
         AMapping m = ee.executeInstructions(plan);
         System.out.println(m);
@@ -698,4 +686,5 @@ public class SimpleExecutionEngineTest {
         System.out.println("---------------------------------");
 
     }
+    
 }

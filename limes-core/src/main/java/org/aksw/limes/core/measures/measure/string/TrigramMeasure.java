@@ -4,6 +4,8 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
@@ -12,6 +14,10 @@ import org.aksw.limes.core.io.cache.Instance;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class TrigramMeasure extends StringMeasure {
+
+    public TrigramMeasure() {
+    }
+
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
         return ((double) 2 * overlap) / (double) (lengthA + lengthB);
@@ -49,22 +55,22 @@ public class TrigramMeasure extends StringMeasure {
             return 1.0;
         if ((p1.length() == 4 && p2.length() > 4) || (p2.length() == 4 && p1.length() > 4))
             return 0.0;
-        TreeSet<String> t1 = getTrigrams(p1);
-        TreeSet<String> t2 = getTrigrams(p2);
+        Set<String> t1 = getTrigrams(p1);
+        Set<String> t2 = getTrigrams(p2);
         double counter = 0;
         for (String s : t1) {
             if (t2.contains(s))
                 counter++;
         }
-        return 2 * counter / (t1.size() + t2.size());
+        return counter / (t1.size() + t2.size() - counter);
     }
 
-    public TreeSet<String> getTrigrams(String a) {
-        TreeSet<String> result = new TreeSet<String>();
+    public Set<String> getTrigrams(String a) {
+        Set<String> result = new HashSet<>();
         String copy = a;
 
-        for (int i = 2; i < copy.length(); i++) {
-            result.add(copy.substring(i - 2, i));
+        for (int i = 3; i <= copy.length(); i++) {
+            result.add(copy.substring(i - 3, i));
         }
         return result;
     }

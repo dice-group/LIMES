@@ -46,10 +46,13 @@ public class GeoHR3 {
     int latMax, latMin, longMax, longMin;
 
     public GeoHR3(float distanceThreshold, int granularity, MeasureType hd) {
-        this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.distanceThreshold = distanceThreshold;
+        this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.granularity = granularity;
         HR3 = true;
+        if (distanceThreshold == 0) {
+            angularThreshold = (float) ((0.001 * 180) / (Math.PI * OrthodromicDistance.R));
+        }
         delta = angularThreshold / (float) granularity;
         latMax = (int) Math.floor(90f / delta) - 1; // we count 0 to the
         // positives
@@ -127,7 +130,9 @@ public class GeoHR3 {
             // we have reached the north or south pole
             if (realLat == latMax || realLat == latMin) {
                 for (int deltaLong = longMin; deltaLong <= longMax; deltaLong++) {
-                    toCompare.add(Arrays.asList(new Integer[] { realLat, deltaLong }));
+                    if (index.getSquare(realLat, deltaLong).size() > 0) {
+                        toCompare.add(Arrays.asList(new Integer[] { realLat, deltaLong }));
+                    }
                 }
             } // if latitude index is negative then take the circle above, i.e.,
               // else take the one below. Equivalent to taking the latitude

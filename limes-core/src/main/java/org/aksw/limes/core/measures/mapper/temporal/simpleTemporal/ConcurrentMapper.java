@@ -85,4 +85,5 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
         return 1000d;
     }
 
+
 }

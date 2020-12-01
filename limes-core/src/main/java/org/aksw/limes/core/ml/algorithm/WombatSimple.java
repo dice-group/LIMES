@@ -1,9 +1,6 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -16,6 +13,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
@@ -25,19 +23,23 @@ import org.slf4j.LoggerFactory;
 /**
  * Simple implementation of the Wombat algorithm
  * Fast implementation, that is not complete
- * 
+ *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 7, 2016
  */
 public class WombatSimple extends AWombat {
-    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
-    protected static final String ALGORITHM_NAME = "Wombat Simple";
-    protected int activeLearningRate = 3;
-    protected RefinementNode bestSolutionNode = null;
-    protected List<ExtendedClassifier> classifiers = null;
-    protected int iterationNr = 0;
 
+    private static final Logger logger = LoggerFactory.getLogger(WombatSimple.class);
 
+    private static final String ALGORITHM_NAME = "Wombat Simple";
+
+    private static final int activeLearningRate = 3;
+
+    private RefinementNode bestSolutionNode = null;
+
+    private List<ExtendedClassifier> classifiers = null;
+
+    private Tree<RefinementNode> refinementTreeRoot = null;
 
     /**
      * WombatSimple constructor.
@@ -58,7 +60,6 @@ public class WombatSimple extends AWombat {
         targetUris = targetCache.getAllUris();
         bestSolutionNode = null;
         classifiers = null;
-        iterationNr = 0;
     }
 
     @Override
@@ -101,15 +102,9 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-        LinkSpecification ls = mlModel.getLinkSpecification();
-        return getPredictions(ls, source, target);
-    }
-
-    @Override
     protected boolean supports(MLImplementationType mlType) {
-        return mlType == MLImplementationType.SUPERVISED_BATCH || 
-                mlType == MLImplementationType.UNSUPERVISED    || 
+        return mlType == MLImplementationType.SUPERVISED_BATCH ||
+                mlType == MLImplementationType.UNSUPERVISED    ||
                 mlType == MLImplementationType.SUPERVISED_ACTIVE;
     }
 
@@ -146,8 +141,11 @@ public class WombatSimple extends AWombat {
         int i = 0;
         Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
         while(itr.hasNext() && i < size) {
-            highestEntropyLinks.add(itr.next());
-            i++;
+            LinkEntropy next = itr.next();
+            if (!trainingData.contains(next.getSourceUri(), next.getTargetUri())) {
+                highestEntropyLinks.add(next);
+                i++;
+            }
         }
         AMapping result = MappingFactory.createDefaultMapping();
         for(LinkEntropy l: highestEntropyLinks){
@@ -162,39 +160,34 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-        this.isUnsupervised = false;
+    protected MLResults activeLearn(AMapping oracleMapping) {
         trainingData = MappingOperations.union(trainingData, oracleMapping);
-        updateScores(refinementTreeRoot);
-        bestSolutionNode = findBestSolution();
-        String bestMetricExpr = bestSolutionNode.getMetricExpression();
-        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
-        AMapping bestMapping = bestSolutionNode.getMapping();
-        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getFMeasure();
-        return new MLResults(bestLS, bestMapping, bestFMeasure, null);
+        boolean hasPositiveExamples = trainingData.getMap().entrySet().stream()
+                .flatMap(e -> e.getValue().values().stream())
+                .anyMatch(x -> x == 1);
+        if (hasPositiveExamples) {
+            updateScores(refinementTreeRoot);
+            isUnsupervised = false;
+            bestSolutionNode = findBestSolution();
+        }
+        return learn();
     }
 
 
-
     /**
-     * update precision, recall and F-Measure of the refinement tree r
+     * update F-Measure of the refinement tree r
      * based on either training data or PFM
-     *  
+     *
      * @param r refinement tree
      */
     protected void updateScores(Tree<RefinementNode> r) {
         if (r.getchildren() == null || r.getchildren().size() == 0) {
             r.getValue().setfMeasure(fMeasure(r.getValue().getMapping()));
-            r.getValue().setPrecision(precision(r.getValue().getMapping()));
-            r.getValue().setRecall(recall(r.getValue().getMapping()));
             return;
         }
         for (Tree<RefinementNode> child : r.getchildren()) {
             if (child.getValue().getFMeasure() >= 0) {
                 r.getValue().setfMeasure(fMeasure(r.getValue().getMapping()));
-                r.getValue().setPrecision(precision(r.getValue().getMapping()));
-                r.getValue().setRecall(recall(r.getValue().getMapping()));
                 updateScores(child);
             }
         }
@@ -207,28 +200,24 @@ public class WombatSimple extends AWombat {
     public RefinementNode findBestSolution() {
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
-        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight() );
+        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot);
         logger.debug("Most promising node: " + mostPromisingNode.getValue());
-        iterationNr++;
+        int i = 1;
         while ((mostPromisingNode.getValue().getFMeasure()) < getMaxFitnessThreshold()
                 && refinementTreeRoot.size() <= getMaxRefinmentTreeSize()
-                && iterationNr <= getMaxIterationNumber()) {
-            iterationNr++;
-            mostPromisingNode = expandNode(mostPromisingNode);
-            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight());
+                && i <= getMaxIterationNumber()) {
+            expandNode(mostPromisingNode);
+            mostPromisingNode = getMostPromisingNode(refinementTreeRoot);
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
             logger.debug("Most promising node: " + mostPromisingNode.getValue());
+            i++;
         }
-        RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
+        RefinementNode bestSolution = getBestNode(refinementTreeRoot).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);
         return bestSolution;
     }
-
-
-
-
 
 
 
@@ -278,10 +267,9 @@ public class WombatSimple extends AWombat {
      *
      * @param node
      *         Refinement node to be expanded
-     * @return The input tree node after expansion
      * @author sherif
      */
-    private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
+    private void expandNode(Tree<RefinementNode> node) {
         AMapping map = MappingFactory.createDefaultMapping();
         for (ExtendedClassifier c : classifiers) {
             for (LogicOperator op : LogicOperator.values()) {
@@ -302,7 +290,6 @@ public class WombatSimple extends AWombat {
         if (isVerbose()) {
             refinementTreeRoot.print();
         }
-        return node;
     }
 
 

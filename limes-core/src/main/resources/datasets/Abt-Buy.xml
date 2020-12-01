@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>abt</ID>
-		<ENDPOINT>src/main/resources/datasets/Abt-Buy/Abt.csv</ENDPOINT>
+		<ENDPOINT>datasets/Abt-Buy/Abt.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -19,7 +19,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>buy</ID>
-		<ENDPOINT>src/main/resources/datasets/Abt-Buy/Buy.csv</ENDPOINT>
+		<ENDPOINT>datasets/Abt-Buy/Buy.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

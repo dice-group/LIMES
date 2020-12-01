@@ -1,8 +1,10 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
+import org.aksw.limes.core.exceptions.NullIndexerException;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -19,7 +21,15 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
@@ -30,7 +40,6 @@ import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
@@ -84,8 +93,16 @@ public class MeasureFactory {
     public static final String QGRAMS = "qgrams";
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
+    public static final String DOUBLEMETA = "doublemeta";
+    public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
-
+    public static final String META = "meta";
+    public static final String NYSIIS = "nysiis";
+    public static final String CAVERPHONE1 = "caverphone1";
+    public static final String CAVERPHONE2 = "caverphone2";
+    public static final String REFINEDSOUNDEX = "refinedsoundex";
+    public static final String MATCHRATING = "matchrating";
+    public static final String DAITCHMOKOTOFF = "daitchmokotoff";
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
     public static final String MANHATTAN = "manhattan";
@@ -108,7 +125,7 @@ public class MeasureFactory {
     public static final String GEO_FRECHET = "geo_frechet";
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
-    public static final String GEO_NAIVE_SURJECTION = "geo_surjection";
+    public static final String GEO_SURJECTION = "geo_surjection";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
 
     // Temporal measures
@@ -144,6 +161,11 @@ public class MeasureFactory {
 
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
+    // Semantic edge-counting measures
+    public static final String SHORTEST_PATH = "shortest_path";
+    public static final String LCH = "lch";
+    public static final String LI = "li";
+    public static final String WUPALMER = "wupalmer";
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
@@ -182,7 +204,6 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-
         if (measure.startsWith(QGRAMS)) {
             return MeasureType.QGRAMS;
         }
@@ -191,6 +212,33 @@ public class MeasureFactory {
         }
         if (measure.startsWith(SOUNDEX)) {
             return MeasureType.SOUNDEX;
+        }
+        if (measure.startsWith(DOUBLEMETA)) {
+            return MeasureType.DOUBLEMETA;
+        }
+        if (measure.startsWith(KOELN)) {
+            return MeasureType.KOELN;
+        }
+        if (measure.startsWith(META)) {
+            return MeasureType.META;
+        }
+        if (measure.startsWith(REFINEDSOUNDEX)) {
+            return MeasureType.REFINEDSOUNDEX;
+        }
+        if (measure.startsWith(NYSIIS)) {
+            return MeasureType.NYSIIS;
+        }
+        if (measure.startsWith(MATCHRATING)) {
+            return MeasureType.MATCHRATING;
+        }
+        if (measure.startsWith(CAVERPHONE1)) {
+            return MeasureType.CAVERPHONE1;
+        }
+        if (measure.startsWith(CAVERPHONE2)) {
+            return MeasureType.CAVERPHONE2;
+        }
+        if (measure.startsWith(DAITCHMOKOTOFF)) {
+            return MeasureType.DAITCHMOKOTOFF;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
@@ -255,7 +303,7 @@ public class MeasureFactory {
         if (measure.startsWith(GEO_SUM_OF_MIN)) {
             return MeasureType.GEO_SUM_OF_MIN;
         }
-        if (measure.startsWith(GEO_NAIVE_SURJECTION)) {
+        if (measure.startsWith(GEO_SURJECTION)) {
             return MeasureType.GEO_NAIVE_SURJECTION;
         }
         if (measure.startsWith(GEO_FAIR_SURJECTION)) {
@@ -350,6 +398,20 @@ public class MeasureFactory {
         if (measure.startsWith(SET_JACCARD)) {
             return MeasureType.SET_JACCARD;
         }
+
+        ////////////////////////////////////////////////////
+        if (measure.startsWith(SHORTEST_PATH)) {
+            return MeasureType.SHORTEST_PATH;
+        }
+        if (measure.startsWith(LCH)) {
+            return MeasureType.LCH;
+        }
+        if (measure.startsWith(LI)) {
+            return MeasureType.LI;
+        }
+        if (measure.startsWith(WUPALMER)) {
+            return MeasureType.WUPALMER;
+        }
         throw new InvalidMeasureException(measure);
     }
 
@@ -388,6 +450,10 @@ public class MeasureFactory {
             return new RatcliffObershelpMeasure();
         case SOUNDEX:
             return new SoundexMeasure();
+        case DOUBLEMETA:
+            return new DoubleMetaphoneMeasure();
+        case KOELN:
+            return new KoelnPhoneticMeasure();
         case TRIGRAM:
             return new TrigramMeasure();
         ////////////////////////////////////////////
@@ -493,10 +559,42 @@ public class MeasureFactory {
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMeasure();
+
+        ///////////////////////
+        case SHORTEST_PATH:
+            AIndex IndexerSP = createIndexer();
+            if (IndexerSP == null) {
+                throw new NullIndexerException("Cannot initialize " + SHORTEST_PATH + ". Index instance is null.");
+            }
+            return new ShortestPathMeasure(IndexerSP);
+        case LCH:
+            AIndex IndexerLCH = createIndexer();
+            if (IndexerLCH == null) {
+                throw new NullIndexerException("Cannot initialize " + LCH + ". Index instance is null.");
+            }
+            return new LCHMeasure(IndexerLCH);
+        case LI:
+            AIndex IndexerLi = createIndexer();
+            if (IndexerLi == null) {
+                throw new NullIndexerException("Cannot initialize " + LI + ". Index instance is null.");
+            }
+            return new LiMeasure(IndexerLi);
+        case WUPALMER:
+            AIndex IndexerWP = createIndexer();
+            if (IndexerWP == null) {
+                throw new NullIndexerException("Cannot initialize " + WUPALMER + ". Index instance is null.");
+            }
+            return new WuPalmerMeasure(IndexerWP);
         default:
             throw new InvalidMeasureException(type.toString());
         }
 
+    }
+
+    public static AIndex createIndexer() {
+        AIndex Indexer = new MemoryIndex();
+        Indexer.preIndex();
+        return Indexer;
     }
 
 }

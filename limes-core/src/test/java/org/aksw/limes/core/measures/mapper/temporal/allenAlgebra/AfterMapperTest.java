@@ -65,9 +65,8 @@ public class AfterMapperTest {
         source.addTriple("S12", "beginsAtDateTime", "2015-05-20T08:31:04+02:00");
         source.addTriple("S12", "endsAtDateTime", "2015-05-20T08:45:04+02:00");
 
-        //target = source;
-        
-        
+        // target = source;
+
         target.addTriple("S1", "b", "2015-05-20T08:21:04+02:00");
         target.addTriple("S1", "e", "2015-05-20T08:22:04+02:00");
 
@@ -130,8 +129,7 @@ public class AfterMapperTest {
     @Test
     public void simpleLS() {
         System.out.println("simpleLS");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -142,8 +140,7 @@ public class AfterMapperTest {
     @Test
     public void similarity() {
         System.out.println("similarity");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -153,8 +150,7 @@ public class AfterMapperTest {
         for (Instance s : source.getAllInstances()) {
             for (Instance t : target.getAllInstances()) {
                 AfterMeasure measure = new AfterMeasure();
-                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime",
-                        "b|e");
+                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime", "b|e");
                 if (sim != 0)
                     m2.add(s.getUri(), t.getUri(), sim);
             }
@@ -165,15 +161,13 @@ public class AfterMapperTest {
     @Test
     public void reverse() {
         System.out.println("reverse");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
         System.out.println(m);
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        LinkSpecification ls2 = new LinkSpecification(
-                "tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        LinkSpecification ls2 = new LinkSpecification("tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         AMapping m2 = e.execute(ls2, p);
         AMapping m3 = MappingFactory.createDefaultMapping();
         for (String s : m2.getMap().keySet()) {

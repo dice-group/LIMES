@@ -1,3 +1,4 @@
+
 package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 import java.math.BigDecimal;
@@ -7,8 +8,8 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -188,25 +189,27 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * String similarity measures.
      */
     private void fillOperationSet() {
-    	ArrayList<String> ops = new ArrayList<String>();
-    	ops.add(MeasureFactory.GEO_CENTROID_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_FAST_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_FAIR_SURJECTION);
-    	ops.add(MeasureFactory.GEO_FRECHET);
-    	ops.add(MeasureFactory.GEO_GREAT_ELLIPTIC);
-    	ops.add(MeasureFactory.GEO_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_LINK);
-    	ops.add(MeasureFactory.GEO_MAX);
-    	ops.add(MeasureFactory.GEO_MEAN);
-    	ops.add(MeasureFactory.GEO_MIN);
-    	ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_NAIVE_SURJECTION);
-    	ops.add(MeasureFactory.GEO_ORTHODROMIC);
-    	ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_SUM_OF_MIN);
-    	ops.add(MeasureFactory.GEO_SYMMETRIC_HAUSDORFF);    	
-    	allowedOperations.addAll(ops);
+        ArrayList<String> ops = new ArrayList<String>();
+        ops.add(MeasureFactory.GEO_CENTROID_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_FAST_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_FAIR_SURJECTION);
+        ops.add(MeasureFactory.GEO_FRECHET);
+        ops.add(MeasureFactory.GEO_GREAT_ELLIPTIC);
+        ops.add(MeasureFactory.GEO_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_LINK);
+        ops.add(MeasureFactory.GEO_MAX);
+        ops.add(MeasureFactory.GEO_MEAN);
+        ops.add(MeasureFactory.GEO_MIN);
+        ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
+
+        ops.add(MeasureFactory.GEO_SURJECTION);
+        ops.add(MeasureFactory.GEO_SURJECTION);
+        ops.add(MeasureFactory.GEO_ORTHODROMIC);
+        ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_SUM_OF_MIN);
+        ops.add(MeasureFactory.GEO_SYMMETRIC_HAUSDORFF);        
+        allowedOperations.addAll(ops);
     }
 
     @Override
@@ -269,6 +272,6 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * @param operationSet
      */
     public void setAllowedOperations(Set<String> operationSet) {
-    	this.allowedOperations = operationSet;
+        this.allowedOperations = operationSet;
     }
 }

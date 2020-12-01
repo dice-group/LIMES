@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
@@ -25,7 +27,7 @@ public class RDFConfigurationReaderTest {
     
     private static final String SYSTEM_DIR = System.getProperty("user.dir");
     Map<String, String> prefixes;
-    Map<String, Map<String, String>> functions;
+    LinkedHashMap<String, Map<String, String>> functions;
     KBInfo sourceInfo, targetInfo;
     Configuration testConf;
 
@@ -37,13 +39,11 @@ public class RDFConfigurationReaderTest {
         prefixes.put("geom", "http://geovocab.org/geometry#");
         prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         prefixes.put("limes", "http://limes.sf.net/ontology/");
-        prefixes = Collections.unmodifiableMap(prefixes);
         
-        functions = new HashMap<>();
-        HashMap<String, String> f = new HashMap<>();
+        functions = new LinkedHashMap<>();
+        Map<String, String> f = new LinkedHashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
-        functions = Collections.unmodifiableMap(functions);
         
         sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
@@ -53,7 +53,7 @@ public class RDFConfigurationReaderTest {
                 new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?x a lgdo:RelayBox")),       //ArrayList<String> restrictions
-                functions,                                                        //Map<String, Map<String, String>> functions
+                functions,                                                        //LinkedHashMap<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
                 "sparql",                                                         //String type
@@ -69,7 +69,7 @@ public class RDFConfigurationReaderTest {
                 new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?y a lgdo:RelayBox")),       //ArrayList<String> restrictions
-                functions,                                                        //Map<String, Map<String, String>> functions
+                functions,                                                        //LinkedHashMap<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
                 "sparql",                                                         //String type
@@ -121,6 +121,8 @@ public class RDFConfigurationReaderTest {
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
         testConf.setOutputFormat("TAB");
+        testConf.setOptimizationTime(1000);
+        testConf.setExpectedSelectivity(0.8);
 
 //        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
         String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
@@ -142,5 +144,37 @@ public class RDFConfigurationReaderTest {
         Configuration fileConf = c.read();       
         
         assertTrue(testConf.equals(fileConf));
+    }
+    
+    @Test
+    public void test1() {
+        //Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
+        RDFConfigurationReader reader = new RDFConfigurationReader(filename);
+        Configuration config = reader.read();
+        
+        Set<String> parameters = config.getConfigurationParametersNames();
+        assertTrue(parameters.contains("optimizationTime"));
+        assertTrue(parameters.contains("expectedSelectivity"));
+        
+        assertTrue(config.getExpectedSelectivity() == 0.8);
+        assertTrue(config.getOptimizationTime() == 1000);
+        
+        
+        
+    }
+    
+    @Test
+    public void test2() {
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.ttl").getPath();
+        RDFConfigurationReader reader = new RDFConfigurationReader(filename);
+        Configuration config = reader.read();
+        
+        
+        assertTrue(config.getExpectedSelectivity() == 1.0);
+        assertTrue(config.getOptimizationTime() == 0);
+        
+        
+        
     }
 }

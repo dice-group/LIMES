@@ -21,7 +21,7 @@ public class SerializerFactory {
             return new CSVSerializer();
         if (name.toLowerCase().trim().startsWith("ttl") || name.toLowerCase().trim().startsWith("turtle"))
             return new TTLSerializer();
-        if (name.toLowerCase().trim().startsWith("nt") || name.toLowerCase().trim().startsWith("turtle"))
+        if (name.toLowerCase().trim().startsWith("nt") || name.toLowerCase().trim().startsWith("n3"))
             return new NtSerializer();
         else {
             logger.info("Serializer with name " + name + " not found. Using .nt as default format.");

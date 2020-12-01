@@ -12,7 +12,6 @@ import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -80,25 +79,29 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
         int counter = 0;
         ResultSet results = qe.execSelect();
         //write
-        String uri, propertyLabel, rawValue, value;
+        String uri, value;
         while (results.hasNext()) {
             QuerySolution soln = results.nextSolution();
             // process query here
             {
                 try {
-                    //first get uri
                     uri = soln.get(kb.getVar().substring(1)).toString();
-                    //now get (p,o) pairs for this s
-                    for (int i = 0; i < kb.getProperties().size(); i++) {
-                        propertyLabel = kb.getProperties().get(i);
+                    int i = 1;
+                    for (String propertyLabel : kb.getProperties()) {
                         if (soln.contains("v" + i)) {
-                            rawValue = soln.get("v" + i).toString();
-                            //remove localization information, e.g. @en
-                            for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                value = Preprocessor.process(rawValue, kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                cache.addTriple(uri, propertyDub, value);
+                            value = soln.get("v" + i).toString();
+                            cache.addTriple(uri, propertyLabel, value);
+                        }
+                        i++;
+                    }
+                    if(kb.getOptionalProperties() != null){
+                        for (String propertyLabel : kb.getOptionalProperties()) {
+                            if (soln.contains("v" + i)) {
+                                value = soln.get("v" + i).toString();
+                                cache.addTriple(uri, propertyLabel, value);
                             }
                         }
+                        i++;
                     }
                 } catch (Exception e) {
                     logger.warn("Error while processing: " + soln.toString());

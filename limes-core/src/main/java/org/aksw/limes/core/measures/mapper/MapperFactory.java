@@ -1,9 +1,20 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.measures.mapper.phonetic.Caverphone1Mapper;
+import org.aksw.limes.core.measures.mapper.phonetic.Caverphone2Mapper;
+import org.aksw.limes.core.measures.mapper.phonetic.DaitchMokotoffMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.DoubleMetaPhoneMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.KoelnPhoneticMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.MatchRatingMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.MetaPhoneMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.NysiisMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.RefinedSoundexMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
+import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
@@ -12,7 +23,6 @@ import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
@@ -69,10 +79,11 @@ public class MapperFactory {
         case JARO:
             return new JaroMapper();
         case QGRAMS:
+            // @todo this is a hotfix, remove it in the future
+        case TRIGRAM:
             return new FastNGramMapper();
         case COSINE:
         case OVERLAP:
-        case TRIGRAM:
         case JACCARD:
             return new PPJoinPlusPlus();
         case LEVENSHTEIN:
@@ -81,6 +92,24 @@ public class MapperFactory {
             return new ExactMatchMapper();
         case SOUNDEX:
             return new SoundexMapper();
+        case REFINEDSOUNDEX:
+            return new RefinedSoundexMapper();
+        case DOUBLEMETA:
+            return new DoubleMetaPhoneMapper();
+        case META:
+            return new MetaPhoneMapper();
+        case CAVERPHONE1:
+            return new Caverphone1Mapper();
+        case CAVERPHONE2:
+            return new Caverphone2Mapper();
+        case KOELN:
+            return new KoelnPhoneticMapper();
+        case DAITCHMOKOTOFF:
+            return new DaitchMokotoffMapper();
+        case MATCHRATING:
+            return new MatchRatingMapper();
+        case NYSIIS:
+            return new NysiisMapper();
         case MONGEELKAN:
             return new MongeElkanMapper();
         case RATCLIFF:
@@ -92,7 +121,8 @@ public class MapperFactory {
             return new HR3Mapper();
         case GEO_ORTHODROMIC:
         case GEO_GREAT_ELLIPTIC:
-            ///////////////////////
+            return new HR3Mapper();
+        ///////////////////////
         case GEO_CENTROID_INDEXED_HAUSDORFF:
         case GEO_FAST_HAUSDORFF:
         case GEO_HAUSDORFF:
@@ -174,6 +204,15 @@ public class MapperFactory {
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMapper();
+        ///////////////////////
+        case SHORTEST_PATH:
+            return new EdgeCountingSemanticMapper();
+        case LCH:
+            return new EdgeCountingSemanticMapper();
+        case LI:
+            return new EdgeCountingSemanticMapper();
+        case WUPALMER:
+            return new EdgeCountingSemanticMapper();
         default:
             throw new InvalidMeasureException(type.toString());
         }

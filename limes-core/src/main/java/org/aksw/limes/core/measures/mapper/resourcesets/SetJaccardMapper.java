@@ -295,4 +295,5 @@ public class SetJaccardMapper extends AMapper {
     public String getName() {
         return "set_jaccard";
     }
+
 }

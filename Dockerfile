@@ -1,13 +1,13 @@
 ########
 ## BUILD
 # build first using maven
-FROM maven:3.3.9-jdk-8 as builder
+FROM maven:3.6.2-jdk-12 as builder
 # set workdir
 WORKDIR /limes
 # copy files
 ADD . /limes
 WORKDIR /limes/limes-core
-RUN mvn clean package shade:shade
+RUN mvn clean package shade:shade -Dmaven.test.skip=true
 # do some magic to get the right jar file to copy
 RUN mvn com.smartcodeltd:release-candidate-maven-plugin:LATEST:version \
 -DoutputTemplate="PROJECT_VERSION={{ version }}" \
@@ -18,7 +18,7 @@ cp -p ./target/limes-core-${PROJECT_VERSION}.jar /limes/limes.jar
 ##########
 ## RELEASE
 # then run in a lighter jdk base
-FROM openjdk:8-jdk
+FROM openjdk:12.0.2-jdk
 # set workdir
 WORKDIR /limes
 # copy jar from build step

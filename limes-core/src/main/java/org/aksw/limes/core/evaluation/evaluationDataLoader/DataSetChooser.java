@@ -10,6 +10,7 @@ import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -679,6 +680,7 @@ public class DataSetChooser {
                 (String) param.get(MapKey.CONFIG_FILE)));
         param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
         param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
+        
         param.put(MapKey.REFERENCE_MAPPING,
                 OracleFactory
                         .getOracle((String) /* param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
@@ -767,8 +769,9 @@ public class DataSetChooser {
     public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;
         AMapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
+        
         for (String sk : original.getMap().keySet()) {
-            if (sC.containsUri(sk)) {
+            if (sC.getAllUris().contains(sk)) {
                 for (String tk : original.getMap().get(sk).keySet()) {
                     if (tC.containsUri(tk)) {
                         fixed.add(sk, tk, original.getConfidence(sk, tk));
@@ -784,16 +787,6 @@ public class DataSetChooser {
         return fixed;
     }
 
-    @Test
-    public void testAll() {
-        try {
-            for (DataSets ds : DataSets.values())
-                getData(ds);
-        } catch (Exception e) {
-            assertTrue(false);
-        }
-        assertTrue(true);
-    }
 
     /**
      * Enumeration of the Hashmap keys for the evaluation datasets.
