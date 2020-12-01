@@ -116,9 +116,9 @@ public class DataSetChooser {
      * @param a
      *            DataSets enum
      * @return HashMap
-     *         <table summary="This table shows the list of information required to load the dataset which are stored in this hash map as a key that represents
-     *         the information title and the value of such item">
-     *         <caption>Paths and files required to load a dataset</caption>
+     *         <table>
+     *             <caption>This table shows the list of information required to load the dataset which are stored in this hash map as a key that represents
+     *         the information title and the value of such item</caption>
      *         <tr>
      *         <th>String key</th>
      *         <th>Object data</th>

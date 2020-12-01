@@ -12,14 +12,16 @@ import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;
 import org.junit.Test;
 
 import weka.core.Instances;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Tests COALA functionality.
  * @author Klaus Lyko
  *
  */
 public class CoalaTest extends MLAlgorithmTest {
-	
+
+    private static final Logger logger = LoggerFactory.getLogger(CoalaTest.class);
 //	@Test
 //	public void testComputeASimilariy() {
 //		Clustering cluster = new Clustering(this.extendedSourceCache, this.extendedTargetCache, pm);
@@ -30,10 +32,10 @@ public class CoalaTest extends MLAlgorithmTest {
 //		SoundexMeasure soundex = new SoundexMeasure();
 //		
 //		
-//		System.out.println("i1-i4(name) = " + cluster.getSimilarity(soundex, pair, t));
+//		logger.info("{}","i1-i4(name) = " + cluster.getSimilarity(soundex, pair, t));
 //		
 //		PairSimilar<String> pair2 = new PairSimilar<String>("surname", "surname");
-//		System.out.println("i1-i4(surname) = " + cluster.getSimilarity(cosine, pair2, t) );
+//		logger.info("{}","i1-i4(surname) = " + cluster.getSimilarity(cosine, pair2, t) );
 //		
 //	}
 	
@@ -57,7 +59,7 @@ public class CoalaTest extends MLAlgorithmTest {
 		
 		Instances inst = cluster.computeSimilaritySpace(candidates);
 		for(int i=0; i<inst.size(); i++) {
-			System.out.println(inst.get(i));
+			logger.info("{}",inst.get(i));
 		}
 		// all triples (instances) computed
 		assert(inst.size() == candidates.size());

@@ -1,25 +1,22 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PreprocessorTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(PreprocessorTest.class);
 
 	public HybridCache cache;
 	public KBInfo kbInfo;
@@ -141,7 +138,7 @@ public class PreprocessorTest {
 	public void testProcess(){
 		ACache processedCache = Preprocessor.applyFunctionsToCache(cache, functions, true);
 		assertTrue(processedCache != cache);
-		System.out.println(processedCache);
+		logger.info("{}",processedCache);
 
 		Iterator<String> i1LabelIterator = processedCache.getInstance(TEST_INSTANCE + "1").getProperty(PROP_RENAMED_LABEL).iterator();
 		Iterator<String> i2LabelIterator = processedCache.getInstance(TEST_INSTANCE + "2").getProperty(PROP_RENAMED_LABEL).iterator();

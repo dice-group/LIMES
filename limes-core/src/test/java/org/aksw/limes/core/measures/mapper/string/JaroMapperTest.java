@@ -78,15 +78,15 @@ public class JaroMapperTest extends JaroMapper {
         long begin = System.currentTimeMillis();
         AMapping m1 = bruteForce(sourceMap, targetMap, threshold);
         long end = System.currentTimeMillis();
-        System.out.println("Brute force: " + (end - begin));
-        System.out.println("Mapping size : " + (m1.getNumberofMappings()));
+        logger.info("{}","Brute force: " + (end - begin));
+        logger.info("{}","Mapping size : " + (m1.getNumberofMappings()));
 
         begin = System.currentTimeMillis();
         AMapping m2 = run(sourceMap, targetMap, threshold);
         end = System.currentTimeMillis();
-        System.out.println("Approach: " + (end - begin));
-        System.out.println("Mapping size : " + (m2.getNumberofMappings()));
-        System.out.println("Mapping size : " + (MappingOperations.difference(m1, m2)));
+        logger.info("{}","Approach: " + (end - begin));
+        logger.info("{}","Mapping size : " + (m2.getNumberofMappings()));
+        logger.info("{}","Mapping size : " + (MappingOperations.difference(m1, m2)));
     }*/
     
     private void deduplicationTest(JaroMapper jm, int sourceSize, double threshold) {
@@ -95,31 +95,31 @@ public class JaroMapperTest extends JaroMapper {
         long begin = System.currentTimeMillis();
         // Mapping m1 = bruteForce(sourceMap, sourceMap, threshold);
         long end = System.currentTimeMillis();
-        // System.out.println("Brute force: " + (end - begin));
-        // System.out.println("Mapping size : " + (m1.getNumberofMappings()));
+        // logger.info("{}","Brute force: " + (end - begin));
+        // logger.info("{}","Mapping size : " + (m1.getNumberofMappings()));
 
         begin = System.currentTimeMillis();
         AMapping m2 = jm.runLenghtOnly(sourceMap, sourceMap, threshold);
         end = System.currentTimeMillis();
-        System.out.println("Length-Only: " + (end - begin));
-        System.out.println("Mapping size : " + (m2.getNumberofMappings()));
-        // System.out.println("Mapping size : " + (SetOperations.difference(m1,
+        logger.info("{}","Length-Only: " + (end - begin));
+        logger.info("{}","Mapping size : " + (m2.getNumberofMappings()));
+        // logger.info("{}","Mapping size : " + (SetOperations.difference(m1,
         // m2)));
 
         begin = System.currentTimeMillis();
         m2 = jm.runWithoutPrefixFilter(sourceMap, sourceMap, threshold);
         end = System.currentTimeMillis();
-        System.out.println("Without Prefix Filtering: " + (end - begin));
-        System.out.println("Mapping size : " + (m2.getNumberofMappings()));
-        // System.out.println("Mapping size : " + (SetOperations.difference(m1,
+        logger.info("{}","Without Prefix Filtering: " + (end - begin));
+        logger.info("{}","Mapping size : " + (m2.getNumberofMappings()));
+        // logger.info("{}","Mapping size : " + (SetOperations.difference(m1,
         // m2)));
 
         begin = System.currentTimeMillis();
 //	Mapping m3 = jm.run(sourceMap, sourceMap, threshold);
         end = System.currentTimeMillis();
-        System.out.println("Full approach: " + (end - begin));
-        System.out.println("Mapping size : " + (m2.getNumberofMappings()));
-        // System.out.println("Mapping size : " + (SetOperations.difference(m1,
+        logger.info("{}","Full approach: " + (end - begin));
+        logger.info("{}","Mapping size : " + (m2.getNumberofMappings()));
+        // logger.info("{}","Mapping size : " + (SetOperations.difference(m1,
         // m3)));
     }
 

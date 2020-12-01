@@ -2,11 +2,14 @@ package org.aksw.limes.core.io.ls;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class LinkSpecificationTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(LinkSpecificationTest.class);
 
     @Test
     public void testLS() {
@@ -19,7 +22,7 @@ public class LinkSpecificationTest {
                 + "euclidean(x.price,y.price)|0.8993)|0.5905)",
                 0.6929);
         
-        System.out.println(ls.toStringPretty());
+        logger.info("{}",ls.toStringPretty());
 
     }
 

@@ -14,7 +14,8 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
@@ -22,6 +23,8 @@ import org.junit.Test;
  *
  */
 public class EagleTest extends MLAlgorithmTest{
+
+    private static final Logger logger = LoggerFactory.getLogger(EagleTest.class);
 
     @Test
     public void testUnsupervised() throws UnsupportedMLImplementationException {
@@ -64,11 +67,11 @@ public class EagleTest extends MLAlgorithmTest{
         /* ------ test predict ------ */
         MLResults mlModel = eagleSup.learn(trainingMap);
         AMapping resultMap = eagleSup.predict(sc, tc, mlModel);
-        logger.info("Predicted links:"+resultMap.size());
+        logger.info("{}","Predicted links:"+resultMap.size());
         assert (resultMap.getSize() >= 0);  
         
         AMapping extendedResultMap = eagleSup.predict(extendedSourceCache, extendedTargetCache, mlModel);
-        logger.info("Predicted extended links:"+extendedResultMap.size());
+        logger.info("{}","Predicted extended links:"+extendedResultMap.size());
         
         assert(extendedResultMap.size()>=resultMap.size());
         boolean containAll = true;
@@ -101,16 +104,16 @@ public class EagleTest extends MLAlgorithmTest{
         AMapping newOracle = MappingFactory.createDefaultMapping();
         for(String sKey : toAnnotate.getMap().keySet())
         	for(String tKey : toAnnotate.getMap().get(sKey).keySet()) {
-        		logger.info("Asking Oracle about "+sKey+" - "+tKey+" ("+toAnnotate.getConfidence(sKey, tKey)+")");
+        		logger.info("{}","Asking Oracle about "+sKey+" - "+tKey+" ("+toAnnotate.getConfidence(sKey, tKey)+")");
         		if(trainingMap.contains(sKey, tKey) || extendedTrainingMap.contains(sKey, tKey)) {
         			newOracle.add(sKey, tKey, 1d);
         		} else {
         			newOracle.add(sKey, tKey, -1d);
         		}
         	}
-        logger.info("new Oracle: "+newOracle.size()+": "+newOracle);
+        logger.info("{}","new Oracle: "+newOracle.size()+": "+newOracle);
         MLResults resultMap = eagleSup.activeLearn(newOracle);
-        logger.info("new resultMap: "+resultMap);
+        logger.info("{}","new resultMap: "+resultMap);
         assert (resultMap.getMapping() != null);  
     }
     

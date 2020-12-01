@@ -68,11 +68,13 @@ import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class MeasureFactoryTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
+    private static final Logger logger = LoggerFactory.getLogger(MeasureFactoryTest.class);
 
     @Before
     public void setUp() {
@@ -128,7 +130,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void runtimeApproximation() {
-        System.out.println("runtimeApproximation");
+        logger.info("{}","runtimeApproximation");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getAtomicRuntimeCosts("jaro", 0.5) != 0);
@@ -190,7 +192,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void mappingApproximation() {
-        System.out.println("mappingApproximation");
+        logger.info("{}","mappingApproximation");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getAtomicMappingSizes("jaro", 0.5) != 0);
@@ -252,7 +254,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void measureType() {
-        System.out.println("mappingApproximation");
+        logger.info("{}","mappingApproximation");
 
         try {
             assertTrue(MeasureFactory.getMeasureType("geo_orthodromic") != null);

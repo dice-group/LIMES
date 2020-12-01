@@ -11,9 +11,12 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CSVMappingReaderTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(CSVMappingReaderTest.class);
     AMapping testMap = MappingFactory.createDefaultMapping();
 
     @Before
@@ -90,7 +93,7 @@ public class CSVMappingReaderTest {
                 assertEquals(0, missing.size());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info("{}",e.getMessage());
         }
     }
 

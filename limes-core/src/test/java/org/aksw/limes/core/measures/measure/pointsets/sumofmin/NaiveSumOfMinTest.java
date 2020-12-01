@@ -8,13 +8,15 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class NaiveSumOfMinTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(NaiveSumOfMinTest.class);
     @Test
     public void test() {
 
@@ -57,7 +59,7 @@ public class NaiveSumOfMinTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveSumOfMinMeasure som = new NaiveSumOfMinMeasure();
-        System.out.println(som.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
+        logger.info("{}",som.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }
 

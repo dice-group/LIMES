@@ -7,12 +7,14 @@ import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class LinkFinderTest {
+    private static final Logger logger = LoggerFactory.getLogger(LinkFinderTest.class);
 
     @Test
     public void test() {
@@ -35,7 +37,7 @@ public class LinkFinderTest {
 
         LinkFinder lf = new LinkFinder(A, B);
         for (PairSimilar<Point> p : lf.getlinkPairsList()) {
-            System.out.println(p.a.label + "<-->" + p.b.label);
+            logger.info("{}",p.a.label + "<-->" + p.b.label);
         }
     }
 

@@ -14,11 +14,13 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class ConcurrentMapperTest {
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
+    private static final Logger logger = LoggerFactory.getLogger(ConcurrentMapperTest.class);
     @Before
     public void setUp() {
         source = new MemoryCache();
@@ -155,24 +157,24 @@ public class ConcurrentMapperTest {
 
     @Test
     public void simpleLS() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
         AMapping m2 = e.execute(ls2, p);
-        System.out.println(m2);
+        logger.info("{}",m2);
 
     }
 
     @Test
     public void complexLS() {
-        System.out.println("complexLS");
+        logger.info("{}","complexLS");
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -194,7 +196,7 @@ public class ConcurrentMapperTest {
 
     @Test
     public void complexLS2() {
-        System.out.println("complexLS2");
+        logger.info("{}","complexLS2");
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -202,7 +204,7 @@ public class ConcurrentMapperTest {
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
-        System.out.println(p.getPlans().get(ls.toString()));
+        logger.info("{}",p.getPlans().get(ls.toString()));
 
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
@@ -216,7 +218,7 @@ public class ConcurrentMapperTest {
 
     @Test
     public void complexLS3() {
-        System.out.println("complexLS3");
+        logger.info("{}","complexLS3");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
@@ -226,8 +228,8 @@ public class ConcurrentMapperTest {
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
         AMapping m1 = e.execute(ls1, p);
         AMapping m2 = e.execute(ls2, p);
-        System.out.println(m1);
-        System.out.println(m2);
+        logger.info("{}",m1);
+        logger.info("{}",m2);
 
         LinkSpecification ls = new LinkSpecification(
                 "MINUS(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
@@ -247,7 +249,7 @@ public class ConcurrentMapperTest {
 
     @Test
     public void complexLS4() {
-        System.out.println("complexLS4");
+        logger.info("{}","complexLS4");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
@@ -257,8 +259,8 @@ public class ConcurrentMapperTest {
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
         AMapping m1 = e.execute(ls1, p);
         AMapping m2 = e.execute(ls2, p);
-        System.out.println(m1);
-        System.out.println(m2);
+        logger.info("{}",m1);
+        logger.info("{}",m2);
 
         LinkSpecification ls = new LinkSpecification(
                 "XOR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",

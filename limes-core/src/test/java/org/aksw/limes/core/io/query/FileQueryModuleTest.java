@@ -11,9 +11,11 @@ import java.util.Map;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class FileQueryModuleTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileQueryModuleTest.class);
     @Test
     public void fillCacheTest() {
         HashMap<String, String> prefixes = new HashMap<>();
@@ -46,7 +48,7 @@ public class FileQueryModuleTest {
         assertTrue(cache.size() > 0);
         for(String abs: cache.getAllInstances().get(0).getProperty("dbpo:abstract")){
         	if(abs.contains("@en")){
-        		System.out.println(abs);
+        		logger.info("{}",abs);
         	}
         }
     }

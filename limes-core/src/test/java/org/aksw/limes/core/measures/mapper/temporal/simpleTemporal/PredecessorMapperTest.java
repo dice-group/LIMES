@@ -14,11 +14,13 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class PredecessorMapperTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
+    private static final Logger logger = LoggerFactory.getLogger(PredecessorMapperTest.class);
 
     @Before
     public void setUp() {
@@ -155,24 +157,24 @@ public class PredecessorMapperTest {
 
     @Test
     public void simpleLS() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
         p = new DynamicPlanner(source, target);
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
         AMapping m2 = e.execute(ls2, p);
-        System.out.println(m2);
+        logger.info("{}",m2);
     }
 
     @Test
     public void complexLS() {
-        System.out.println("complexLS");
+        logger.info("{}","complexLS");
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|e)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -194,7 +196,7 @@ public class PredecessorMapperTest {
 
     @Test
     public void complexLS2() {
-        System.out.println("complexLS2");
+        logger.info("{}","complexLS2");
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -202,7 +204,7 @@ public class PredecessorMapperTest {
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
-        System.out.println(p.getPlans().get(ls.toString()));
+        logger.info("{}",p.getPlans().get(ls.toString()));
 
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
@@ -210,9 +212,9 @@ public class PredecessorMapperTest {
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
-        System.out.println(m);
+        logger.info("{}",m);
 
-        System.out.println(mm);
+        logger.info("{}",mm);
 
         assertTrue(!m.equals(mm));
         assertTrue(!mm.equals(mmm));
@@ -221,7 +223,7 @@ public class PredecessorMapperTest {
 
     @Test
     public void complexLS3() {
-        System.out.println("complexLS3");
+        logger.info("{}","complexLS3");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         LinkSpecification ls = new LinkSpecification(
                 "MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
@@ -229,7 +231,7 @@ public class PredecessorMapperTest {
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
-        System.out.println(p.getPlans().get(ls.toString()));
+        logger.info("{}",p.getPlans().get(ls.toString()));
 
         e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
@@ -239,8 +241,8 @@ public class PredecessorMapperTest {
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
-        System.out.println(m);
-        System.out.println(mm);
+        logger.info("{}",m);
+        logger.info("{}",mm);
 
         assertTrue(m.equals(mm));
         assertTrue(mm.equals(mmm));
@@ -248,7 +250,7 @@ public class PredecessorMapperTest {
 
     @Test
     public void complexLS4() {
-        System.out.println("complexLS4");
+        logger.info("{}","complexLS4");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
         
@@ -266,9 +268,9 @@ public class PredecessorMapperTest {
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
-        System.out.println("Dynamic "+m);
-        System.out.println("Canonical "+mm);
-        System.out.println("Helios "+mmm);
+        logger.info("{}","Dynamic "+m);
+        logger.info("{}","Canonical "+mm);
+        logger.info("{}","Helios "+mmm);
 
         
         assertTrue(m.equals(mm));

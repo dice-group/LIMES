@@ -5,12 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class InstructionTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(InstructionTest.class);
     @Test
     public void equals() {
-        System.out.println("Equal");
+        logger.info("{}","Equal");
 
 
         Instruction i = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
@@ -46,7 +48,7 @@ public class InstructionTest {
 
     @Test
     public void Clone() {
-        System.out.println("clone");
+        logger.info("{}","clone");
 
 
         Instruction i = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);

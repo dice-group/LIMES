@@ -12,6 +12,8 @@ import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.MeshEuclid;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Tests all EUCLID algorithm implementations
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
@@ -28,16 +30,17 @@ public class EuclidTest extends MLAlgorithmTest{
 //        };
 //        // for each Euclid sub type
 //        for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
-//        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
+//        	logger.info("{}","Testing unsupervised "+algorithm.getSimpleName());
 //        	testUnsupervised(algorithm);
 //        	
-//        	logger.info("Testing supervised "+algorithm.getSimpleName());
+//        	logger.info("{}","Testing supervised "+algorithm.getSimpleName());
 ////        	testSupervisedBatch(algorithm);
 //        }        
 //	}
 	
 /*-------------------------- unsupervised tests ----------------------------------*/	
-	
+
+    private static final Logger logger = LoggerFactory.getLogger(EuclidTest.class);
 	/**
 	 * Test a certain Euclid implementation. Is unsupervised learning implemented, is it producing actual results?
 	 * @param algorithm
@@ -63,22 +66,21 @@ public class EuclidTest extends MLAlgorithmTest{
         assert(unsupEuclid.getMl().supports(MLImplementationType.UNSUPERVISED));
         try {
 			MLResults result = unsupEuclid.learn(new PseudoFMeasure());
-			
-			logger.info("Test (" + unsupEuclid.getName()+") results:");
-			logger.info("LS:" + result.linkspec.toStringOneLine());
-			logger.info("Mapping size= "  +result.getMapping().size());
-			logger.info("Quality:" + result.quality);
+			logger.info("{}","Test (" + unsupEuclid.getName()+") results:");
+			logger.info("{}","LS:" + result.linkspec.toStringOneLine());
+			logger.info("{}","Mapping size= "  +result.getMapping().size());
+			logger.info("{}","Quality:" + result.quality);
 			
 			for(String key : result.getDetails().keySet()) {
-				logger.info(key+" : "+result.getDetails().get(key));    				
+				logger.info("{}",key+" : "+result.getDetails().get(key));
 			}
 			
 			assert(result.getLinkSpecification().size()>0);
 			assert(result.getMapping().size()>=0);
 			
 			AMapping mapping = unsupEuclid.predict(sc, tc, result);
-			logger.info(mapping);
-			logger.info("result:"+result.getMapping().size()+" predict: "+mapping.size());
+			logger.info("{}",mapping);
+			logger.info("{}","result:"+result.getMapping().size()+" predict: "+mapping.size());
 			if(unsupEuclid.getName().equals(MeshEuclid.ALGORITHM_NAME)) {
 				logger.error("Mesh Euclids predict() method doesn't work properly! Skipping test.");
 			}
@@ -128,19 +130,19 @@ public class EuclidTest extends MLAlgorithmTest{
 			/* Test learning function */
 			mlModel = euclid.learn(trainingMap);
 			
-			logger.info("Test (" + euclid.getName()+") supervised (batch) results:");
-			logger.info("Mapping size= "  +mlModel.getMapping().size());
-			logger.info("Quality:" + mlModel.quality);
+			logger.info("{}","Test (" + euclid.getName()+") supervised (batch) results:");
+			logger.info("{}","Mapping size= "  +mlModel.getMapping().size());
+			logger.info("{}","Quality:" + mlModel.quality);
 			
 			for(String key : mlModel.getDetails().keySet()) {
-				logger.info(key+" : "+mlModel.getDetails().get(key));    				
+				logger.info("{}",key+" : "+mlModel.getDetails().get(key));
 			}
 			
 			/* TEST predict() method on different caches*/
 	        AMapping resultMap = euclid.predict(sc, tc, mlModel);
-	        logger.info("Predicted links:"+resultMap.getSize());	        
+	        logger.info("{}","Predicted links:"+resultMap.getSize());
 	        AMapping extendedResultMap = euclid.predict(extendedSourceCache, extendedTargetCache, mlModel);
-	        logger.info("Predict on extended maps: "+extendedResultMap.size());
+	        logger.info("{}","Predict on extended maps: "+extendedResultMap.size());
 	        
 	        boolean containAll = true;
 	        for(String sUri : resultMap.getMap().keySet())

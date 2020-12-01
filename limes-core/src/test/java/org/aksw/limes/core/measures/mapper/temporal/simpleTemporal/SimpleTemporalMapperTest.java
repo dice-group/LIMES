@@ -7,12 +7,14 @@ import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMe
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class SimpleTemporalMapperTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
+    private static final Logger logger = LoggerFactory.getLogger(SimpleTemporalMapperTest.class);
     @Before
     public void setUp() {
         source = new MemoryCache();
@@ -140,7 +142,7 @@ target.addTriple("S12", "name", "mattttt");
 
     @Test
     public void firstProperty() {
-        System.out.println("firstProperty");
+        logger.info("{}","firstProperty");
         //LinkSpecification ls = new LinkSpecification(
         //        "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
         //        0.5);
@@ -150,7 +152,7 @@ target.addTriple("S12", "name", "mattttt");
         String property2 = "b|m";
         ConcurrentMeasure c = new ConcurrentMeasure();
         double sim = c.getSimilarity(s1, t1, property1, property2);
-        System.out.println(sim);
+        logger.info("{}",sim);
     }
 
 }

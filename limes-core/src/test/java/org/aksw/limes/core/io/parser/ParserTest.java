@@ -107,8 +107,8 @@ public class ParserTest {
     @Test
     public void weih2(){
     	Parser p = new Parser("ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)",0.8);
-    	System.out.println(p.getLeftCoefficient());
-    	System.out.println(p.getRightCoefficient());
+    	logger.info("{}",p.getLeftCoefficient());
+    	logger.info("{}",p.getRightCoefficient());
     }
 
 }

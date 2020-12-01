@@ -8,12 +8,14 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class NaiveFrechetTest {
+    private static final Logger logger = LoggerFactory.getLogger(NaiveFrechetTest.class);
 
     @Test
     public void test() {
@@ -57,7 +59,7 @@ public class NaiveFrechetTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveFrechetMeasure frechet = new NaiveFrechetMeasure();
-        System.out.println(frechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
+        logger.info("{}",frechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }
 

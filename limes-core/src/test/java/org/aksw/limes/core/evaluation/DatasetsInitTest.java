@@ -41,7 +41,7 @@ public class DatasetsInitTest {
         TaskData task = new TaskData();
         try {
             for (String ds : datasetsList) {
-                logger.info(ds);
+                logger.info("{}",ds);
                 EvaluationData c = DataSetChooser.getData(ds);
                 GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
                 //extract training data
@@ -56,7 +56,7 @@ public class DatasetsInitTest {
                 tasks.add(task);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info("{}",e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);

@@ -8,12 +8,14 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class borderModifierTest {
+    private static final Logger logger = LoggerFactory.getLogger(borderModifierTest.class);
 
     @Test
     public void test() {
@@ -62,29 +64,27 @@ public class borderModifierTest {
         maltaLgd.add(maltaLgdPoly1);
 
         // Print Modified Malta
-        System.out.println("Malta in DBpedia before applying InLineMeasurementErrorModifier modifier: "
+        logger.info("{}","Malta in DBpedia before applying InLineMeasurementErrorModifier modifier: "
                 + maltaDbpediaPoly1.points);
         Polygon maltaDbpediapoly1G = new borderModifier().modify(maltaDbpediaPoly1, 2);
-        System.out.println("Malta in DBpedia after applying InLineMeasurementErrorModifier modifier: "
+        logger.info("{}","Malta in DBpedia after applying InLineMeasurementErrorModifier modifier: "
                 + maltaDbpediapoly1G.points);
-        System.out.println();
 
-        System.out.println(
+        logger.info("{}",
                 "Malta in Nuts before applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly1.points);
         Polygon maltaNutsPoly1G = new borderModifier().modify(maltaNutsPoly1, 2);
-        System.out.println(
+        logger.info("{}",
                 "Malta in Nuts after applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly1G.points);
-        System.out.println(
+        logger.info("{}",
                 "Malta in Nuts before applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly2.points);
         Polygon maltaNutsPoly2G = new borderModifier().modify(maltaNutsPoly2, 2);
-        System.out.println(
+        logger.info("{}",
                 "Malta in Nuts after applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly2G.points);
-        System.out.println();
 
-        System.out.println(
+        logger.info("{}",
                 "Malta in LGD before applying InLineMeasurementErrorModifier modifier: " + maltaLgdPoly1.points);
         Polygon maltaLgdPoly1G = new borderModifier().modify(maltaLgdPoly1, 2);
-        System.out.println(
+        logger.info("{}",
                 "Malta in LGD after applying InLineMeasurementErrorModifier modifier: " + maltaLgdPoly1G.points);
 
     }

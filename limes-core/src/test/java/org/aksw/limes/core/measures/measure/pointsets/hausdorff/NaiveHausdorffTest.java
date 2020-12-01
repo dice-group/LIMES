@@ -8,13 +8,15 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class NaiveHausdorffTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(NaiveHausdorffTest.class);
     @Test
     public void test() {
 
@@ -57,7 +59,7 @@ public class NaiveHausdorffTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveHausdorffMeasure hausdorff = new NaiveHausdorffMeasure();
-        System.out.println(hausdorff.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
+        logger.info("{}",hausdorff.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }
 

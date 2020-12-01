@@ -10,12 +10,14 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class CanonicalPlannerTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(CanonicalPlannerTest.class);
     @Test
     public void EmptyPlan() {
-        System.out.println("EmptyPlan");
+        logger.info("{}","EmptyPlan");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification();
@@ -25,7 +27,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void AtomicPlan() {
-        System.out.println("AtomicPlan");
+        logger.info("{}","AtomicPlan");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.8);
@@ -44,7 +46,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexPlanLS() {
-        System.out.println("ComplexPlanLS");
+        logger.info("{}","ComplexPlanLS");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification(
@@ -67,14 +69,14 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexPlanExtendedLS() {
-        System.out.println("ComplexPlanExtendedLS");
+        logger.info("{}","ComplexPlanExtendedLS");
 
         CanonicalPlanner p = new CanonicalPlanner();
         ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
                 "OR(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
                 0.8);
 
-        System.out.println(ls.getFullExpression());
+        logger.info("{}",ls.getFullExpression());
         NestedPlan plan = p.plan(ls);
         assertTrue(plan.isEmpty() == false);
         assertTrue(plan.isAtomic() == false);
@@ -92,7 +94,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void PlanWithWrongOperator() {
-        System.out.println("PlanWithWrongOperator");
+        logger.info("{}","PlanWithWrongOperator");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
@@ -112,12 +114,12 @@ public class CanonicalPlannerTest {
 
     @Test
     public void AtomicEqual() {
-        System.out.println("AtomicEqual");
+        logger.info("{}","AtomicEqual");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
         LinkSpecification ls = new LinkSpecification("cosine(x.label,y.label)", 0.8);
-        System.out.println(ls.isAtomic());
+        logger.info("{}",ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);
 
@@ -130,14 +132,14 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexEqual() {
-        System.out.println("ComplexEqual");
+        logger.info("{}","ComplexEqual");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
         LinkSpecification ls = new LinkSpecification(
                 "OR(cosine(x.description,y.description)|0.3,OR(cosine(x.description,y.description)|0.5,cosine(x.title,y.name)|0.6)|0.7)",
                 0.8);
-        System.out.println(ls.isAtomic());
+        logger.info("{}",ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);
 

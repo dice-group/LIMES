@@ -13,16 +13,16 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.apache.log4j.Logger;
 import org.junit.Before;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Basic test class for ml algorithms. Provides an ad hoc test case.
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  *
  */
 public class MLAlgorithmTest {
-	static Logger logger = Logger.getLogger(MLAlgorithmTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(MLAlgorithmTest.class);
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 

@@ -62,11 +62,11 @@ public class EvaluatorsTest {
                 er.display();
             }
             for (EvaluationRun er : results) {
-                System.out.println(er);
+                logger.info("{}",er);
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info("{}",e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);
@@ -86,10 +86,10 @@ public class EvaluatorsTest {
         List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
         List<EvaluationRun> results =null;
         for (TaskAlgorithm tAlgorithm : algorithms) {
-            System.out.println("testing "+tAlgorithm.getMlAlgorithm().toString());
+            logger.info("{}","testing "+tAlgorithm.getMlAlgorithm().toString());
             if(tAlgorithm.getMlAlgorithm() instanceof SupervisedMLAlgorithm)
                 results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), null, tasks,folds, evaluators, null);
-            System.out.println(results);
+            logger.info("{}",results);
         }
         assertTrue(true);
     }

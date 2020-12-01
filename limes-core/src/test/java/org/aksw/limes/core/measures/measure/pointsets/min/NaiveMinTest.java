@@ -8,13 +8,15 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class NaiveMinTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(NaiveMinTest.class);
     @Test
     public void test() {
 
@@ -57,7 +59,7 @@ public class NaiveMinTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveMinMeasure min = new NaiveMinMeasure();
-        System.out.println(min.run(maltaNuts, maltaDbpedia, 90));
+        logger.info("{}",min.run(maltaNuts, maltaDbpedia, 90));
 
     }
 

@@ -10,9 +10,11 @@ import java.util.Map;
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class EvaluationSerializerTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(EvaluationSerializerTest.class);
     List<EvaluationRun> results = new ArrayList<EvaluationRun>();
     private void init()
     {
@@ -41,7 +43,7 @@ public class EvaluationSerializerTest {
             evaSer.writeToFile(results, "resources/evauationResults.csv");
             evaSer.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info("{}",e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);

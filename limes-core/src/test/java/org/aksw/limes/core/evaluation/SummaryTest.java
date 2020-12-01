@@ -24,9 +24,12 @@ import com.google.common.collect.ImmutableMap;
 import de.vandermeer.asciitable.AT_Cell;
 import de.vandermeer.asciitable.AT_Row;
 import de.vandermeer.asciitable.AsciiTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SummaryTest {
-	public List<EvaluationRun> runs;
+    private static final Logger logger = LoggerFactory.getLogger(SummaryTest.class);
+    public List<EvaluationRun> runs;
 	public static final String algo1 = "algo1";
 	public static final String algo2 = "algo2";
 	public static final String data1 = "data1";
@@ -301,7 +304,7 @@ public class SummaryTest {
 		algos.set(s, usedAlgos);
 		s.setStatisticalTestResults(statisticalTestResults);
 		AsciiTable at = s.statisticalResultsToTable(data1, true);
-		System.out.println(at.render());
+		logger.info("{}",at.render());
 		String[] expectedCells = new String[] { "", ham, fuzzy, crisp, all, allham + "0", allfuzzy + "0",
 				allcrisp + "0", ham, "-", hamfuzzy + "0", hamcrisp + "0", fuzzy, hamfuzzy + "0", "-",
 				fuzzycrisp + "0" };

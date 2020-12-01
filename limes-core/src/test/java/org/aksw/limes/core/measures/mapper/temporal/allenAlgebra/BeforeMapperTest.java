@@ -15,8 +15,13 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BeforeMapperTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(BeforeMapperTest.class);
+
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -107,27 +112,27 @@ public class BeforeMapperTest {
 
     @Test
     public void simpleLS() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
     }
 
     @Test
     public void similarity() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
         AMapping m2 = MappingFactory.createDefaultMapping();
         for (Instance s : source.getAllInstances()) {

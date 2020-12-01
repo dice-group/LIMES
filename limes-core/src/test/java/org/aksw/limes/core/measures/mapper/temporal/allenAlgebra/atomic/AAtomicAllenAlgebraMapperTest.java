@@ -5,9 +5,12 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AAtomicAllenAlgebraMapperTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(AAtomicAllenAlgebraMapperTest.class);
     @Test
     public void test() {
 
@@ -42,9 +45,9 @@ public class AAtomicAllenAlgebraMapperTest {
         
         for(String value: values){
             long epoch = AAtomicAllenAlgebraMapper.getEpoch(value);
-            System.out.println(epoch);
+            logger.info("{}",epoch);
             numbers.add(epoch);
-            System.out.println("-----------------------");
+            logger.info("{}","-----------------------");
         }
         //7200000
         assertTrue(numbers.get(0)-numbers.get(1) == 7200000);

@@ -1,5 +1,8 @@
 package org.aksw.limes.core.util.datetime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +37,8 @@ public enum DateTimeFormat {
     FORMAT8("yyyy-MM"), 
     FORMAT9("yyyy");
 
+    private static final Logger logger = LoggerFactory.getLogger(DateTimeFormat.class);
+
     private String pattern;
 
     DateTimeFormat(String value) {
@@ -58,19 +63,18 @@ public enum DateTimeFormat {
 
         for (DateTimeFormat pat : DateTimeFormat.values()) {
             try {
-                System.out.println("Before: " + date);
+                logger.info("Before: " + date);
                 df = new SimpleDateFormat(pat.getPattern());
                 // exception -> date remains null
                 date = df.parse(timeStamp);
-                System.out.println("After: " + date.toString());
+                logger.info("After: " + date.toString());
                 // no exception -> date gets a value
-                if (date != null)
-                    break;
-            } catch (ParseException e) {
+                break;
+            } catch (ParseException ignored) {
             }
         }
         if (date == null) {
-            System.err.println("Couldn't parse date: " + timeStamp);
+            logger.error("Couldn't parse date: " + timeStamp);
             throw new RuntimeException();
         }
 

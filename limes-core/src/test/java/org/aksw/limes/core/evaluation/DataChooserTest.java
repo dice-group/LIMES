@@ -4,8 +4,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class DataChooserTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataChooserTest.class);
 
     @Test
     public void test() {
@@ -13,7 +16,7 @@ public class DataChooserTest {
         //  
         try {
             for (String ds : datasets) {
-                System.out.println(ds);
+                logger.info("{}",ds);
                 DataSetChooser.getData(ds);
             }
 

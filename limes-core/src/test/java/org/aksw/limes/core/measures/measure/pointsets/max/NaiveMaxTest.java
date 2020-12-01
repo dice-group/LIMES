@@ -8,12 +8,14 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class NaiveMaxTest {
+    private static final Logger logger = LoggerFactory.getLogger(NaiveMaxTest.class);
 
     @Test
     public void test() {
@@ -57,7 +59,7 @@ public class NaiveMaxTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveMaxMeasure max = new NaiveMaxMeasure();
-        System.out.println(max.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
+        logger.info("{}",max.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }
 

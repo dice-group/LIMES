@@ -31,8 +31,10 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class DecisionTreeTest {
+    private static final Logger logger = LoggerFactory.getLogger(DecisionTreeTest.class);
 
 	public DecisionTree goldTreeMapping;
 	public DecisionTree goldTree2;
@@ -98,8 +100,8 @@ public class DecisionTreeTest {
 		sourceCacheField.setAccessible(true);
 		assertEquals("Source caches do not match", this.sourceCache,
 				sourceCacheField.get(((Dragon) this.dtl.getMl()).root));
-		System.out.println(res.getLinkSpecification());
-		System.out.println(
+		logger.info("{}",res.getLinkSpecification());
+		logger.info("{}",
 				"FMeasure: " + new FMeasure().calculate(this.dtl.predict(this.sourceCache, this.targetCache, res),
 						new GoldStandard(this.c.getReferenceMapping())));
 	}
@@ -123,7 +125,7 @@ public class DecisionTreeTest {
 				slice.add(key, full.getMap().get(key));
 			}
 		}
-		System.out.println("got: " + MappingOperations.intersection(slice, full).size() + " wanted: " + sliceSizeWanted
+		logger.info("{}","got: " + MappingOperations.intersection(slice, full).size() + " wanted: " + sliceSizeWanted
 				+ " full: " + full.size());
 		return slice;
 	}

@@ -16,8 +16,10 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class HeliosPlannerTest {
+    private static final Logger logger = LoggerFactory.getLogger(HeliosPlannerTest.class);
 	public ACache source = new MemoryCache();
 	public ACache target = new MemoryCache();
 
@@ -75,7 +77,7 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void EmptyPlan() {
-		System.out.println("EmptyPlan");
+		logger.info("{}","EmptyPlan");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 		LinkSpecification ls = new LinkSpecification();
@@ -85,7 +87,7 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void AtomicPlan() {
-		System.out.println("AtomicPlan");
+		logger.info("{}","AtomicPlan");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 		LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.8);
@@ -104,7 +106,7 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void ComplexPlanLS() {
-		System.out.println("ComplexPlanLS");
+		logger.info("{}","ComplexPlanLS");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 		LinkSpecification ls = new LinkSpecification(
@@ -132,7 +134,7 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void ComplexPlanExtendedLS() {
-		System.out.println("ComplexPlanExtendedLS");
+		logger.info("{}","ComplexPlanExtendedLS");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 		ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
@@ -156,12 +158,12 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void AtomicEqual() {
-		System.out.println("AtomicEqual");
+		logger.info("{}","AtomicEqual");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 
 		LinkSpecification ls = new LinkSpecification("cosine(x.label,y.label)", 0.8);
-		System.out.println(ls.isAtomic());
+		logger.info("{}",ls.isAtomic());
 
 		NestedPlan plan = p.plan(ls);
 
@@ -174,14 +176,14 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void ComplexEqual() {
-		System.out.println("ComplexEqual");
+		logger.info("{}","ComplexEqual");
 
 		HeliosPlanner p = new HeliosPlanner(source, target);
 
 		LinkSpecification ls = new LinkSpecification(
 				"OR(cosine(x.description,y.description)|0.3,OR(cosine(x.description,y.description)|0.5,cosine(x.title,y.name)|0.6)|0.7)",
 				0.8);
-		System.out.println(ls.isAtomic());
+		logger.info("{}",ls.isAtomic());
 
 		NestedPlan plan = p.plan(ls);
 		//////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +223,7 @@ public class HeliosPlannerTest {
 
 	@Test
 	public void filterCosts() {
-		System.out.println("filterCosts");
+		logger.info("{}","filterCosts");
 		HeliosPlanner p = new HeliosPlanner(source, target);
 
 		assertTrue(p.getFilterCosts(null, 500) == 0);

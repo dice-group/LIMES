@@ -15,9 +15,11 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasur
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class OverlapsMapperTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(OverlapsMapperTest.class);
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
@@ -109,27 +111,27 @@ public class OverlapsMapperTest {
 
     @Test
     public void simpleLS() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
     }
 
     @Test
     public void similarity() {
-        System.out.println("simpleLS");
+        logger.info("{}","simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
         AMapping m2 = MappingFactory.createDefaultMapping();
         for (Instance s : source.getAllInstances()) {

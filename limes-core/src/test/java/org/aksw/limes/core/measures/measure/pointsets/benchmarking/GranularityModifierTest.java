@@ -8,12 +8,14 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class GranularityModifierTest {
+    private static final Logger logger = LoggerFactory.getLogger(GranularityModifierTest.class);
 
     @Test
     public void test() {
@@ -61,15 +63,15 @@ public class GranularityModifierTest {
 
         // Print Modified Malta
         Polygon maltaDbpediapoly1G = new GranularityModifier().modify(maltaDbpediaPoly1, 2);
-        System.out.println("Malta in DBpedia after applying granularity modifier: " + maltaDbpediapoly1G.points);
+        logger.info("{}","Malta in DBpedia after applying granularity modifier: " + maltaDbpediapoly1G.points);
 
         Polygon maltaNutsPoly1G = new GranularityModifier().modify(maltaNutsPoly1, 2);
-        System.out.println("Malta in Nuts after applying granularity modifier: " + maltaNutsPoly1G.points);
+        logger.info("{}","Malta in Nuts after applying granularity modifier: " + maltaNutsPoly1G.points);
         Polygon maltaNutsPoly2G = new GranularityModifier().modify(maltaNutsPoly2, 2);
-        System.out.println("Malta in Nuts after applying granularity modifier: " + maltaNutsPoly2G.points);
+        logger.info("{}","Malta in Nuts after applying granularity modifier: " + maltaNutsPoly2G.points);
 
         Polygon maltaLgdPoly1G = new GranularityModifier().modify(maltaLgdPoly1, 2);
-        System.out.println("Malta in LGD after applying granularity modifier: " + maltaLgdPoly1G.points);
+        logger.info("{}","Malta in LGD after applying granularity modifier: " + maltaLgdPoly1G.points);
 
     }
 

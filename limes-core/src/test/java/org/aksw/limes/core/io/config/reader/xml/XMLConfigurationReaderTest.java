@@ -18,7 +18,8 @@ import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -26,6 +27,7 @@ import org.junit.Test;
  */
 public class XMLConfigurationReaderTest {
     
+    private static final Logger logger = LoggerFactory.getLogger(XMLConfigurationReaderTest.class);
     Map<String, String> prefixes = new HashMap<>();
     LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
     ArrayList<String> properties;
@@ -98,7 +100,7 @@ public class XMLConfigurationReaderTest {
 
 //        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
         String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
-        System.out.println(file);
+        logger.info("{}",file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
@@ -117,7 +119,7 @@ public class XMLConfigurationReaderTest {
         targetInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
 
         String file= System.getProperty("user.dir") + "/resources/lgd-lgd-optional-properties.xml";
-        System.out.println(file);
+        logger.info("{}",file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -142,7 +144,7 @@ public class XMLConfigurationReaderTest {
 
 //        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
         String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.xml").getPath();
-        System.out.println(file);
+        logger.info("{}",file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         
@@ -195,7 +197,7 @@ public class XMLConfigurationReaderTest {
         //no selectivity from file -> 1.0
         //
         String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath(); 
-        System.out.println(filename);
+        logger.info("{}",filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
         
@@ -208,7 +210,7 @@ public class XMLConfigurationReaderTest {
     @Test
     public void test2() {
         String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.xml").getPath(); 
-        System.out.println(filename);
+        logger.info("{}",filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
         

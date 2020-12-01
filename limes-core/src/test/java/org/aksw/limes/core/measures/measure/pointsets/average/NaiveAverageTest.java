@@ -8,7 +8,8 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -16,6 +17,7 @@ import org.junit.Test;
  */
 public class NaiveAverageTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(NaiveAverageTest.class);
     @Test
     public void test() {
 
@@ -58,7 +60,7 @@ public class NaiveAverageTest {
         maltaLgd.add(maltaLgdPoly1);
 
         NaiveAverageMeasure avarage = new NaiveAverageMeasure();
-        System.out.println(avarage.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
+        logger.info("{}",avarage.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }
 

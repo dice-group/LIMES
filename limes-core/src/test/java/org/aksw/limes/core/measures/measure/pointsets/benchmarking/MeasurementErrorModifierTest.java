@@ -8,6 +8,8 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -15,6 +17,7 @@ import org.junit.Test;
  */
 public class MeasurementErrorModifierTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(MeasurementErrorModifierTest.class);
     @Test
     public void test() {
 
@@ -63,15 +66,15 @@ public class MeasurementErrorModifierTest {
 
         // Print Modified Malta
         Polygon maltaDbpediapoly1G = new MeasurementErrorModifier().modify(maltaDbpediaPoly1, 2);
-        System.out.println("Malta in DBpedia after applying measurement error modifier: " + maltaDbpediapoly1G.points);
+        logger.info("{}","Malta in DBpedia after applying measurement error modifier: " + maltaDbpediapoly1G.points);
 
         Polygon maltaNutsPoly1G = new MeasurementErrorModifier().modify(maltaNutsPoly1, 2);
-        System.out.println("Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly1G.points);
+        logger.info("{}","Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly1G.points);
         Polygon maltaNutsPoly2G = new MeasurementErrorModifier().modify(maltaNutsPoly2, 2);
-        System.out.println("Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly2G.points);
+        logger.info("{}","Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly2G.points);
 
         Polygon maltaLgdPoly1G = new MeasurementErrorModifier().modify(maltaLgdPoly1, 2);
-        System.out.println("Malta in LGD after applying measurement error modifier: " + maltaLgdPoly1G.points);
+        logger.info("{}","Malta in LGD after applying measurement error modifier: " + maltaLgdPoly1G.points);
     }
 
 }

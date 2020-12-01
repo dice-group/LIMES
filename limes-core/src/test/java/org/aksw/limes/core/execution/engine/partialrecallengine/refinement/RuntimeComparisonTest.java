@@ -17,9 +17,11 @@ import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class RuntimeComparisonTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(RuntimeComparisonTest.class);
     @Test
     public void comparePlans() {
         Plan plan1 = new NestedPlan();
@@ -81,8 +83,8 @@ public class RuntimeComparisonTest {
         assertTrue(sorted.size() == 5);
         
         for(PartialRecallRefinementNode node: sorted){
-            System.out.println("\nLS: "+node.getLinkSpecification().toString());
-            System.out.println("\nRuntime: "+node.getPlan().getRuntimeCost());
+            logger.info("{}","\nLS: "+node.getLinkSpecification().toString());
+            logger.info("{}","\nRuntime: "+node.getPlan().getRuntimeCost());
         }
         
         

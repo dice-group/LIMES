@@ -18,12 +18,14 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class DynamicPlannerTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
+    private static final Logger logger = LoggerFactory.getLogger(DynamicPlannerTest.class);
     @Before
     public void setUp() {
         source = new MemoryCache();
@@ -78,7 +80,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void EmptyPlan() {
-        System.out.println("EmptyPlan");
+        logger.info("{}","EmptyPlan");
 
         AMapping m = MappingFactory.createDefaultMapping();
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -96,7 +98,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void AtomicPlan() {
-        System.out.println("AtomicPlan");
+        logger.info("{}","AtomicPlan");
         AMapping m = MappingFactory.createDefaultMapping();
 
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -119,7 +121,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void ComplexPlanExtendedLS() {
-        System.out.println("ComplexPlanExtendedLS");
+        logger.info("{}","ComplexPlanExtendedLS");
 
         LinkSpecification ls = new LinkSpecification(
                 "OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.7728)|0.5807)",
@@ -134,12 +136,12 @@ public class DynamicPlannerTest {
 
     @Test
     public void AtomicEqual() {
-        System.out.println("AtomicEqual");
+        logger.info("{}","AtomicEqual");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         
         LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
-        System.out.println(ls.isAtomic());
+        logger.info("{}",ls.isAtomic());
         ls = p.normalize(ls);
         ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
         ee.execute(ls, p);
@@ -148,14 +150,14 @@ public class DynamicPlannerTest {
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);
         plan2.addInstruction(run1);
 
-        System.out.println(p.getPlans());
+        logger.info("{}",p.getPlans());
         assertTrue(p.getPlans().get(ls.toString()).equals(plan2));
     }
 
 
     @Test
     public void filterCosts() {
-        System.out.println("filterCosts");
+        logger.info("{}","filterCosts");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getFilterCosts(null, 500) == 0);

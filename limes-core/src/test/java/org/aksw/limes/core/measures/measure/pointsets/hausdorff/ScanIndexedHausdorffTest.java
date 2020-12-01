@@ -33,7 +33,7 @@ public class ScanIndexedHausdorffTest {
         testSet.add(B);
 
         //ScanIndexedHausdorffMeasure c = new ScanIndexedHausdorffMeasure();
-        // System.out.println(c.run(testSet, testSet, 0.1.0));
+        // logger.info("{}",c.run(testSet, testSet, 0.1.0));
 
     }
 
