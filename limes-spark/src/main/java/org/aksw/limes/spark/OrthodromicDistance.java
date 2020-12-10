@@ -1,31 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.aksw.limes.core.measures.mapper.pointsets;
+package org.aksw.limes.spark;
 
-import org.aksw.limes.core.datastrutures.Point;
-
-/**
- * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
- */
 public class OrthodromicDistance {
 
     public static double R = 6371f;
-
-    /**
-     * Computes and returns distance between two points.
-     *
-     * @param x,
-     *         first point
-     * @param y,
-     *         second point
-     * @return the distance between x and y
-     */
-    public static double getDistanceInDegrees(Point x, Point y) {
-        return getDistanceInDegrees(x.coordinates.get(0), x.coordinates.get(1), y.coordinates.get(0),
-                y.coordinates.get(1));
-    }
 
     /**
      * Computes the distance between two points on earth Input
