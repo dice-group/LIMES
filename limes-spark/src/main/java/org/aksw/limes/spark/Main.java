@@ -30,7 +30,7 @@ public class Main {
         try {
             FSDataOutputStream fin = fs.create(evalPath, true);
             fin.writeUTF("Iteration\tComputation\tOutput\n");
-            SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper(); //@todo make this dynamic
+            SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
             for (int i = 0; i < 10; i++) {
                 if (fs.exists(linksPath)) {
                     fs.delete(linksPath, true);
@@ -44,11 +44,14 @@ public class Main {
                 mapping.write().csv(outputUrl);
                 long finish = System.currentTimeMillis();
                 fin.writeUTF(i + "\t" + (comp - start) + "\t" + (finish - comp) + "\t" + count + "\n");
+                mapping.unpersist();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             fs.close();
+            sourceDS.unpersist();
+            targetDS.unpersist();
         }
     }
     // sourceDatasetPath, targetDatasetPath, threshold, evaluationOutputPath, linksOutputPath
