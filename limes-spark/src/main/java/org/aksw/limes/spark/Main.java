@@ -40,8 +40,6 @@ public class Main {
         long sizeA = sourceDS.count();
         long sizeB = targetDS.count();
         partitions *= Math.pow(10,Math.ceil(Math.max(0, Math.log10(Math.max(sizeA, sizeB))-6)));
-        System.out.println(sizeA);
-        System.out.println(sizeB);
         if (sizeA > sizeB) {
             Dataset<Row> tmp = sourceDS;
             sourceDS = targetDS;
@@ -59,7 +57,7 @@ public class Main {
                 }
                 long start = System.currentTimeMillis();
                 Dataset<Row> mapping = sparkHR3Mapper
-                        .getMapping(sourceDS, targetDS, threshold, 4)
+                        .getMapping(sourceDS, targetDS, threshold, 1)
                         .cache();
                 long count = mapping.count();
                 long comp = System.currentTimeMillis();
