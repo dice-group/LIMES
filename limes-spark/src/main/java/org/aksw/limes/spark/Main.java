@@ -31,8 +31,8 @@ public class Main {
             .add("data", DataTypes.StringType, false);
 
     public void run(String sourceDatasetPath, String targetDatasetPath, double threshold, String evalUrl, String outputUrl, FileSystem fs) throws Exception {
-        Dataset<Row> sourceDS = readInstancesFromCSV(sourceDatasetPath).cache();
-        Dataset<Row> targetDS = readInstancesFromCSV(targetDatasetPath).cache();
+        Dataset<Row> sourceDS = readInstancesFromCSV(sourceDatasetPath);//.cache();
+        Dataset<Row> targetDS = readInstancesFromCSV(targetDatasetPath);//.cache();
         SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
         long init = System.currentTimeMillis();
 //        sparkHR3Mapper.getMapping(spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), threshold, 4).count();
@@ -58,7 +58,7 @@ public class Main {
                 long start = System.currentTimeMillis();
                 Dataset<Row> mapping = sparkHR3Mapper
                         .getMapping(sourceDS, targetDS, threshold, 1)
-                        .cache();
+                        ;//.cache();
                 long count = mapping.count();
                 long comp = System.currentTimeMillis();
                 if (sizeA > sizeB) {
@@ -74,8 +74,8 @@ public class Main {
             throw new RuntimeException(e);
         } finally {
             fs.close();
-            sourceDS.unpersist();
-            targetDS.unpersist();
+//            sourceDS.unpersist();
+//            targetDS.unpersist();
         }
     }
     // sourceDatasetPath, targetDatasetPath, threshold, evaluationOutputPath, linksOutputPath
