@@ -61,11 +61,11 @@ public class Main {
                         ;//.cache();
                 long count = mapping.count();
                 long comp = System.currentTimeMillis();
-                if (sizeA > sizeB) {
-                    mapping = mapping.map((MapFunction<Row, Row>) r ->
-                            RowFactory.create(r.get(1), r.get(0), r.get(2)), SparkHR3Mapper.outputEncoder);
-                }
-                mapping.write().csv(outputUrl);
+//                if (sizeA > sizeB) {
+//                    mapping = mapping.map((MapFunction<Row, Row>) r ->
+//                            RowFactory.create(r.get(1), r.get(0), r.get(2)), SparkHR3Mapper.outputEncoder);
+//                }
+//                mapping.write().csv(outputUrl);
                 long finish = System.currentTimeMillis();
                 fin.writeUTF(i + "\t" + (comp - start) + "\t" + (finish - comp) + "\t" + init + "\t" + count + "\n");
                 mapping.unpersist();
