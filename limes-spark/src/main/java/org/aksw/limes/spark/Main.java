@@ -39,7 +39,7 @@ public class Main {
         init = System.currentTimeMillis() - init;
         long sizeA = sourceDS.count();
         long sizeB = targetDS.count();
-        partitions *= Math.pow(10,Math.ceil(Math.max(0, Math.log10(Math.max(sizeA, sizeB))-6)));
+        partitions *= Math.pow(10,Math.ceil(Math.max(0, Math.log10(Math.max(sizeA, sizeB))-7)));
         if (sizeA > sizeB) {
             Dataset<Row> tmp = sourceDS;
             sourceDS = targetDS;
