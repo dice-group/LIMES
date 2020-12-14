@@ -1,14 +1,11 @@
 package org.aksw.limes.spark;
 
-import com.google.common.collect.Lists;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.GenericOptionsParser;
-import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
@@ -39,7 +36,7 @@ public class Main {
         init = System.currentTimeMillis() - init;
         long sizeA = sourceDS.count();
         long sizeB = targetDS.count();
-        partitions *= Math.pow(10,Math.ceil(Math.max(0, Math.log10(Math.max(sizeA, sizeB))-7)));
+        partitions *= 10;//Math.pow(10,Math.ceil(Math.max(0, Math.log10(Math.max(sizeA, sizeB))-7)));
         if (sizeA > sizeB) {
             Dataset<Row> tmp = sourceDS;
             sourceDS = targetDS;
