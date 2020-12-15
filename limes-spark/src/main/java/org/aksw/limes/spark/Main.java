@@ -51,7 +51,7 @@ public class Main {
             FSDataOutputStream fin = fs.create(evalPath, true);
             fin.writeUTF("i\tt_comp\tt_write\tinit\tn_links\n");
 
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (fs.exists(linksPath)) {
                     fs.delete(linksPath, true);
                 }
