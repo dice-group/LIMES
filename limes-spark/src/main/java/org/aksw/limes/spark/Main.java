@@ -1,11 +1,14 @@
 package org.aksw.limes.spark;
 
+import avro.shaded.com.google.common.collect.Lists;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
@@ -32,7 +35,7 @@ public class Main {
         Dataset<Row> targetDS = readInstancesFromCSV(targetDatasetPath);//.cache();
         SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
         long init = System.currentTimeMillis();
-//        sparkHR3Mapper.getMapping(spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), threshold, 4).count();
+        sparkHR3Mapper.getMapping(spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), spark.createDataFrame(Lists.newArrayList(RowFactory.create("test","17.3,37.2")), inType), threshold, 4).count();
         init = System.currentTimeMillis() - init;
         long sizeA = sourceDS.count();
         long sizeB = targetDS.count();
@@ -55,14 +58,14 @@ public class Main {
                 long start = System.currentTimeMillis();
                 Dataset<Row> mapping = sparkHR3Mapper
                         .getMapping(sourceDS, targetDS, threshold, 1)
-                        ;//.cache();
+                        .cache();
                 long count = mapping.count();
                 long comp = System.currentTimeMillis();
-//                if (sizeA > sizeB) {
-//                    mapping = mapping.map((MapFunction<Row, Row>) r ->
-//                            RowFactory.create(r.get(1), r.get(0), r.get(2)), SparkHR3Mapper.outputEncoder);
-//                }
-//                mapping.write().csv(outputUrl);
+                if (sizeA > sizeB) {
+                    mapping = mapping.map((MapFunction<Row, Row>) r ->
+                            RowFactory.create(r.get(1), r.get(0), r.get(2)), SparkHR3Mapper.outputEncoder);
+                }
+                mapping.write().csv(outputUrl);
                 long finish = System.currentTimeMillis();
                 fin.writeUTF(i + "\t" + (comp - start) + "\t" + (finish - comp) + "\t" + init + "\t" + count + "\n");
                 mapping.unpersist();
