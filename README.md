@@ -20,6 +20,15 @@ In case Eclipse does not recognize the project as Java. Please run the following
 mvn eclipse:eclipse
 ```
 Then, update the project on Eclipse.
+## How to cite
+```
+@inproceedings{Ngomo2011LIMESA,
+  title={LIMES - A Time-Efficient Approach for Large-Scale Link Discovery on the Web of Data},
+  author={Axel-Cyrille Ngonga Ngomo and S{\"o}ren Auer},
+  booktitle={IJCAI},
+  year={2011}
+}
+```
 
 ## More details
 
