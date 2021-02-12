@@ -22,11 +22,13 @@ mvn eclipse:eclipse
 Then, update the project on Eclipse.
 ## How to cite
 ```
-@inproceedings{Ngomo2011LIMESA,
-  title={LIMES - A Time-Efficient Approach for Large-Scale Link Discovery on the Web of Data},
-  author={Axel-Cyrille Ngonga Ngomo and S{\"o}ren Auer},
-  booktitle={IJCAI},
-  year={2011}
+@article{KI_LIMES_2021,
+  title={{LIMES - A Framework for Link Discovery on the Semantic Web}},
+  author={Axel-Cyrille {Ngonga Ngomo} and Mohamed Ahmed Sherif and Kleanthi Georgala and Mofeed Hassan and Kevin Dreßler and Klaus Lyko and Daniel Obraczka and Tommaso Soru},
+  journal={KI-K{\"u}nstliche Intelligenz, German Journal of Artificial Intelligence - Organ des Fachbereichs "Künstliche Intelligenz" der Gesellschaft für Informatik e.V.},
+  year={2021},
+  url = {https://papers.dice-research.org/2021/KI_LIMES/public.pdf},
+  publisher={Springer}
 }
 ```
 
