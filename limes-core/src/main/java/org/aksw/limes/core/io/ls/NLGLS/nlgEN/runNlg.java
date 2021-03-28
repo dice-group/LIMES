@@ -172,7 +172,8 @@ public class runNlg {
 			linkSpec.readSpec(str, 0.7);
 			//System.out.println(linkSpec.getFullExpression());
 			//lsPostProcessor.postProcessor(linkSpec);
-			bw.write(lsPostProcessor.postProcessor(linkSpec));
+			String postProcessor = lsPostProcessor.postProcessor(linkSpec);
+			bw.write(postProcessor);
 			bw.newLine();
 
 		}

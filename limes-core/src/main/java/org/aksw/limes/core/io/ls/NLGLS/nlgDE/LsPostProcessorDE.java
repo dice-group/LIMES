@@ -203,20 +203,22 @@ public class LsPostProcessorDE {
 		return mapping;
 	}
 
-	public void realisng() {
+	public String realisng() {
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 		SPhraseSpec clause=nlgFactory.createClause();
 		SPhraseSpec clause1=nlgFactory.createClause();
 		SPhraseSpec clause2=nlgFactory.createClause();
 		SPhraseSpec clause3=nlgFactory.createClause();
 		Realiser clause1Realiser = new Realiser(lexicon);
-
+		String op="";
+		String verbalzation="";
 		for(int i=0;i<allNLGElement.size();i++)
 		{
+			
 			String temp1="";
 			String temp2="";
 			String str=allNLGElement.get(i).getRealisation();
-
+			//System.out.println("string: "+i+"   "+str);
 			if(str.length()>2&&str.contains("haben")) {
 				VPPhraseSpec AuxVerb = nlgFactory.createVerbPhrase("passieren");
 				//AuxVerb.setFeature(Feature.PASSIVE, true);
@@ -235,12 +237,16 @@ public class LsPostProcessorDE {
 				clause.addComplement(clause1);
 				NLGElement clause1Realised = clause1Realiser.realise(clause);
 				clause=new SPhraseSpec(nlgFactory);
-				System.out.println(clause1Realised);
+				//System.out.println("yy "+clause1Realised);
+				verbalzation= clause1Realised.getRealisation();
+				//System.out.println("verbal: "+verbalzation);
 			}
 
-			if(str.equals("und")||str.equals("oder"))
-				System.out.println(str);
-
+			if(str.equals("und")||str.equals("oder")) {
+				op=str;
+				//System.out.println(op);
+			}
+			//verbalzation=verbalzation1+" "+str+" ";
 			if (str.length()>2&&str.contains("hat ")) {
 				VPPhraseSpec AuxVerb = nlgFactory.createVerbPhrase("passieren");
 				//SPhraseSpec clause3=nlgFactory.createClause();
@@ -259,14 +265,17 @@ public class LsPostProcessorDE {
 				clause3.addComplement(clause2);
 				NLGElement clause1Realised = clause1Realiser.realise(clause3);
 				clause3=new SPhraseSpec(nlgFactory);
-				System.out.println(clause1Realised);
-
+				//System.out.println("xxx "+clause1Realised);
+				verbalzation=verbalzation+" "+op+" "+ clause1Realised.getRealisation();
+				
 
 
 			}
 			//System.out.println(str);
+			//return verbalzation;
 		}
-
+		//System.out.println("verbalzation: "+verbalzation);
+		return verbalzation;
 
 	}
 
