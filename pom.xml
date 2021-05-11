@@ -120,7 +120,8 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
-                        <failOnError>false</failOnError>
+                        <failOnError>true</failOnError>
+                        <source>1.8</source>
                     </configuration>
                     <executions>
                         <execution>
@@ -219,34 +220,11 @@
             <id>maven.aksw.internal</id>
             <name>University Leipzig, AKSW Maven2 Internal Repository</name>
             <url>https://maven.aksw.org/repository/internal/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>maven.aksw.snapshots</id>
             <name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
             <url>https://maven.aksw.org/repository/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>maven2-repository.java.net</id>
-            <name>Java.net Repository for Maven</name>
-            <url>https://download.java.net/maven/2/</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>osgeo</id>
-            <name>Open Source Geospatial Foundation Repository</name>
-            <url>https://download.osgeo.org/webdav/geotools/</url>
         </repository>
     </repositories>
 
