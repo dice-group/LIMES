@@ -12,8 +12,8 @@
 	<version>1.7.5-SNAPSHOT</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
-	<url>http://aksw.org/Projects/LIMES</url>
-
+	<url>https://aksw.org/Projects/LIMES</url>
+    <inceptionYear>2011</inceptionYear>
 	<packaging>pom</packaging>
 	<modules>
 		<module>limes-core</module>
@@ -25,7 +25,6 @@
         <connection>scm:git:https://github.com/dice-group/LIMES.git</connection>
         <tag>HEAD</tag>
     </scm>
-
 
 	<dependencyManagement>
 		<dependencies>
@@ -40,7 +39,6 @@
 	<build>
 
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
@@ -69,19 +67,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<!-- That's a sledge hammer solution - but at least it works ... -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.2</version>
-					<configuration>
-						<arguments>-P!source-artifacts</arguments>
-						<useReleaseProfile>false</useReleaseProfile>
-						<releaseProfiles>release</releaseProfiles>
-						<goals>-Dmaven.test.skip=false deploy</goals>
-						<autoVersionSubmodules>true</autoVersionSubmodules>
-					</configuration>
-				</plugin>
 
 				<!--Maven Compiler Plugin -->
 				<plugin>
@@ -128,14 +113,19 @@
 					</executions>
 				</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
-					<configuration>
-						<skipTests>false</skipTests>
-					</configuration>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <configuration>
+                        <forkCount>1</forkCount>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <argLine>-Xms256m -Xmx128G</argLine>
+                        <testFailureIgnore>false</testFailureIgnore>
+                        <skipTests>false</skipTests>
+                        <useManifestOnlyJar>false</useManifestOnlyJar>
+                    </configuration>
+                </plugin>
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -161,43 +151,37 @@
 					<version>3.0.2</version>
 				</plugin>
 
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>4.0</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <header>com/mycila/maven/plugin/license/templates/AGPL-3.txt</header>
+                        <properties>
+                            <owner>Data Science Group (DICE)</owner>
+                            <email>ngonga@uni-paderborn.de</email>
+                        </properties>
+                        <excludes>
+                            <exclude>**/README</exclude>
+                            <exclude>**/LICENSE</exclude>
+                            <exclude>**/Dockerfile</exclude>
+                            <exclude>**/docs/**</exclude>
+                            <exclude>**/manual/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
+                            <exclude>examples/**</exclude>
+                            <exclude>**/src/test/resources/**</exclude>
+                            <exclude>**/src/main/resources/**</exclude>
+                            <exclude>**/src/main/webapp/**</exclude>
+                            <exclude>**/target/**</exclude>
+                            <exclude>limes-web-ui/**</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
 
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
-	<profiles>
-		<profile>
-			<id>doclint-java8-disable</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<failOnError>false</failOnError>
-								</configuration>
-							</execution>
-						</executions>
-						<configuration>
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
     <distributionManagement>
         <repository>
@@ -211,18 +195,40 @@
         </snapshotRepository>
     </distributionManagement>
 
-	<repositories>
-		<repository>
-			<id>maven.aksw.snapshots</id>
-			<name>AKSW Snapshot Repository</name>
-			<url>https://maven.aksw.org/archiva/repository/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>maven.aksw.internal</id>
+            <name>University Leipzig, AKSW Maven2 Internal Repository</name>
+            <url>https://maven.aksw.org/repository/internal/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven.aksw.snapshots</id>
+            <name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
+            <url>https://maven.aksw.org/repository/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven2-repository.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+        </repository>
+    </repositories>
 
 </project>

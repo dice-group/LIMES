@@ -16,7 +16,7 @@
 		<deb.packageName>limes-cli</deb.packageName>
 		<!-- <deb.jarFile>${project.artifactId}-${project.version}.jar</deb.jarFile> -->
 		<deb.jarFile>${project.artifactId}-${project.version}.jar</deb.jarFile>
-                <project.description>LIMES – Link Discovery Framework for Metric Spaces.</project.description>
+        <project.description>LIMES – Link Discovery Framework for Metric Spaces.</project.description>
 	</properties>
 
 
