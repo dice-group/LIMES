@@ -1,25 +1,36 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import edu.mit.jwi.item.*;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import edu.mit.jwi.item.IIndexWord;
-import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.ISynsetID;
-import edu.mit.jwi.item.IWord;
-import edu.mit.jwi.item.IWordID;
-import edu.mit.jwi.item.POS;
 import weka.core.Stopwords;
 import weka.core.tokenizers.Tokenizer;
 import weka.core.tokenizers.WordTokenizer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implements the edge-counting semantic string similarity abstract class.
@@ -58,7 +69,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Retrieves the hierarchy depth for a given POS.
-     * 
+     *
      * @param posNumber,
      *            the input POS number id
      * @return the corresponding hierarchy depth
@@ -81,7 +92,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Retrieves a IWord for a given IWordID
-     * 
+     *
      * @param wordID,
      *            the input IWordID
      * @return the corresponding IWord
@@ -95,7 +106,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Retrieves an ISynset for a given IWord
-     * 
+     *
      * @param iword,
      *            the input IWord
      * @return the corresponding ISynset
@@ -108,7 +119,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Retrieves a list of IWordID for a given IIndexWord
-     * 
+     *
      * @param w,
      *            the input IIndexWord
      * @return the corresponding list of IWordIDs
@@ -121,7 +132,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
     /**
      * Retrieves a list of hypernym paths for a given concept, stored in an
      * index instance.
-     * 
+     *
      * @param synset,
      *            the input concept
      * @return the corresponding list of hypernym paths
@@ -137,7 +148,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Calculates the semantic similarity between two concepts.
-     * 
+     *
      * @param synset1,
      *            the first input concept
      * @param synset2,
@@ -152,7 +163,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Calculates the semantic similarity between two IIndexWords.
-     * 
+     *
      * @param w1,
      *            the first input IIndexWord
      * @param w2,
@@ -220,7 +231,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Tokenizes an array of strings
-     * 
+     *
      * @param strings,
      *            the input array of strings
      * @return an array of tokenized strings
@@ -239,7 +250,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
     /**
      * Checks if a semantic similarity between two tokens has already been
      * calculated.
-     * 
+     *
      * @param similaritiesMap,
      *            the map that stores the semantic similarities between two
      *            tokens
@@ -268,7 +279,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
      * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
@@ -369,7 +380,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Closes and removes the semantic dictionary from memory
-     * 
+     *
      */
     public void close() {
         dictionary.removeDictionary();
@@ -377,7 +388,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.
      * Object, java.lang.Object)
@@ -405,7 +416,7 @@ public abstract class AEdgeCountingSemanticMeasure extends AMeasure implements I
 
     /**
      * Retrieves the IIndexWord for a given input string
-     * 
+     *
      * @param str,
      *            the input string
      * @return the corresponding IIndexWord

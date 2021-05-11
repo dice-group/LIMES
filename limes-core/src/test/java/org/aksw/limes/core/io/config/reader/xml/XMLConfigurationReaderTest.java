@@ -1,14 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.config.reader.xml;
-
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
@@ -19,13 +26,18 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jan 15, 2016
  */
 public class XMLConfigurationReaderTest {
-    
+
     Map<String, String> prefixes = new HashMap<>();
     LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
     ArrayList<String> properties;
@@ -42,7 +54,7 @@ public class XMLConfigurationReaderTest {
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
         properties = new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT"));
-        
+
         sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
                 "http://linkedgeodata.org/sparql",                                //String endpoint
@@ -74,21 +86,21 @@ public class XMLConfigurationReaderTest {
                 -1,                                                               //int minOffset
                 -1                                                                //int maxoffset
         );
-        
+
         testConf = new Configuration();
         testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
-        testConf.setAcceptanceRelation("lgdo:near");       
+        testConf.setAcceptanceRelation("lgdo:near");
         testConf.setVerificationRelation("lgdo:near");
-        testConf.setAcceptanceThreshold(0.9); 
+        testConf.setAcceptanceThreshold(0.9);
         testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
         testConf.setOutputFormat("TAB");
     }
-    
-    
+
+
     @Test
     public void testXmlReaderForMetric() {
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
@@ -105,14 +117,14 @@ public class XMLConfigurationReaderTest {
         assertEquals(testConf, fileConf);
         assertTrue(testConf.equals(fileConf));
     }
-    
+
     @Test
     public void testXmlReaderForOptionalProperties() {
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
-        
+
         sourceInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
         targetInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
 
@@ -122,7 +134,7 @@ public class XMLConfigurationReaderTest {
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
     }
-    
+
     @Test
     public void testXmlReaderMLAlgorithm() {
 
@@ -145,10 +157,10 @@ public class XMLConfigurationReaderTest {
         System.out.println(file);
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
-        
+
         assertTrue(testConf.equals(fileConf));
     }
-    
+
     @Test
     public void testNAryFunctions() {
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
@@ -184,34 +196,33 @@ public class XMLConfigurationReaderTest {
         String file = Thread.currentThread().getContextClassLoader().getResource("naryfunctionstest.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
-        
+
         assertEquals(testConf, fileConf);
     }
 
-    
+
     @Test
     public void test1() {
         //optimization time = -1000 -> 0
         //no selectivity from file -> 1.0
         //
-        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath(); 
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
         System.out.println(filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
-        
-        
-        
+
+
         assertTrue(config.getOptimizationTime() == 0);
         assertTrue(config.getExpectedSelectivity() == 1.0);
     }
-    
+
     @Test
     public void test2() {
-        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.xml").getPath(); 
+        String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.xml").getPath();
         System.out.println(filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);
         Configuration config = reader.read();
-        
+
         assertTrue(config.getOptimizationTime() == 1000);
         assertTrue(config.getExpectedSelectivity() == 0.65);
     }

@@ -1,20 +1,33 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
+import java.util.*;
+
 /**
  * Implements the mapper abstract class.
  *
  * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public abstract class AMapper implements IMapper {
@@ -58,8 +71,8 @@ public abstract class AMapper implements IMapper {
      * @return Mapping from source resource uri to target resource uri
      */
     protected AMapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap,
-            Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap,
-            boolean swapped) {
+                                          Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap,
+                                          boolean swapped) {
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : valueMap.keySet()) {
             for (String t : valueMap.get(s).keySet()) {
@@ -75,13 +88,13 @@ public abstract class AMapper implements IMapper {
     }
 
     protected AMapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap,
-            Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap) {
+                                          Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap) {
         return getUriToUriMapping(valueMap, sourceValueToUriMap, targetValueToUriMap, false);
     }
 
     @Override
     public void setNo(int no) {
         // TODO Auto-generated method stub
-        
+
     }
 }

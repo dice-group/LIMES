@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.io.cache.Instance;
@@ -15,11 +32,11 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
         int shorter;
         int longer;
         if (s1.length>s2.length) {
-        	shorter = s2.length; 
-        	longer = s1.length;
+            shorter = s2.length;
+            longer = s1.length;
         }else {
-        	shorter =  s1.length;
-        	longer = s2.length;
+            shorter =  s1.length;
+            longer = s2.length;
         }
         double distance = 0d;
         for (int i = 0; i < shorter; i++)
@@ -27,20 +44,20 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
                 distance += 1d;
         return (1.0d - (distance / (double) longer));
     }
-    
+
     public double proximity(String s1, String s2) {
-    	List<String> map1 = DoubleMetaphoneMeasure.getCode(s1);
-    	List<String> map2 = DoubleMetaphoneMeasure.getCode(s2);
-    	double proximity = 0d;
-    	double check;
-    	for (String k1: map1) {
-    		for(String k2: map2) {
-    			check = getProximity(k1.toCharArray(), k2.toCharArray());
-    			if (check > proximity) {
-    				proximity = check;
-    			}
-    		}
-    	}
+        List<String> map1 = DoubleMetaphoneMeasure.getCode(s1);
+        List<String> map2 = DoubleMetaphoneMeasure.getCode(s2);
+        double proximity = 0d;
+        double check;
+        for (String k1: map1) {
+            for(String k2: map2) {
+                check = getProximity(k1.toCharArray(), k2.toCharArray());
+                if (check > proximity) {
+                    proximity = check;
+                }
+            }
+        }
         return proximity;
     }
 

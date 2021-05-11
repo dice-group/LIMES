@@ -1,36 +1,52 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.mapping;
+
+import org.apache.jena.vocabulary.OWL;
 
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import org.apache.jena.vocabulary.OWL;
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
- * @author Tommaso Soru {@literal <}tsoru {@literal @} informatik.uni-leipzig.de{@literal >} 
+ * @author Tommaso Soru {@literal <}tsoru {@literal @} informatik.uni-leipzig.de{@literal >}
  * @author Klaus Lyko {@literal <}lyko {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version 2015-11-24
  */
 public abstract class AMapping implements IMapping {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2139214978237914397L;
-	protected HashMap<String, HashMap<String, Double>> map;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -2139214978237914397L;
+    protected HashMap<String, HashMap<String, Double>> map;
     protected HashMap<Double, HashMap<String, TreeSet<String>>> reversedMap;
     protected int size;
     protected String predicate;
 
 
-    
     public AMapping() {
         this.map = new HashMap<>();
         this.reversedMap = new HashMap<>();
         this.size = 0;
         this.predicate = OWL.sameAs.getURI(); //default
-        
+
     }
 
     public abstract double getConfidence(String key, String value);
@@ -45,9 +61,9 @@ public abstract class AMapping implements IMapping {
 
     public abstract int getNumberofMappings();
 
-	public abstract int getNumberofPositiveMappings();
+    public abstract int getNumberofPositiveMappings();
 
-	public abstract AMapping getOnlyPositiveExamples();
+    public abstract AMapping getOnlyPositiveExamples();
 
     public abstract boolean contains(String key, String value);
 
@@ -69,6 +85,7 @@ public abstract class AMapping implements IMapping {
         m2 = m2.reverseSourceTarget();
         return m2;
     }
+
     /**
      * Get the predicate URI, which defaults to OWL.sameAs.
      *

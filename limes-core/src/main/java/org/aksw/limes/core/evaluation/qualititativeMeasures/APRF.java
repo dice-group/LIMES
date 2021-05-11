@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  *
  */
@@ -52,13 +69,13 @@ public abstract class APRF implements IQualitativeMeasure {
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
      * @return double This returns the number of false negative links
      */
-    
+
     public static double falseNegative(final AMapping predictions, final AMapping goldStandard) {
         double FNCounter = 0;
         for (String sUri : goldStandard.getMap().keySet()){
             for (String tUri : goldStandard.getMap().get(sUri).keySet()){
                 if (goldStandard.getMap().get(sUri).get(tUri) > 0 && (!(predictions.contains(sUri, tUri) && predictions.getMap().get(sUri).get(tUri) > 0))){
-                        FNCounter++;
+                    FNCounter++;
                 }
             }
         }
@@ -71,13 +88,14 @@ public abstract class APRF implements IQualitativeMeasure {
         for (String sUri : predictions.getMap().keySet()){
             for (String tUri : predictions.getMap().get(sUri).keySet()){
                 if (predictions.contains(sUri, tUri) && predictions.getMap().get(sUri).get(tUri) <= 0){
-                	negativesSize++;
+                    negativesSize++;
                 }
             }
         }
-        return negativesSize - falseNegative(predictions, goldStandard.referenceMappings); 
+        return negativesSize - falseNegative(predictions, goldStandard.referenceMappings);
     }
-    /** 
+
+    /**
      * The Abstract method to be implemented for calculating the accuracy of the machine learning predictions compared to a gold standard
      * @param predictions The predictions provided by a machine learning algorithm
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs

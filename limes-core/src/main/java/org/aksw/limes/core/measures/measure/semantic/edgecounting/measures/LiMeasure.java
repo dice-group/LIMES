@@ -1,13 +1,29 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.measures;
 
-import java.util.ArrayList;
-
+import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.finders.LeastCommonSubsumerFinder;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 
-import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.ISynsetID;
+import java.util.ArrayList;
 
 /**
  * Implements the Li et al. (LI) semantic string similarity between two concepts
@@ -27,7 +43,7 @@ public class LiMeasure extends AEdgeCountingSemanticMeasure {
 
     /**
      * Calculates the actual LI similarity.
-     * 
+     *
      * @param synset1Tree,
      *            the set of all hypernym paths for a concept synset1
      * @param synset2Tree,
@@ -65,7 +81,7 @@ public class LiMeasure extends AEdgeCountingSemanticMeasure {
      * all possible hypernym paths for the two concepts, finds their least
      * common subsumer concept, calculates the length of the shortest path
      * between the concepts which passes via their least common subsumer.
-     * 
+     *
      * @param synset1,
      *            the first input synset
      * @param synset2,

@@ -1,15 +1,32 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine.partialrecallengine.refinement;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.LigerPlanner;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class PartialRecallRefinementOperator {
     protected static final Logger logger = Logger.getLogger(PartialRecallRefinementOperator.class.getName());
@@ -70,7 +87,7 @@ public abstract class PartialRecallRefinementOperator {
      * returns 0. If the input selectivity is lower than the desired
      * selectivity, it returns a value lower than 0. If the input selectivity is
      * larger than the desired selectivity, it returns a value larger than 0.
-     * 
+     *
      * @param selectivity
      * @return
      */
@@ -88,7 +105,7 @@ public abstract class PartialRecallRefinementOperator {
      * value can be at most 1.0. If the input threshold is already 1.0, it
      * returns a negative number that indicates that the link specification, to
      * which the input threshold belongs to, can not be refined any further.
-     * 
+     *
      * @param currentThreshold,
      *            the input threshold
      * @return a value that is the first larger value than currentThreshold from
@@ -128,8 +145,8 @@ public abstract class PartialRecallRefinementOperator {
      * The best specification is the subsumed specification with the lowest
      * runtime estimation, that abides to the minimal expected recall
      * requirement.
-     * 
-     * 
+     *
+     *
      * @param spec,
      *            the input link specification
      */

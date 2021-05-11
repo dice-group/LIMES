@@ -1,16 +1,28 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.finders;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
 
 import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.Pointer;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
+
+import java.util.*;
 
 /**
  * Computes all the paths from a synset (concept) to the root(s) of the tree
@@ -26,7 +38,7 @@ public class HypernymPathsFinder {
 
     /**
      * Retrieves all hypernym paths in a tree hierarchy for a synset (concept) .
-     * 
+     *
      * @param dictionary,
      *            a semantic dictionary that represents the tree hierarchy
      * @param synset,
@@ -45,7 +57,7 @@ public class HypernymPathsFinder {
     /**
      * Recursive function that computes all hypernym paths in a tree hierarchy
      * for a synset (concept), by traversing the graph in a BFS manner.
-     * 
+     *
      * @param dictionary,
      *            a semantic dictionary that represents the tree hierarchy
      * @param synset,
@@ -55,7 +67,7 @@ public class HypernymPathsFinder {
      * @return all hypernym paths of synset
      */
     public static ArrayList<ArrayList<ISynsetID>> getHypernymPaths(SemanticDictionary dictionary, ISynset synset,
-            Set<ISynsetID> history) {
+                                                                   Set<ISynsetID> history) {
 
         // only noun hierarchy has instance hypernyms
         useInstanceHypernyms = synset.getType() == 1;

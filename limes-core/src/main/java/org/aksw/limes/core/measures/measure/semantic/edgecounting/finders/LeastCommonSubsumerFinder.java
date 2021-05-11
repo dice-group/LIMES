@@ -1,15 +1,32 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.finders;
+
+import edu.mit.jwi.item.ISynsetID;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.mit.jwi.item.ISynsetID;
-
 /**
  * Implements the Least Common Subsumer (LSO) class. The LSO of two concepts c1
  * and c2 is "the most specific concept which is an ancestor of both c1 and c2".
- * 
- * 
+ *
+ *
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  *
  */
@@ -38,15 +55,15 @@ public class LeastCommonSubsumerFinder {
      * hierarchy, or 3) the new common concept has the same depth as the
      * previous one but a smaller distance between the two concepts, the
      * algorithm sets as the new common concept as the LSO.
-     * 
-     * 
+     *
+     *
      * @param synset1Tree,
      *            the hypernym paths of the first concept
      * @param synset2Tree,
      *            the hypernym paths of the second concept
      */
     public void getLeastCommonSubsumer(ArrayList<ArrayList<ISynsetID>> synset1Tree,
-            ArrayList<ArrayList<ISynsetID>> synset2Tree) {
+                                       ArrayList<ArrayList<ISynsetID>> synset2Tree) {
 
         if (synset1Tree == null || synset2Tree == null)
             return;
@@ -64,7 +81,7 @@ public class LeastCommonSubsumerFinder {
                 path2Pos = 0;
                 while ((path1Pos < synset1HypernymPath.size()) && (path2Pos < synset2HypernymPath.size())
                         && (synset1HypernymPath.get(path1Pos).getOffset() == synset2HypernymPath.get(path2Pos)
-                                .getOffset())) {
+                        .getOffset())) {
                     ++path1Pos;
                     ++path2Pos;
                 }

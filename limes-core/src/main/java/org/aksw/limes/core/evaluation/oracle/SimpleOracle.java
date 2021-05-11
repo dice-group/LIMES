@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.evaluation.oracle;
 
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -24,6 +41,7 @@ public class SimpleOracle implements IOracle {
     public SimpleOracle(AMapping m) {
         loadData(m);
     }
+
     /** check if a pair source-target URIs exist in the oracle
      * @param uri1 the source URI
      * @param uri2 the target URI
@@ -34,6 +52,7 @@ public class SimpleOracle implements IOracle {
         if (mapping == null) return false;
         return (mapping.contains(uri1, uri2) || mapping.contains(uri2, uri1));
     }
+
     /** Loads the oracle with the given mapping
      * @param m the source mapping to assign to oracle*/
 
@@ -51,6 +70,7 @@ public class SimpleOracle implements IOracle {
     public AMapping getMapping() {
         return mapping;
     }
+
     /** It returns the type of mapping
      * @return  String - teh type of the mapping*/
 

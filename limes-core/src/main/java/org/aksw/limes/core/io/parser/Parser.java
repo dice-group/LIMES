@@ -1,7 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.parser;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
@@ -10,9 +24,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Parse Link Specifications
- * 
+ *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Aug 23, 2016
  */
@@ -83,9 +100,9 @@ public class Parser implements IParser {
     }
 
     public double getLeftCoefficient() {
-    	if(leftCoefficient != -1.0){
-    		return leftCoefficient;
-    	}
+        if(leftCoefficient != -1.0){
+            return leftCoefficient;
+        }
         leftCoefficient = 1.0;
         logger.debug("Parsing " + getRightTerm());
         if (leftTerm.contains("*")) {
@@ -107,9 +124,9 @@ public class Parser implements IParser {
      * @return right coefficient
      */
     public double getRightCoefficient() {
-    	if(rightCoefficient != -1.0){
-    		return rightCoefficient;
-    	}
+        if(rightCoefficient != -1.0){
+            return rightCoefficient;
+        }
         rightCoefficient = 1;
         logger.debug("Parsing " + getRightTerm());
         if (rightTerm.contains("*")) {
@@ -168,9 +185,9 @@ public class Parser implements IParser {
                 setThreshold1(getThreshold() / (rightCoefficient * leftCoefficient));
                 setThreshold2(getThreshold1());
             } // now set constraints. separator for sets and thresholds is |
-              // thus one can write
-              // AND(sim(a,b)|0.5,sim(b,d)|0.7)
-              // and then set global threshold to the minimal value wanted
+            // thus one can write
+            // AND(sim(a,b)|0.5,sim(b,d)|0.7)
+            // and then set global threshold to the minimal value wanted
             else {
                 int index = leftTerm.lastIndexOf("|");
                 String t;

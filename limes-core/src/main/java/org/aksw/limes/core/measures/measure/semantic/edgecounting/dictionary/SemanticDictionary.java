@@ -1,28 +1,39 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
+import edu.mit.jwi.IRAMDictionary;
+import edu.mit.jwi.RAMDictionary;
+import edu.mit.jwi.data.ILoadPolicy;
+import edu.mit.jwi.item.*;
 import org.aksw.limes.core.exceptions.semanticDictionary.ExportedSemanticDictionaryFileNotFound;
 import org.aksw.limes.core.exceptions.semanticDictionary.SemanticDictionaryNotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.mit.jwi.IRAMDictionary;
-import edu.mit.jwi.RAMDictionary;
-import edu.mit.jwi.data.ILoadPolicy;
-import edu.mit.jwi.item.IIndexWord;
-import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.ISynsetID;
-import edu.mit.jwi.item.IWord;
-import edu.mit.jwi.item.IWordID;
-import edu.mit.jwi.item.POS;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Implements the semantic dictionary (wordnet) class. Responsible for loading,
  * exporting and closing the semantic dictionary.
- * 
+ *
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  *
@@ -35,7 +46,7 @@ public class SemanticDictionary {
 
     /**
      * Exports the wordnet database files into one file.
-     * 
+     *
      */
     public void exportDictionaryToFile() {
         File dictionaryFolder = new File(wordNetFolder);
@@ -68,7 +79,7 @@ public class SemanticDictionary {
 
     /**
      * Closes and removes the semantic dictionary from memory
-     * 
+     *
      */
     public void removeDictionary() {
         if (dictionary != null) {
@@ -79,7 +90,7 @@ public class SemanticDictionary {
 
     /**
      * Opens the exported wordnet file and loads it to memory
-     * 
+     *
      */
     public void openDictionaryFromFile() {
         File dicFile = new File(exFile);
@@ -104,10 +115,10 @@ public class SemanticDictionary {
 
     /**
      * Retrieves the corresponding IWord of an IWordID in wordnet
-     * 
+     *
      * @param wordID,
      *            the input IWordID
-     * 
+     *
      * @return the resulting IWord
      */
     public IWord getWord(IWordID wordID) {
@@ -116,12 +127,12 @@ public class SemanticDictionary {
 
     /**
      * Retrieves the corresponding IIndexWord of a string in wordnet
-     * 
+     *
      * @param str,
      *            the input string
      * @param pos,
      *            the input string's POS
-     * 
+     *
      * @return the resulting IIndexWord
      */
     public IIndexWord getIndexWord(String str, POS pos) {
@@ -130,10 +141,10 @@ public class SemanticDictionary {
 
     /**
      * Retrieves the corresponding ISynset of ISynsetID in wordnet
-     * 
+     *
      * @param hypernymId,
      *            the input ISynsetID
-     * 
+     *
      * @return the resulting ISynset
      */
     public ISynset getSynset(ISynsetID hypernymId) {
@@ -142,7 +153,7 @@ public class SemanticDictionary {
 
     /**
      * Retrieves the semantic wordnet dictionary
-     * 
+     *
      * @return the dictionary
      */
     public IRAMDictionary getDictionary() {

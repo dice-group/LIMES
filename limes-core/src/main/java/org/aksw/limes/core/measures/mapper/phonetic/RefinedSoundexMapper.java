@@ -1,13 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.phonetic;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -18,6 +26,8 @@ import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.phoneticmeasure.RefinedSoundexMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
+
+import java.util.*;
 
 
 public class RefinedSoundexMapper extends AMapper {
@@ -42,7 +52,7 @@ public class RefinedSoundexMapper extends AMapper {
      */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+                               double threshold) {
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }
@@ -50,15 +60,15 @@ public class RefinedSoundexMapper extends AMapper {
         Map<String, List<Integer>> invListA, invListB;
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         String property1 = properties.get(0);
-		String property2 = properties.get(1);
-		//if(property1.contains("#"))
-		//property1=property1.substring(property1.indexOf("#")+1);
-		//if(property2.contains("#"))
-		//property2=property2.substring(property2.indexOf("#")+1);
-	//	System.out.println(" p1: "+property1);
-	//	System.out.println(" p2: "+property2);
-		Map<String, Set<String>> sourceMap = getValueToUriMap(source, property1);
-		Map<String, Set<String>> targetMap = getValueToUriMap(target, property2);
+        String property2 = properties.get(1);
+        //if(property1.contains("#"))
+        //property1=property1.substring(property1.indexOf("#")+1);
+        //if(property2.contains("#"))
+        //property2=property2.substring(property2.indexOf("#")+1);
+        //	System.out.println(" p1: "+property1);
+        //	System.out.println(" p2: "+property2);
+        Map<String, Set<String>> sourceMap = getValueToUriMap(source, property1);
+        Map<String, Set<String>> targetMap = getValueToUriMap(target, property2);
         listA = new ArrayList<>(sourceMap.keySet());
         listB = new ArrayList<>(targetMap.keySet());
         // create inverted lists (code=>index of original list)
@@ -117,16 +127,16 @@ public class RefinedSoundexMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-        	if (!s.equals("")) {
-            String code = RefinedSoundexMeasure.getCode(s);
-            List<Integer> ref;
-            if (!result.containsKey(code)) {
-                ref = new LinkedList<>();
-                result.put(code, ref);
-            } else {
-                ref = result.get(code);
-            }
-            ref.add(i);}
+            if (!s.equals("")) {
+                String code = RefinedSoundexMeasure.getCode(s);
+                List<Integer> ref;
+                if (!result.containsKey(code)) {
+                    ref = new LinkedList<>();
+                    result.put(code, ref);
+                } else {
+                    ref = result.get(code);
+                }
+                ref.add(i);}
         }
         return result;
     }
@@ -170,8 +180,7 @@ public class RefinedSoundexMapper extends AMapper {
 
         private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
             if (code.length() > 1) {
-                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);}
-            else if(code.length()==1) {
+                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);} else if(code.length()==1) {
                 node.addChild(code.charAt(0), references);}
         }
 

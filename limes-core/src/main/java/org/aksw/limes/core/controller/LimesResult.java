@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.controller;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -88,28 +105,28 @@ public class LimesResult {
         double pseudoFMeasureForAll = new PseudoFMeasure().calculate(wholeMapping, goldStandard);
         return String.format(
                 "{" +
-                "\n\t\"mappingTime\" : %d," +
-                "\n\t\"inputSizes\" : {" +
-                "\n\t\t\"source\" : %d," +
-                "\n\t\t\"target\" : %d" +
-                "\n\t}," +
-                "\n\t\"outputSizes\" : {" +
-                "\n\t\t\"verification\" : %d," +
-                "\n\t\t\"acceptance\" : %d" +
-                "\n\t}," +
-                "\n\t\"pseudoPRF\" : {" +
-                "\n\t\t\"acceptance\" : {" +
-                "\n\t\t\t\"precision\" : %s," +
-                "\n\t\t\t\"recall\" : %s," +
-                "\n\t\t\t\"f-measure\" : %s" +
-                "\n\t\t}," +
-                "\n\t\t\"all\" : {" +
-                "\n\t\t\t\"precision\" : %s," +
-                "\n\t\t\t\"recall\" : %s," +
-                "\n\t\t\t\"f-measure\" : %s" +
-                "\n\t\t}" +
-                "\n\t}" +
-                "\n}",
+                        "\n\t\"mappingTime\" : %d," +
+                        "\n\t\"inputSizes\" : {" +
+                        "\n\t\t\"source\" : %d," +
+                        "\n\t\t\"target\" : %d" +
+                        "\n\t}," +
+                        "\n\t\"outputSizes\" : {" +
+                        "\n\t\t\"verification\" : %d," +
+                        "\n\t\t\"acceptance\" : %d" +
+                        "\n\t}," +
+                        "\n\t\"pseudoPRF\" : {" +
+                        "\n\t\t\"acceptance\" : {" +
+                        "\n\t\t\t\"precision\" : %s," +
+                        "\n\t\t\t\"recall\" : %s," +
+                        "\n\t\t\t\"f-measure\" : %s" +
+                        "\n\t\t}," +
+                        "\n\t\t\"all\" : {" +
+                        "\n\t\t\t\"precision\" : %s," +
+                        "\n\t\t\t\"recall\" : %s," +
+                        "\n\t\t\t\"f-measure\" : %s" +
+                        "\n\t\t}" +
+                        "\n\t}" +
+                        "\n}",
                 this.runTime, this.sourceCache.size(), this.targetCache.size(),
                 this.verificationMapping.size(), this.acceptanceMapping.size(),
                 Double.toString(pseudoPrecisionForAcceptance), Double.toString(pseudoRecallForAcceptance), Double.toString(pseudoFMeasureForAcceptance),
@@ -148,19 +165,19 @@ public class LimesResult {
         double recallForAll = new FMeasure().recall(filteredWhole, goldStandard);
         double fMeasureForAll = new FMeasure().calculate(filteredWhole, goldStandard);
         return stats + String.format("," +
-                "\n\t\"PRF\" : {" +
-                "\n\t\t\"acceptance\" : {" +
-                "\n\t\t\t\"precision\" : %s," +
-                "\n\t\t\t\"recall\" : %s," +
-                "\n\t\t\t\"f-measure\" : %s" +
-                "\n\t\t}," +
-                "\n\t\t\"all\" : {" +
-                "\n\t\t\t\"precision\" : %s," +
-                "\n\t\t\t\"recall\" : %s," +
-                "\n\t\t\t\"f-measure\" : %s" +
-                "\n\t\t}" +
-                "\n\t}" +
-                "\n}",
+                        "\n\t\"PRF\" : {" +
+                        "\n\t\t\"acceptance\" : {" +
+                        "\n\t\t\t\"precision\" : %s," +
+                        "\n\t\t\t\"recall\" : %s," +
+                        "\n\t\t\t\"f-measure\" : %s" +
+                        "\n\t\t}," +
+                        "\n\t\t\"all\" : {" +
+                        "\n\t\t\t\"precision\" : %s," +
+                        "\n\t\t\t\"recall\" : %s," +
+                        "\n\t\t\t\"f-measure\" : %s" +
+                        "\n\t\t}" +
+                        "\n\t}" +
+                        "\n}",
                 Double.toString(precisionForAcceptance), Double.toString(recallForAcceptance), Double.toString(fMeasureForAcceptance),
                 Double.toString(precisionForAll), Double.toString(recallForAll), Double.toString(fMeasureForAll));
     }

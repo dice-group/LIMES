@@ -1,9 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -16,21 +28,26 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+
 /**
  * Basic test class for ml algorithms. Provides an ad hoc test case.
- * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  *
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 public class MLAlgorithmTest {
-	static Logger logger = Logger.getLogger(MLAlgorithmTest.class);
+    static Logger logger = Logger.getLogger(MLAlgorithmTest.class);
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 
     ACache extendedSourceCache = new MemoryCache();
     ACache extendedTargetCache = new MemoryCache();
-    
+
     AMapping trainingMap, extendedTrainingMap, refMap;
-    
+
     Configuration config = new Configuration();
     PropertyMapping pm = new PropertyMapping();
 
@@ -49,14 +66,14 @@ public class MLAlgorithmTest {
         Instance i3 = new Instance("ex:i3");
         i3.addProperty("name", "Claus");
         i3.addProperty("surname", "Stadler");
-        
+
         Instance i4 = new Instance("ex:i4");
         i4.addProperty("name", "Claus");
-        i4.addProperty("surname", "Lyko");        
+        i4.addProperty("surname", "Lyko");
         Instance i5 = new Instance("ex:i5");
         i5.addProperty("name", "J.");
         i5.addProperty("surname", "Doe");
-        
+
         Instance i6 = new Instance("ex:i6");
         i6.addProperty("name", "Donald");
         i6.addProperty("surname", "Dumb");
@@ -66,7 +83,7 @@ public class MLAlgorithmTest {
         sc.addInstance(i2);//j.doe
         sc.addInstance(i3);//stadler
         sc.addInstance(i6);//trump
-        
+
 
         tc.addInstance(i1);
         tc.addInstance(i2);
@@ -74,8 +91,8 @@ public class MLAlgorithmTest {
         tc.addInstance(i4);
         tc.addInstance(i5);
         tc.addInstance(i6);
-        
-        
+
+
         //extra Instances
         Instance ia = new Instance("ex:ia");
         ia.addProperty("name", "Phill");
@@ -85,12 +102,12 @@ public class MLAlgorithmTest {
         ib.addProperty("surname", "Lektro");
 
         for(Instance ii : sc.getAllInstances())
-        	extendedSourceCache.addInstance(ii);
+            extendedSourceCache.addInstance(ii);
         for(Instance ii : tc.getAllInstances())
-        	extendedTargetCache.addInstance(ii);
+            extendedTargetCache.addInstance(ii);
         extendedSourceCache.addInstance(ia);
         extendedTargetCache.addInstance(ia);
-        
+
         trainingMap = MappingFactory.createDefaultMapping();
         trainingMap.add("ex:i1", "ex:i1", 1d);
 
@@ -101,12 +118,12 @@ public class MLAlgorithmTest {
 
         extendedTrainingMap = MappingFactory.createDefaultMapping();
         for(Entry<String, HashMap<String, Double>> e : refMap.getMap().entrySet()) {
-        	for(String t : e.getValue().keySet())
-        	extendedTrainingMap.add(e.getKey(), t, refMap.getConfidence(e.getKey(), t));
+            for(String t : e.getValue().keySet())
+                extendedTrainingMap.add(e.getKey(), t, refMap.getConfidence(e.getKey(), t));
         }
         extendedTrainingMap.add("ex:i1", "ex:i4", 0.8d);
         extendedTrainingMap.add("ex:i2", "ex:i5", 1d);
-        
+
         KBInfo si = new KBInfo();
         si.setVar("?x");
         si.setProperties(props);

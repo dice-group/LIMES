@@ -1,16 +1,33 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  *
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
+
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 /**
  *         <p>
@@ -18,6 +35,7 @@ import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
  *         must be fair. The surjection between sets X and Y is fair if η' maps
  *         lements of X as evenly as possible to Y.
  */
+
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
@@ -77,7 +95,7 @@ public class FairSurjectionFinder extends SurjectionFinder {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.pointsets.surjection.
      * SurjectionFinder#getRuntimeApproximation(double)
      */

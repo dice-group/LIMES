@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.euclid;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -10,10 +23,14 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
- * Boolean implementation of a self-configurator (Euclid) to (unsupervised) learn LS based upon 
- * a boolean combination of arbitrary simple classifiers, each representing an atomic LS. 
- * 
+ * Boolean implementation of a self-configurator (Euclid) to (unsupervised) learn LS based upon
+ * a boolean combination of arbitrary simple classifiers, each representing an atomic LS.
+ *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
@@ -23,7 +40,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
      * @param source Source cache
      * @param target Target cache
      */
-	public BooleanSelfConfigurator (ACache source, ACache target) {
+    public BooleanSelfConfigurator (ACache source, ACache target) {
         super(source, target);
     }
 
@@ -37,7 +54,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public BooleanSelfConfigurator (ACache source, ACache target, double minCoverage, double beta) {
         super(source, target, minCoverage, beta);
     }
-    
+
     /**
      * Constructor
      *
@@ -50,7 +67,6 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public BooleanSelfConfigurator(ACache source, ACache target, double minCoverage, double beta, Map<String, String> measures) {
         super(source, target, minCoverage, beta, measures);
     }
-
 
 
     /** Aims to improve upon a particular classifier by checking whether adding a delta

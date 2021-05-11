@@ -1,6 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper;
-
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -11,54 +26,22 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
-import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
-import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.string.JaroMapper;
-import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
+import org.aksw.limes.core.measures.mapper.string.*;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverseMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.EqualsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.FinishesMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.MeetsMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.OverlapsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.*;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.topology.ContainsMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoveredbyMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoversMapper;
-import org.aksw.limes.core.measures.mapper.topology.CrossesMapper;
-import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
-import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
-import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
-import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
-import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.mapper.topology.*;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MapperFactoryTest {
     public ACache source = new MemoryCache();

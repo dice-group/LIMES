@@ -1,10 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine.partialrecallengine.refinement;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.execution.planning.plan.Plan;
@@ -12,6 +23,8 @@ import org.aksw.limes.core.execution.planning.planner.LigerPlanner;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.log4j.Logger;
+
+import java.util.*;
 
 public class LigerRefinementOperator extends PartialRecallRefinementOperator {
 
@@ -39,15 +52,15 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
      * better runtime estimation, the algorithm assigns it as the best
      * specification. If the new best specification has achieved the desired
      * selectivity, the algorithm terminates.
-     * 
+     *
      * Then, LIGER calls the function refine(), which implements the refinement
      * operator. A new subsumed specification resulted from the refinement is
      * stored iff it does not already exists in total set and its selectivity is
      * higher or equal to the desired selectivity.
-     * 
+     *
      * Finally, the algorithm performs a hierarchical ordering of the
      * specifications in the buffer queue with respect to runtime estimations.
-     * 
+     *
      */
     @Override
     public void optimize() {
@@ -97,7 +110,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
      * Creates the set of to-be-refined nodes by adding specification that does
      * not already exists in total set and their selectivity is higher or equal
      * to the desired selectivity.
-     * 
+     *
      * @param specs,
      *            the input set of unchecked specifications
      */
@@ -119,8 +132,8 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
 
     /**
      * Implements the refinement operator for guaranteed recall.
-     * 
-     * 
+     *
+     *
      * @param currentSpec,
      *            an input specification
      * @return a list of refined specifications
@@ -172,7 +185,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
     /**
      * Refines an atomic link specification by calling the next(threshold)
      * function.
-     * 
+     *
      * @param currentSpec,an
      *            input specification
      * @return null if the currentSpec can not be refine anymore, or a refined
@@ -199,7 +212,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
      * keeping one child specification as is, and substitutes the other child
      * specification with the set of specification retrieved by refining the
      * other child.
-     * 
+     *
      * @param parent,
      *            an input specification
      * @param leftChildren,
@@ -212,7 +225,7 @@ public class LigerRefinementOperator extends PartialRecallRefinementOperator {
      * @return a set of specifications subsumed by the parent specification
      */
     public List<LinkSpecification> merge(LinkSpecification parent, List<LinkSpecification> leftChildren,
-            List<LinkSpecification> rightChildren, boolean isLeft) {
+                                         List<LinkSpecification> rightChildren, boolean isLeft) {
 
         List<LinkSpecification> specList = new ArrayList<LinkSpecification>();
 

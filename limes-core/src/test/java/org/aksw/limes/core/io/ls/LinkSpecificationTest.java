@@ -1,10 +1,25 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.ls;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class LinkSpecificationTest {
 
@@ -12,13 +27,13 @@ public class LinkSpecificationTest {
     public void testLS() {
         LinkSpecification ls = new LinkSpecification(
                 "OR(OR(cosine(x.name,y.name)|0.4044,OR"
-                + "(OR(cosine(x.name,y.name)|0.4044,levenshtein(x.description,y.description)|0.4135)|0.5151,"
-                + "MINUS(OR(levenshtein(x.description,y.description)|0.4135,euclidean(x.price,y.price)|0.8596)|0.5151,"
-                + "euclidean(x.price,y.price)|0.8993)|0.5905)|0.5801)|0.5151,"
-                + "MINUS(OR(cosine(x.name,y.name)|0.4044,levenshtein(x.description,y.description)|0.4135)|0.5151,"
-                + "euclidean(x.price,y.price)|0.8993)|0.5905)",
+                        + "(OR(cosine(x.name,y.name)|0.4044,levenshtein(x.description,y.description)|0.4135)|0.5151,"
+                        + "MINUS(OR(levenshtein(x.description,y.description)|0.4135,euclidean(x.price,y.price)|0.8596)|0.5151,"
+                        + "euclidean(x.price,y.price)|0.8993)|0.5905)|0.5801)|0.5151,"
+                        + "MINUS(OR(cosine(x.name,y.name)|0.4044,levenshtein(x.description,y.description)|0.4135)|0.5151,"
+                        + "euclidean(x.price,y.price)|0.8993)|0.5905)",
                 0.6929);
-        
+
         System.out.println(ls.toStringPretty());
 
     }

@@ -1,31 +1,42 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.ml.algorithm.matching;
 
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.matching.stablematching.HospitalResidents;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.TreeSet;
+
 /**
- *
  * @author ngonga
  * @author Klaus Lyko
  */
-public class DefaultPropertyMapper implements PropertyMapper{
+public class DefaultPropertyMapper implements PropertyMapper {
 
     public int LIMIT = 500;
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -33,20 +44,22 @@ public class DefaultPropertyMapper implements PropertyMapper{
     Model sourceModel, targetModel;
 
     public DefaultPropertyMapper(){}
+
     public DefaultPropertyMapper(Model sourceModel, Model targetModel){
-    	this.sourceModel = sourceModel;
-    	this.targetModel = targetModel;
+        this.sourceModel = sourceModel;
+        this.targetModel = targetModel;
     }
-    /** Applies stable matching to determine the best possible mapping of 
+
+    /** Applies stable matching to determine the best possible mapping of
      * properties from two endpoints
      * @param endpoint1 Source endpoint
      * @param endpoint2 Target endpoint
      * @param classExpression1 Source class expression
      * @param classExpression2 Target class expression
-     * @return 
+     * @return
      */
     public AMapping getPropertyMapping(String endpoint1,
-            String endpoint2, String classExpression1, String classExpression2) {
+                                       String endpoint2, String classExpression1, String classExpression2) {
         AMapping m = getMappingProperties(endpoint1, endpoint2, classExpression1, classExpression2);
         HospitalResidents hr = new HospitalResidents();
         m = hr.getMatching(m);
@@ -63,27 +76,27 @@ public class DefaultPropertyMapper implements PropertyMapper{
     }
 
     public Model getSourceModel() {
-		return sourceModel;
-	}
+        return sourceModel;
+    }
 
-	public void setSourceModel(Model sourceModel) {
-		this.sourceModel = sourceModel;
-	}
+    public void setSourceModel(Model sourceModel) {
+        this.sourceModel = sourceModel;
+    }
 
-	public Model getTargetModel() {
-		return targetModel;
-	}
+    public Model getTargetModel() {
+        return targetModel;
+    }
 
-	public void setTargetModel(Model targetModel) {
-		this.targetModel = targetModel;
-	}
+    public void setTargetModel(Model targetModel) {
+        this.targetModel = targetModel;
+    }
 
-	/** Computes the mapping of property from enpoint1 to endpoint2 by using the
+    /** Computes the mapping of property from enpoint1 to endpoint2 by using the
      * restriction classExpression 1 and classExpression2
      *
      */
     public AMapping getMappingProperties(String endpoint1,
-            String endpoint2, String classExpression1, String classExpression2) {
+                                         String endpoint2, String classExpression1, String classExpression2) {
 
         logger.info("Getting mapping from " + classExpression1 + " to " + classExpression2);
         AMapping m2 = getMonoDirectionalMap(endpoint1, endpoint2, classExpression1, classExpression2);
@@ -105,7 +118,7 @@ public class DefaultPropertyMapper implements PropertyMapper{
     }
 
     public AMapping getMonoDirectionalMap(String endpoint1,
-            String endpoint2, String classExpression1, String classExpression2) {
+                                          String endpoint2, String classExpression1, String classExpression2) {
 
 
         HashMap<String, TreeSet<String>> propertyValueMap =
@@ -128,15 +141,15 @@ public class DefaultPropertyMapper implements PropertyMapper{
         Query sparqlQuery = QueryFactory.create(query);
         QueryExecution qexec;
         if(sourceModel == null)
-        	qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
+            qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
         else
-        	qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
+            qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
         ResultSet results = qexec.execSelect();
         // first get LIMIT instances from
         String s, p, o;
         int count = 0;
         while (results.hasNext()) {
-        	count++;
+            count++;
             QuerySolution soln = results.nextSolution();
             {
                 try {
@@ -168,11 +181,11 @@ public class DefaultPropertyMapper implements PropertyMapper{
                 object = object.split("@")[0];
                 if (!object.contains("\\") && !object.contains("\n") && !object.contains("\"")) {
                     //System.out.println(object);
-                	String objectString;
-                	if(!object.startsWith("http"))
-                		objectString = "\"" + object.replaceAll(" ", "_") + "\"";
-                	else
-                		objectString = "<"+object.replaceAll(" ", "_") +">";
+                    String objectString;
+                    if(!object.startsWith("http"))
+                        objectString = "\"" + object.replaceAll(" ", "_") + "\"";
+                    else
+                        objectString = "<"+object.replaceAll(" ", "_") +">";
                     query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"+
                             "SELECT ?p " +
                             "WHERE { ?s rdf:type <" + classExpression2 + "> . "+
@@ -181,16 +194,16 @@ public class DefaultPropertyMapper implements PropertyMapper{
                     logger.debug(query);
                     sparqlQuery = QueryFactory.create(query);
                     if(targetModel == null)
-                    	qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
+                        qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
                     else
-                    	qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
+                        qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
                     results = qexec.execSelect();
                     int count2 = 0;
                     QuerySolution soln;
                     while (results.hasNext()) {
                         soln = results.nextSolution();
                         {
-                        	count2++;
+                            count2++;
                             try {
                                 p = soln.get("p").toString();
                                 sim = propertyToProperty.getConfidence(property, p);
@@ -213,7 +226,7 @@ public class DefaultPropertyMapper implements PropertyMapper{
         //logger.debug(classToClassMapping.map);
         return propertyToProperty;
     }
-    
+
     /** Test whether the input string is numeric
      *
      * @param input String to test

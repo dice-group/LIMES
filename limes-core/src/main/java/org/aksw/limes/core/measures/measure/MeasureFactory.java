@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
@@ -7,12 +24,7 @@ import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure
 import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
@@ -31,40 +43,14 @@ import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
+import org.aksw.limes.core.measures.measure.string.*;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
-import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
-import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
-import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
-import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
-import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
+import org.aksw.limes.core.measures.measure.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -427,166 +413,166 @@ public class MeasureFactory {
     public static AMeasure createMeasure(MeasureType type) {
 
         switch (type) {
-        case COSINE:
-            return new CosineMeasure();
-        case EXACTMATCH:
-            return new ExactMatchMeasure();
-        case JACCARD:
-            return new JaccardMeasure();
-        // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
-        case JAROWINKLER:
-            return new JaroWinklerMeasure();
-        case JARO:
-            return new JaroMeasure();
-        case LEVENSHTEIN:
-            return new LevenshteinMeasure();
-        case MONGEELKAN:
-            return new MongeElkanMeasure();
-        case OVERLAP:
-            return new TrigramMeasure();
-        case QGRAMS:
-            return new QGramSimilarityMeasure();
-        case RATCLIFF:
-            return new RatcliffObershelpMeasure();
-        case SOUNDEX:
-            return new SoundexMeasure();
-        case DOUBLEMETA:
-            return new DoubleMetaphoneMeasure();
-        case KOELN:
-            return new KoelnPhoneticMeasure();
-        case TRIGRAM:
-            return new TrigramMeasure();
-        ////////////////////////////////////////////
+            case COSINE:
+                return new CosineMeasure();
+            case EXACTMATCH:
+                return new ExactMatchMeasure();
+            case JACCARD:
+                return new JaccardMeasure();
+            // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
+            case JAROWINKLER:
+                return new JaroWinklerMeasure();
+            case JARO:
+                return new JaroMeasure();
+            case LEVENSHTEIN:
+                return new LevenshteinMeasure();
+            case MONGEELKAN:
+                return new MongeElkanMeasure();
+            case OVERLAP:
+                return new TrigramMeasure();
+            case QGRAMS:
+                return new QGramSimilarityMeasure();
+            case RATCLIFF:
+                return new RatcliffObershelpMeasure();
+            case SOUNDEX:
+                return new SoundexMeasure();
+            case DOUBLEMETA:
+                return new DoubleMetaphoneMeasure();
+            case KOELN:
+                return new KoelnPhoneticMeasure();
+            case TRIGRAM:
+                return new TrigramMeasure();
+            ////////////////////////////////////////////
 
-        case EUCLIDEAN:
-            return new EuclideanMeasure();
-        case MANHATTAN:
-            return new ManhattanMeasure();
-        case GEO_GREAT_ELLIPTIC:
-            return new GeoGreatEllipticMeasure();
-        case GEO_ORTHODROMIC:
-            return new GeoOrthodromicMeasure();
-        ///////////////////////
-        case GEO_CENTROID_INDEXED_HAUSDORFF:
-            return new CentroidIndexedHausdorffMeasure();
-        case GEO_FAST_HAUSDORFF:
-            return new FastHausdorffMeasure();
-        case GEO_HAUSDORFF:
-            return new NaiveHausdorffMeasure();
-        case GEO_INDEXED_HAUSDORFF:
-            return new IndexedHausdorffMeasure();
-        case GEO_NAIVE_HAUSDORFF:
-            return new NaiveHausdorffMeasure();
-        case GEO_SCAN_INDEXED_HAUSDORFF:
-            return new ScanIndexedHausdorffMeasure();
-        case GEO_SYMMETRIC_HAUSDORFF:
-            return new SymmetricHausdorffMeasure();
-        ///////////////////////
-        case GEO_MAX:
-            return new NaiveMaxMeasure();
-        case GEO_MEAN:
-            return new NaiveMeanMeasure();
-        case GEO_MIN:
-            return new NaiveMinMeasure();
-        case GEO_AVG:
-            return new NaiveAverageMeasure();
-        case GEO_FRECHET:
-            return new NaiveFrechetMeasure();
-        case GEO_LINK:
-            return new NaiveLinkMeasure();
-        case GEO_SUM_OF_MIN:
-            return new NaiveSumOfMinMeasure();
-        case GEO_NAIVE_SURJECTION:
-            return new NaiveSurjectionMeasure();
-        case GEO_FAIR_SURJECTION:
-            return new FairSurjectionMeasure();
-        ///////////////////////
-        case TMP_CONCURRENT:
-            return new ConcurrentMeasure();
-        case TMP_PREDECESSOR:
-            return new PredecessorMeasure();
-        case TMP_SUCCESSOR:
-            return new SuccessorMeasure();
+            case EUCLIDEAN:
+                return new EuclideanMeasure();
+            case MANHATTAN:
+                return new ManhattanMeasure();
+            case GEO_GREAT_ELLIPTIC:
+                return new GeoGreatEllipticMeasure();
+            case GEO_ORTHODROMIC:
+                return new GeoOrthodromicMeasure();
+            ///////////////////////
+            case GEO_CENTROID_INDEXED_HAUSDORFF:
+                return new CentroidIndexedHausdorffMeasure();
+            case GEO_FAST_HAUSDORFF:
+                return new FastHausdorffMeasure();
+            case GEO_HAUSDORFF:
+                return new NaiveHausdorffMeasure();
+            case GEO_INDEXED_HAUSDORFF:
+                return new IndexedHausdorffMeasure();
+            case GEO_NAIVE_HAUSDORFF:
+                return new NaiveHausdorffMeasure();
+            case GEO_SCAN_INDEXED_HAUSDORFF:
+                return new ScanIndexedHausdorffMeasure();
+            case GEO_SYMMETRIC_HAUSDORFF:
+                return new SymmetricHausdorffMeasure();
+            ///////////////////////
+            case GEO_MAX:
+                return new NaiveMaxMeasure();
+            case GEO_MEAN:
+                return new NaiveMeanMeasure();
+            case GEO_MIN:
+                return new NaiveMinMeasure();
+            case GEO_AVG:
+                return new NaiveAverageMeasure();
+            case GEO_FRECHET:
+                return new NaiveFrechetMeasure();
+            case GEO_LINK:
+                return new NaiveLinkMeasure();
+            case GEO_SUM_OF_MIN:
+                return new NaiveSumOfMinMeasure();
+            case GEO_NAIVE_SURJECTION:
+                return new NaiveSurjectionMeasure();
+            case GEO_FAIR_SURJECTION:
+                return new FairSurjectionMeasure();
+            ///////////////////////
+            case TMP_CONCURRENT:
+                return new ConcurrentMeasure();
+            case TMP_PREDECESSOR:
+                return new PredecessorMeasure();
+            case TMP_SUCCESSOR:
+                return new SuccessorMeasure();
 
-        case TMP_AFTER:
-            return new AfterMeasure();
-        case TMP_BEFORE:
-            return new BeforeMeasure();
-        case TMP_DURING_REVERSE:
-            return new DuringReverseMeasure();
-        case TMP_DURING:
-            return new DuringMeasure();
-        case TMP_EQUALS:
-            return new EqualsMeasure();
-        case TMP_FINISHES:
-            return new FinishesMeasure();
-        case TMP_IS_FINISHED_BY:
-            return new IsFinishedByMeasure();
-        case TMP_IS_MET_BY:
-            return new IsMetByMeasure();
-        case TMP_IS_OVERLAPPED_BY:
-            return new IsOverlappedByMeasure();
-        case TMP_IS_STARTED_BY:
-            return new IsStartedByMeasure();
-        case TMP_MEETS:
-            return new MeetsMeasure();
-        case TMP_OVERLAPS:
-            return new OverlapsMeasure();
-        case TMP_STARTS:
-            return new StartsMeasure();
-        ///////////////////////
-        case TOP_CONTAINS:
-            return new ContainsMeasure();
-        case TOP_COVERED_BY:
-            return new CoveredbyMeasure();
-        case TOP_COVERS:
-            return new CoversMeasure();
-        case TOP_CROSSES:
-            return new CrossesMeasure();
-        case TOP_DISJOINT:
-            return new DisjointMeasure();
-        case TOP_EQUALS:
-            return new org.aksw.limes.core.measures.measure.topology.EqualsMeasure();
-        case TOP_INTERSECTS:
-            return new IntersectsMeasure();
-        case TOP_OVERLAPS:
-            return new org.aksw.limes.core.measures.measure.topology.OverlapsMeasure();
-        case TOP_TOUCHES:
-            return new TouchesMeasure();
-        case TOP_WITHIN:
-            return new WithinMeasure();
+            case TMP_AFTER:
+                return new AfterMeasure();
+            case TMP_BEFORE:
+                return new BeforeMeasure();
+            case TMP_DURING_REVERSE:
+                return new DuringReverseMeasure();
+            case TMP_DURING:
+                return new DuringMeasure();
+            case TMP_EQUALS:
+                return new EqualsMeasure();
+            case TMP_FINISHES:
+                return new FinishesMeasure();
+            case TMP_IS_FINISHED_BY:
+                return new IsFinishedByMeasure();
+            case TMP_IS_MET_BY:
+                return new IsMetByMeasure();
+            case TMP_IS_OVERLAPPED_BY:
+                return new IsOverlappedByMeasure();
+            case TMP_IS_STARTED_BY:
+                return new IsStartedByMeasure();
+            case TMP_MEETS:
+                return new MeetsMeasure();
+            case TMP_OVERLAPS:
+                return new OverlapsMeasure();
+            case TMP_STARTS:
+                return new StartsMeasure();
+            ///////////////////////
+            case TOP_CONTAINS:
+                return new ContainsMeasure();
+            case TOP_COVERED_BY:
+                return new CoveredbyMeasure();
+            case TOP_COVERS:
+                return new CoversMeasure();
+            case TOP_CROSSES:
+                return new CrossesMeasure();
+            case TOP_DISJOINT:
+                return new DisjointMeasure();
+            case TOP_EQUALS:
+                return new org.aksw.limes.core.measures.measure.topology.EqualsMeasure();
+            case TOP_INTERSECTS:
+                return new IntersectsMeasure();
+            case TOP_OVERLAPS:
+                return new org.aksw.limes.core.measures.measure.topology.OverlapsMeasure();
+            case TOP_TOUCHES:
+                return new TouchesMeasure();
+            case TOP_WITHIN:
+                return new WithinMeasure();
 
-        ///////////////////////
-        case SET_JACCARD:
-            return new SetJaccardMeasure();
+            ///////////////////////
+            case SET_JACCARD:
+                return new SetJaccardMeasure();
 
-        ///////////////////////
-        case SHORTEST_PATH:
-            AIndex IndexerSP = createIndexer();
-            if (IndexerSP == null) {
-                throw new NullIndexerException("Cannot initialize " + SHORTEST_PATH + ". Index instance is null.");
-            }
-            return new ShortestPathMeasure(IndexerSP);
-        case LCH:
-            AIndex IndexerLCH = createIndexer();
-            if (IndexerLCH == null) {
-                throw new NullIndexerException("Cannot initialize " + LCH + ". Index instance is null.");
-            }
-            return new LCHMeasure(IndexerLCH);
-        case LI:
-            AIndex IndexerLi = createIndexer();
-            if (IndexerLi == null) {
-                throw new NullIndexerException("Cannot initialize " + LI + ". Index instance is null.");
-            }
-            return new LiMeasure(IndexerLi);
-        case WUPALMER:
-            AIndex IndexerWP = createIndexer();
-            if (IndexerWP == null) {
-                throw new NullIndexerException("Cannot initialize " + WUPALMER + ". Index instance is null.");
-            }
-            return new WuPalmerMeasure(IndexerWP);
-        default:
-            throw new InvalidMeasureException(type.toString());
+            ///////////////////////
+            case SHORTEST_PATH:
+                AIndex IndexerSP = createIndexer();
+                if (IndexerSP == null) {
+                    throw new NullIndexerException("Cannot initialize " + SHORTEST_PATH + ". Index instance is null.");
+                }
+                return new ShortestPathMeasure(IndexerSP);
+            case LCH:
+                AIndex IndexerLCH = createIndexer();
+                if (IndexerLCH == null) {
+                    throw new NullIndexerException("Cannot initialize " + LCH + ". Index instance is null.");
+                }
+                return new LCHMeasure(IndexerLCH);
+            case LI:
+                AIndex IndexerLi = createIndexer();
+                if (IndexerLi == null) {
+                    throw new NullIndexerException("Cannot initialize " + LI + ". Index instance is null.");
+                }
+                return new LiMeasure(IndexerLi);
+            case WUPALMER:
+                AIndex IndexerWP = createIndexer();
+                if (IndexerWP == null) {
+                    throw new NullIndexerException("Cannot initialize " + WUPALMER + ". Index instance is null.");
+                }
+                return new WuPalmerMeasure(IndexerWP);
+            default:
+                throw new InvalidMeasureException(type.toString());
         }
 
     }

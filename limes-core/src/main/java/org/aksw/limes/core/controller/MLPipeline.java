@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.controller;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
@@ -15,16 +28,11 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.MLResults;
-import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Execution pipeline for generating mappings using ML.
@@ -52,12 +60,12 @@ public class MLPipeline {
         MLResults mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
         if (mlImplementationType == MLImplementationType.SUPERVISED_BATCH){
-        	AMappingReader mappingReader;
-        	if(trainingDataFile.endsWith(".csv")){
-        		mappingReader = new CSVMappingReader(trainingDataFile);
-        	}else{
-        		mappingReader = new RDFMappingReader(trainingDataFile);
-        	}
+            AMappingReader mappingReader;
+            if(trainingDataFile.endsWith(".csv")){
+                mappingReader = new CSVMappingReader(trainingDataFile);
+            }else{
+                mappingReader = new RDFMappingReader(trainingDataFile);
+            }
             trainingDataMap = mappingReader.read();
         }
 

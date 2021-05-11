@@ -1,18 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.topology;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -21,12 +24,16 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.util.LimesWktReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -45,18 +52,18 @@ public class RADON {
         public static double[] decideForTheta(GridSizeHeuristics s, GridSizeHeuristics t, String measure) {
             double[] stats;
             switch (measure) {
-            case MAX:
-                stats = new double[] { s.maxX, s.maxY, t.maxX, t.maxY };
-                break;
-            case AVG:
-                stats = new double[] { s.avgX, s.avgY, t.avgX, t.avgY };
-                break;
-            case MED:
-                stats = new double[] { s.medX, s.medY, t.medX, t.medY };
-                break;
-            case MIN:
-            default:
-                stats = new double[] { s.minX, s.minY, t.minX, t.minY };
+                case MAX:
+                    stats = new double[] { s.maxX, s.maxY, t.maxX, t.maxY };
+                    break;
+                case AVG:
+                    stats = new double[] { s.avgX, s.avgY, t.avgX, t.avgY };
+                    break;
+                case MED:
+                    stats = new double[] { s.medX, s.medY, t.medX, t.medY };
+                    break;
+                case MIN:
+                default:
+                    stats = new double[] { s.minX, s.minY, t.minX, t.minY };
             }
             double estAreaS = stats[0] * stats[1] * s.size;
             double estAreaT = stats[2] * stats[3] * t.size;
@@ -269,28 +276,28 @@ public class RADON {
 
         private static Boolean relate(Geometry geometry1, Geometry geometry2, String relation) {
             switch (relation) {
-            case EQUALS:
-                return geometry1.equals(geometry2);
-            case DISJOINT:
-                return geometry1.disjoint(geometry2);
-            case INTERSECTS:
-                return geometry1.intersects(geometry2);
-            case TOUCHES:
-                return geometry1.touches(geometry2);
-            case CROSSES:
-                return geometry1.crosses(geometry2);
-            case WITHIN:
-                return geometry1.within(geometry2);
-            case CONTAINS:
-                return geometry1.contains(geometry2);
-            case COVERS:
-                return geometry1.covers(geometry2);
-            case COVEREDBY:
-                return geometry1.coveredBy(geometry2);
-            case OVERLAPS:
-                return geometry1.overlaps(geometry2);
-            default:
-                return geometry1.relate(geometry2, relation);
+                case EQUALS:
+                    return geometry1.equals(geometry2);
+                case DISJOINT:
+                    return geometry1.disjoint(geometry2);
+                case INTERSECTS:
+                    return geometry1.intersects(geometry2);
+                case TOUCHES:
+                    return geometry1.touches(geometry2);
+                case CROSSES:
+                    return geometry1.crosses(geometry2);
+                case WITHIN:
+                    return geometry1.within(geometry2);
+                case CONTAINS:
+                    return geometry1.contains(geometry2);
+                case COVERS:
+                    return geometry1.covers(geometry2);
+                case COVEREDBY:
+                    return geometry1.coveredBy(geometry2);
+                case OVERLAPS:
+                    return geometry1.overlaps(geometry2);
+                default:
+                    return geometry1.relate(geometry2, relation);
             }
         }
     }
@@ -360,7 +367,7 @@ public class RADON {
     }
 
     public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar,
-            String expression, double threshold, String relation) {
+                                      String expression, double threshold, String relation) {
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }
@@ -392,7 +399,7 @@ public class RADON {
     }
 
     public static AMapping getMapping(Map<String, Geometry> sourceData, Map<String, Geometry> targetData,
-            String relation) {
+                                      String relation) {
         double thetaX, thetaY;
         int numThreads = new Double(Math.ceil((double) Runtime.getRuntime().availableProcessors() / 2.0d)).intValue();
         // Relation thats actually used for computation.
@@ -421,18 +428,18 @@ public class RADON {
             sourceData = targetData;
             targetData = swap;
             switch (rel) {
-            case WITHIN:
-                rel = CONTAINS;
-                break;
-            case CONTAINS:
-                rel = WITHIN;
-                break;
-            case COVERS:
-                rel = COVEREDBY;
-                break;
-            case COVEREDBY:
-                rel = COVERS;
-                break;
+                case WITHIN:
+                    rel = CONTAINS;
+                    break;
+                case CONTAINS:
+                    rel = WITHIN;
+                    break;
+                case COVERS:
+                    rel = COVEREDBY;
+                    break;
+                case COVEREDBY:
+                    rel = COVERS;
+                    break;
             }
         }
 

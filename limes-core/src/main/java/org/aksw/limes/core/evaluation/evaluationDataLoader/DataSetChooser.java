@@ -1,24 +1,37 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
 import de.uni_leipzig.simba.genetics.util.PropMapper;
@@ -49,55 +62,55 @@ public class DataSetChooser {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (d) {
-        case "PERSONNew":
-            param = getPersonNew();
-            break;
-        case "PERSON1":
-            param = getPerson1();
-            break;
-        case "PERSON2":
-            param = getPerson2();
-            break;
-        case "RESTAURANTS":
-            param = getRestaurant();
-            break;
-        case "RESTAURANTSFIXED":
-            param = getRestaurant();
-            break;
-        case "DBLPACM":
-            param = getDBLPACM();
-            break;
-        case "ABTBUY":
-            param = getAbtBuy();
-            break;
-        case "DBLPSCHOLAR":
-            param = getDBLPScholar();
-            break;
-        case "AMAZONGOOGLEPRODUCTS":
-            param = getAmazonGoogleProducts();
-            break;
-        case "DBPLINKEDMDB":
-            param = getDBPediaLinkedMDB();
-            break;
-        case "DRUGS":
-            param = getDrugs();
-            break;
-        case "PERSON1_CSV":
-            param = getPerson1CSV();
-            break;
-        case "PERSON2_CSV":
-            param = getPerson2CSV();
-            break;
-        case "RESTAURANTS_CSV":
-            param = getRestaurantCSV();
-            break;
-        case "OAEI2014BOOKS":
-            param = getOAEI2014Books();
-            break;
-        /*
-         * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
-         * getVillages(); break; case "MOVIES": param = getMovies(); break;
-         */
+            case "PERSONNew":
+                param = getPersonNew();
+                break;
+            case "PERSON1":
+                param = getPerson1();
+                break;
+            case "PERSON2":
+                param = getPerson2();
+                break;
+            case "RESTAURANTS":
+                param = getRestaurant();
+                break;
+            case "RESTAURANTSFIXED":
+                param = getRestaurant();
+                break;
+            case "DBLPACM":
+                param = getDBLPACM();
+                break;
+            case "ABTBUY":
+                param = getAbtBuy();
+                break;
+            case "DBLPSCHOLAR":
+                param = getDBLPScholar();
+                break;
+            case "AMAZONGOOGLEPRODUCTS":
+                param = getAmazonGoogleProducts();
+                break;
+            case "DBPLINKEDMDB":
+                param = getDBPediaLinkedMDB();
+                break;
+            case "DRUGS":
+                param = getDrugs();
+                break;
+            case "PERSON1_CSV":
+                param = getPerson1CSV();
+                break;
+            case "PERSON2_CSV":
+                param = getPerson2CSV();
+                break;
+            case "RESTAURANTS_CSV":
+                param = getRestaurantCSV();
+                break;
+            case "OAEI2014BOOKS":
+                param = getOAEI2014Books();
+                break;
+            /*
+             * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
+             * getVillages(); break; case "MOVIES": param = getMovies(); break;
+             */
         }
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
         param.put(MapKey.MAX_RUNS, 5);
@@ -169,48 +182,48 @@ public class DataSetChooser {
     public static EvaluationData getData(DataSets a) {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (a) {
-        case PERSON1:
-            param = getPerson1();
-            break;
-        case PERSON2:
-            param = getPerson2();
-            break;
-        case RESTAURANTS:
-            param = getRestaurant();
-            break;
-        case RESTAURANTS_FIXED:
-            param = getRestaurant();
-            break;
-        case DBLPACM:
-            param = getDBLPACM();
-            break;
-        case ABTBUY:
-            param = getAbtBuy();
-            break;
-        case DBLPSCHOLAR:
-            param = getDBLPScholar();
-            break;
-        case AMAZONGOOGLEPRODUCTS:
-            param = getAmazonGoogleProducts();
-            break;
-        case DBPLINKEDMDB:
-            param = getDBPediaLinkedMDB();
-            break;
-        case DRUGS:
-            param = getDrugs();
-            break;
-        case PERSON1_CSV:
-            param = getPerson1CSV();
-            break;
-        case PERSON2_CSV:
-            param = getPerson2CSV();
-            break;
-        case RESTAURANTS_CSV:
-            param = getRestaurantCSV();
-            break;
-        case OAEI2014BOOKS:
-            param = getOAEI2014Books();
-            break;
+            case PERSON1:
+                param = getPerson1();
+                break;
+            case PERSON2:
+                param = getPerson2();
+                break;
+            case RESTAURANTS:
+                param = getRestaurant();
+                break;
+            case RESTAURANTS_FIXED:
+                param = getRestaurant();
+                break;
+            case DBLPACM:
+                param = getDBLPACM();
+                break;
+            case ABTBUY:
+                param = getAbtBuy();
+                break;
+            case DBLPSCHOLAR:
+                param = getDBLPScholar();
+                break;
+            case AMAZONGOOGLEPRODUCTS:
+                param = getAmazonGoogleProducts();
+                break;
+            case DBPLINKEDMDB:
+                param = getDBPediaLinkedMDB();
+                break;
+            case DRUGS:
+                param = getDrugs();
+                break;
+            case PERSON1_CSV:
+                param = getPerson1CSV();
+                break;
+            case PERSON2_CSV:
+                param = getPerson2CSV();
+                break;
+            case RESTAURANTS_CSV:
+                param = getRestaurantCSV();
+                break;
+            case OAEI2014BOOKS:
+                param = getOAEI2014Books();
+                break;
 
         }
 
@@ -224,7 +237,7 @@ public class DataSetChooser {
         }
         return data;
     }
-    
+
     private static HashMap<MapKey, Object> getPersonNew() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
@@ -234,7 +247,7 @@ public class DataSetChooser {
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
         param.put(MapKey.TARGET_FILE, "person12.nt");
-       // param.put(MapKey.TRAINING, "dataset11_dataset12_training_person.xml");
+        // param.put(MapKey.TRAINING, "dataset11_dataset12_training_person.xml");
 
         String type = "-Person";
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
@@ -680,7 +693,7 @@ public class DataSetChooser {
                 (String) param.get(MapKey.CONFIG_FILE)));
         param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
         param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
-        
+
         param.put(MapKey.REFERENCE_MAPPING,
                 OracleFactory
                         .getOracle((String) /* param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
@@ -748,7 +761,7 @@ public class DataSetChooser {
      * data.getTargetCache()); //
      * System.out.println("orginal.size()="+data.getReferenceMapping().size()+
      * " - fixed.size()="+ref.size());
-     * 
+     *
      * EvaluationData fixedRest =
      * DataSetChooser.getData(DataSets.RESTAURANTS_FIXED); System.out.println(
      * "RefMap fixed size="+fixedRest.getReferenceMapping().size()); }
@@ -769,7 +782,7 @@ public class DataSetChooser {
     public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;
         AMapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
-        
+
         for (String sk : original.getMap().keySet()) {
             if (sC.getAllUris().contains(sk)) {
                 for (String tk : original.getMap().get(sk).keySet()) {
@@ -872,7 +885,6 @@ public class DataSetChooser {
          * Name of target class
          */
         TARGET_CLASS("targetclass");
-        
 
 
         private final String key;

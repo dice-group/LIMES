@@ -1,9 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine.partialrecallengine.refinement;
-
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -13,6 +25,11 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.log4j.Logger;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class LigerRefinementOperatorTest {
     protected static final Logger logger = Logger.getLogger(LigerRefinementOperatorTest.class.getName());
@@ -156,7 +173,7 @@ public class LigerRefinementOperatorTest {
             LinkSpecification refinedLeftChild = operator.refineAtomicLinkSpecification(leftChild);
             LinkSpecification rightChild = parent.getChildren().get(1);
             LinkSpecification refinedRightChild = operator.refineAtomicLinkSpecification(rightChild);
-            
+
             // 1st attempt: refine left, keep right
             List<LinkSpecification> refinedLefts = new ArrayList<LinkSpecification>();
             refinedLefts.add(refinedLeftChild);
@@ -179,7 +196,7 @@ public class LigerRefinementOperatorTest {
             List<LinkSpecification> refinedRights = new ArrayList<LinkSpecification>();
             refinedRights.add(refinedRightChild);
             assertTrue(refinedRightChild != rightChild);
-            
+
             List<LinkSpecification> mergedWithRight = operator.merge(parent, lefts, refinedRights, false);
             for (LinkSpecification newLS : mergedWithRight) {
                 assertTrue(parent != newLS);

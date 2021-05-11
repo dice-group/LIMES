@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -10,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 public class MLAlgorithmFactory {
 
-    
+
     public static final String EAGLE = "eagle";
     public static final String WOMBAT_SIMPLE = "wombat simple";
     public static final String WOMBAT_COMPLETE = "wombat complete";
@@ -42,20 +59,20 @@ public class MLAlgorithmFactory {
             return WombatComplete.class;
         }
         if (name.equalsIgnoreCase(EUCLID_LINEAR)) {
-        	return LinearEuclid.class;
+            return LinearEuclid.class;
         }
         if (name.equalsIgnoreCase(EUCLID_BOOLEAN)) {
-        	return BooleanEuclid.class;
+            return BooleanEuclid.class;
         }
         if (name.equalsIgnoreCase(EUCLID_MESH)) {
-        	return MeshEuclid.class;
+            return MeshEuclid.class;
         }
         if (name.equalsIgnoreCase(LION)) {
             //@todo: fix this
             return Eagle.class;
         }
         if (name.equalsIgnoreCase(DRAGON)) {
-        	return Dragon.class;
+            return Dragon.class;
         }
 
 //        if(name.equalsIgnoreCase(DECISION_TREE_LEARNING)){
