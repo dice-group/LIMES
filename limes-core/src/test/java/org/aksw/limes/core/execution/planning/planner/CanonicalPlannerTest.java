@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.planner;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -10,14 +23,16 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
+
 public class CanonicalPlannerTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(CanonicalPlannerTest.class);
     @Test
     public void EmptyPlan() {
-        logger.info("{}","EmptyPlan");
+        System.out.println("EmptyPlan");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification();
@@ -27,7 +42,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void AtomicPlan() {
-        logger.info("{}","AtomicPlan");
+        System.out.println("AtomicPlan");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.8);
@@ -46,7 +61,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexPlanLS() {
-        logger.info("{}","ComplexPlanLS");
+        System.out.println("ComplexPlanLS");
 
         CanonicalPlanner p = new CanonicalPlanner();
         LinkSpecification ls = new LinkSpecification(
@@ -69,14 +84,14 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexPlanExtendedLS() {
-        logger.info("{}","ComplexPlanExtendedLS");
+        System.out.println("ComplexPlanExtendedLS");
 
         CanonicalPlanner p = new CanonicalPlanner();
         ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
                 "OR(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
                 0.8);
 
-        logger.info("{}",ls.getFullExpression());
+        System.out.println(ls.getFullExpression());
         NestedPlan plan = p.plan(ls);
         assertTrue(plan.isEmpty() == false);
         assertTrue(plan.isAtomic() == false);
@@ -94,7 +109,7 @@ public class CanonicalPlannerTest {
 
     @Test
     public void PlanWithWrongOperator() {
-        logger.info("{}","PlanWithWrongOperator");
+        System.out.println("PlanWithWrongOperator");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
@@ -114,12 +129,12 @@ public class CanonicalPlannerTest {
 
     @Test
     public void AtomicEqual() {
-        logger.info("{}","AtomicEqual");
+        System.out.println("AtomicEqual");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
         LinkSpecification ls = new LinkSpecification("cosine(x.label,y.label)", 0.8);
-        logger.info("{}",ls.isAtomic());
+        System.out.println(ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);
 
@@ -132,14 +147,14 @@ public class CanonicalPlannerTest {
 
     @Test
     public void ComplexEqual() {
-        logger.info("{}","ComplexEqual");
+        System.out.println("ComplexEqual");
 
         CanonicalPlanner p = new CanonicalPlanner();
 
         LinkSpecification ls = new LinkSpecification(
                 "OR(cosine(x.description,y.description)|0.3,OR(cosine(x.description,y.description)|0.5,cosine(x.title,y.name)|0.6)|0.7)",
                 0.8);
-        logger.info("{}",ls.isAtomic());
+        System.out.println(ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);
 

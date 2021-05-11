@@ -1,21 +1,35 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
+
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- *
  */
 public class borderModifierTest {
-    private static final Logger logger = LoggerFactory.getLogger(borderModifierTest.class);
 
     @Test
     public void test() {
@@ -64,27 +78,29 @@ public class borderModifierTest {
         maltaLgd.add(maltaLgdPoly1);
 
         // Print Modified Malta
-        logger.info("{}","Malta in DBpedia before applying InLineMeasurementErrorModifier modifier: "
+        System.out.println("Malta in DBpedia before applying InLineMeasurementErrorModifier modifier: "
                 + maltaDbpediaPoly1.points);
         Polygon maltaDbpediapoly1G = new borderModifier().modify(maltaDbpediaPoly1, 2);
-        logger.info("{}","Malta in DBpedia after applying InLineMeasurementErrorModifier modifier: "
+        System.out.println("Malta in DBpedia after applying InLineMeasurementErrorModifier modifier: "
                 + maltaDbpediapoly1G.points);
+        System.out.println();
 
-        logger.info("{}",
+        System.out.println(
                 "Malta in Nuts before applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly1.points);
         Polygon maltaNutsPoly1G = new borderModifier().modify(maltaNutsPoly1, 2);
-        logger.info("{}",
+        System.out.println(
                 "Malta in Nuts after applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly1G.points);
-        logger.info("{}",
+        System.out.println(
                 "Malta in Nuts before applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly2.points);
         Polygon maltaNutsPoly2G = new borderModifier().modify(maltaNutsPoly2, 2);
-        logger.info("{}",
+        System.out.println(
                 "Malta in Nuts after applying InLineMeasurementErrorModifier modifier: " + maltaNutsPoly2G.points);
+        System.out.println();
 
-        logger.info("{}",
+        System.out.println(
                 "Malta in LGD before applying InLineMeasurementErrorModifier modifier: " + maltaLgdPoly1.points);
         Polygon maltaLgdPoly1G = new borderModifier().modify(maltaLgdPoly1, 2);
-        logger.info("{}",
+        System.out.println(
                 "Malta in LGD after applying InLineMeasurementErrorModifier modifier: " + maltaLgdPoly1G.points);
 
     }

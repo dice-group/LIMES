@@ -1,15 +1,25 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.ml.algorithm.wombat;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -42,6 +52,8 @@ import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+
 /**
  * This class uses Least General Generalization (LGG) to learn Link
  * Specifications (LS)
@@ -72,11 +84,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected String sourceVariable = "x";
     protected String targetVariable = "y";
     protected Map<String, Double> sourcePropertiesCoverageMap; // coverage map
-                                                               // for latter
-                                                               // computations
+    // for latter
+    // computations
     protected Map<String, Double> targetPropertiesCoverageMap; // coverage map
-                                                               // for latter
-                                                               // computations
+    // for latter
+    // computations
 
     protected PseudoFMeasure pseudoFMeasure = null;
     protected AMapping trainingData = MappingFactory.createDefaultMapping();
@@ -123,7 +135,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      *         mapper measure(sourceProperty, targetProperty)
      */
     private AMapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure,
-            double threshold) {
+                                          double threshold) {
         String measureExpression = measure + "(" + sourceVariable + "." + sourceProperty + ", " + targetVariable + "."
                 + targetProperty + ")";
         Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
@@ -160,7 +172,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return Mapping corresponding to the input metric expression
      */
     protected final AMapping getMappingOfMetricExpression(String metricExpression,
-            Tree<? extends RefinementNode> root) {
+                                                          Tree<? extends RefinementNode> root) {
         AMapping map = null;
         if (saveMapping()) {
             map = getMappingOfMetricFromTree(metricExpression, root);

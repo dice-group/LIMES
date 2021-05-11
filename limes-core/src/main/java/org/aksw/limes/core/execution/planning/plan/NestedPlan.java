@@ -1,10 +1,27 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.plan;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the nested plan of a link specification. Note that the subPlans
@@ -43,6 +60,7 @@ public class NestedPlan extends Plan {
     }
 
     /* Getters and setters */
+
     /**
      * Returns the set of sub-plans of the current plan.
      *
@@ -120,7 +138,7 @@ public class NestedPlan extends Plan {
         this.executionStatus = executionStatus;
     }
 
-    
+
     /**
      * Checks if the plan is empty. Returns true if and only if the instruction
      * list is empty and both the sub-plans and the filtering instructions are
@@ -128,7 +146,7 @@ public class NestedPlan extends Plan {
      *
      * @return true if the plan is empty and false otherwise
      */
-     @Override
+    @Override
     public boolean isEmpty() {
         // instructionList is initiliazed as new list
         // subplans are null until a function initiliazes it

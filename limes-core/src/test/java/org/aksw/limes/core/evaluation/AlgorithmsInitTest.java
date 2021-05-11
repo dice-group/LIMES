@@ -1,31 +1,42 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.WombatComplete;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class AlgorithmsInitTest {
-    final public String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE"};
+    final public String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE", "SUPERVISED_BATCH:WOMBATSIMPLE"};
 
 
     @Test
     public void test() {
-        initializeMLAlgorithms(algorithmsListData,1);
+        initializeMLAlgorithms(algorithmsListData, 1);
     }
     //remember
     //---------AMLAlgorithm(concrete:SupervisedMLAlgorithm,ActiveMLAlgorithm or UnsupervisedMLAlgorithm--------
@@ -34,13 +45,12 @@ public class AlgorithmsInitTest {
     //---                                                                                              --------
     //---------------------------------------------------------------------------------------------------------
 
-        public List<TaskAlgorithm> initializeMLAlgorithms(String[] algorithmsList, int datasetsNr) {
+    public List<TaskAlgorithm> initializeMLAlgorithms(String[] algorithmsList, int datasetsNr) {
         if(algorithmsList==null)
             algorithmsList = algorithmsListData;
         List<TaskAlgorithm> mlAlgorithms = null;
 
-        try
-        {
+        try {
             mlAlgorithms = new ArrayList<TaskAlgorithm>();
             for (String algorithmItem : algorithmsList) {
                 String[] algorithmTitles = algorithmItem.split(":");// split to get the type and the name of the algorithm
@@ -49,39 +59,34 @@ public class AlgorithmsInitTest {
                 List<LearningParameter> mlParameter = null;
                 AMLAlgorithm mlAlgorithm = null;
                 //check the mlImplementation Type
-                if(algType.equals(MLImplementationType.SUPERVISED_ACTIVE))
-                {
+                if(algType.equals(MLImplementationType.SUPERVISED_ACTIVE)) {
                     if(algorithmTitles[1].equals("EAGLE"))//create its core as eagle - it will be enclosed inside SupervisedMLAlgorithm that extends AMLAlgorithm
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asActive(); //create an eagle learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asActive(); //create an wombat simple learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asActive(); //create an wombat complete learning algorithm
-                    
-                   mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_ACTIVE,algorithmTitles[1]);
 
-                }
-                else if(algType.equals(MLImplementationType.SUPERVISED_BATCH))
-                {
+                    mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_ACTIVE,algorithmTitles[1]);
+
+                } else if(algType.equals(MLImplementationType.SUPERVISED_BATCH)) {
                     if(algorithmTitles[1].equals("EAGLE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asSupervised(); //create an eagle learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asSupervised(); //create an wombat simple learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asSupervised(); //create an wombat complete learning algorithm
-                    
+
                     mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_BATCH,algorithmTitles[1]);
 
-                }
-                else if(algType.equals(MLImplementationType.UNSUPERVISED))
-                {
+                } else if(algType.equals(MLImplementationType.UNSUPERVISED)) {
                     if(algorithmTitles[1].equals("EAGLE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asUnsupervised(); //create an eagle learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asUnsupervised(); //create an wombat simple learning algorithm
                     else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asUnsupervised(); //create an wombat complete learning algorithm
-                    
+
                     mlParameter = initializeLearningParameters(MLImplementationType.UNSUPERVISED,algorithmTitles[1]);
 
                 }
@@ -99,22 +104,17 @@ public class AlgorithmsInitTest {
         return mlAlgorithms;
     }
 
-     private List<LearningParameter> initializeLearningParameters(MLImplementationType mlType, String className) {
+    private List<LearningParameter> initializeLearningParameters(MLImplementationType mlType, String className) {
         List<LearningParameter> lParameters = null;
-        if(mlType.equals(MLImplementationType.UNSUPERVISED))
-        {
+        if(mlType.equals(MLImplementationType.UNSUPERVISED)) {
             if(className.equals("WOMBATSIMPLE") || className.equals("WOMBATCOMPLETE"))
                 lParameters = initializeWombatSimple();
 
-        }
-        else  if(mlType.equals(MLImplementationType.SUPERVISED_ACTIVE))
-        {
+        } else  if(mlType.equals(MLImplementationType.SUPERVISED_ACTIVE)) {
             if(className.equals("WOMBATSIMPLE") || className.equals("WOMBATCOMPLETE"))
                 lParameters = initializeWombatSimple();
 
-        }
-        else  if(mlType.equals(MLImplementationType.SUPERVISED_BATCH))
-        {
+        } else  if(mlType.equals(MLImplementationType.SUPERVISED_BATCH)) {
             if(className.equals("WOMBATSIMPLE") || className.equals("WOMBATCOMPLETE"))
                 lParameters = initializeWombatSimple();
 
@@ -123,8 +123,7 @@ public class AlgorithmsInitTest {
 
     }
 
-    private List<LearningParameter> initializeWombatSimple()
-    {
+    private List<LearningParameter> initializeWombatSimple() {
         List<LearningParameter> wombaParameters = new ArrayList<>() ;
 
         wombaParameters.add(new LearningParameter("max refinement tree size", 2000, Integer.class, 10, Integer.MAX_VALUE, 10d, "max refinement tree size"));

@@ -1,9 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.planner;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -18,14 +30,17 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
+
 public class DynamicPlannerTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
-    private static final Logger logger = LoggerFactory.getLogger(DynamicPlannerTest.class);
     @Before
     public void setUp() {
         source = new MemoryCache();
@@ -80,7 +95,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void EmptyPlan() {
-        logger.info("{}","EmptyPlan");
+        System.out.println("EmptyPlan");
 
         AMapping m = MappingFactory.createDefaultMapping();
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -98,7 +113,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void AtomicPlan() {
-        logger.info("{}","AtomicPlan");
+        System.out.println("AtomicPlan");
         AMapping m = MappingFactory.createDefaultMapping();
 
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -121,7 +136,7 @@ public class DynamicPlannerTest {
 
     @Test
     public void ComplexPlanExtendedLS() {
-        logger.info("{}","ComplexPlanExtendedLS");
+        System.out.println("ComplexPlanExtendedLS");
 
         LinkSpecification ls = new LinkSpecification(
                 "OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.7728)|0.5807)",
@@ -136,28 +151,28 @@ public class DynamicPlannerTest {
 
     @Test
     public void AtomicEqual() {
-        logger.info("{}","AtomicEqual");
+        System.out.println("AtomicEqual");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
-        
+
         LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
-        logger.info("{}",ls.isAtomic());
+        System.out.println(ls.isAtomic());
         ls = p.normalize(ls);
         ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
         ee.execute(ls, p);
-        
+
         NestedPlan plan2 = new NestedPlan();
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);
         plan2.addInstruction(run1);
 
-        logger.info("{}",p.getPlans());
+        System.out.println(p.getPlans());
         assertTrue(p.getPlans().get(ls.toString()).equals(plan2));
     }
 
 
     @Test
     public void filterCosts() {
-        logger.info("{}","filterCosts");
+        System.out.println("filterCosts");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getFilterCosts(null, 500) == 0);

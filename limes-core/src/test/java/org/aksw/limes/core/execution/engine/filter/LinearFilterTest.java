@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine.filter;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
 
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -14,10 +27,12 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
+
 public class LinearFilterTest {
-    private static final Logger logger = LoggerFactory.getLogger(LinearFilterTest.class);
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -75,7 +90,7 @@ public class LinearFilterTest {
 
     @Test
     public void simpleFilter() {
-        logger.info("{}","simpleFilter");
+        System.out.println("simpleFilter");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -83,37 +98,37 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
         AMapping m0 = f.filter(m1, 0.0);
-        logger.info("{}","0 threshold: " + m0.getNumberofMappings());
+        System.out.println("0 threshold: " + m0.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m0.getNumberofMappings());
 
         // restrict output
         AMapping m2 = f.filter(m1, 0.8);
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
         // relax output
         AMapping m3 = f.filter(m1, 0.2);
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m3.getNumberofMappings());
 
         // relax output
         AMapping m4 = f.filter(m1, -1.0);
-        logger.info("{}","Negative threshold: " + m4.getNumberofMappings());
+        System.out.println("Negative threshold: " + m4.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m4.getNumberofMappings());
         assertTrue(m1 == m4);
 
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void complexFilterWithAtomicCondition1() {
-        logger.info("{}","complexFilterWithAtomicCondition1");
+        System.out.println("complexFilterWithAtomicCondition1");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -121,27 +136,27 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
 
         AMapping m2 = f.filter(m1, "overlap(x.name, y.name)", 0.8, source, target, "?x", "?y");
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
         // relax output
         AMapping m3 = f.filter(m1, "overlap(x.name, y.name)", 0.2, source, target, "?x", "?y");
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m3.getNumberofMappings());
 
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void complexFilterWithComplexcCondition1() {
-        logger.info("{}","complexFilterWithComplexcCondition1");
+        System.out.println("complexFilterWithComplexcCondition1");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -149,34 +164,34 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
 
         AMapping m01 = f.filter(m1, "OR(overlap(x.name, y.name)|0.5,qgrams(x.name, y.name)|0.8)", 0.0, source, target,
                 "?x", "?y");
-        logger.info("{}","threshold == 0: " + m01.getNumberofMappings());
+        System.out.println("threshold == 0: " + m01.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m01.getNumberofMappings());
 
         AMapping m2 = f.filter(m1, "OR(overlap(x.name, y.name)|0.8,qgrams(x.name, y.name)|0.9)", 0.95, source, target,
                 "?x", "?y");
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
         // relax filter
         AMapping m3 = f.filter(m1, "OR(overlap(x.name, y.name)|0.1, qgrams(x.name, y.name)|0.1)", 0.2, source, target,
                 "?x", "?y");
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m3.getNumberofMappings());
 
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void complexFilterWithAtomicCondition2() {
-        logger.info("{}","complexFilterWithAtomicCondition2");
+        System.out.println("complexFilterWithAtomicCondition2");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -184,31 +199,31 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
 
         AMapping m02 = f.filter(m1, "overlap(x.name, y.name)", 0.3, 0.0, source, target, "?x", "?y");
-        logger.info("{}","0 mainthreshold only: " + m02.getNumberofMappings());
+        System.out.println("0 mainthreshold only: " + m02.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m02.getNumberofMappings());
 
         AMapping m2 = f.filter(m1, "overlap(x.name, y.name)", 0.8, 0.95, source, target, "?x", "?y");
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
         // relax output
         AMapping m3 = f.filter(m1, "overlap(x.name, y.name)", 0.2, 0.4, source, target, "?x", "?y");
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
 
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void complexFilterWithComplexcCondition2() {
-        logger.info("{}","complexFilterWithComplexcCondition2");
+        System.out.println("complexFilterWithComplexcCondition2");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -216,8 +231,8 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         // all thresholds of the condition are 0, all thresholds of filters are
         // 0
@@ -225,49 +240,49 @@ public class LinearFilterTest {
 
         AMapping m02 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.0, 0.0, source,
                 target, "?x", "?y");
-        logger.info("{}","threshold and mainThreshold == 0: " + m02.getNumberofMappings());
+        System.out.println("threshold and mainThreshold == 0: " + m02.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() == m02.getNumberofMappings());
 
         AMapping m03 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.9, 0.0, source,
                 target, "?x", "?y");
-        logger.info("{}","only mainThreshold == 0: " + m03.getNumberofMappings());
+        System.out.println("only mainThreshold == 0: " + m03.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m03.getNumberofMappings());
 
         AMapping m04 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.0, 0.9, source,
                 target, "?x", "?y");
-        logger.info("{}","onlythreshold == 0: " + m04.getNumberofMappings());
+        System.out.println("onlythreshold == 0: " + m04.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m04.getNumberofMappings());
 
         AMapping m2 = f.filter(m1, "AND(overlap(x.name, y.name)|0.8,qgrams(x.name, y.name)|0.9)", 0.8, 0.95, source,
                 target, "?x", "?y");
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
         AMapping m21 = f.filter(m1, "AND(overlap(x.name, y.name)|0.8,qgrams(x.name, y.name)|0.9)", 0.2, 0.1, source,
                 target, "?x", "?y");
-        logger.info("{}","Higher threshold2: " + m21.getNumberofMappings());
+        System.out.println("Higher threshold2: " + m21.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m21.getNumberofMappings());
 
         // relax output
         AMapping m3 = f.filter(m1, "AND(overlap(x.name, y.name)|0.1,qgrams(x.name, y.name)|0.1)", 0.2, 0.4, source,
                 target, "?x", "?y");
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
 
         AMapping m4 = f.filter(m1,
                 "MINUS(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.5)",
                 0.8, 0.4, source, target, "?x", "?y");
-        logger.info("{}","Final touch " + m4.getNumberofMappings());
-        logger.info("{}",m4);
+        System.out.println("Final touch " + m4.getNumberofMappings());
+        System.out.println(m4);
 
         assertTrue(m1.getNumberofMappings() != m4.getNumberofMappings());
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void complexReverseFilterWithAtomicCondition() {
-        logger.info("{}","complexReverseFilterWithAtomicCondition");
+        System.out.println("complexReverseFilterWithAtomicCondition");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -275,43 +290,43 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
-        logger.info("{}","\n");
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
+        System.out.println("\n");
 
         LinearFilter f = new LinearFilter();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         AMapping m02 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.7, 0.0, source, target, "?x", "?y");
-        logger.info("{}","non 0 threshold: " + m02.getNumberofMappings());
+        System.out.println("non 0 threshold: " + m02.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m02.getNumberofMappings());
-        logger.info("{}","\n");
+        System.out.println("\n");
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         AMapping m2 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.4, 0.6, source, target, "?x", "?y");
-        logger.info("{}","Higher threshold: " + m2.getNumberofMappings());
+        System.out.println("Higher threshold: " + m2.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
-        logger.info("{}","\n");
+        System.out.println("\n");
 
         // relax output
         AMapping m3 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.2, 0.4, source, target, "?x", "?y");
-        logger.info("{}","Lower threshold: " + m3.getNumberofMappings());
+        System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
-        logger.info("{}","\n");
+        System.out.println("\n");
 
         AMapping m4 = f.reversefilter(m1,
                 "OR(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.1)",
                 0.9, 0.4, source, target, "?x", "?y");
-        logger.info("{}","Final touch " + m4.getNumberofMappings());
-        logger.info("{}",m4);
-        logger.info("{}","------------------------");
+        System.out.println("Final touch " + m4.getNumberofMappings());
+        System.out.println(m4);
+        System.out.println("------------------------");
 
     }
 
     @Test
     public void filterWithCoEfficient() {
-        logger.info("{}","filterWithCoEfficient");
+        System.out.println("filterWithCoEfficient");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         Plan plan = new Plan();
@@ -319,29 +334,29 @@ public class LinearFilterTest {
         Instruction run1 = new Instruction(Command.RUN, "levenshtein(x.name, y.name)", "0.13", -1, -1, 0);
         plan.addInstruction(run1);
         AMapping m1 = ee.executeInstructions(plan);
-        logger.info("{}","Size before: " + m1.getNumberofMappings());
-        logger.info("{}",m1);
+        System.out.println("Size before: " + m1.getNumberofMappings());
+        System.out.println(m1);
 
         Plan plan2 = new Plan();
         plan2.setInstructionList(new ArrayList<Instruction>());
         Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
         plan2.addInstruction(run2);
         AMapping m2 = ee.executeInstructions(plan2);
-        logger.info("{}","Size before: " + m2.getNumberofMappings());
-        logger.info("{}",m2);
+        System.out.println("Size before: " + m2.getNumberofMappings());
+        System.out.println(m2);
 
         LinearFilter f = new LinearFilter();
         AMapping m0 = f.filter(m1, m2, 0.8, 0.45, 0.2, "add");
-        logger.info("{}","add: " + m0.getNumberofMappings());
+        System.out.println("add: " + m0.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() >= m0.getNumberofMappings());
         assertTrue(m2.getNumberofMappings() >= m0.getNumberofMappings());
 
         AMapping m01 = f.filter(m1, m2, 0.8, 0.45, 0.2, "minus");
-        logger.info("{}","add: " + m01.getNumberofMappings());
+        System.out.println("add: " + m01.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() >= m01.getNumberofMappings());
         assertTrue(m2.getNumberofMappings() >= m01.getNumberofMappings());
 
-        logger.info("{}","------------------------");
+        System.out.println("------------------------");
 
     }
 }

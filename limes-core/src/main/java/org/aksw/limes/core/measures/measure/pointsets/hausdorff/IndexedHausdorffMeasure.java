@@ -1,12 +1,25 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
@@ -15,6 +28,10 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -40,7 +57,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#run(java
      * .util.Set, java.util.Set, double)
@@ -79,7 +96,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
     }
 
     public Map<String, Map<String, Double>> runWithoutIndex(Set<Polygon> source, Set<Polygon> target,
-            double threshold) {
+                                                            double threshold) {
 
         Map<String, Map<String, Double>> map = new HashMap<String, Map<String, Double>>();
         Map<String, Double> mapping;
@@ -168,7 +185,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
      * computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
      * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
@@ -234,7 +251,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -243,7 +260,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure#
      * getSimilarity(java.lang.Object, java.lang.Object)
      */
@@ -253,7 +270,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
@@ -262,7 +279,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
      * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
@@ -274,7 +291,7 @@ public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
      * double)

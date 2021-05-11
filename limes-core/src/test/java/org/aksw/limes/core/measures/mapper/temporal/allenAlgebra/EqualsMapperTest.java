@@ -1,6 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
-
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -15,10 +30,10 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertTrue;
+
 public class EqualsMapperTest {
-    private static final Logger logger = LoggerFactory.getLogger(EqualsMapperTest.class);
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -109,27 +124,27 @@ public class EqualsMapperTest {
 
     @Test
     public void simpleLS() {
-        logger.info("{}","simpleLS");
+        System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_equals(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        logger.info("{}",m);
+        System.out.println(m);
 
     }
 
     @Test
     public void similarity() {
-        logger.info("{}","simpleLS");
+        System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_equals(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        logger.info("{}",m);
+        System.out.println(m);
 
         AMapping m2 = MappingFactory.createDefaultMapping();
         for (Instance s : source.getAllInstances()) {

@@ -1,28 +1,41 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.ml.algorithm.matching;
 
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.matching.stablematching.HospitalResidents;
 import org.aksw.limes.core.util.Clock;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.TreeSet;
+
 /**
  * Tries to map the classes out of two SPARQL endpoints via stable marriages
+ *
  * @author ngonga
  * @author Klaus Lyko
  */
@@ -32,32 +45,38 @@ public class DefaultClassMapper implements OntologyClassMapper {
     public int LIMIT = 300;
     Logger logger = LoggerFactory.getLogger(getClass());
     String relation = "http://www.w3.org/2002/07/owl#sameAs";
-    
+
     Model sourceModel, targetModel;
+
     public DefaultClassMapper() {}
+
     public DefaultClassMapper(Model sourceModel, Model targetModel) {
-    	this.sourceModel = sourceModel;
-    	this.targetModel = targetModel;
+        this.sourceModel = sourceModel;
+        this.targetModel = targetModel;
     }
+
     public DefaultClassMapper(int limit) {
-    	LIMIT = limit;
+        LIMIT = limit;
     }
-    
+
     public Model getSourceModel() {
-		return sourceModel;
-	}
-	public void setSourceModel(Model sourceModel) {
-		this.sourceModel = sourceModel;
-	}
-	public Model getTargetModel() {
-		return targetModel;
-	}
-	public void setTargetModel(Model targetModel) {
-		this.targetModel = targetModel;
-	}
-	
-	public AMapping getEntityMapping(String endpoint1,
-            String endpoint2, String namespace1, String namespace2) {
+        return sourceModel;
+    }
+
+    public void setSourceModel(Model sourceModel) {
+        this.sourceModel = sourceModel;
+    }
+
+    public Model getTargetModel() {
+        return targetModel;
+    }
+
+    public void setTargetModel(Model targetModel) {
+        this.targetModel = targetModel;
+    }
+
+    public AMapping getEntityMapping(String endpoint1,
+                                     String endpoint2, String namespace1, String namespace2) {
         AMapping m = getMappingClasses(endpoint1, endpoint2, namespace1, namespace2);
         logger.debug("Got class mapping " + m);
         HospitalResidents hr = new HospitalResidents();
@@ -69,7 +88,7 @@ public class DefaultClassMapper implements OntologyClassMapper {
     /** Computes mapping between classes in two given endpoints by using the 
      * owl:sameAs links. If no such links exists between the two endpoints, the 
      * fallback solution is used
-     * 
+     *
      * @param endpoint1 Source endpoint for the class mapping
      * @param endpoint2 Target endpoint for the class mapping
      * @param namespace1 Namespace for the source endpoint
@@ -78,11 +97,11 @@ public class DefaultClassMapper implements OntologyClassMapper {
      * owl:sameAs links or fallback weight based on matching properties
      */
     public AMapping getMappingClasses(String endpoint1,
-            String endpoint2, String namespace1, String namespace2) {
+                                      String endpoint2, String namespace1, String namespace2) {
         Clock clock = new Clock();
         logger.info("Getting mapping from " + namespace1 + " to " + namespace2);
         AMapping m1 = getMonoDirectionalMap(endpoint1, endpoint2, namespace1, namespace2);
-        logger.info("Took " + clock.durationSinceClick() + " ms");        
+        logger.info("Took " + clock.durationSinceClick() + " ms");
         logger.info("Getting mapping from " + namespace2 + " to " + namespace1);
         AMapping m2 = getMonoDirectionalMap(endpoint2, endpoint1, namespace2, namespace1);
         logger.info("Took " + clock.durationSinceClick() + " ms");
@@ -97,21 +116,20 @@ public class DefaultClassMapper implements OntologyClassMapper {
             }
         }
         //logger.debug("Class mapping is \n"+m2);
-        if(m1.size() == 0)
-        {
+        if(m1.size() == 0) {
             logger.info("No mapping found. Using fallback solution.");
             m1 = getMappingClassesFallback(endpoint1, endpoint2, namespace1, namespace2);
         }
         return m1;
     }
 
-    
-        public AMapping getMappingClassesFallback(String endpoint1,
-            String endpoint2, String namespace1, String namespace2) {
+
+    public AMapping getMappingClassesFallback(String endpoint1,
+                                              String endpoint2, String namespace1, String namespace2) {
         Clock clock = new Clock();
         logger.info("Getting mapping from " + namespace1 + " to " + namespace2);
         AMapping m1 = getMonoDirectionalMapFallback(endpoint1, endpoint2, namespace1, namespace2);
-        logger.info("Took " + clock.durationSinceClick() + " ms");        
+        logger.info("Took " + clock.durationSinceClick() + " ms");
         logger.info("Getting mapping from " + namespace2 + " to " + namespace1);
         AMapping m2 = getMonoDirectionalMapFallback(endpoint2, endpoint1, namespace2, namespace1);
         logger.info("Took " + clock.durationSinceClick() + " ms");
@@ -128,9 +146,9 @@ public class DefaultClassMapper implements OntologyClassMapper {
         //logger.debug("Class mapping is \n"+m2);
         return m1;
     }
-        
+
     public AMapping getMonoDirectionalMap(String endpoint1,
-            String endpoint2, String namespace1, String namespace2) {
+                                          String endpoint2, String namespace1, String namespace2) {
 
 
         HashMap<String, TreeSet<String>> instanceToClassMap =
@@ -152,7 +170,7 @@ public class DefaultClassMapper implements OntologyClassMapper {
         logger.debug("Query from " + namespace1 + " to " + namespace2 + ":\n" + query);
 
         Query sparqlQuery = QueryFactory.create(query);
-        
+
         QueryExecution qexec;
 //        if (!namespace1.contains("dbpedia") ) {
 //            logger.debug("Querying with default graph "
@@ -165,9 +183,9 @@ public class DefaultClassMapper implements OntologyClassMapper {
 //            qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
 //        }
         if(sourceModel == null)
-        	qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
+            qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
         else
-        	qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
+            qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
         ResultSet results = qexec.execSelect();
 
         // first get LIMIT instances from
@@ -208,9 +226,9 @@ public class DefaultClassMapper implements OntologyClassMapper {
             //logger.debug(query);
             sparqlQuery = QueryFactory.create(query);
             if(targetModel == null)
-            	qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
+                qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
             else
-            	qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
+                qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
             results = qexec.execSelect();
             QuerySolution soln;
             while (results.hasNext()) {
@@ -249,7 +267,7 @@ public class DefaultClassMapper implements OntologyClassMapper {
     }
 
     public AMapping getMonoDirectionalMapFallback(String endpoint1,
-            String endpoint2, String namespace1, String namespace2) {
+                                                  String endpoint2, String namespace1, String namespace2) {
 
 
         HashMap<String, TreeSet<String>> classValueMap =
@@ -282,9 +300,9 @@ public class DefaultClassMapper implements OntologyClassMapper {
 //            qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
 //        }
         if(sourceModel == null)
-        	qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
+            qexec = QueryExecutionFactory.sparqlService(endpoint1, sparqlQuery);
         else
-        	qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
+            qexec = QueryExecutionFactory.create(sparqlQuery, sourceModel);
         ResultSet results = qexec.execSelect();
 
         // first get LIMIT instances from
@@ -337,9 +355,9 @@ public class DefaultClassMapper implements OntologyClassMapper {
 //                        qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
 //                    }
                     if(targetModel == null)
-                    	qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
+                        qexec = QueryExecutionFactory.sparqlService(endpoint2, sparqlQuery);
                     else
-                    	qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
+                        qexec = QueryExecutionFactory.create(sparqlQuery, targetModel);
                     results = qexec.execSelect();
                     QuerySolution soln;
                     while (results.hasNext()) {
@@ -367,11 +385,11 @@ public class DefaultClassMapper implements OntologyClassMapper {
         //logger.debug(classToClass);
         return classToClass;
     }
-    
+
     public static void main(String[] args){
-		DefaultClassMapper mapper = new DefaultClassMapper();
-		AMapping m = mapper.getEntityMapping("http://www.dbpedia.org/sparql","http://linkedgeodata.org/sparql","dbpedia", "linkedgeodata");
-		System.out.println("Mapping: "  + m);
+        DefaultClassMapper mapper = new DefaultClassMapper();
+        AMapping m = mapper.getEntityMapping("http://www.dbpedia.org/sparql","http://linkedgeodata.org/sparql","dbpedia", "linkedgeodata");
+        System.out.println("Mapping: "  + m);
     }
 
     public static boolean isNumeric(String input) {
@@ -388,5 +406,5 @@ public class DefaultClassMapper implements OntologyClassMapper {
             return false;
         }
     }
-    
+
 }

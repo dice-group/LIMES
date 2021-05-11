@@ -1,17 +1,29 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.StringTokenizer;
-
+import algorithms.StoppUhr;
+import algorithms.Token;
+import algorithms.ppjoinplus.Record;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -26,9 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-import algorithms.ppjoinplus.Record;
+import java.util.*;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -137,7 +147,7 @@ public class PPJoinPlusPlus extends AMapper {
     }
 
     private static int suffixFilter(Record x, int xBeginn, int xEnd, Record y, int yBeginn, int yEnd, int H_max,
-            int depth) {
+                                    int depth) {
         int xSize = xEnd - xBeginn + 1;
         int ySize = yEnd - yBeginn + 1;
         if (depth > MAX_DEPTH) {
@@ -337,7 +347,7 @@ public class PPJoinPlusPlus extends AMapper {
      *         the target instances
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+                               double threshold) {
 
         AMapping mapping;
         HashMap<Integer, String> sourceMap;
@@ -553,12 +563,12 @@ public class PPJoinPlusPlus extends AMapper {
     }
 
     private int verification(Record currentRec, HashMap<Record, CandidateInfo> candidates, AMapping mapping,
-            HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap, IStringMeasure measure) {
+                             HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap, IStringMeasure measure) {
         int count = 0;
         String id1, id2;
 
         for (@SuppressWarnings("rawtypes")
-        Map.Entry e : candidates.entrySet()) {
+                Map.Entry e : candidates.entrySet()) {
             CandidateInfo value = (CandidateInfo) e.getValue();
             if (value.currentOverlap > 0) {
                 Record key = (Record) e.getKey();
@@ -575,8 +585,8 @@ public class PPJoinPlusPlus extends AMapper {
                 } else if (compRes > 0) {
                     int ubound = value.currentOverlap + key.tokens.length
                             - /*
-                               * key.prefixLength
-                               */ key.midPrefix;
+                     * key.prefixLength
+                     */ key.midPrefix;
                     if (ubound >= value.alpha) {
                         overlap += overlap(currentRec, value.currentOverlap, key,
                                 /*
@@ -587,8 +597,8 @@ public class PPJoinPlusPlus extends AMapper {
                     // --> Duplikate fehlen!
                     int ubound = value.currentOverlap + Math.min(currentRec.tokens.length - currentRec.prefixLength,
                             key.tokens.length - /*
-                                                 * key.prefixLength
-                                                 */ key.midPrefix);
+                             * key.prefixLength
+                             */ key.midPrefix);
                     if (ubound >= value.alpha) {
                         overlap += overlap(currentRec, currentRec.prefixLength, key,
                                 /*

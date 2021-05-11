@@ -1,5 +1,29 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.query;
 
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.util.DataCleaner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,13 +32,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
-
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.util.DataCleaner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MarkerFactory;
 
 
 /**
@@ -45,12 +62,12 @@ public class CsvQueryModule implements IQueryModule {
     public void fillCache(ACache c) {
         try {
             // in case a CSV is use, endpoint is the file to read
-        	BufferedReader reader;
-        	try{
-        		reader = new BufferedReader(new FileReader(new File(kb.getEndpoint())));
-        	}catch(Exception e){
-        		reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
-        	}
+            BufferedReader reader;
+            try{
+                reader = new BufferedReader(new FileReader(new File(kb.getEndpoint())));
+            }catch(Exception e){
+                reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
+            }
             String s = reader.readLine();
             String split[];
             //first read name of properties. URI = first column
@@ -69,8 +86,8 @@ public class CsvQueryModule implements IQueryModule {
 
                     id = split[0];
                     for (String propertyLabel : kb.getProperties()) {
-                            value = split[properties.indexOf(propertyLabel)];
-                            c.addTriple(id, propertyLabel, value);
+                        value = split[properties.indexOf(propertyLabel)];
+                        c.addTriple(id, propertyLabel, value);
                     }
                     s = reader.readLine();
                 }

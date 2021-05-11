@@ -1,12 +1,29 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Wraps around results of a ML algorithm.
@@ -20,17 +37,17 @@ public class MLResults {
     protected double quality;
     protected Map<String, Object> details = new HashMap<>();
     protected List<SimpleClassifier> classifiers = null;
-    
+
     /**
      * MLResults constructor.
      */
     public MLResults() {
-    	super();
+        super();
     }
 
     /**
      * MLResults full constructor.
-     * 
+     *
      * @param linkspec the link specification
      * @param mapping the mapping
      * @param quality the value of quality measure
@@ -51,7 +68,7 @@ public class MLResults {
         s.append("LS: " + linkspec + "\n");
         s.append("Quality: " + quality + "\n");
         if(mapping != null)
-        	s.append("Mapping: " + mapping.size() + "\n");
+            s.append("Mapping: " + mapping.size() + "\n");
         return s.toString();
     }
 
@@ -99,7 +116,7 @@ public class MLResults {
 
     /**
      * Add additional computation detail.
-     * 
+     *
      * @param key computation detail name
      * @param value computation detail value
      */
@@ -114,21 +131,21 @@ public class MLResults {
         return details;
     }
 
-	public List<SimpleClassifier> getClassifiers() {
-		return classifiers;
-	}
+    public List<SimpleClassifier> getClassifiers() {
+        return classifiers;
+    }
 
-	public void setClassifiers(List<SimpleClassifier> classifiers) {
-		this.classifiers = classifiers;
-	}
-	
-	/**
-	 * Some ML algorithms such as Euclid don't produce LS but Mapping build by so called
-	 * classifiers. This method checks whether this (also) holds those.
-	 * @return
-	 */
-	public boolean classifiersSet() {
-		return classifiers != null && classifiers.size()>0;
-	}
+    public void setClassifiers(List<SimpleClassifier> classifiers) {
+        this.classifiers = classifiers;
+    }
+
+    /**
+     * Some ML algorithms such as Euclid don't produce LS but Mapping build by so called
+     * classifiers. This method checks whether this (also) holds those.
+     * @return
+     */
+    public boolean classifiersSet() {
+        return classifiers != null && classifiers.size()>0;
+    }
 
 }

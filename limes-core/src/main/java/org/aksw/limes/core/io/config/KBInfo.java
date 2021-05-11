@@ -1,22 +1,35 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.io.config;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Contains the information necessary to access a knowledge base
- * 
+ *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 12, 2016
  */
@@ -67,9 +80,9 @@ public class KBInfo implements Serializable {
     }
 
     public KBInfo(String id, String endpoint, String graph, String var,
-            List<String> properties, List<String> optionalProperties,
-            ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
-            Map<String, String> prefixes, int pageSize, String type) {
+                  List<String> properties, List<String> optionalProperties,
+                  ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
+                  Map<String, String> prefixes, int pageSize, String type) {
         super();
         this.id = id;
         this.endpoint = endpoint;
@@ -157,11 +170,11 @@ public class KBInfo implements Serializable {
     public void addProperty(String property) {
         this.properties.add(property);
     }
-    
+
     public void addOptionalProperty(String optionalProperty) {
         this.optionalProperties.add(optionalProperty);
     }
-    
+
     public LinkedHashMap<String, Map<String, String>> getFunctions() {
         return functions;
     }
@@ -193,19 +206,19 @@ public class KBInfo implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public void setMaxOffset(int maxoffset) {
         this.maxoffset = maxoffset;
     }
-    
+
     public int getMaxOffset() {
         return maxoffset;
     }
-    
+
     public void setMinOffset(int minoffset) {
         this.minoffset = minoffset;
     }
-    
+
     public int getMinOffset() {
         return minoffset;
     }

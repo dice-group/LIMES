@@ -1,6 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure;
-
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -11,12 +26,7 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
@@ -25,56 +35,27 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
+import org.aksw.limes.core.measures.measure.string.*;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
-import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
-import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
-import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
-import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
-import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
+import org.aksw.limes.core.measures.measure.topology.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertTrue;
+
 public class MeasureFactoryTest {
 
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
-    private static final Logger logger = LoggerFactory.getLogger(MeasureFactoryTest.class);
 
     @Before
     public void setUp() {
@@ -130,7 +111,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void runtimeApproximation() {
-        logger.info("{}","runtimeApproximation");
+        System.out.println("runtimeApproximation");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getAtomicRuntimeCosts("jaro", 0.5) != 0);
@@ -192,7 +173,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void mappingApproximation() {
-        logger.info("{}","mappingApproximation");
+        System.out.println("mappingApproximation");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         assertTrue(p.getAtomicMappingSizes("jaro", 0.5) != 0);
@@ -254,7 +235,7 @@ public class MeasureFactoryTest {
 
     @Test
     public void measureType() {
-        logger.info("{}","mappingApproximation");
+        System.out.println("mappingApproximation");
 
         try {
             assertTrue(MeasureFactory.getMeasureType("geo_orthodromic") != null);

@@ -1,13 +1,29 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.semantic.edgecounting.measures;
 
-import java.util.ArrayList;
-
+import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.finders.ShortestPathFinder;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 
-import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.ISynsetID;
+import java.util.ArrayList;
 
 /**
  * Implements the Shortest Path semantic string similarity between two concepts
@@ -27,7 +43,7 @@ public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
 
     /**
      * Calculates the actual Shortest Path similarity.
-     * 
+     *
      * @param synset1,
      *            an input concept, used to retrieve the depth of the
      *            corresponding hierarchy
@@ -50,7 +66,7 @@ public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
      * Computes the Shortest Path similarity between two concepts. It retrieves
      * all possible hypernym paths for the two concepts and finds the shortest
      * path between two concepts via their least common subsumer.
-     * 
+     *
      * @param synset1,
      *            the first input synset
      * @param synset2,

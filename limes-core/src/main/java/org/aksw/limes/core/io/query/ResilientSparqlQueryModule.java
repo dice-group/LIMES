@@ -1,7 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.query;
-
-import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
 import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
@@ -19,6 +33,8 @@ import org.apache.jena.sparql.core.DatasetDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -26,9 +42,9 @@ import org.slf4j.LoggerFactory;
  * @version Jul 12, 2016
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {
-   
+
     protected Logger logger = LoggerFactory.getLogger(ResilientSparqlQueryModule.class);
-    
+
     protected int retryCount = 5;
     protected int retryDelayInMS = 500;
     protected int requestDelayInMs = 50;
@@ -36,14 +52,14 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
     protected long timeToLive = 24l * 60l * 60l * 1000l;
     protected String cacheDirectory = System.getProperty("user.dir") + "/cache";
 
-    
+
     public ResilientSparqlQueryModule(KBInfo kbInfo) {
         super(kbInfo);
     }
 
 
     public ResilientSparqlQueryModule(KBInfo kbinfo, Logger logger, int retryCount, int retryDelayInMS,
-            int requestDelayInMs, int pageSize, long timeToLive, String cacheDirectory) {
+                                      int requestDelayInMs, int pageSize, long timeToLive, String cacheDirectory) {
         super(kbinfo);
         this.logger = logger;
         this.retryCount = retryCount;
@@ -53,8 +69,6 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
         this.timeToLive = timeToLive;
         this.cacheDirectory = cacheDirectory;
     }
-
-
 
 
     /**
@@ -124,34 +138,34 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
      * @throws SQLException if SQL contains errors
      */
     protected QueryExecutionFactory initQueryExecution(KBInfo kbInfo) throws ClassNotFoundException, SQLException {
-       QueryExecutionFactory qef;
-        
+        QueryExecutionFactory qef;
+
         DatasetDescription dd = new DatasetDescription();
         if(kbInfo.getGraph() != null) {
-                dd.addDefaultGraphURI(kbInfo.getGraph());
+            dd.addDefaultGraphURI(kbInfo.getGraph());
         }
-        
+
         SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
 
         qef = FluentQueryExecutionFactory
-            .http(ssr)
-            .config()
+                .http(ssr)
+                .config()
                 .withRetry(retryCount, retryDelayInMS, TimeUnit.MILLISECONDS)
                 .withDelay(requestDelayInMs, TimeUnit.MILLISECONDS)
                 .withPagination(pageSize)
-            .end()
-            .create();
-        
-		if (cacheDirectory != null) {
-		    String dbName = kbInfo.getEndpoint().replaceAll("[:/]", "_");
-		    CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
-			qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
-		} else {
-			logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
-		}
-		
+                .end()
+                .create();
+
+        if (cacheDirectory != null) {
+            String dbName = kbInfo.getEndpoint().replaceAll("[:/]", "_");
+            CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
+            qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+        } else {
+            logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
+        }
+
         try {
-            qef = new QueryExecutionFactoryPaginated(qef, pageSize);            
+            qef = new QueryExecutionFactoryPaginated(qef, pageSize);
             return qef;
         } catch (Exception e) {
             logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +

@@ -1,6 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
-
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -14,12 +29,11 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertTrue;
 
 public class SuccessorMapperTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(SuccessorMapperTest.class);
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -159,20 +173,20 @@ public class SuccessorMapperTest {
 
     @Test
     public void simpleLS() {
-        logger.info("{}","simpleLS");
+        System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
                 "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        logger.info("{}",m);
+        System.out.println(m);
 
     }
 
     @Test
     public void complexLS() {
-        logger.info("{}","complexLS");
+        System.out.println("complexLS");
         LinkSpecification ls = new LinkSpecification(
                 "OR(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -194,7 +208,7 @@ public class SuccessorMapperTest {
 
     @Test
     public void complexLS2() {
-        logger.info("{}","complexLS2");
+        System.out.println("complexLS2");
         LinkSpecification ls = new LinkSpecification(
                 "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
@@ -202,8 +216,8 @@ public class SuccessorMapperTest {
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
-        logger.info("{}",p.getPlans().get(ls.toString()));
-        
+        System.out.println(p.getPlans().get(ls.toString()));
+
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
@@ -217,7 +231,7 @@ public class SuccessorMapperTest {
 
     @Test
     public void complexLS3() {
-        logger.info("{}","complexLS3");
+        System.out.println("complexLS3");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
@@ -225,8 +239,8 @@ public class SuccessorMapperTest {
                 "MINUS(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         AMapping m = e.execute(ls, p);
-        logger.info("{}",p.getPlans().get(ls.toString()));
-        
+        System.out.println(p.getPlans().get(ls.toString()));
+
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
@@ -240,7 +254,7 @@ public class SuccessorMapperTest {
 
     @Test
     public void complexLS4() {
-        logger.info("{}","complexLS4");
+        System.out.println("complexLS4");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 

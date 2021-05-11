@@ -1,11 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.dragon;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.PropMapper;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
@@ -33,16 +43,16 @@ import org.aksw.limes.core.ml.algorithm.dragon.Pruning.GlobalFMeasurePruning;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
-
 import weka.classifiers.trees.J48;
+
+import java.util.*;
 
 /**
  * This class uses decision trees and an active learning approach to learn link
  * specifications
- * 
- * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
- *         studserv.uni-leipzig.de{@literal >}
  *
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ * studserv.uni-leipzig.de{@literal >}
  */
 public class Dragon extends ACoreMLAlgorithm {
 
@@ -114,7 +124,7 @@ public class Dragon extends ACoreMLAlgorithm {
     /**
      * Constructor uses superconstructor, initializes TreeParser object and sets
      * configuration
-     * 
+     *
      * @param c
      */
     public Dragon(Configuration c) {
@@ -125,7 +135,7 @@ public class Dragon extends ACoreMLAlgorithm {
 
     /**
      * Helper class for easier handling of links or link candidates
-     * 
+     *
      * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
      *         studserv.uni-leipzig.de{@literal >}
      *
@@ -184,7 +194,7 @@ public class Dragon extends ACoreMLAlgorithm {
      * Creates a training set out of the oracleMapping and uses {@link J48} to
      * build a decision tree The decision tree gets parsed to a
      * {@link LinkSpecification}
-     * 
+     *
      * @param oracleMapping
      * @return res wrapper containing learned link specification
      */

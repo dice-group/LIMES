@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -28,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
     /**
-     *	
+     *
      */
     private static final long serialVersionUID = -7114137172832439294L;
     static Logger logger = LoggerFactory.getLogger("LIMES");
@@ -41,7 +58,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     PseudoFMeasure pfm;
 
     private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1,
-            ACache c2) {
+                                          ACache c2) {
         config = a_config;
         sourceCache = c1;
         targetCache = c2;
@@ -52,7 +69,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
     /**
      * Singleton pattern
-     * 
+     *
      * @param a_config
      *            LinkSpecGeneticLearnerConfig
      * @param pfm
@@ -64,7 +81,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
      * @return instance of PseudoFMeasure Fitness Function
      */
     public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm,
-            ACache c1, ACache c2) {
+                                                            ACache c1, ACache c2) {
         if (instance == null) {
             return instance = new PseudoFMeasureFitnessFunction(a_config, pfm, c1, c2);
         } else {
@@ -139,7 +156,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     /**
      * Get or create a mapping from a link specification (Metric String +
      * Acceptance threshold: 0&lt;=threshold&lt;=1).
-     * 
+     *
      * @param spec
      *            the link specification
      * @return Mapping m={sURI, tURI} of all pairs who satisfy the metric.

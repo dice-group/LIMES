@@ -1,14 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -16,6 +23,10 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.util.datetime.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Abstract class of atomic Allen's relations. The main idea behind this
@@ -26,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * using two time points b(s) and e(s). To compose the atomic interval
  * relations, we define all possible binary relations between the begin and end
  * points of two event resources s = (b(s), e(s)) and t = (b(t), e(t)).
- * 
+ *
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
@@ -83,11 +94,11 @@ public abstract class AAtomicAllenAlgebraMapper {
 
     /**
      * Returns the epoch value of an input time stamp
-     * 
-     * 
+     *
+     *
      * @param timeStamp,
      *            the time stamp
-     * 
+     *
      * @return the epoch value of the corresponding time stamp
      */
     protected static long getEpoch(String timeStamp) {
@@ -104,15 +115,15 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * 
-     * 
+     *
+     *
      * @param cache,
      *            The cache of instances
      * @param expression,
      *            The metric expression
      * @param kbType,
      *            source or target
-     * 
+     *
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
@@ -150,7 +161,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its end date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * 
+     *
      * @param kbType
      *            TODO
      *
@@ -160,7 +171,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      *            The metric expression
      * @param kbType,
      *            source or target
-     * 
+     *
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
@@ -208,7 +219,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return concurrentEvents, the map of concurrent events
      */
     protected static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
-            TreeMap<Long, Set<String>> targets) {
+                                                                TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
@@ -238,7 +249,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return concurrentEvents, the map of predecessor events
      */
     protected static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
-            TreeMap<Long, Set<String>> targets) {
+                                                                 TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {

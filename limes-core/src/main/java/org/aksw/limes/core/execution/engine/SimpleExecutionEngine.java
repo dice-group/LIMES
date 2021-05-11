@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
@@ -25,6 +38,10 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -77,7 +94,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      *            expected selectivity
      */
     public SimpleExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt,
-            double k) {
+                                 double k) {
         super(source, target, sourceVar, targetVar, maxOpt, k);
     }
 
@@ -304,8 +321,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         else if (plan.isAtomic()) {
             m = executeInstructions(plan);
         } // nested plans contain subplans, an operator for merging the results
-          // of the subplans and a filter for filtering the results of the
-          // subplan
+        // of the subplans and a filter for filtering the results of the
+        // subplan
         else {
             // run all the subplans
             m = executeStatic(plan.getSubPlans().get(0));
@@ -363,7 +380,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * re-plan the remaining non-executed parts of P (if any). Then it executes
      * the second sub-plan of P, that can vary given from the initial given the
      * intermediate executed steps of the first plan.
-     * 
+     *
      *
      * @param spec
      *            The input link specification

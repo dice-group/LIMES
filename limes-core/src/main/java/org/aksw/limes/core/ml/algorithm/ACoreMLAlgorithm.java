@@ -1,7 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NoSuchParameterException;
@@ -11,6 +25,9 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -25,25 +42,25 @@ public abstract class ACoreMLAlgorithm {
     protected ACache sourceCache;
 
     protected ACache targetCache;
-    
+
     protected Configuration configuration;
 
     /**
      * @return the configuration
      */
     public Configuration getConfiguration() {
-		return configuration;
-	}
+        return configuration;
+    }
 
-	/**
-	 * @param configuration the configuration
-	 */
-	public void setConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-		
-	}
+    /**
+     * @param configuration the configuration
+     */
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
 
-	/**
+    }
+
+    /**
      * Name of the core ML algorithm.
      *
      * @return Name of the core ML algorithm.
@@ -56,7 +73,7 @@ public abstract class ACoreMLAlgorithm {
     protected List<LearningParameter> getParameters() {
         return learningParameters;
     }
-    
+
     /**
      * Set default ACoreMLAlgorithm parameters values
      */
@@ -72,7 +89,7 @@ public abstract class ACoreMLAlgorithm {
     protected void init(List<LearningParameter> learningParameters, ACache sourceCache, ACache targetCache) {
         if (learningParameters != null) {
             //only update existing parameters
-            for(LearningParameter lp : learningParameters){ 
+            for(LearningParameter lp : learningParameters){
                 setParameter(lp.getName(), lp.getValue());
             }
         }
@@ -140,33 +157,33 @@ public abstract class ACoreMLAlgorithm {
      */
     protected abstract MLResults activeLearn(AMapping oracleMapping)
             throws UnsupportedMLImplementationException;
-    
+
     /**
      * Learning method for supervised active core ML algorithm implementations
      * Normally, it is used as a first step to initialize the ML model 
      * before going through the active learning process
-     * 
+     *
      * @return wrap with results
      * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
     protected abstract MLResults activeLearn() throws UnsupportedMLImplementationException;
 
-    
+
     /**
      * Get parameter by name.
-     * 
+     *
      * @param name parameter name
      * @return the parameter as Object
      * @throws NoSuchParameterException if parameter is not exists
      */
     protected Object getParameter(String name) {
-    	for(LearningParameter par : learningParameters)
-    		if(par.getName().equals(name))
-    			return par.getValue();
-    	return new NoSuchParameterException(name);
+        for(LearningParameter par : learningParameters)
+            if(par.getName().equals(name))
+                return par.getValue();
+        return new NoSuchParameterException(name);
     }
-    
-    
+
+
     /**
      * @param par parameter name
      * @param val parameter value

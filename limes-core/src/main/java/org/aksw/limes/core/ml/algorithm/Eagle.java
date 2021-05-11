@@ -1,10 +1,22 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
 
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
@@ -15,12 +27,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
-import org.aksw.limes.core.ml.algorithm.eagle.core.IGPFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
-import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
+import org.aksw.limes.core.ml.algorithm.eagle.core.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
 import org.apache.log4j.Logger;
@@ -31,18 +38,22 @@ import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.impl.GPPopulation;
 import org.jgap.gp.impl.ProgramChromosome;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
- *
  */
 public class Eagle extends ACoreMLAlgorithm {
-    
+
     //======================= COMMON VARIABLES ======================
     private IGPProgram allBest = null;
     private IGPFitnessFunction fitness;
     private GPGenotype gp;
-    
+
     //================ SUPERVISED-LEARNING VARIABLES ================
     private int turn = 0;
     private List<IGPProgram> bestSolutions = new LinkedList<IGPProgram>();
@@ -52,9 +63,9 @@ public class Eagle extends ACoreMLAlgorithm {
     private List<LinkSpecification> specifications;
 
     //======================= PARAMETER NAMES =======================
-    
+
     protected static final String ALGORITHM_NAME = "Eagle";
-    
+
     public static final String GENERATIONS = "generations";
     public static final String PRESERVE_FITTEST = "preserve_fittest";
     public static final String MAX_DURATION = "max_duration";
@@ -72,13 +83,13 @@ public class Eagle extends ACoreMLAlgorithm {
 
     public static final String MEASURE = "measure";
     public static final String PROPERTY_MAPPING = "property_mapping";
-    
-    
+
+
     // ========================================================================
-    
-    
+
+
     protected static Logger logger = Logger.getLogger(Eagle.class);
-    
+
     /**
      * Eagle constructor.
      */
@@ -98,10 +109,10 @@ public class Eagle extends ACoreMLAlgorithm {
         this.turn = 0;
         this.bestSolutions = new LinkedList<IGPProgram>();
     }
-    
+
     @Override
     protected MLResults learn(AMapping trainingData) {
-        
+
         try {
             setUp(trainingData);
         } catch (InvalidConfigurationException e) {
@@ -109,13 +120,13 @@ public class Eagle extends ACoreMLAlgorithm {
             logger.error(e.getMessage());
             return null;
         }
-        
+
         turn++;
         fitness.addToReference(extractPositiveMatches(trainingData));
         fitness.fillCachesIncrementally(trainingData);
 
         Integer nGen = (Integer) getParameter(GENERATIONS);
-        
+
         for (int gen = 1; gen <= nGen; gen++) {
             gp.evolve();
             bestSolutions.add(determineFittest(gp, gen));
@@ -123,24 +134,24 @@ public class Eagle extends ACoreMLAlgorithm {
 
         MLResults result = createSupervisedResult();
         return result;
-        
+
     }
 
     @Override
     protected MLResults learn(PseudoFMeasure pfm) {
 
-        learningParameters.add(new LearningParameter(PSEUDO_FMEASURE, pfm, PseudoFMeasure.class, 
+        learningParameters.add(new LearningParameter(PSEUDO_FMEASURE, pfm, PseudoFMeasure.class,
                 Double.NaN, Double.NaN, Double.NaN, PSEUDO_FMEASURE));
-        
+
         try {
             setUp(null);
         } catch (InvalidConfigurationException e) {
             logger.error(e.getMessage());
             return null;
         }
-        
+
         Integer nGen = (Integer) getParameter(GENERATIONS);
-        
+
         specifications = new LinkedList<LinkSpecification>();
         logger.info("Start learning");
         for (int gen = 1; gen <= nGen; gen++) {
@@ -153,13 +164,13 @@ public class Eagle extends ACoreMLAlgorithm {
 
         allBest = determineFittestUnsup(gp, nGen);
         return createUnsupervisedResult();
-        
+
     }
 
     @Override
     protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
 //      if (allBest != null) {
-            return fitness.getMapping(source, target, mlModel.getLinkSpecification());
+        return fitness.getMapping(source, target, mlModel.getLinkSpecification());
 //        } else {
 //            logger.error("No link specification calculated so far.");
 //          assert (allBest != null);
@@ -171,12 +182,13 @@ public class Eagle extends ACoreMLAlgorithm {
     protected boolean supports(MLImplementationType mlType) {
         return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED || mlType == MLImplementationType.SUPERVISED_ACTIVE;
     }
+
     //*************** active learning implementation *****************************************
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
 //        throw new UnsupportedMLImplementationException(this.getName());
         return calculateOracleQuestions(size);
-        
+
     }
 
     @Override
@@ -184,15 +196,15 @@ public class Eagle extends ACoreMLAlgorithm {
         logger.info("EAGLE active learning started with "+oracleMapping.size()+" examples");
         return learn(oracleMapping);
     }
-    
+
     @Override
     protected MLResults activeLearn() throws UnsupportedMLImplementationException {
         logger.info("Supposed to run an active EAGLE, but provided no oracle data. Running default unsupervised approach instead.");
-        return learn(new PseudoFMeasure());     
+        return learn(new PseudoFMeasure());
     }
 
     @Override
-    public void setDefaultParameters() {        
+    public void setDefaultParameters() {
         learningParameters = new ArrayList<>();
         learningParameters.add(new LearningParameter(GENERATIONS, 20, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
         learningParameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
@@ -209,13 +221,12 @@ public class Eagle extends ACoreMLAlgorithm {
         learningParameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
         learningParameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
         learningParameters.add(new LearningParameter(PSEUDO_FMEASURE, new PseudoFMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
-        learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));        
+        learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
     }
 
 
-    
     //====================== SPECIFIC METHODS =======================
-    
+
     /**
      * Configures EAGLE.
      *
@@ -231,7 +242,7 @@ public class Eagle extends ACoreMLAlgorithm {
 
         jgapConfig.sC = sourceCache;
         jgapConfig.tC = targetCache;
-        
+
         jgapConfig.setPopulationSize((Integer) getParameter(POPULATION));
         jgapConfig.setCrossoverProb((Float) getParameter(CROSSOVER_RATE));
         jgapConfig.setMutationProb((Float) getParameter(MUTATION_RATE));
@@ -240,21 +251,21 @@ public class Eagle extends ACoreMLAlgorithm {
         jgapConfig.setPropertyMapping(pm);
 
         if(trainingData != null) { // supervised
-            
+
             FMeasure fm = (FMeasure) getParameter(MEASURE);
             fitness = ExpressionFitnessFunction.getInstance(jgapConfig, fm, trainingData);
             org.jgap.Configuration.reset();
             jgapConfig.setFitnessFunction(fitness);
-            
+
         } else { // unsupervised
-            
+
             PseudoFMeasure pfm = (PseudoFMeasure) getParameter(PSEUDO_FMEASURE);
             fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, pfm, sourceCache, targetCache);
             org.jgap.Configuration.reset();
             jgapConfig.setFitnessFunction(fitness);
-            
+
         }
-        
+
 
         GPProblem gpP;
 
@@ -354,7 +365,7 @@ public class Eagle extends ACoreMLAlgorithm {
         result.addDetail("specifiactions", bestSolutions);
         return result;
     }
-    
+
     /**
      * Constructs the MLResult for this run.
      *
@@ -414,8 +425,8 @@ public class Eagle extends ACoreMLAlgorithm {
         }
         return answer;
     }
-    
-    
+
+
     /**
      * Method to compute best individuals by hand.
      *

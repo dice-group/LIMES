@@ -1,22 +1,34 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  *
  */
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineSegment;
-import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.util.GeometricShapeFactory;
+
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -278,9 +290,9 @@ public class PolygonFrechetDistance {
                 poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
                 poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1)) > epsilon &&
 
-        Line2D.ptSegDist(poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1),
-                poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
-                poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1)) > epsilon) {
+                Line2D.ptSegDist(poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1),
+                        poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
+                        poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -289,9 +301,9 @@ public class PolygonFrechetDistance {
                 poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
                 poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1)) > epsilon &&
 
-        Line2D.ptSegDist(poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1),
-                poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
-                poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1)) > epsilon) {
+                Line2D.ptSegDist(poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1),
+                        poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
+                        poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -304,12 +316,12 @@ public class PolygonFrechetDistance {
                 poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
                 poly2.points.get(poly2.points.size() - 1).coordinates.get(1)) > epsilon &&
 
-        Line2D.ptSegDist(poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
-                poly1.points.get(poly1.points.size() - 2).coordinates.get(1),
-                poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
-                poly1.points.get(poly1.points.size() - 1).coordinates.get(1),
-                poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
-                poly2.points.get(poly2.points.size() - 2).coordinates.get(1)) > epsilon) {
+                Line2D.ptSegDist(poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
+                        poly1.points.get(poly1.points.size() - 2).coordinates.get(1),
+                        poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
+                        poly1.points.get(poly1.points.size() - 1).coordinates.get(1),
+                        poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
+                        poly2.points.get(poly2.points.size() - 2).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -320,12 +332,12 @@ public class PolygonFrechetDistance {
                 poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
                 poly1.points.get(poly1.points.size() - 2).coordinates.get(1)) > epsilon &&
 
-        Line2D.ptSegDist(poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
-                poly2.points.get(poly2.points.size() - 2).coordinates.get(1),
-                poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
-                poly2.points.get(poly2.points.size() - 1).coordinates.get(1),
-                poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
-                poly1.points.get(poly1.points.size() - 1).coordinates.get(1)) > epsilon) {
+                Line2D.ptSegDist(poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
+                        poly2.points.get(poly2.points.size() - 2).coordinates.get(1),
+                        poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
+                        poly2.points.get(poly2.points.size() - 1).coordinates.get(1),
+                        poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
+                        poly1.points.get(poly1.points.size() - 1).coordinates.get(1)) > epsilon) {
 
             return false;
         }

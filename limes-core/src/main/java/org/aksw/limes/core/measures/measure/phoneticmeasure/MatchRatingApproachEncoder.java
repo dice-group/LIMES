@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 /*
@@ -17,14 +34,14 @@ package org.aksw.limes.core.measures.measure.phoneticmeasure;
  * limitations under the License.
  */
 
-import java.util.Locale;
-
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.StringEncoder;
 
+import java.util.Locale;
+
 /**
  * Match Rating Approach Phonetic Algorithm Developed by <CITE>Western Airlines</CITE> in 1977.
- *
+ * <p>
  * This class is immutable and thread-safe.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Match_rating_approach">Wikipedia - Match Rating Approach</a>
@@ -40,7 +57,7 @@ public class MatchRatingApproachEncoder implements StringEncoder {
      * Constants used mainly for the min rating value.
      */
     private static final int ONE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5, SIX = 6, SEVEN = 7,
-                             ELEVEN = 11, TWELVE = 12;
+            ELEVEN = 11, TWELVE = 12;
 
     /**
      * The plain letter equivalent of the accented letters.
@@ -66,7 +83,7 @@ public class MatchRatingApproachEncoder implements StringEncoder {
 
     private static final String[] DOUBLE_CONSONANT =
             new String[] { "BB", "CC", "DD", "FF", "GG", "HH", "JJ", "KK", "LL", "MM", "NN", "PP", "QQ", "RR", "SS",
-                           "TT", "VV", "WW", "XX", "YY", "ZZ" };
+                    "TT", "VV", "WW", "XX", "YY", "ZZ" };
 
     /**
      * Cleans up a name: 1. Upper-cases everything 2. Removes some common punctuation 3. Removes accents 4. Removes any
@@ -275,7 +292,7 @@ public class MatchRatingApproachEncoder implements StringEncoder {
      */
     boolean isVowel(final String letter) {
         return letter.equalsIgnoreCase("E") || letter.equalsIgnoreCase("A") || letter.equalsIgnoreCase("O") ||
-               letter.equalsIgnoreCase("I") || letter.equalsIgnoreCase("U");
+                letter.equalsIgnoreCase("I") || letter.equalsIgnoreCase("U");
     }
 
     /**

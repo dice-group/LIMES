@@ -1,9 +1,25 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
+import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
+import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPosition;
+import fr.ign.cogit.geoxygene.spatial.coordgeom.GM_LineSegment;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -11,10 +27,9 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
-import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
-import fr.ign.cogit.geoxygene.distance.Frechet;
-import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPosition;
-import fr.ign.cogit.geoxygene.spatial.coordgeom.GM_LineSegment;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -64,14 +79,14 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
         // PrintStream originalStream = System.out;
 //        System.setOut(null);
         double f = OrthodromicFrechetDistance.discreteFrechet(toLineSegment(X), toLineSegment(Y));
-        
+
         // System.setOut(originalStream);
         return f;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
      * getComputations()
      */
@@ -81,7 +96,7 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -114,7 +129,7 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
@@ -123,7 +138,7 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
      * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
@@ -155,7 +170,7 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
      * double)

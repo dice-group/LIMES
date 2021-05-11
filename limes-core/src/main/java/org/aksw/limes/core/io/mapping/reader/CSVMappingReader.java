@@ -1,7 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.mapping.reader;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -9,6 +23,9 @@ import org.aksw.limes.core.util.DataCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  * Read AMapping from CSV file by default the CSV file delimiter is the comma,
@@ -99,7 +116,7 @@ public class CSVMappingReader extends AMappingReader {
                 // check if it's the line with the properties
                 if (!split[0].startsWith("id")) {
                     //if (!split[0].startsWith("<")) {
-                        m.add(split[0], split[1], 1.0);
+                    m.add(split[0], split[1], 1.0);
                     //} else {
                     //    m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
                     //}
