@@ -1,9 +1,10 @@
 # LIMES - Link Discovery Framework for Metric Spaces.
 
 [![Build Status](https://github.com/dice-group/LIMES/actions/workflows/run-tests.yml/badge.svg?branch=master&event=push)](https://github.com/dice-group/LIMES/actions/workflows/run-tests.yml)
+[![DockerHub](https://badgen.net/badge/dockerhub/dicegroup%2Flimes/blue?icon=docker)](https://hub.docker.com/r/dicegroup/limes)
 [![GNU Affero General Public License v3.0](https://badgen.net/badge/license/GNU_Affero_General_Public_License_v3.0/orange)](./LICENSE)
 ![Java 1.8+](https://badgen.net/badge/java/1.8+/gray?icon=maven)
-![Java 1.8+](https://badgen.net/badge/dockerhub/dicegroup%2Flimes/blue?icon=docker)
+
 
 ## Running LIMES
 
@@ -70,7 +71,8 @@ docker run -it --rm \
 ```
 
 ## How to cite
-```
+
+```bibtex
 @article{KI_LIMES_2021,
   title={{LIMES - A Framework for Link Discovery on the Semantic Web}},
   author={Axel-Cyrille {Ngonga Ngomo} and Mohamed Ahmed Sherif and Kleanthi Georgala and Mofeed Hassan and Kevin Dreßler and Klaus Lyko and Daniel Obraczka and Tommaso Soru},
@@ -86,6 +88,3 @@ docker run -it --rm \
 * [Demo](https://dice-research.org/LIMES)
 * [User manual](http://dice-group.github.io/LIMES/#/user_manual/index)
 * [Developer manual](http://dice-group.github.io/LIMES/#/developer_manual/index)
-
-
-
