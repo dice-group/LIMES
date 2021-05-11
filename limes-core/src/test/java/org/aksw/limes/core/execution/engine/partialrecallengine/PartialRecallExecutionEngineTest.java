@@ -727,23 +727,23 @@ public class PartialRecallExecutionEngineTest {
         System.out.println("---------------------------------");
     }
 
-    @Test
-    public void testAtomicLSLiger2() {
-
-        String fileNameOrUri = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
-        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
-        Configuration config = reader.read();
-        ACache sour = HybridCache.getData(config.getSourceInfo());
-        ACache targ = HybridCache.getData(config.getTargetInfo());
-
-        System.out.println("testAtomicLSLiger");
-        LinkSpecification ls = new LinkSpecification("geo_hausdorff(x.polygon, y.polygon)", 0.001);
-        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
-        IPlanner cp = new CanonicalPlanner();
-        AMapping m = ee.execute(ls, cp);
-        System.out.println("---------------------------------");
-
-    }
+//    @Test
+//    public void testAtomicLSLiger2() {
+//
+//        String fileNameOrUri = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
+//        AConfigurationReader reader = new XMLConfigurationReader(fileNameOrUri);
+//        Configuration config = reader.read();
+//        ACache sour = HybridCache.getData(config.getSourceInfo());
+//        ACache targ = HybridCache.getData(config.getTargetInfo());
+//
+//        System.out.println("testAtomicLSLiger");
+//        LinkSpecification ls = new LinkSpecification("geo_hausdorff(x.polygon, y.polygon)", 0.001);
+//        PartialRecallExecutionEngine ee = new PartialRecallExecutionEngine(sour, targ, "?x", "?y", 1000, 0.5);
+//        IPlanner cp = new CanonicalPlanner();
+//        AMapping m = ee.execute(ls, cp);
+//        System.out.println("---------------------------------");
+//
+//    }
 
     @Test
     public void testAtomicLSLigerOR() {

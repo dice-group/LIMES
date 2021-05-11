@@ -1,0 +1,14 @@
+.git
+.idea
+.gitignore
+.java-version
+**/.server-storage
+.travis.yml
+.settings
+**/target
+faraday-cage
+examples
+manual
+scripts
+deer-slipo-plugin
+deer-web-ui
