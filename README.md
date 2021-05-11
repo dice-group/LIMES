@@ -27,17 +27,18 @@ limes-core.jar, i.e. to run a configuration at `./my-configuration`:
 
 ```bash
 docker run -it --rm \
-   -v $(pwd):/data dicegroup/limes:latest \
-   /data/my-configuration.xml
+  -v $(pwd):/data \
+  dicegroup/limes:latest \
+    /data/my-configuration.xml
 ```
 
 To run LIMES server:
 
 ```bash
 docker run -it --rm \
-   dicegroup/limes:latest \
-   -p 8080:8080 \
-   -s
+  -p 8080:8080
+  dicegroup/limes:latest \
+    -s
 ```
 
 ## Maven
