@@ -125,7 +125,7 @@ public class Eagle extends ACoreMLAlgorithm {
         fitness.addToReference(extractPositiveMatches(trainingData));
         fitness.fillCachesIncrementally(trainingData);
 
-        Integer nGen = (Integer) getParameter(GENERATIONS);
+        Integer nGen = Integer.parseInt(getParameter(GENERATIONS).toString());
 
         for (int gen = 1; gen <= nGen; gen++) {
             gp.evolve();
@@ -150,7 +150,7 @@ public class Eagle extends ACoreMLAlgorithm {
             return null;
         }
 
-        Integer nGen = (Integer) getParameter(GENERATIONS);
+        Integer nGen = Integer.parseInt(getParameter(GENERATIONS).toString());
 
         specifications = new LinkedList<LinkSpecification>();
         logger.info("Start learning");
@@ -174,7 +174,7 @@ public class Eagle extends ACoreMLAlgorithm {
 //        } else {
 //            logger.error("No link specification calculated so far.");
 //          assert (allBest != null);
-//        }     
+//        }
 //        return MappingFactory.createDefaultMapping();
     }
 
@@ -243,11 +243,11 @@ public class Eagle extends ACoreMLAlgorithm {
         jgapConfig.sC = sourceCache;
         jgapConfig.tC = targetCache;
 
-        jgapConfig.setPopulationSize((Integer) getParameter(POPULATION));
-        jgapConfig.setCrossoverProb((Float) getParameter(CROSSOVER_RATE));
-        jgapConfig.setMutationProb((Float) getParameter(MUTATION_RATE));
-        jgapConfig.setPreservFittestIndividual((Boolean) getParameter(PRESERVE_FITTEST));
-        jgapConfig.setReproductionProb((Float) getParameter(REPRODUCTION_RATE));
+        jgapConfig.setPopulationSize(Integer.parseInt(getParameter(POPULATION).toString()));
+        jgapConfig.setCrossoverProb(Float.parseFloat(getParameter(CROSSOVER_RATE).toString()));
+        jgapConfig.setMutationProb(Float.parseFloat(getParameter(MUTATION_RATE).toString()));
+        jgapConfig.setPreservFittestIndividual(Boolean.parseBoolean(getParameter(PRESERVE_FITTEST).toString()));
+        jgapConfig.setReproductionProb(Float.parseFloat(getParameter(REPRODUCTION_RATE).toString()));
         jgapConfig.setPropertyMapping(pm);
 
         if(trainingData != null) { // supervised
@@ -332,7 +332,7 @@ public class Eagle extends ACoreMLAlgorithm {
             }
         }
         // remember the best
-        if ((Boolean) getParameter(PRESERVE_FITTEST)) {
+        if (Boolean.parseBoolean(getParameter(PRESERVE_FITTEST).toString())) {
             if (allBest == null || fitness.calculateRawFitness(allBest) > fittest) {
                 allBest = bestHere;
                 logger.info("Generation " + gen + " new fittest (" + fittest + ") individual: " + getLinkSpecification(bestHere));
@@ -468,7 +468,7 @@ public class Eagle extends ACoreMLAlgorithm {
             }
         }
 
-        if ((Boolean) getParameter(PRESERVE_FITTEST)) {
+        if (Boolean.parseBoolean(getParameter(PRESERVE_FITTEST).toString())) {
             if (allBest == null || fitness.calculateRawFitness(allBest) > fittest) {
                 allBest = bestHere;
                 logger.info("Generation " + gen + " new fittest (" + fittest + ") individual: " + getLinkSpecification(bestHere));
