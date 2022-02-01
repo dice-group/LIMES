@@ -28,7 +28,7 @@
 
     <groupId>org.aksw.limes</groupId>
     <artifactId>limes-full</artifactId>
-    <version>1.7.6-SNAPSHOT</version>
+    <version>1.7.7-SNAPSHOT</version>
     <name>LIMES</name>
     <description>LIMES – Link Discovery Framework for Metric Spaces.</description>
     <url>https://aksw.org/Projects/LIMES</url>
