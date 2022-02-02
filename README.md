@@ -36,9 +36,20 @@ To run LIMES server:
 
 ```bash
 docker run -it --rm \
-  -p 8080:8080
+  -p 8080:8080 \
   dicegroup/limes:latest \
     -s
+```
+
+To build and run Docker with WordNet:
+
+```bash
+docker build -f wordnet.Dockerfile . -t limes-wordnet
+
+docker run -it --rm \
+  -v $(pwd):/data \
+  limes-wordnet \
+    /data/my-configuration.xml
 ```
 
 ## Maven
