@@ -15,8 +15,8 @@
 	</PREFIX>
 	
 <SOURCE>
-		<ID>test</ID>
-		<ENDPOINT>/home/abdullah/LIMES/limes-core/src/main/resources/datasets/test.nt</ENDPOINT>
+		<ID>dbp</ID>
+		<ENDPOINT>/home/abdullah/knowledge_base_alig/dbp.nt</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION> </RESTRICTION>
@@ -26,8 +26,8 @@
 </SOURCE>
 	
 	<TARGET>
-		<ID>test</ID>
-		<ENDPOINT>/home/abdullah/LIMES/limes-core/src/main/resources/datasets/test.nt</ENDPOINT>
+		<ID>lgd</ID>
+		<ENDPOINT>/home/abdullah/knowledge_base_alig/lgd.nt</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION> </RESTRICTION>
@@ -38,12 +38,12 @@
 	<METRIC>levenshtein(x.rdfs:label, y.rdfs:label)</METRIC>
 
 	<ACCEPTANCE>
-		<THRESHOLD>0.9</THRESHOLD>
-		<FILE>accepted.txt</FILE>
+		<THRESHOLD>0.8</THRESHOLD>
+		<FILE>/home/abdullah/knowledge_base_alig/accepted.nt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</ACCEPTANCE>
 	<REVIEW>
-		<THRESHOLD>0.95</THRESHOLD>
+		<THRESHOLD>0.7</THRESHOLD>
 		<FILE>reviewme.txt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</REVIEW>

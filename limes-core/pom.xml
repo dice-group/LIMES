@@ -264,18 +264,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.geotools</groupId>-->
-        <!--<artifactId>gt-main</artifactId>-->
-        <!--<version>20.2</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.opengis</groupId>-->
-        <!--<artifactId>geoapi</artifactId>-->
-        <!--<version>3.0.1</version>-->
-        <!--<type>bundle</type>-->
-        <!--</dependency>-->
-
+        
+        <!--geotools-->
+    
+    
+    <dependency>
+	<groupId>io.oss84.geotools</groupId>
+	<artifactId>gt-main</artifactId>
+	<version>24.2-oss84-1</version>
+</dependency>
+<!-- Thanks for using https://jar-download.com -->
+    
+ <!--geotools-->
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts</artifactId>
