@@ -17,17 +17,19 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-import org.aksw.commons.util.StopWatch;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MapperTest;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Set;
-
-import static org.junit.Assert.assertTrue;
+import com.google.common.base.Stopwatch;
 
 /**
  * @author Kevin Dreßler
@@ -44,15 +46,13 @@ public class JaroWinklerMapperTest extends MapperTest {
 //        RatcliffObershelpMapper rom = new RatcliffObershelpMapper();
         Map<String, Set<String>> s = generateRandomMap(sourceSize);
         Map<String, Set<String>> t = generateRandomMap(targetSize);
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
+        Stopwatch stopWatch = Stopwatch.createStarted();
         AMapping m1 = jwm.getMapping(s, t, theta);
 //        AMapping m1 = rom.getMapping(s, t, theta);
 //        stopWatch.getElapsedTime();
         stopWatch.start();
         AMapping m2 = bruteForce(s, t, theta, new JaroWinklerMeasure());
-        stopWatch.getElapsedTime();
-        stopWatch.stop();
+        stopWatch.elapsed(TimeUnit.MILLISECONDS);
         assertTrue(MappingOperations.difference(m1, m2).size() == 0);
     }
 }
