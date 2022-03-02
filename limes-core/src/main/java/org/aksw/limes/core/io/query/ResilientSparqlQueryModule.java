@@ -23,6 +23,8 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 import org.aksw.commons.io.cache.AdvancedRangeCacheConfigImpl;
+import org.aksw.commons.io.util.PathUtils;
+import org.aksw.commons.io.util.UriToPathUtils;
 import org.aksw.commons.store.object.key.api.ObjectStore;
 import org.aksw.commons.store.object.key.impl.KryoUtils;
 import org.aksw.commons.store.object.key.impl.ObjectStoreImpl;
@@ -153,27 +155,31 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
         SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
 
         // Since jenax 4.4.0-1 there is a new advanced range cache that unifies caching and pagination
-        
+
+        int pageSize = kbInfo.getPageSize();
+
         qef = FluentQueryExecutionFactory
                 .http(ssr)
                 .config()
                 .withRetry(retryCount, retryDelayInMS, TimeUnit.MILLISECONDS)
                 .withDelay(requestDelayInMs, TimeUnit.MILLISECONDS)
-                .compose(internalQef -> cacheDirectory != null ? internalQef : new QueryExecutionFactoryPaginated(internalQef, pageSize))
-                // .withPagination(pageSize)
+                // Only apply pagination if there is a page size
+                // and no configured cache folder
+                .compose(internalQef -> pageSize > 0 && cacheDirectory == null
+                    ? new QueryExecutionFactoryPaginated(internalQef, pageSize)
+                    : internalQef)
                 .end()
                 .create();
 
         if (cacheDirectory != null) {
-            String dbName = kbInfo.getEndpoint().replaceAll("[:/]", "_");
-            Path cacheFolder = Paths.get(cacheDirectory).resolve(dbName);
+            // Javaify the endpoint url - e.g. http://dbpedia.org/sparql becomes org/dbepdia/sparql
+            String[] pathSegments = UriToPathUtils.toPathSegments(kbInfo.getEndpoint());
+            Path cacheFolder = PathUtils.resolve(Paths.get(cacheDirectory), pathSegments);
             ObjectStore objectStore = ObjectStoreImpl.create(cacheFolder, ObjectSerializerKryo.create(KryoUtils.createKryoPool(null)));
 
             AdvancedRangeCacheConfigImpl cacheConfig = AdvancedRangeCacheConfigImpl.createDefault();
-            cacheConfig.setMaxRequestSize(pageSize);
+            cacheConfig.setMaxRequestSize(pageSize > 0 ? pageSize : Integer.MAX_VALUE);
             qef = new QueryExecutionFactoryRangeCache(qef, objectStore, 100, cacheConfig);
-            // CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
-            // qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
         } else {
             logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
         }
