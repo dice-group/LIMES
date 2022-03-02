@@ -175,22 +175,23 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
             // Javaify the endpoint url - e.g. http://dbpedia.org/sparql becomes org/dbepdia/sparql
             String[] pathSegments = UriToPathUtils.toPathSegments(kbInfo.getEndpoint());
             Path cacheFolder = PathUtils.resolve(Paths.get(cacheDirectory), pathSegments);
-            ObjectStore objectStore = ObjectStoreImpl.create(cacheFolder, ObjectSerializerKryo.create(KryoUtils.createKryoPool(null)));
 
             AdvancedRangeCacheConfigImpl cacheConfig = AdvancedRangeCacheConfigImpl.createDefault();
             cacheConfig.setMaxRequestSize(pageSize > 0 ? pageSize : Integer.MAX_VALUE);
-            qef = new QueryExecutionFactoryRangeCache(qef, objectStore, 100, cacheConfig);
+
+            qef = QueryExecutionFactoryRangeCache.create(qef, cacheFolder, 100, cacheConfig);
         } else {
             logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
         }
 
-        try {
-            qef = new QueryExecutionFactoryPaginated(qef, pageSize);
-            return qef;
-        } catch (Exception e) {
-            logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
-                    e.getLocalizedMessage());
-            return qef;
-        }
+        return qef;
+//        try {
+//            qef = new QueryExecutionFactoryPaginated(qef, pageSize);
+//            return qef;
+//        } catch (Exception e) {
+//            logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
+//                    e.getLocalizedMessage());
+//            return qef;
+//        }
     }
 }
