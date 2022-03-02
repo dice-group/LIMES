@@ -17,13 +17,21 @@
  */
 package org.aksw.limes.core.io.query;
 
-import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
-import org.aksw.jena_sparql_api.cache.h2.CacheUtilsH2;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
+
+import org.aksw.commons.io.cache.AdvancedRangeCacheConfigImpl;
+import org.aksw.commons.store.object.key.api.ObjectStore;
+import org.aksw.commons.store.object.key.impl.KryoUtils;
+import org.aksw.commons.store.object.key.impl.ObjectStoreImpl;
+import org.aksw.commons.store.object.path.impl.ObjectSerializerKryo;
+import org.aksw.jena_sparql_api.cache.advanced.QueryExecutionFactoryRangeCache;
 import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
-import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
+import org.aksw.jenax.arq.connection.core.QueryExecutionFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.jena.query.QueryExecution;
@@ -32,9 +40,6 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.DatasetDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -83,7 +88,7 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 
         logger.info("Querying the endpoint.");
         //run query
-        org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = null;
+        QueryExecutionFactory qef = null;
         try {
             qef = initQueryExecution(kb);
         } catch (Exception e) {
@@ -147,19 +152,28 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 
         SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
 
+        // Since jenax 4.4.0-1 there is a new advanced range cache that unifies caching and pagination
+        
         qef = FluentQueryExecutionFactory
                 .http(ssr)
                 .config()
                 .withRetry(retryCount, retryDelayInMS, TimeUnit.MILLISECONDS)
                 .withDelay(requestDelayInMs, TimeUnit.MILLISECONDS)
-                .withPagination(pageSize)
+                .compose(internalQef -> cacheDirectory != null ? internalQef : new QueryExecutionFactoryPaginated(internalQef, pageSize))
+                // .withPagination(pageSize)
                 .end()
                 .create();
 
         if (cacheDirectory != null) {
             String dbName = kbInfo.getEndpoint().replaceAll("[:/]", "_");
-            CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
-            qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+            Path cacheFolder = Paths.get(cacheDirectory).resolve(dbName);
+            ObjectStore objectStore = ObjectStoreImpl.create(cacheFolder, ObjectSerializerKryo.create(KryoUtils.createKryoPool(null)));
+
+            AdvancedRangeCacheConfigImpl cacheConfig = AdvancedRangeCacheConfigImpl.createDefault();
+            cacheConfig.setMaxRequestSize(pageSize);
+            qef = new QueryExecutionFactoryRangeCache(qef, objectStore, 100, cacheConfig);
+            // CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
+            // qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
         } else {
             logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
         }
