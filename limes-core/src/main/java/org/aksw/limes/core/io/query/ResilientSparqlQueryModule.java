@@ -25,10 +25,6 @@ import java.util.concurrent.TimeUnit;
 import org.aksw.commons.io.cache.AdvancedRangeCacheConfigImpl;
 import org.aksw.commons.io.util.PathUtils;
 import org.aksw.commons.io.util.UriToPathUtils;
-import org.aksw.commons.store.object.key.api.ObjectStore;
-import org.aksw.commons.store.object.key.impl.KryoUtils;
-import org.aksw.commons.store.object.key.impl.ObjectStoreImpl;
-import org.aksw.commons.store.object.path.impl.ObjectSerializerKryo;
 import org.aksw.jena_sparql_api.cache.advanced.QueryExecutionFactoryRangeCache;
 import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
@@ -36,7 +32,9 @@ import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.jenax.arq.connection.core.QueryExecutionFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.DatasetDescription;
@@ -86,7 +84,8 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
      */
     public void fillCache(ACache cache, boolean sparql) {
         long startTime = System.currentTimeMillis();
-        String query = generateQuery();
+        String queryStr = generateQuery();
+        Query query = QueryFactory.create(queryStr);
 
         logger.info("Querying the endpoint.");
         //run query
