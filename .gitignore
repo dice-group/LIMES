@@ -9,6 +9,11 @@ target/
 out/
 nbactions.xml
 
+# Eclipse
+.project
+.classpath
+.settings
+
 # IntelliJ IDEA #
 *.iml
 .idea/
@@ -39,3 +44,7 @@ package-lock.json
 # misc
 release.properties
 cache/
+
+# dependency tree file generiated via `mvn dependency:tree > deptree.txt`
+deptree.txt
+
