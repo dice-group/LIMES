@@ -18,4 +18,4 @@ VOLUME /data
 COPY --from=builder /limes/limes.jar limes.jar
 ENV JAVA_OPTS="-Xmx2G"
 EXPOSE 8080
-ENTRYPOINT ["java", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED", "-jar", "/limes.jar"]
+ENTRYPOINT ["java", "-jar", "/limes.jar"]
