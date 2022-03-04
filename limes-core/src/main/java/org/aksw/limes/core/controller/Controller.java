@@ -17,7 +17,14 @@
  */
 package org.aksw.limes.core.controller;
 
-import org.aksw.commons.util.Files;
+import static org.fusesource.jansi.Ansi.ansi;
+import static org.fusesource.jansi.Ansi.Color.RED;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.function.Function;
+
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
@@ -35,17 +42,15 @@ import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.function.Function;
-
-import static org.fusesource.jansi.Ansi.Color.RED;
-import static org.fusesource.jansi.Ansi.ansi;
 
 /**
  * This is the default LIMES Controller used to run the software as CLI.
@@ -116,9 +121,9 @@ public class Controller {
                         format = cmd.getOptionValue('F');
                     }
                     AMapping reference = OracleFactory.getOracle(cmd.getOptionValue('g'), format, "simple").getMapping();
-                    Files.writeToFile(statFile, result.getStatistics(reference), false);
+                    Files.writeString(statFile.toPath(), result.getStatistics(reference));
                 } else {
-                    Files.writeToFile(statFile, result.getStatistics(), false);
+                    Files.writeString(statFile.toPath(), result.getStatistics());
                 }
             } catch (IOException e) {
                 logger.error("Error writing JSON statistics file:");
@@ -204,7 +209,7 @@ public class Controller {
             sourceCache = getSubCache.apply(sourceCache);
             targetCache = getSubCache.apply(targetCache);
         }
-        // 4. Apply preprocessing 
+        // 4. Apply preprocessing
         sourceCache = Preprocessor.applyFunctionsToCache(sourceCache, config.getSourceInfo().getFunctions());
         targetCache = Preprocessor.applyFunctionsToCache(targetCache, config.getTargetInfo().getFunctions());
 

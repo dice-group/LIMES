@@ -21,7 +21,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFReader;
+import org.apache.jena.rdf.model.RDFReaderI;
 import org.apache.jena.riot.RiotNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class FileQueryModule implements IQueryModule {
                     logger.error(MarkerFactory.getMarker("FATAL"),"endpoint could not be loaded as a file or resource");
                     throw new RuntimeException(e);
                 }
-                RDFReader r = model.getReader(kb.getType());
+                RDFReaderI r = model.getReader(kb.getType());
                 InputStreamReader reader = new InputStreamReader(in, "UTF8");
                 r.read(model, reader, null);
                 reader.close();

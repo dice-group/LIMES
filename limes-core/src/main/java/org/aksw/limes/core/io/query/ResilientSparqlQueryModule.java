@@ -17,24 +17,29 @@
  */
 package org.aksw.limes.core.io.query;
 
-import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
-import org.aksw.jena_sparql_api.cache.h2.CacheUtilsH2;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
+
+import org.aksw.commons.io.cache.AdvancedRangeCacheConfigImpl;
+import org.aksw.commons.io.util.PathUtils;
+import org.aksw.commons.io.util.UriToPathUtils;
+import org.aksw.jena_sparql_api.cache.advanced.QueryExecutionFactoryRangeCache;
 import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
-import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
+import org.aksw.jenax.arq.connection.core.QueryExecutionFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.DatasetDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -79,11 +84,12 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
      */
     public void fillCache(ACache cache, boolean sparql) {
         long startTime = System.currentTimeMillis();
-        String query = generateQuery();
+        String queryStr = generateQuery();
+        Query query = QueryFactory.create(queryStr);
 
         logger.info("Querying the endpoint.");
         //run query
-        org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = null;
+        QueryExecutionFactory qef = null;
         try {
             qef = initQueryExecution(kb);
         } catch (Exception e) {
@@ -147,30 +153,44 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 
         SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
 
+        // Since jenax 4.4.0-1 there is a new advanced range cache that unifies caching and pagination
+
+        int pageSize = kbInfo.getPageSize();
+
         qef = FluentQueryExecutionFactory
                 .http(ssr)
                 .config()
                 .withRetry(retryCount, retryDelayInMS, TimeUnit.MILLISECONDS)
                 .withDelay(requestDelayInMs, TimeUnit.MILLISECONDS)
-                .withPagination(pageSize)
+                // Only apply pagination if there is a page size
+                // and no configured cache folder
+                .compose(internalQef -> pageSize > 0 && cacheDirectory == null
+                    ? new QueryExecutionFactoryPaginated(internalQef, pageSize)
+                    : internalQef)
                 .end()
                 .create();
 
         if (cacheDirectory != null) {
-            String dbName = kbInfo.getEndpoint().replaceAll("[:/]", "_");
-            CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend(dbName, true, timeToLive);
-            qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+            // Javaify the endpoint url - e.g. http://dbpedia.org/sparql becomes org/dbepdia/sparql
+            String[] pathSegments = UriToPathUtils.toPathSegments(kbInfo.getEndpoint());
+            Path cacheFolder = PathUtils.resolve(Paths.get(cacheDirectory), pathSegments);
+
+            AdvancedRangeCacheConfigImpl cacheConfig = AdvancedRangeCacheConfigImpl.createDefault();
+            cacheConfig.setMaxRequestSize(pageSize > 0 ? pageSize : Integer.MAX_VALUE);
+
+            qef = QueryExecutionFactoryRangeCache.create(qef, cacheFolder, 100, cacheConfig);
         } else {
             logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
         }
 
-        try {
-            qef = new QueryExecutionFactoryPaginated(qef, pageSize);
-            return qef;
-        } catch (Exception e) {
-            logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
-                    e.getLocalizedMessage());
-            return qef;
-        }
+        return qef;
+//        try {
+//            qef = new QueryExecutionFactoryPaginated(qef, pageSize);
+//            return qef;
+//        } catch (Exception e) {
+//            logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
+//                    e.getLocalizedMessage());
+//            return qef;
+//        }
     }
 }
