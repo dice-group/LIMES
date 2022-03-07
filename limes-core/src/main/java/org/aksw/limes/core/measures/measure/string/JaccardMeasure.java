@@ -81,7 +81,7 @@ public class JaccardMeasure extends StringMeasure {
     }
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
-        return (double) overlap / (lengthA + lengthA - overlap);
+        return (double) overlap / (lengthA + lengthB - overlap);
     }
 
     public int getPrefixLength(int tokensNumber, double threshold) {

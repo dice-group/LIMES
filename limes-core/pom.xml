@@ -1,21 +1,16 @@
 <!--
-
     LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
     Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
@@ -97,6 +92,15 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.35</version>
+<<<<<<< HEAD
+=======
+        </dependency>
+
+	   <dependency>
+            <groupId>org.aksw.commons</groupId>
+   			<artifactId>aksw-commons-util</artifactId>
+            <version>0.8.14</version>
+>>>>>>> dev
         </dependency>
 
         <dependency>
@@ -164,6 +168,15 @@
             </exclusions>
         </dependency>
         <dependency>
+<<<<<<< HEAD
+=======
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <version>2.17.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+>>>>>>> dev
             <groupId>org.aksw.jena-sparql-api</groupId>
             <artifactId>jena-sparql-api-core</artifactId>
             <version>3.17.0-1</version>
@@ -275,18 +288,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.geotools</groupId>-->
-        <!--<artifactId>gt-main</artifactId>-->
-        <!--<version>20.2</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.opengis</groupId>-->
-        <!--<artifactId>geoapi</artifactId>-->
-        <!--<version>3.0.1</version>-->
-        <!--<type>bundle</type>-->
-        <!--</dependency>-->
-
+        
+        <!--geotools-->
+    
+    
+    <dependency>
+	<groupId>io.oss84.geotools</groupId>
+	<artifactId>gt-main</artifactId>
+	<version>24.2-oss84-1</version>
+</dependency>
+<!-- Thanks for using https://jar-download.com -->
+    
+ <!--geotools-->
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts</artifactId>
