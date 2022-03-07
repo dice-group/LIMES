@@ -419,6 +419,13 @@
         <!--<artifactId>commons-fileupload</artifactId>-->
         <!--<version>1.3.2</version>-->
         <!--</dependency>-->
+        
+           <dependency>
+	<groupId>io.oss84.geotools</groupId>
+	<artifactId>gt-main</artifactId>
+	<version>24.2-oss84-1</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
