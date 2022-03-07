@@ -121,7 +121,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
-                        <failOnError>false</failOnError>
+                        <failOnError>true</failOnError>
                         <source>1.8</source>
                     </configuration>
                     <executions>
@@ -142,8 +142,8 @@
                         <forkCount>4</forkCount>
                         <!--suppress UnresolvedMavenProperty -->
                         <argLine>-Xms256m -Xmx128G</argLine>
-                        <testFailureIgnore>true</testFailureIgnore>
-                        <skipTests>true</skipTests>
+                        <testFailureIgnore>false</testFailureIgnore>
+                        <skipTests>false</skipTests>
                         <useManifestOnlyJar>false</useManifestOnlyJar>
                     </configuration>
                 </plugin>
