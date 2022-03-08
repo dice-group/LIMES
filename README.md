@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/dice-group/LIMES/actions/workflows/run-tests.yml/badge.svg?branch=master&event=push)](https://github.com/dice-group/LIMES/actions/workflows/run-tests.yml)
 [![DockerHub](https://badgen.net/badge/dockerhub/dicegroup%2Flimes/blue?icon=docker)](https://hub.docker.com/r/dicegroup/limes)
 [![GNU Affero General Public License v3.0](https://badgen.net/badge/license/GNU_Affero_General_Public_License_v3.0/orange)](./LICENSE)
-![Java 1.8+](https://badgen.net/badge/java/1.8+/gray?icon=maven)
+![Java 11+](https://badgen.net/badge/java/11+/gray?icon=maven)
 
 
 ## Running LIMES
