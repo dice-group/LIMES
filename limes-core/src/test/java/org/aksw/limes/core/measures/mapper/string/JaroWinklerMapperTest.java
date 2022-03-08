@@ -46,13 +46,13 @@ public class JaroWinklerMapperTest extends MapperTest {
 //        RatcliffObershelpMapper rom = new RatcliffObershelpMapper();
         Map<String, Set<String>> s = generateRandomMap(sourceSize);
         Map<String, Set<String>> t = generateRandomMap(targetSize);
-        Stopwatch stopWatch = Stopwatch.createStarted();
+        //Stopwatch stopWatch = Stopwatch.createStarted();
         AMapping m1 = jwm.getMapping(s, t, theta);
 //        AMapping m1 = rom.getMapping(s, t, theta);
 //        stopWatch.getElapsedTime();
-        stopWatch.start();
+       // stopWatch.start();
         AMapping m2 = bruteForce(s, t, theta, new JaroWinklerMeasure());
-        stopWatch.elapsed(TimeUnit.MILLISECONDS);
+        //stopWatch.elapsed(TimeUnit.MILLISECONDS);
         assertTrue(MappingOperations.difference(m1, m2).size() == 0);
     }
 }
