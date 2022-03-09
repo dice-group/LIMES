@@ -28,23 +28,60 @@ import static org.junit.Assert.assertTrue;
 
 public class ResilientSparqlQueryModuleTest {
 
+//    @Test
+//    public void testFillCacheDBpedia() {
+//        HashMap<String, String> prefixes = new HashMap<>();
+//        prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+//        prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+//        prefixes.put("dbpo", "http://dbpedia.org/ontology/");
+//
+//        LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
+//
+//        KBInfo kbInfo = new KBInfo(
+//                "DBpedia",                                                     //String id
+//                "http://dbpedia.org/sparql",                                   //String endpoint
+//                null,                                                          //String graph
+//                "?x",                                                          //String var
+//                new ArrayList<String>(Arrays.asList("rdfs:label")),            //List<String> properties
+//                null,                                                          //List<String> optionlProperties
+//                new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")), //ArrayList<String> restrictions
+//                functions,                                                     //LinkedHashMap<String, Map<String, String>> functions
+//                prefixes,                                                      //Map<String, String> prefixes
+//                1000,                                                          //int pageSize
+//                "sparql",                                                         //String type
+//                -1,                                                               //int minOffset
+//                2000                                                                //int maxoffset
+//        );
+//
+//        ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);
+//        ACache cache = new HybridCache();
+//        rsqm.fillCache(cache);
+//
+//        assertTrue(cache.size() > 0);
+//    }
+    
+    
     @Test
-    public void fillCacheTest() {
+    public void testFillCacheLinkedGeoData() {
         HashMap<String, String> prefixes = new HashMap<>();
         prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         prefixes.put("dbpo", "http://dbpedia.org/ontology/");
+        prefixes.put("geom", "http://geovocab.org/geometry#");
+        prefixes.put("geos", "http://www.opengis.net/ont/geosparql#");
+        prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
+
 
         LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
 
         KBInfo kbInfo = new KBInfo(
-                "DBpedia",                                                     //String id
-                "http://dbpedia.org/sparql",                                   //String endpoint
+                "LGD",                                                     //String id
+                "http://linkedgeodata.org/sparql",                                   //String endpoint
                 null,                                                          //String graph
                 "?x",                                                          //String var
-                new ArrayList<String>(Arrays.asList("rdfs:label")),            //List<String> properties
+                new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")),            //List<String> properties
                 null,                                                          //List<String> optionlProperties
-                new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")), //ArrayList<String> restrictions
+                new ArrayList<String>(Arrays.asList("?x a lgdo:RelayBox")), //ArrayList<String> restrictions
                 functions,                                                     //LinkedHashMap<String, Map<String, String>> functions
                 prefixes,                                                      //Map<String, String> prefixes
                 1000,                                                          //int pageSize
@@ -55,7 +92,7 @@ public class ResilientSparqlQueryModuleTest {
 
         ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);
         ACache cache = new HybridCache();
-        rsqm.fillCache(cache);
+        rsqm.fillCache(cache);    
 
         assertTrue(cache.size() > 0);
     }

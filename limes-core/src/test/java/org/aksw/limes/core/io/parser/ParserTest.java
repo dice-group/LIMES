@@ -39,7 +39,6 @@ public class ParserTest {
                         + " with " + "threshold " + threshold);
             }
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -50,7 +49,6 @@ public class ParserTest {
         try {
             assertTrue(p.isAtomic());
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -59,7 +57,6 @@ public class ParserTest {
 
             assertFalse(p.isAtomic());
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -71,7 +68,6 @@ public class ParserTest {
             p = new Parser("MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))",
                     0.5);
         } catch (RuntimeException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         assertTrue(p.getOperator().equals(Parser.MAX));
@@ -80,21 +76,15 @@ public class ParserTest {
     }
 
     @Test
-    public void atomicParcer() {
-
-        try {
-            Parser p = new Parser(
-                    "blabala(trigrams(x.skos:prefLabel,y.rdfs:label)|0.5,trigrams(x.osnp:valueLabel, y.rdfs:label)|0.5)",
-                    0.5);
+    public void testUnsupportedOperatorException() { 
+        assertThrows(UnsupportedOperator.class, () -> {
+            Parser p = new Parser("blabala(trigrams(x.skos:prefLabel,y.rdfs:label)|0.5,trigrams(x.osnp:valueLabel, y.rdfs:label)|0.5)",0.5);
             p.isAtomic();
-        } catch (RuntimeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        });
     }
 
     @Test
-    public void weightedTest(){
+    public void testWeighted(){
         double theta = 0.8;
         Parser p = new Parser("ADD("
                 + "0.5* ADD("
@@ -120,10 +110,10 @@ public class ParserTest {
     }
 
     @Test
-    public void weih2(){
+    public void testGetCoefficients(){
         Parser p = new Parser("ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)",0.8);
-        System.out.println(p.getLeftCoefficient());
-        System.out.println(p.getRightCoefficient());
+        assertEquals(p.getLeftCoefficient(), 0,3);
+        assertEquals(p.getRightCoefficient(), 0,7);
     }
 
 }
