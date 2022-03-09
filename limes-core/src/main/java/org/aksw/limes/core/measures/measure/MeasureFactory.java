@@ -77,6 +77,7 @@ public class MeasureFactory {
     public static final String MONGEELKAN = "mongeelkan";
     public static final String OVERLAP = "overlap";
     public static final String QGRAMS = "qgrams";
+    public static final String LESS_THAN = "less_than";
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
     public static final String DOUBLEMETA = "doublemeta";
@@ -166,6 +167,9 @@ public class MeasureFactory {
 
         if (measure.startsWith(COSINE)) {
             return MeasureType.COSINE;
+        }
+        if (measure.startsWith(LESS_THAN)) {
+            return MeasureType.LESS_THAN;
         }
         if (measure.startsWith(EXACTMATCH)) {
             return MeasureType.EXACTMATCH;
@@ -415,6 +419,9 @@ public class MeasureFactory {
         switch (type) {
             case COSINE:
                 return new CosineMeasure();
+                
+            case LESS_THAN:
+                return new LessThanMeasure();
             case EXACTMATCH:
                 return new ExactMatchMeasure();
             case JACCARD:

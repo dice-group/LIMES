@@ -76,6 +76,8 @@ public class MapperFactory {
                 return new EDJoinMapper();
             case EXACTMATCH:
                 return new ExactMatchMapper();
+            case LESS_THAN:
+                return new LessThanMapper();
             case SOUNDEX:
                 return new SoundexMapper();
             case REFINEDSOUNDEX:
