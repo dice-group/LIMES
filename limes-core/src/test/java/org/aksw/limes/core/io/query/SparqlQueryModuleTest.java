@@ -53,14 +53,14 @@ public class SparqlQueryModuleTest {
                 functions,                                                       //LinkedHashMap<String, Map<String, String>> functions
                 prefixes,                                                        //Map<String, String> prefixes
                 1000,                                                            //int pageSize
-                "sparql",                                                         //String type
-                -1,                                                               //int minOffset
-                2000                                                                //int maxoffset
+                "sparql",                                                        //String type
+                -1,                                                              //int minOffset
+                2000                                                             //int maxoffset
         );
     }
 
     @Test
-    public void fillCacheTest() {
+    public void testFillCache() {
         SparqlQueryModule sqm = new SparqlQueryModule(kbInfo);
         ACache cache = new HybridCache();
         sqm.fillCache(cache);
@@ -69,7 +69,7 @@ public class SparqlQueryModuleTest {
 
 
     @Test
-    public void optionalPropertyTest() {
+    public void testOptionalProperty() {
         kbInfo.setOptionalProperties(Arrays.asList("rdfs:comment"));
         SparqlQueryModule sqm = new SparqlQueryModule(kbInfo);
         ACache cache = new HybridCache();

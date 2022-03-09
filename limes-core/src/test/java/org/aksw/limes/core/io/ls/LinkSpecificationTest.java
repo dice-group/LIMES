@@ -34,12 +34,12 @@ public class LinkSpecificationTest {
                         + "euclidean(x.price,y.price)|0.8993)|0.5905)",
                 0.6929);
 
-        System.out.println(ls.toStringPretty());
+//        System.out.println(ls.toStringPretty());
 
     }
 
     // @Test
-    public void setLeafTest() {
+    public void testSetLeaf() {
 
         LinkSpecification ls = new LinkSpecification(
                 "OR(" + "MINUS(" + "OR(" + "MINUS(jaccard(x.p,y.p)|0.001,jaccard(x.h,y.h)|0.1)|0.0,"

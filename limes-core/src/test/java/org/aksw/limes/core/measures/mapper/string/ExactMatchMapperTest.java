@@ -36,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 public class ExactMatchMapperTest {
 
     @Test
-    public void test() {
+    public void testExactMatchMapper() {
         int size = 1000;
         double threshold = 1.0;
         IMapper mapper = new ExactMatchMapper();

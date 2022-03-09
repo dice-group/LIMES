@@ -23,10 +23,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class SetOperationsTest {
+public class MappingOperationsTest {
 
     @Test
-    public void test() {
+    public void testMappingOperation() {
         AMapping a = MappingFactory.createDefaultMapping();
         AMapping b = MappingFactory.createDefaultMapping();
         a.add("c", "c", 0.5);

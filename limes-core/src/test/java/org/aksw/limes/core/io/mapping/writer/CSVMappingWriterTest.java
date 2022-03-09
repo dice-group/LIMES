@@ -44,6 +44,7 @@ public class CSVMappingWriterTest {
         outputFile += "test";
 
         (new CSVMappingWriter()).write(mapping, outputFile);
+   
 
     }
 

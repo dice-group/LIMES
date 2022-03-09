@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 public class RDFMappingReaderTest {
 
     @Test
-    public void rdfMappingThreeColTester() {
+    public void testRdfMappingReader() {
         AMapping testMap = MappingFactory.createDefaultMapping();
 
         testMap.add("http://linkedgeodata.org/triplify/node2806760713", "http://linkedgeodata.org/triplify/node2478449224", 1.0d);

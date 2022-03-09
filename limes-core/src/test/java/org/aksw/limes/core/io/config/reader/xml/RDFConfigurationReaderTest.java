@@ -157,7 +157,7 @@ public class RDFConfigurationReaderTest {
     }
 
     @Test
-    public void test1() {
+    public void testRDFReaderForExpectedSelectivityAndOptimizationTime1() {
         //Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
         String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
         RDFConfigurationReader reader = new RDFConfigurationReader(filename);
@@ -174,7 +174,7 @@ public class RDFConfigurationReaderTest {
     }
 
     @Test
-    public void test2() {
+    public void testRDFReaderForExpectedSelectivityAndOptimizationTime2() {
         String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.ttl").getPath();
         RDFConfigurationReader reader = new RDFConfigurationReader(filename);
         Configuration config = reader.read();

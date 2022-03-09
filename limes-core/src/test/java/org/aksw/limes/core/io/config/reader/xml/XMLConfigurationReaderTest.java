@@ -202,7 +202,7 @@ public class XMLConfigurationReaderTest {
 
 
     @Test
-    public void test1() {
+    public void testXmlReaderForExpectedSelectivityAndOptimizationTime1() {
         //optimization time = -1000 -> 0
         //no selectivity from file -> 1.0
         //
@@ -217,7 +217,7 @@ public class XMLConfigurationReaderTest {
     }
 
     @Test
-    public void test2() {
+    public void testXmlReaderForExpectedSelectivityAndOptimizationTime2() {
         String filename = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd2.xml").getPath();
         System.out.println(filename);
         XMLConfigurationReader reader = new XMLConfigurationReader(filename);

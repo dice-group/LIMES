@@ -141,7 +141,7 @@ public class PreprocessorTest {
     }
 
     @Test
-    public void testgetFunctionId(){
+    public void testGetFunctionId(){
         String[] functionchain = functions.get(PROP_LABEL).get(PROP_RENAMED_LABEL).split("->");
         assertEquals(FUNCTIONID1_EXPECTED, Preprocessor.getFunctionId(functionchain[0]));
         assertEquals(FUNCTIONID2_EXPECTED, Preprocessor.getFunctionId(functionchain[1]));

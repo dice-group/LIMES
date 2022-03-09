@@ -57,11 +57,11 @@ public class FileQueryModuleTest {
         fqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);
-        for(String abs: cache.getAllInstances().get(0).getProperty("dbpo:abstract")){
-            if(abs.contains("@en")){
-                System.out.println(abs);
-            }
-        }
+//        for(String abs: cache.getAllInstances().get(0).getProperty("dbpo:abstract")){
+//            if(abs.contains("@en")){
+//                System.out.println(abs);
+//            }
+//        }
     }
 
 }
