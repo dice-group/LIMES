@@ -27,7 +27,7 @@
 	
 	<TARGET>
 		<ID>lgd</ID>
-		<ENDPOINT>/home/abdullah/knowledge_base_alig/lgd.nt</ENDPOINT>
+		<ENDPOINT>/home/abdullah/knowledge_base_alig/dbp.nt</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION> </RESTRICTION>
@@ -35,7 +35,7 @@
 		<TYPE>N3</TYPE>
 	</TARGET>	
 
-	<METRIC>levenshtein(x.rdfs:label, y.rdfs:label)</METRIC>
+	<METRIC>less_than(x.rdfs:label, y.rdfs:label)</METRIC>
 
 	<ACCEPTANCE>
 		<THRESHOLD>0.8</THRESHOLD>
