@@ -57,6 +57,8 @@ public class QueryModuleFactory {
             return new FileQueryModule(kbinfo);
         } else if (name.toLowerCase().startsWith("sparql")) {
             return new SparqlQueryModule(kbinfo);
+        } else if (name.toLowerCase().startsWith("resilientsparql")) {
+        	return new ResilientSparqlQueryModule(kbinfo);
         } else if (name.toLowerCase().startsWith("vector")) {
             return new VectorQueryModule(kbinfo);
         }
