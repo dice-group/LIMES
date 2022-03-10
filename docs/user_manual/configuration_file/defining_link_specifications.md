@@ -19,7 +19,17 @@ For this purpose, two categories of binary operations are supported:
 ## Metric operations
 
 Metric operations allow to combine metric values. They include the operators
-`MIN`, `MAX` and `ADD` e.g. as follows:
+`MIN`, `MAX`, `MINUS` and `ADD` as follows:
+
+* `MIN(m1, m2)` Computes the *intersection* of the two mappings `m1` and `m2`. In case a link `l` exists in both mappings `m1` and `m2` the `l` with the minimal similarity is taken. In other words, the result of `MIN(m1, m2)` would be all the entries (i.e., links) with *minimum* similarities in both `m1` and `m2`, where nonexisting entries in both `m1` and `m2` are assumed to have a similarity of `0`. For instance, if a link `l` exists *only* in `m1`, then we assume that `m2` contains the same link '`l` with a similarity of `0`. Therefore, the `MIN` will not return `l` as it would have the minimum similarity of `0`. 
+
+* `MAX(m1, m2)` Computes the *union* of the two mappings `m1` and `m2`. In case a link `l` exists in both mappings `m1` and `m2` the `l` with the maximal similarity is taken. In other words, the result of `MAX(m1, m2)` would be all the entries (i.e., links) with *maximum* similarities in both `m1` and `m2`, where nonexisting entries in both `m1` and `m2` are assumed to have a similarity of `0`. For instance, if a link `l` exists *only* in `m1`, then we assume that `m2` contains the same link `l` with a similarity of `0`. Therefore, the `MAX` will always return `l` from `m1` as it would have the maximum similarity. 
+
+* `MINUS(m1, m2)` Computes the *difference* of two mappings. i.e. the set difference `m1 - m2`. In other words, `MINUS` will only return links from `m1` with their respective similarities, only in case such links do not exist in `m2`. 
+
+* `ADD` allows to define weighted sums as follows:`ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)`.
+
+#### Link specification with metric operations example:
 
 ```
 MAX(trigrams(x.rdfs:label,y.dc:title)|0.3,euclidean(x.lat|long, y.latitude|longitude)|0.5).
@@ -27,12 +37,9 @@ MAX(trigrams(x.rdfs:label,y.dc:title)|0.3,euclidean(x.lat|long, y.latitude|longi
 
 This specification computes the maximum of:
 
-1. The trigram similarity of x's `rdfs:label` and y's `dc:title` is greater or equal to 0.3
+1. The *trigram similarity* of x's `rdfs:label` and y's `dc:title` is greater or equal to 0.3
 
-2. The 2-dimension Euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5.
-
-
-Note that euclidean supports arbitrarily many dimensions. In addition, note that `ADD` allows to define weighted sums as follows:`ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)`.
+2. The 2-dimension *Euclidean distance* of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. Note that euclidean supports arbitrarily many dimensions. 
 
 We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specification and `euclidean(x.lat|long, y.latitude|longitude)|0.5` the right child of the specification. Both children specifications are simple specifications and combined with a metric operator, they create a complex specification. LIMES gives the user the opportunity to combine **exactly two** complex or simple specifications to create a new complex specification. Note that each child specification must be accompanied by its own threshold.
 
