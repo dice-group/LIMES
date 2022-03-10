@@ -144,7 +144,7 @@
                         <argLine>-Xms256m -Xmx128G</argLine>
                         <testFailureIgnore>true</testFailureIgnore>
                         <skipTests>true</skipTests>
-                        <useManifestOnlyJar>true</useManifestOnlyJar>
+                        <useManifestOnlyJar>false</useManifestOnlyJar>
                     </configuration>
                 </plugin>
 
