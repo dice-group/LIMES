@@ -10,7 +10,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
     You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses />.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -26,7 +26,7 @@
 
     <groupId>org.aksw.limes</groupId>
     <artifactId>limes-full</artifactId>
-    <version>1.7.9-SNAPSHOT</version>
+    <version>1.7.7-SNAPSHOT</version>
     <name>LIMES</name>
     <description>LIMES – Link Discovery Framework for Metric Spaces.</description>
     <url>https://aksw.org/Projects/LIMES</url>
@@ -121,7 +121,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
-                        <failOnError>true</failOnError>
+                        <failOnError>false</failOnError>
                         <source>1.8</source>
                     </configuration>
                     <executions>
@@ -144,7 +144,7 @@
                         <argLine>-Xms256m -Xmx128G</argLine>
                         <testFailureIgnore>true</testFailureIgnore>
                         <skipTests>true</skipTests>
-                        <useManifestOnlyJar>true</useManifestOnlyJar>
+                        <useManifestOnlyJar>false</useManifestOnlyJar>
                     </configuration>
                 </plugin>
 
