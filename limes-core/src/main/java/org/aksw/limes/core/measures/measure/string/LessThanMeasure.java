@@ -25,54 +25,45 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
  */
 
 
-
-/**
- * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
- */
 public class LessThanMeasure extends StringMeasure  {
 
 
-   
+	public double getSimilarity(Object a, Object b) {
+		String string1 = a + ""; 
+		String string2 = b + "";
 
-    public double getSimilarity(Object a, Object b) {
-    	String string1 = a.toString();
-    	String string2 = b.toString();
-    	
-    	return string1.compareTo(string2) < 0 ? 1.0d : 0d;
-    	
-    }
+		return string1.compareTo(string2) < 0 ? 1.0d : 0d;
 
-    public String getType() {
-        return "string";
-    }
+	}
 
-    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
-        double sim = 0;
-        double max = 0;
-        for (String p1 : instance1.getProperty(property1)) {
-            for (String p2 : instance2.getProperty(property2)) {
-                sim = getSimilarity(p1, p2);
-                if (max < sim) {
-                    max = sim;
-                }
-            }
-        }
-        return max;
-    }
+	public String getType() {
+		return "string";
+	}
 
-    public String getName() {
-        return "less_than";
-    }
+	public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
 
-   
+		for (String p1 : instance1.getProperty(property1)) {
+			for (String p2 : instance2.getProperty(property2)) {
+				if (p1.compareTo(p2) < 0) 
+					return 1.0d;
+			}
+		}
+		return 0.d;
+	}
 
-    
+	public String getName() {
+		return "less_than";
+	}
 
 
-    @Override
-    public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize / 1000d;
-    }
+
+
+
+
+	@Override
+	public double getRuntimeApproximation(double mappingSize) {
+		return mappingSize / 1000d;
+	}
 
 	@Override
 	public int getPrefixLength(int tokensNumber, double threshold) {

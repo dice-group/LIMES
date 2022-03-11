@@ -51,7 +51,8 @@ public class LessThanMapper extends AMapper {
 		Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));
 		Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
 		AMapping m = MappingFactory.createDefaultMapping();
-		boolean swapped = sourceIndex.keySet().size() > targetIndex.keySet().size();
+		
+		boolean swapped = sourceIndex.keySet().size() >= targetIndex.keySet().size();
 		(!swapped ? sourceIndex : targetIndex).keySet().stream().filter(!swapped ? targetIndex::containsKey : sourceIndex::containsKey).forEach(value -> {
 			for (String sourceUri : sourceIndex.get(value)) {
 				for (String targetUri : targetIndex.get(value)) {

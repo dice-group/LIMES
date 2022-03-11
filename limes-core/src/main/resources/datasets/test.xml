@@ -15,8 +15,8 @@
 	</PREFIX>
 	
 <SOURCE>
-		<ID>dbp</ID>
-		<ENDPOINT>/home/abdullah/knowledge_base_alig/dbp.nt</ENDPOINT>
+		<ID>test</ID>
+		<ENDPOINT>datasets/test.nt</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION> </RESTRICTION>
@@ -26,8 +26,8 @@
 </SOURCE>
 	
 	<TARGET>
-		<ID>lgd</ID>
-		<ENDPOINT>/home/abdullah/knowledge_base_alig/dbp.nt</ENDPOINT>
+		<ID>test</ID>
+		<ENDPOINT>datasets/test.nt</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION> </RESTRICTION>
@@ -38,8 +38,8 @@
 	<METRIC>less_than(x.rdfs:label, y.rdfs:label)</METRIC>
 
 	<ACCEPTANCE>
-		<THRESHOLD>0.8</THRESHOLD>
-		<FILE>/home/abdullah/knowledge_base_alig/accepted.nt</FILE>
+		<THRESHOLD>0.95</THRESHOLD>
+		<FILE>testaccepted.nt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</ACCEPTANCE>
 	<REVIEW>
