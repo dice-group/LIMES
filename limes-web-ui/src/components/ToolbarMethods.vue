@@ -44,7 +44,7 @@ export default {
         pagesize: 2000,
         restriction: '?t a lgdo:RelayBox',
         type: '',
-        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME STRGEO'],
+        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME StrGeo'],
         optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
@@ -53,9 +53,9 @@ export default {
       this.$store.commit('changeTarget', target);
       this.importWorkspaceString = `
       <xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="start" id="]~iOOuxgG1il)Qn#!5@R" deletable="false" x="-60" y="68">
+  <block type="start" id="]~iOOuxgG1il)Qn#!5@R" deletable="false" x="-43" y="223">
     <value name="NAME">
-      <block type="operator" id="/Cs/;:E)}F1)9??ddPl.">
+      <block type="operator" id="UPt),ECc.Dk11X$cW=xM">
         <field name="operators">minus</field>
         <value name="rename">
           <block type="measure" id="KV+e%A!n/j5k2T@D@*GH">
@@ -87,16 +87,16 @@ export default {
               <block type="renamepreprocessingfunction" id="rpf">
                 <field name="RENAME">GEOMETRY</field>
                 <value name="RENAME">
-                  <block type="targetproperty" id=".mRyon#Gsr9}B=;J1.l^">
+                  <block type="targetproperty" id="n1O[#^wbmB=cRY2:Dh!z">
                     <field name="propTitle">ngeo:geometry</field>
                     <field name="enable_propertypath">TRUE</field>
                     <value name="propName">
-                      <block type="propertyPath" id="_opx:XTpe/Lq0Q8f;50[" movable="false">
+                      <block type="propertyPath" id="%+^C#EQ0a;_--$5EeDgs" movable="false">
                         <field name="path">sslash</field>
                         <field name="propTitle">geos:asWKT</field>
                         <field name="enable_propertypath">FALSE</field>
                         <value name="propertyPath">
-                          <block type="emptyBlock" id="WiKNwJwWK8W6Ul{9-v4Y" movable="false"></block>
+                          <block type="emptyBlock" id="8GKMIIbCGbtv##3I;,Cb" movable="false"></block>
                         </value>
                       </block>
                     </value>
@@ -107,33 +107,43 @@ export default {
           </block>
         </value>
         <value name="NAME">
-          <block type="measure" id="pa3d{QS2@B2wR.2Qi4L^">
+          <block type="measure" id="wmW/JW:xDV_!PVlXFa|(">
             <field name="measureList">ExactMatch</field>
             <field name="enable_threshold">TRUE</field>
             <field name="threshold">0.5</field>
             <value name="sourceProperty">
-              <block type="renamepreprocessingfunction" id="Og],F57@![z4UkE1|CFw">
+              <block type="renamepreprocessingfunction" id=")dz~dGl1q%Xg{C%6#LRu">
                 <field name="RENAME">STRGEO</field>
                 <value name="RENAME">
-                  <block type="sourceproperty" id="toBYm9kqZRWcpA;_SXX0">
-                    <field name="propTitle">ngeo:STRGEO</field>
-                    <field name="enable_propertypath">TRUE</field>
-                    <value name="propName">
-                      <block type="emptyBlock" id="!bwx($MoA1.G?RiA;Z%5" movable="false"></block>
+                  <block type="preprocessingfunction" id="?l4-Mzuk2x_3YD#$CXKp">
+                    <field name="function">uriasstring</field>
+                    <value name="NAME">
+                      <block type="sourceproperty" id=":88(wrdI!6+RK^8!MQ(">
+                        <field name="propTitle">ngeo:geometry</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propName">
+                          <block type="emptyBlock" id="XDA*vb;FzNgxwRjEo+t}" movable="false"></block>
+                        </value>
+                      </block>
                     </value>
                   </block>
                 </value>
               </block>
             </value>
             <value name="targetProperty">
-              <block type="renamepreprocessingfunction" id="@.zus);_m;0ES?qT]:hW">
+              <block type="renamepreprocessingfunction" id="!#=KZssUMJ?pXPUG%F6{">
                 <field name="RENAME">STRGEO</field>
                 <value name="RENAME">
-                  <block type="targetproperty" id="=7GE$L:0PWTC94K+1/@a">
-                    <field name="propTitle">ngeo:STRGEO</field>
-                    <field name="enable_propertypath">TRUE</field>
-                    <value name="propName">
-                      <block type="emptyBlock" id="E%47hsJsT2b]~Za;;naC" movable="false"></block>
+                  <block type="preprocessingfunction" id="v74wNGJcreym+@=B[Zk=">
+                    <field name="function">uriasstring</field>
+                    <value name="NAME">
+                      <block type="targetproperty" id="O}%Ewti;W(-qMNU0ssXm">
+                        <field name="propTitle">ngeo:geometry</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propName">
+                          <block type="emptyBlock" id="Q?K%^jF8k3(y5nqD[MYd" movable="false"></block>
+                        </value>
+                      </block>
                     </value>
                   </block>
                 </value>
@@ -145,9 +155,9 @@ export default {
     </value>
   </block>
 </xml>
-      `;
+`;
       this.xmlToWorkspace(this.importWorkspaceString);
-      this.metrics = ['MINUS(geo_hausdorff(s.GEOMETRY,t.GEOMETRY)|0.5,exactmatch(s.STRGEO,t.STRGEO)|0.5)'];
+      this.metrics = ['MINUS(geo_hausdorff(s.GEOMETRY,t.GEOMETRY)|0.5,exactmatch(s.strGeo,t.StrGeo)|0.5)'];
       this.acceptance = {
         id: 'acceptance',
         threshold: 0.9,
