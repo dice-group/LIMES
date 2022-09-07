@@ -44,7 +44,7 @@ export default {
         pagesize: 2000,
         restriction: '?t a lgdo:RelayBox',
         type: '',
-        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME StrGeo'],
+        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME STRGEO'],
         optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
@@ -157,7 +157,7 @@ export default {
 </xml>
 `;
       this.xmlToWorkspace(this.importWorkspaceString);
-      this.metrics = ['MINUS(geo_hausdorff(s.GEOMETRY,t.GEOMETRY)|0.5,exactmatch(s.strGeo,t.StrGeo)|0.5)'];
+      this.metrics = ['MINUS(geo_hausdorff(s.GEOMETRY,t.GEOMETRY)|0.5,exactmatch(s.STRGEO,t.STRGEO)|0.5)'];
       this.acceptance = {
         id: 'acceptance',
         threshold: 0.9,
