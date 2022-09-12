@@ -14,7 +14,7 @@ export default {
       this.prefixes = [
         {
           namespace: 'http://geovocab.org/geometry#',
-          label: 'geom',
+          label: 'ngeo',
         },
         {
           namespace: 'http://www.opengis.net/ont/geosparql#',
@@ -32,7 +32,7 @@ export default {
         pagesize: 2000,
         restriction: '?s a lgdo:RelayBox',
         type: '',
-        properties: ['geom:geometry/geos:asWKT RENAME polygon'],
+        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME STRGEO'],
         optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
@@ -44,7 +44,7 @@ export default {
         pagesize: 2000,
         restriction: '?t a lgdo:RelayBox',
         type: '',
-        properties: ['geom:geometry/geos:asWKT RENAME polygon'],
+        properties: ['ngeo:geometry/geos:asWKT RENAME GEOMETRY', 'ngeo:geometry AS uriasstring RENAME STRGEO'],
         optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
@@ -53,65 +53,111 @@ export default {
       this.$store.commit('changeTarget', target);
       this.importWorkspaceString = `
       <xml xmlns="http://www.w3.org/1999/xhtml">
-        <block type="start" id="]~iOOuxgG1il)Qn#!5@R" deletable="false" x="0" y="0">
-          <value name="NAME">
-            <block type="measure" id="KV+e%A!n/j5k2T@D@*GH">
-              <field name="measureList">Geo_Hausdorff</field>
-              <field name="enable_threshold">FALSE</field>
-              <field name="threshold">0.5</field>
-              <value name="sourceProperty">
-                <block type="renamepreprocessingfunction" id="$J8bghZmrI;ETkue6mwG">
-                  <field name="RENAME">polygon</field>
-                  <value name="RENAME">
-                    
-                    <block type="sourceproperty" id="sp">
-					<field name="propTitle">geom:geometry</field>
-					<field name="enable_propertypath">TRUE</field>
-					<value name="propName">
-					  <block type="propertyPath" id="KJ" movable="false">
-						<field name="path">sslash</field>
-						<field name="propTitle">geos:asWKT</field>
-						<field name="enable_propertypath">FALSE</field>
-						<value name="propertyPath">
-						  <block type="emptyBlock" id="sC" movable="false"></block>
-						</value>
-					  </block>
-					</value>
-				  </block>
-                    
-                  </value>
-                </block>
-              </value>
-              <value name="targetProperty">
-                <block type="renamepreprocessingfunction" id="rpf">
-                  <field name="RENAME">polygon</field>
-                  <value name="RENAME">
-                    
-                    <block type="targetproperty" id="sp">
-					<field name="propTitle">geom:geometry</field>
-					<field name="enable_propertypath">TRUE</field>
-					<value name="propName">
-					  <block type="propertyPath" id="KJ" movable="false">
-						<field name="path">sslash</field>
-						<field name="propTitle">geos:asWKT</field>
-						<field name="enable_propertypath">FALSE</field>
-						<value name="propertyPath">
-						  <block type="emptyBlock" id="sC" movable="false"></block>
-						</value>
-					  </block>
-					</value>
-				  </block>
-                    
-                  </value>
-                </block>
-              </value>
-            </block>
-          </value>
-        </block>
-      </xml>
-      `;
+  <block type="start" id="]~iOOuxgG1il)Qn#!5@R" deletable="false" x="-43" y="223">
+    <value name="NAME">
+      <block type="operator" id="UPt),ECc.Dk11X$cW=xM">
+        <field name="operators">minus</field>
+        <value name="rename">
+          <block type="measure" id="KV+e%A!n/j5k2T@D@*GH">
+            <field name="measureList">Geo_Hausdorff</field>
+            <field name="enable_threshold">TRUE</field>
+            <field name="threshold">0.5</field>
+            <value name="sourceProperty">
+              <block type="renamepreprocessingfunction" id="$J8bghZmrI;ETkue6mwG">
+                <field name="RENAME">GEOMETRY</field>
+                <value name="RENAME">
+                  <block type="sourceproperty" id="sp">
+                    <field name="propTitle">ngeo:geometry</field>
+                    <field name="enable_propertypath">TRUE</field>
+                    <value name="propName">
+                      <block type="propertyPath" id="KJ" movable="false">
+                        <field name="path">sslash</field>
+                        <field name="propTitle">geos:asWKT</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propertyPath">
+                          <block type="emptyBlock" id="sC" movable="false"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="targetProperty">
+              <block type="renamepreprocessingfunction" id="rpf">
+                <field name="RENAME">GEOMETRY</field>
+                <value name="RENAME">
+                  <block type="targetproperty" id="n1O[#^wbmB=cRY2:Dh!z">
+                    <field name="propTitle">ngeo:geometry</field>
+                    <field name="enable_propertypath">TRUE</field>
+                    <value name="propName">
+                      <block type="propertyPath" id="%+^C#EQ0a;_--$5EeDgs" movable="false">
+                        <field name="path">sslash</field>
+                        <field name="propTitle">geos:asWKT</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propertyPath">
+                          <block type="emptyBlock" id="8GKMIIbCGbtv##3I;,Cb" movable="false"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="NAME">
+          <block type="measure" id="wmW/JW:xDV_!PVlXFa|(">
+            <field name="measureList">ExactMatch</field>
+            <field name="enable_threshold">TRUE</field>
+            <field name="threshold">0.5</field>
+            <value name="sourceProperty">
+              <block type="renamepreprocessingfunction" id=")dz~dGl1q%Xg{C%6#LRu">
+                <field name="RENAME">STRGEO</field>
+                <value name="RENAME">
+                  <block type="preprocessingfunction" id="?l4-Mzuk2x_3YD#$CXKp">
+                    <field name="function">uriasstring</field>
+                    <value name="NAME">
+                      <block type="sourceproperty" id=":88(wrdI!6+RK^8!MQ(">
+                        <field name="propTitle">ngeo:geometry</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propName">
+                          <block type="emptyBlock" id="XDA*vb;FzNgxwRjEo+t}" movable="false"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="targetProperty">
+              <block type="renamepreprocessingfunction" id="!#=KZssUMJ?pXPUG%F6{">
+                <field name="RENAME">STRGEO</field>
+                <value name="RENAME">
+                  <block type="preprocessingfunction" id="v74wNGJcreym+@=B[Zk=">
+                    <field name="function">uriasstring</field>
+                    <value name="NAME">
+                      <block type="targetproperty" id="O}%Ewti;W(-qMNU0ssXm">
+                        <field name="propTitle">ngeo:geometry</field>
+                        <field name="enable_propertypath">FALSE</field>
+                        <value name="propName">
+                          <block type="emptyBlock" id="Q?K%^jF8k3(y5nqD[MYd" movable="false"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </value>
+  </block>
+</xml>
+`;
       this.xmlToWorkspace(this.importWorkspaceString);
-      this.metrics = ['geo_hausdorff(s.polygon, t.polygon)'];
+      this.metrics = ['MINUS(geo_hausdorff(s.GEOMETRY,t.GEOMETRY)|0.5,exactmatch(s.STRGEO,t.STRGEO)|0.5)'];
       this.acceptance = {
         id: 'acceptance',
         threshold: 0.9,
