@@ -34,6 +34,9 @@ import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMap
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
 import org.aksw.limes.core.measures.mapper.topology.*;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.area.*;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.diagonal.*;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.mixed.*;
 import org.aksw.limes.core.measures.measure.MeasureType;
 
 /**
@@ -188,6 +191,64 @@ public class MapperFactory {
                 return new TouchesMapper();
             case TOP_WITHIN:
                 return new WithinMapper();
+
+            ///////////////////////
+            case TOP_COBALT_AREA_CONTAINS:
+                return new CobaltAreaContainsMapper();
+            case TOP_COBALT_AREA_COVERED_BY:
+                return new CobaltAreaCoveredbyMapper();
+            case TOP_COBALT_AREA_COVERS:
+                return new CobaltAreaCoversMapper();
+            case TOP_COBALT_AREA_DISJOINT:
+                return new CobaltAreaDisjointMapper();
+            case TOP_COBALT_AREA_EQUALS:
+                return new CobaltAreaEqualsMapper();
+            case TOP_COBALT_AREA_INTERSECTS:
+                return new CobaltAreaIntersectsMapper();
+            case TOP_COBALT_AREA_OVERLAPS:
+                return new CobaltAreaOverlapsMapper();
+            case TOP_COBALT_AREA_TOUCHES:
+                return new CobaltAreaTouchesMapper();
+            case TOP_COBALT_AREA_WITHIN:
+                return new CobaltAreaWithinMapper();
+
+            case TOP_COBALT_DIAGONAL_CONTAINS:
+                return new CobaltDiagonalContainsMapper();
+            case TOP_COBALT_DIAGONAL_COVERED_BY:
+                return new CobaltDiagonalCoveredbyMapper();
+            case TOP_COBALT_DIAGONAL_COVERS:
+                return new CobaltDiagonalCoversMapper();
+            case TOP_COBALT_DIAGONAL_DISJOINT:
+                return new CobaltDiagonalDisjointMapper();
+            case TOP_COBALT_DIAGONAL_EQUALS:
+                return new CobaltDiagonalEqualsMapper();
+            case TOP_COBALT_DIAGONAL_INTERSECTS:
+                return new CobaltDiagonalIntersectsMapper();
+            case TOP_COBALT_DIAGONAL_OVERLAPS:
+                return new CobaltDiagonalOverlapsMapper();
+            case TOP_COBALT_DIAGONAL_TOUCHES:
+                return new CobaltDiagonalTouchesMapper();
+            case TOP_COBALT_DIAGONAL_WITHIN:
+                return new CobaltDiagonalWithinMapper();
+
+            case TOP_COBALT_MIXED_CONTAINS:
+                return new CobaltMixedContainsMapper();
+            case TOP_COBALT_MIXED_COVERED_BY:
+                return new CobaltMixedCoveredbyMapper();
+            case TOP_COBALT_MIXED_COVERS:
+                return new CobaltMixedCoversMapper();
+            case TOP_COBALT_MIXED_DISJOINT:
+                return new CobaltMixedDisjointMapper();
+            case TOP_COBALT_MIXED_EQUALS:
+                return new CobaltMixedEqualsMapper();
+            case TOP_COBALT_MIXED_INTERSECTS:
+                return new CobaltMixedIntersectsMapper();
+            case TOP_COBALT_MIXED_OVERLAPS:
+                return new CobaltMixedOverlapsMapper();
+            case TOP_COBALT_MIXED_TOUCHES:
+                return new CobaltMixedTouchesMapper();
+            case TOP_COBALT_MIXED_WITHIN:
+                return new CobaltMixedWithinMapper();
 
             ///////////////////////
             case SET_JACCARD:

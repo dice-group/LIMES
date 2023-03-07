@@ -51,6 +51,9 @@ import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMe
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
 import org.aksw.limes.core.measures.measure.topology.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.area.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.diagonal.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.mixed.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -548,6 +551,64 @@ public class MeasureFactory {
                 return new TouchesMeasure();
             case TOP_WITHIN:
                 return new WithinMeasure();
+
+            ///////////////////////
+            case TOP_COBALT_AREA_CONTAINS:
+                return new CobaltAreaContainsMeasure();
+            case TOP_COBALT_AREA_COVERED_BY:
+                return new CobaltAreaCoveredbyMeasure();
+            case TOP_COBALT_AREA_COVERS:
+                return new CobaltAreaCoversMeasure();
+            case TOP_COBALT_AREA_DISJOINT:
+                return new CobaltAreaDisjointMeasure();
+            case TOP_COBALT_AREA_EQUALS:
+                return new CobaltAreaEqualsMeasure();
+            case TOP_COBALT_AREA_INTERSECTS:
+                return new CobaltAreaIntersectsMeasure();
+            case TOP_COBALT_AREA_OVERLAPS:
+                return new CobaltAreaOverlapsMeasure();
+            case TOP_COBALT_AREA_TOUCHES:
+                return new CobaltAreaTouchesMeasure();
+            case TOP_COBALT_AREA_WITHIN:
+                return new CobaltAreaWithinMeasure();
+
+            case TOP_COBALT_DIAGONAL_CONTAINS:
+                return new CobaltDiagonalContainsMeasure();
+            case TOP_COBALT_DIAGONAL_COVERED_BY:
+                return new CobaltDiagonalCoveredbyMeasure();
+            case TOP_COBALT_DIAGONAL_COVERS:
+                return new CobaltDiagonalCoversMeasure();
+            case TOP_COBALT_DIAGONAL_DISJOINT:
+                return new CobaltDiagonalDisjointMeasure();
+            case TOP_COBALT_DIAGONAL_EQUALS:
+                return new CobaltDiagonalEqualsMeasure();
+            case TOP_COBALT_DIAGONAL_INTERSECTS:
+                return new CobaltDiagonalIntersectsMeasure();
+            case TOP_COBALT_DIAGONAL_OVERLAPS:
+                return new CobaltDiagonalOverlapsMeasure();
+            case TOP_COBALT_DIAGONAL_TOUCHES:
+                return new CobaltDiagonalTouchesMeasure();
+            case TOP_COBALT_DIAGONAL_WITHIN:
+                return new CobaltDiagonalWithinMeasure();
+
+            case TOP_COBALT_MIXED_CONTAINS:
+                return new CobaltMixedContainsMeasure();
+            case TOP_COBALT_MIXED_COVERED_BY:
+                return new CobaltMixedCoveredbyMeasure();
+            case TOP_COBALT_MIXED_COVERS:
+                return new CobaltMixedCoversMeasure();
+            case TOP_COBALT_MIXED_DISJOINT:
+                return new CobaltMixedDisjointMeasure();
+            case TOP_COBALT_MIXED_EQUALS:
+                return new CobaltMixedEqualsMeasure();
+            case TOP_COBALT_MIXED_INTERSECTS:
+                return new CobaltMixedIntersectsMeasure();
+            case TOP_COBALT_MIXED_OVERLAPS:
+                return new CobaltMixedOverlapsMeasure();
+            case TOP_COBALT_MIXED_TOUCHES:
+                return new CobaltMixedTouchesMeasure();
+            case TOP_COBALT_MIXED_WITHIN:
+                return new CobaltMixedWithinMeasure();
 
             ///////////////////////
             case SET_JACCARD:
