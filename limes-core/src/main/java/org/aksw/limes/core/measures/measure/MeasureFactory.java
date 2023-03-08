@@ -149,6 +149,37 @@ public class MeasureFactory {
     public static final String TOP_TOUCHES = "top_touches";
     public static final String TOP_WITHIN = "top_within";
 
+    // Topological measures of cobalt
+    public static final String TOP_COBALT_AREA_CONTAINS = "top_cobalt_area_contains";
+    public static final String TOP_COBALT_AREA_COVERED_BY = "top_cobalt_area_covered_by";
+    public static final String TOP_COBALT_AREA_COVERS = "top_cobalt_area_covers";
+    public static final String TOP_COBALT_AREA_DISJOINT = "top_cobalt_area_disjoint";
+    public static final String TOP_COBALT_AREA_EQUALS = "top_cobalt_area_equals";
+    public static final String TOP_COBALT_AREA_INTERSECTS = "top_cobalt_area_intersects";
+    public static final String TOP_COBALT_AREA_OVERLAPS = "top_cobalt_area_overlaps";
+    public static final String TOP_COBALT_AREA_TOUCHES = "top_cobalt_area_touches";
+    public static final String TOP_COBALT_AREA_WITHIN = "top_cobalt_area_within";
+
+    public static final String TOP_COBALT_DIAGONAL_CONTAINS = "top_cobalt_diagonal_contains";
+    public static final String TOP_COBALT_DIAGONAL_COVERED_BY = "top_cobalt_diagonal_covered_by";
+    public static final String TOP_COBALT_DIAGONAL_COVERS = "top_cobalt_diagonal_covers";
+    public static final String TOP_COBALT_DIAGONAL_DISJOINT = "top_cobalt_diagonal_disjoint";
+    public static final String TOP_COBALT_DIAGONAL_EQUALS = "top_cobalt_diagonal_equals";
+    public static final String TOP_COBALT_DIAGONAL_INTERSECTS = "top_cobalt_diagonal_intersects";
+    public static final String TOP_COBALT_DIAGONAL_OVERLAPS = "top_cobalt_diagonal_overlaps";
+    public static final String TOP_COBALT_DIAGONAL_TOUCHES = "top_cobalt_diagonal_touches";
+    public static final String TOP_COBALT_DIAGONAL_WITHIN = "top_cobalt_diagonal_within";
+
+    public static final String TOP_COBALT_MIXED_CONTAINS = "top_cobalt_mixed_contains";
+    public static final String TOP_COBALT_MIXED_COVERED_BY = "top_cobalt_mixed_covered_by";
+    public static final String TOP_COBALT_MIXED_COVERS = "top_cobalt_mixed_covers";
+    public static final String TOP_COBALT_MIXED_DISJOINT = "top_cobalt_mixed_disjoint";
+    public static final String TOP_COBALT_MIXED_EQUALS = "top_cobalt_mixed_equals";
+    public static final String TOP_COBALT_MIXED_INTERSECTS = "top_cobalt_mixed_intersects";
+    public static final String TOP_COBALT_MIXED_OVERLAPS = "top_cobalt_mixed_overlaps";
+    public static final String TOP_COBALT_MIXED_TOUCHES = "top_cobalt_mixed_touches";
+    public static final String TOP_COBALT_MIXED_WITHIN = "top_cobalt_mixed_within";
+
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
     // Semantic edge-counting measures
@@ -385,6 +416,91 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TOP_WITHIN)) {
             return MeasureType.TOP_WITHIN;
+        }
+
+        ////////////////////////////////////////////////////
+        if (measure.startsWith(TOP_COBALT_AREA_CONTAINS)) {
+            return MeasureType.TOP_COBALT_AREA_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_AREA_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_COVERS)) {
+            return MeasureType.TOP_COBALT_AREA_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_DISJOINT)) {
+            return MeasureType.TOP_COBALT_AREA_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_EQUALS)) {
+            return MeasureType.TOP_COBALT_AREA_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_AREA_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_AREA_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_TOUCHES)) {
+            return MeasureType.TOP_COBALT_AREA_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_WITHIN)) {
+            return MeasureType.TOP_COBALT_AREA_WITHIN;
+        }
+
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_CONTAINS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_COVERS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_DISJOINT)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_EQUALS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_TOUCHES)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_WITHIN)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_WITHIN;
+        }
+
+        if (measure.startsWith(TOP_COBALT_MIXED_CONTAINS)) {
+            return MeasureType.TOP_COBALT_MIXED_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_MIXED_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_COVERS)) {
+            return MeasureType.TOP_COBALT_MIXED_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_DISJOINT)) {
+            return MeasureType.TOP_COBALT_MIXED_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_EQUALS)) {
+            return MeasureType.TOP_COBALT_MIXED_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_MIXED_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_MIXED_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_TOUCHES)) {
+            return MeasureType.TOP_COBALT_MIXED_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_WITHIN)) {
+            return MeasureType.TOP_COBALT_MIXED_WITHIN;
         }
 
         ////////////////////////////////////////////////////
