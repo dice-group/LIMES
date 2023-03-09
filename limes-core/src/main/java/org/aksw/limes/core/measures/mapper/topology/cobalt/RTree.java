@@ -74,7 +74,7 @@ public class RTree {
         for (RTree child : children) {
             if (child.boundary.getMinX() != Double.POSITIVE_INFINITY) {
                 tree.children.add(child);
-            }else{
+            } else {
                 throw new RuntimeException("");
             }
         }
@@ -139,7 +139,7 @@ public class RTree {
         int requiredNodeAmount = (int) Math.ceil((0.0 + entries.size()) / capacity);
         int sliceAmount = (int) Math.ceil(Math.sqrt(requiredNodeAmount));
         int entriesPerSlice = (int) Math.ceil((0.0 + entries.size()) / sliceAmount);
-        int nodesPerSlice = (int) Math.ceil((0.0 +entriesPerSlice) / capacity);
+        int nodesPerSlice = (int) Math.ceil((0.0 + entriesPerSlice) / capacity);
 
         List<RTree> nodes = new ArrayList<>(requiredNodeAmount);
 
@@ -149,7 +149,7 @@ public class RTree {
             sliceEntries.sort(Comparator.comparingDouble(o -> o.envelope.getMinY() + o.envelope.getMaxY()));
             for (int j = 0; j < nodesPerSlice; j++) {
                 List<Entry> nodeEntries = sliceEntries.subList(Math.min(j * capacity, sliceEntries.size()), Math.min((j + 1) * capacity, sliceEntries.size()));
-                if(!nodeEntries.isEmpty()){
+                if (!nodeEntries.isEmpty()) {
                     nodes.add(createLeaf(nodeEntries));
                 }
             }
@@ -163,16 +163,16 @@ public class RTree {
     private static RTree buildSTRRec(List<RTree> entries) {
         int requiredNodeAmount = (int) Math.ceil((0.0 + entries.size()) / capacity);
 
-        if(requiredNodeAmount == 0){
+        if (requiredNodeAmount == 0) {
             return createLeaf(new ArrayList<>()); //Empty RTree
         }
-        if(requiredNodeAmount == 1){
+        if (requiredNodeAmount == 1) {
             return createParent(entries); //Create the root
         }
 
         int sliceAmount = (int) Math.ceil(Math.sqrt(requiredNodeAmount));
         int entriesPerSlice = (int) Math.ceil((0.0 + entries.size()) / sliceAmount);
-        int nodesPerSlice = (int) Math.ceil((0.0 +entriesPerSlice) / capacity);
+        int nodesPerSlice = (int) Math.ceil((0.0 + entriesPerSlice) / capacity);
 
         List<RTree> nodes = new ArrayList<>(requiredNodeAmount);
 
@@ -182,7 +182,7 @@ public class RTree {
             sliceEntries.sort(Comparator.comparingDouble(o -> o.boundary.getMinY() + o.boundary.getMaxY()));
             for (int j = 0; j < nodesPerSlice; j++) {
                 List<RTree> nodeEntries = sliceEntries.subList(Math.min(j * capacity, sliceEntries.size()), Math.min((j + 1) * capacity, sliceEntries.size()));
-                if(!nodeEntries.isEmpty()){
+                if (!nodeEntries.isEmpty()) {
                     nodes.add(createParent(nodeEntries));
                 }
             }
@@ -215,6 +215,39 @@ public class RTree {
         }
     }
 
+    public List<Entry> searchExcept(Envelope envelope) {
+        ArrayList<Entry> result = new ArrayList<>();
+        searchExcept(envelope, result);
+        return result;
+    }
+
+    private void searchExcept(Envelope envelope, List<Entry> result) {
+        if (leaf) {
+            for (Entry content : contents) {
+                if (!content.envelope.intersects(envelope)) {
+                    result.add(content);
+                }
+            }
+        } else {
+            for (RTree child : children) {
+                if (child.boundary.intersects(envelope)) {
+                    child.searchExcept(envelope, result);
+                }else{
+                    child.addRecursive(result);
+                }
+            }
+        }
+    }
+
+    private void addRecursive(List<Entry> result) {
+        if (leaf) {
+            result.addAll(contents);
+        } else {
+            for (RTree child : children) {
+                child.addRecursive(result);
+            }
+        }
+    }
 
 }
 

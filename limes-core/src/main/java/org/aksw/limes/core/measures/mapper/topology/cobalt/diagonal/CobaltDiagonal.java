@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures.*;
 
@@ -97,14 +98,8 @@ public class CobaltDiagonal {
             entries.add(new RTree.Entry(s, geometry, null));
         });
 
-        boolean disjointStrategy = relation.equals(DISJOINT);
-        if (disjointStrategy) {
-            relation = INTERSECTS;
-        }
-
-        RTree rTree = RTree.buildSTR(entries);
-
         AMapping m = MappingFactory.createDefaultMapping();
+        RTree rTree = RTree.buildSTR(entries);
 
         ExecutorService exec = Executors.newFixedThreadPool(numThreads);
         Map<String, Set<String>> results = new HashMap<>(); //Target -> Source Mappings
@@ -127,6 +122,9 @@ public class CobaltDiagonal {
                                         return relate(abb, bbb, finalRelation);
                                     }
                             ).forEach(x -> value.add(x.getUri()));
+                    if(relation.equals(DISJOINT)){
+                        value.addAll(rTree.searchExcept(envelope).stream().map(RTree.Entry::getUri).collect(Collectors.toList()));
+                    }
                 });
             } else {
                 String finalRelation = relation;
@@ -140,6 +138,9 @@ public class CobaltDiagonal {
                                     return relate(abb, bbb, finalRelation);
                                 }
                         ).forEach(x -> finalM.add(x.getUri(), uri, 1.0));
+                if(relation.equals(DISJOINT)){
+                    rTree.searchExcept(envelope).stream().map(RTree.Entry::getUri).forEach(sourceUri -> finalM.add(sourceUri, uri, 1.0));
+                }
             }
         }
         if (numThreads > 1) {
@@ -157,17 +158,6 @@ public class CobaltDiagonal {
             }
         }
 
-        if (disjointStrategy) {
-            AMapping disjoint = MappingFactory.createDefaultMapping();
-            for (String s : sourceData.keySet()) {
-                for (String t : targetData.keySet()) {
-                    if (!m.contains(s, t)) {
-                        disjoint.add(s, t, 1.0d);
-                    }
-                }
-            }
-            m = disjoint;
-        }
         return m;
     }
 

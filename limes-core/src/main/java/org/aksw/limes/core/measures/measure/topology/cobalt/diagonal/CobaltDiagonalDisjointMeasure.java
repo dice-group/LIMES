@@ -44,7 +44,7 @@ public class CobaltDiagonalDisjointMeasure extends AMeasure {
             e.printStackTrace();
             return 0d;
         }
-        return !CobaltDiagonal.relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.INTERSECTS) ? 1d : 0d;
+        return CobaltDiagonal.relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.DISJOINT) ? 1d : 0d;
     }
 
     @Override
