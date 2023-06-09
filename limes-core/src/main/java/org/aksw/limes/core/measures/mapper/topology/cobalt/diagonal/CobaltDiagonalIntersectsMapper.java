@@ -26,7 +26,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.topology.ITopologicRelationMapper;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.Cobalt;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.CobaltDiagonalMatcher;
 
 import java.util.Set;
 
@@ -37,12 +39,12 @@ public class CobaltDiagonalIntersectsMapper extends AMapper implements ITopologi
 
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        return CobaltDiagonal.getMapping(sourceData, targetData, CobaltMeasures.INTERSECTS);
+        return Cobalt.getMapping(sourceData, targetData, CobaltMeasures.INTERSECTS, new CobaltDiagonalMatcher());
     }
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
-        return CobaltDiagonal.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.INTERSECTS);
+        return Cobalt.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.INTERSECTS, new CobaltDiagonalMatcher());
     }
 
     @Override

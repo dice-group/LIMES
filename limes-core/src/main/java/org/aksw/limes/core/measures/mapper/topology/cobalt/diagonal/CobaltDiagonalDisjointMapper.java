@@ -26,7 +26,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.topology.ITopologicRelationMapper;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.Cobalt;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.CobaltDiagonalMatcher;
 
 import java.util.Set;
 
@@ -37,12 +39,12 @@ public class CobaltDiagonalDisjointMapper extends AMapper implements ITopologicR
 
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        return CobaltDiagonal.getMapping(sourceData, targetData, CobaltMeasures.DISJOINT);
+        return Cobalt.getMapping(sourceData, targetData, CobaltMeasures.DISJOINT, new CobaltDiagonalMatcher());
     }
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
-        return CobaltDiagonal.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.DISJOINT);
+        return Cobalt.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.DISJOINT, new CobaltDiagonalMatcher());
     }
 
     @Override

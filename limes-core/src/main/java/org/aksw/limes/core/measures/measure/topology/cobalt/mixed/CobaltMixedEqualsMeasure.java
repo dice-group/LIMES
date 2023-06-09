@@ -19,7 +19,7 @@ package org.aksw.limes.core.measures.measure.topology.cobalt.mixed;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures;
-import org.aksw.limes.core.measures.mapper.topology.cobalt.mixed.CobaltMixed;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.CobaltMixedMatcher;
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.util.LimesWktReader;
 import org.locationtech.jts.geom.Geometry;
@@ -44,7 +44,7 @@ public class CobaltMixedEqualsMeasure extends AMeasure {
             e.printStackTrace();
             return 0d;
         }
-        return CobaltMixed.relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.EQUALS) ? 1d : 0d;
+        return new CobaltMixedMatcher().relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.EQUALS) ? 1d : 0d;
     }
 
     @Override

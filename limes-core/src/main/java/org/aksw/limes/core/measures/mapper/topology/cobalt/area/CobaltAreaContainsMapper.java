@@ -26,7 +26,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.topology.ITopologicRelationMapper;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.Cobalt;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.CobaltAreaMatcher;
 
 import java.util.Set;
 
@@ -37,12 +39,12 @@ public class CobaltAreaContainsMapper extends AMapper implements ITopologicRelat
 
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        return CobaltArea.getMapping(sourceData, targetData, CobaltMeasures.CONTAINS);
+        return Cobalt.getMapping(sourceData, targetData, CobaltMeasures.CONTAINS, new CobaltAreaMatcher());
     }
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
-        return CobaltArea.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.CONTAINS);
+        return Cobalt.getMapping(source, target, sourceVar, targetVar, expression, threshold, CobaltMeasures.CONTAINS, new CobaltAreaMatcher());
     }
 
     @Override

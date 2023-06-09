@@ -19,7 +19,7 @@ package org.aksw.limes.core.measures.measure.topology.cobalt.diagonal;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures;
-import org.aksw.limes.core.measures.mapper.topology.cobalt.diagonal.CobaltDiagonal;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.CobaltDiagonalMatcher;
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.util.LimesWktReader;
 import org.locationtech.jts.geom.Geometry;
@@ -44,7 +44,7 @@ public class CobaltDiagonalCoversMeasure extends AMeasure {
             e.printStackTrace();
             return 0d;
         }
-        return CobaltDiagonal.relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.COVERS) ? 1d : 0d;
+        return new CobaltDiagonalMatcher().relate(sGeo.getEnvelopeInternal(), tGeo.getEnvelopeInternal(), CobaltMeasures.COVERS) ? 1d : 0d;
     }
 
     @Override
