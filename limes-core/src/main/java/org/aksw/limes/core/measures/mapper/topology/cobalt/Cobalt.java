@@ -8,6 +8,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.matcher.ICobaltMatcher;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.splitting.CobaltSplitMatcher;
+import org.aksw.limes.core.measures.mapper.topology.cobalt.splitting.CobaltSplitter;
 import org.aksw.limes.core.measures.mapper.topology.cobalt.splitting.FittingSplitter;
 import org.aksw.limes.core.util.LimesWktReader;
 import org.locationtech.jts.geom.Envelope;
@@ -32,6 +33,7 @@ import static org.aksw.limes.core.measures.mapper.topology.cobalt.CobaltMeasures
 public class Cobalt {
 
     private static final Logger logger = LoggerFactory.getLogger(Cobalt.class);
+    public static CobaltSplitter DEFAULT_SPLITTER = new FittingSplitter();
 
     public static Map<String, Geometry> getGeometryMapFromCache(ACache c, String property) {
         LimesWktReader wktReader = new LimesWktReader();
@@ -182,7 +184,7 @@ public class Cobalt {
 
     private static AMapping getMappingSplits(Map<String, Geometry> sourceData, Map<String, Geometry> targetData, String relation, ICobaltMatcher matcher, int splits) {
         int numThreads = 1;
-        CobaltSplitMatcher splitMatcher = new CobaltSplitMatcher(splits, new FittingSplitter(), matcher);
+        CobaltSplitMatcher splitMatcher = new CobaltSplitMatcher(splits, DEFAULT_SPLITTER, matcher);
         List<RTree.Entry> entries = new ArrayList<>(sourceData.size());
         sourceData.forEach((s, geometry) -> {
             entries.add(new RTree.Entry(s, geometry.getEnvelopeInternal(), geometry));
