@@ -1,14 +1,26 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.eagle.genes;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -20,6 +32,11 @@ import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -188,25 +205,27 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * String similarity measures.
      */
     private void fillOperationSet() {
-    	ArrayList<String> ops = new ArrayList<String>();
-    	ops.add(MeasureFactory.GEO_CENTROID_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_FAST_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_FAIR_SURJECTION);
-    	ops.add(MeasureFactory.GEO_FRECHET);
-    	ops.add(MeasureFactory.GEO_GREAT_ELLIPTIC);
-    	ops.add(MeasureFactory.GEO_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_LINK);
-    	ops.add(MeasureFactory.GEO_MAX);
-    	ops.add(MeasureFactory.GEO_MEAN);
-    	ops.add(MeasureFactory.GEO_MIN);
-    	ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_NAIVE_SURJECTION);
-    	ops.add(MeasureFactory.GEO_ORTHODROMIC);
-    	ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_SUM_OF_MIN);
-    	ops.add(MeasureFactory.GEO_SYMMETRIC_HAUSDORFF);    	
-    	allowedOperations.addAll(ops);
+        ArrayList<String> ops = new ArrayList<String>();
+        ops.add(MeasureFactory.GEO_CENTROID_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_FAST_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_FAIR_SURJECTION);
+        ops.add(MeasureFactory.GEO_FRECHET);
+        ops.add(MeasureFactory.GEO_GREAT_ELLIPTIC);
+        ops.add(MeasureFactory.GEO_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_LINK);
+        ops.add(MeasureFactory.GEO_MAX);
+        ops.add(MeasureFactory.GEO_MEAN);
+        ops.add(MeasureFactory.GEO_MIN);
+        ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
+
+        ops.add(MeasureFactory.GEO_SURJECTION);
+        ops.add(MeasureFactory.GEO_SURJECTION);
+        ops.add(MeasureFactory.GEO_ORTHODROMIC);
+        ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
+        ops.add(MeasureFactory.GEO_SUM_OF_MIN);
+        ops.add(MeasureFactory.GEO_SYMMETRIC_HAUSDORFF);        
+        allowedOperations.addAll(ops);
     }
 
     @Override
@@ -269,6 +288,6 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * @param operationSet
      */
     public void setAllowedOperations(Set<String> operationSet) {
-    	this.allowedOperations = operationSet;
+        this.allowedOperations = operationSet;
     }
 }

@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -17,7 +34,6 @@ import org.jgap.gp.impl.ProgramChromosome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Fitness function to evolve metric expression using a PseudoMeasue
  *
@@ -29,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
     /**
-     *	
+     *
      */
     private static final long serialVersionUID = -7114137172832439294L;
     static Logger logger = LoggerFactory.getLogger("LIMES");
@@ -38,27 +54,34 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     ACache sourceCache, targetCache;
     LinkSpecGeneticLearnerConfig config;
     double beta = 1.0d;
-    
+
     PseudoFMeasure pfm;
 
-    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1, ACache c2) {
+    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1,
+                                          ACache c2) {
         config = a_config;
         sourceCache = c1;
         targetCache = c2;
         this.pfm = pfm;
-        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, c1, c2, a_config.source.getVar(), a_config.target.getVar());
+        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, c1, c2, a_config.source.getVar(),
+                a_config.target.getVar(), 0, 1.0);
     }
 
     /**
      * Singleton pattern
-     * 
-     * @param a_config LinkSpecGeneticLearnerConfig
-     * @param pfm PseudoFMeasure
-     * @param c1 Cache
-     * @param c2 Cache
+     *
+     * @param a_config
+     *            LinkSpecGeneticLearnerConfig
+     * @param pfm
+     *            PseudoFMeasure
+     * @param c1
+     *            Cache
+     * @param c2
+     *            Cache
      * @return instance of PseudoFMeasure Fitness Function
      */
-    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1, ACache c2) {
+    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm,
+                                                            ACache c1, ACache c2) {
         if (instance == null) {
             return instance = new PseudoFMeasureFitnessFunction(a_config, pfm, c1, c2);
         } else {
@@ -74,8 +97,11 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     /**
      * Determine fitness of the individual p;
      *
-     * @param p GP programs
-     * @return 1-PseudoFMeasure. Or if something wents wrong either 5d, iff p isn't fulfilling all constraints. 8d if executing p results in memory error.
+     * @param p
+     *            GP programs
+     * @return 1-PseudoFMeasure. Or if something wents wrong either 5d, iff p
+     *         isn't fulfilling all constraints. 8d if executing p results in
+     *         memory error.
      */
     public double calculateRawFitness(IGPProgram p) {
         double pseudoFMeasure = calculatePseudoMeasure(p);
@@ -108,41 +134,41 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
             actualMapping = getMapping(sourceCache, targetCache, spec);
         } catch (java.lang.OutOfMemoryError e) {
             e.printStackTrace(); // should not happen
-            
+
             return MappingFactory.createDefaultMapping();
         }
         return actualMapping;
     }
 
     /**
-     * @param p GP programs
+     * @param p
+     *            GP programs
      * @return PseudoMeasure
      */
     public Double calculatePseudoMeasure(IGPProgram p) {
-        
-    	// mapping
+        // mapping
         AMapping mapping = calculateMapping(p);
         // gold standard is not needed by pseudoFM
         GoldStandard gold = new GoldStandard(mapping, sourceCache, targetCache);
-        
-        return pfm.getPseudoFMeasure(mapping, gold, beta);
-        
+        return pfm.calculate(mapping, gold, beta);
     }
 
     /**
-     * Get or create a mapping from a link specification (Metric String + Acceptance threshold: 0&lt;=threshold&lt;=1).
-     * 
-     * @param spec the link specification
+     * Get or create a mapping from a link specification (Metric String +
+     * Acceptance threshold: 0&lt;=threshold&lt;=1).
+     *
+     * @param spec
+     *            the link specification
      * @return Mapping m={sURI, tURI} of all pairs who satisfy the metric.
      */
     public AMapping getMapping(ACache sC, ACache tC, LinkSpecification spec) {
         try {
-            IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
-                    sC, tC);
+            IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sC, tC);
             return engine.execute(spec, planner);
         } catch (Exception e) {
             e.printStackTrace();
-            String out = "Error getMapping() in PFM (" + config.source.getId() + " - " + config.target.getId() + ") with metric: " + spec + " \n" + e.getMessage();
+            String out = "Error getMapping() in PFM (" + config.source.getId() + " - " + config.target.getId()
+                    + ") with metric: " + spec + " \n" + e.getMessage();
             System.err.println(out);
             logger.error(out);
             return MappingFactory.createDefaultMapping();
@@ -173,27 +199,25 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
         this.beta = beta;
     }
 
-
     public double calculateRawMeasure(IGPProgram p) {
         return calculatePseudoMeasure(p);
     }
 
-	@Override
-	public void addToReference(AMapping m) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void addToReference(AMapping m) {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public void fillCachesIncrementally(AMapping matches) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void fillCachesIncrementally(AMapping matches) {
+        throw new UnsupportedOperationException();
+    }
 
-
-//	public void addPropertyChangeListener(PropertyChangeListener l) {
-//		changes.addPropertyChangeListener(l);
-//	}
-//	
-//	public void removePropertyChangeListener(PropertyChangeListener l) {
-//		changes.removePropertyChangeListener(l);
-//	}
+    // public void addPropertyChangeListener(PropertyChangeListener l) {
+    // changes.addPropertyChangeListener(l);
+    // }
+    //
+    // public void removePropertyChangeListener(PropertyChangeListener l) {
+    // changes.removePropertyChangeListener(l);
+    // }
 }

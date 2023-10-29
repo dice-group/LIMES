@@ -1,12 +1,21 @@
-package org.aksw.limes.core.measures.measure;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -19,6 +28,9 @@ import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -85,7 +97,7 @@ public class MeasureProcessor {
      * @return the similarity of sourceInstance and targetInstance
      */
     public static double getSimilarity(Instance sourceInstance, Instance targetInstance, String expression,
-            double threshold, String sourceVar, String targetVar) {
+                                       double threshold, String sourceVar, String targetVar) {
 
         Parser p = new Parser(expression, threshold);
         try {
@@ -163,7 +175,6 @@ public class MeasureProcessor {
 
                         }
                     }
-
                     if (similarity >= threshold)
                         return similarity;
                     else
@@ -240,14 +251,14 @@ public class MeasureProcessor {
                             if (firstChild >= parentThreshold) {
                                 return firstChild;
                             } else // similarity smaller than the parent
-                                   // threshold
+                                // threshold
                                 return 0;
                         } else// similarity smaller than the left child
-                              // threshold
+                            // threshold
                             return 0;
                     } else // current (s,t) are included in the mapping of the
-                           // right
-                           // child
+                        // right
+                        // child
                         return 0;
                 }
             }

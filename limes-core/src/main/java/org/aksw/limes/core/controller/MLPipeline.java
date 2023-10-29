@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.controller;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
@@ -12,17 +25,14 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.reader.AMappingReader;
+import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.MLResults;
-import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Execution pipeline for generating mappings using ML.
@@ -43,15 +53,19 @@ public class MLPipeline {
             List<LearningParameter> learningParameters,
             String trainingDataFile,
             EvaluatorType pfmType,
-            int maxIt
+            int maxIt,
+            ActiveLearningOracle oracle
     ) throws UnsupportedMLImplementationException {
         Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgorithmName);
         MLResults mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
-        if (
-                mlImplementationType == MLImplementationType.SUPERVISED_BATCH){
-            // TODO make it check for different readers
-            RDFMappingReader mappingReader = new RDFMappingReader(trainingDataFile);
+        if (mlImplementationType == MLImplementationType.SUPERVISED_BATCH){
+            AMappingReader mappingReader;
+            if(trainingDataFile.endsWith(".csv")){
+                mappingReader = new CSVMappingReader(trainingDataFile);
+            }else{
+                mappingReader = new RDFMappingReader(trainingDataFile);
+            }
             trainingDataMap = mappingReader.read();
         }
 
@@ -70,44 +84,17 @@ public class MLPipeline {
                 mla.init(learningParameters, source, target);
                 mla.getMl().setConfiguration(configuration);
                 mlm = mla.activeLearn();
-                Scanner scan = new Scanner(System.in);
-                double rating;
-                String reply, evaluationMsg;
-                int i = 0;
-                while (true) {
-                    i++;
-                    logger.info("To rate the " + i + ". set of examples, write 'r' and press enter.\n" +
-                            "To quit learning at this point and write out the mapping, write 'q' and press enter.\n" +
-                            "For rating examples, use numbers in [-1,+1].\n" +
-                            "\t(-1 := strong negative example, +1 := strong positive example)");
-                    reply = scan.next();
-                    if (reply.trim().equals("q"))
+                while (!oracle.isStopped()) {
+                    AMapping nextExamplesMapping = mla.getNextExamples(maxIt);
+                    if (nextExamplesMapping.getMap().isEmpty()) {
+                        oracle.stop();
                         break;
-                    AMapping nextExamples = mla.getNextExamples(maxIt);
-                    int j = 0;
-                    for (String s : nextExamples.getMap().keySet()) {
-                        for (String t : nextExamples.getMap().get(s).keySet()) {
-                            boolean rated = false;
-                            j++;
-                            do {
-                                evaluationMsg = "Exemplar #" + i + "." + j + ": (" + s + ", " + t + ")";
-                                try {
-                                    logger.info(evaluationMsg);
-                                    rating = scan.nextDouble();
-                                    if (rating >= -1.0d && rating <= 1.0d) {
-                                        nextExamples.getMap().get(s).put(t, rating);
-                                        rated = true;
-                                    } else {
-                                        logger.error("Input number out of range [-1,+1], please try again...");
-                                    }
-                                } catch (NoSuchElementException e) {
-                                    logger.error("Input did not match floating point number, please try again...");
-                                    scan.next();
-                                }
-                            } while (!rated);
-                        }
                     }
-                    mlm = mla.activeLearn(nextExamples);
+                    logger.info(nextExamplesMapping.toString());
+                    ActiveLearningExamples activeLearningExamples = new ActiveLearningExamples(nextExamplesMapping, source, target);
+                    AMapping classify = oracle.classify(activeLearningExamples);
+                    logger.info(classify.toString());
+                    mlm = mla.activeLearn(classify);
                 }
                 logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mla.predict(source, target, mlm);

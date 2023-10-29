@@ -1,10 +1,26 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.cache;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.jena.rdf.model.Model;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -37,14 +53,23 @@ public abstract class ACache implements ICache {
 
     public abstract Set<String> getAllProperties();
 
-    /**
-     * Method to processData according to specific preprocessing steps.
-     *
-     * @param propertyProcess
-     *         Map maps propertyNames to preprocessing functions.
-     * @return cacheof processed data
-     */
-    public abstract ACache processData(Map<String, String> propertyProcess);
+    @Override
+    public abstract ACache clone();
+
+    @Override
+    public abstract int hashCode();
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+//    /**
+//     * Method to processData according to specific preprocessing steps.
+//     *
+//     * @param propertyProcess
+//     *         Map maps propertyNames to preprocessing functions.
+//     * @return cacheof processed data
+//     */
+//    public abstract ACache processData(Map<String, String> propertyProcess);
 
     /**
      * Method to process data of a property into a new property with specific preprocessing.

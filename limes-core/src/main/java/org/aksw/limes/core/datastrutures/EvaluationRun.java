@@ -1,15 +1,33 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
- * 
+ *
  */
 package org.aksw.limes.core.datastrutures;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.apache.commons.math3.util.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents a single run for an algorithm with specific implementation using specific datasets with its qualitative scores and quantitative records
@@ -19,7 +37,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
  */
 
 public class EvaluationRun {
-    private final int stringSize=200;
+    private final int stringSize = 200;
     /** The name of the used machine learning algorithm e.g. EAGLE*/
     private String algorithmName="";
     /** The impementation of the machine learning algorithm e.g. UNSUPERVISED */
@@ -28,32 +46,38 @@ public class EvaluationRun {
     private String datasetName="";
     /** The qualitative measures scores e.g. F-MEASURE*/
     public Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
+    /**
+     * The qualitative measures scores e.g. F-MEASURE with value as first pair
+     * value, and variance as second
+     */
+    public Map<EvaluatorType, Pair<Double, Double>> qualititativeScoresWithVariance = new HashMap<>();
+    private int runInExperiment = 0;
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
     private LinkSpecification learnedLS;
-    
+
     public EvaluationRun(){};
-    /** 
+
+    /**
      * @param  algorithmName The name of the evaluated algorithm
      * @param  datasetName The name of used dataset for evaluation
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * */
-    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
-    {
+    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores) {
         this.algorithmName = algorithmName;
         this.datasetName=datasetName;
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
     }
-    /** 
+
+    /**
      * @param  algorithmName The name of the evaluated algorithm
      * @param  implementation The implementation type of the evaluated algorithm
      * @param  datasetName The name of used dataset for evaluation
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * */
-    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
-    {
+    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores) {
         this.algorithmName = algorithmName;
         this.datasetName=datasetName;
         this.implementationType=implementation;
@@ -61,14 +85,31 @@ public class EvaluationRun {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
     }
-    /** 
-     * @param  algorithmName The name of the evaluated algorithm
-     * @param  implementation The implementation type of the evaluated algorithm
-     * @param  datasetName The name of used dataset for evaluation
-     * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
-     * */
-    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, LinkSpecification learnedLS)
-    {
+
+    public EvaluationRun(String algorithmName, String implementation, String datasetName,
+                         Map<EvaluatorType, Double> evaluatorsScores, int run) {
+        this.algorithmName = algorithmName;
+        this.datasetName = datasetName;
+        this.implementationType = implementation;
+        for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
+            this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
+        }
+        this.runInExperiment = run;
+    }
+
+    /**
+     * @param algorithmName
+     *            The name of the evaluated algorithm
+     * @param implementation
+     *            The implementation type of the evaluated algorithm
+     * @param datasetName
+     *            The name of used dataset for evaluation
+     * @param evaluatorsScores
+     *            A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
+     * @param learnedLS
+     *            learned LinkSpec
+     */
+    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, LinkSpecification learnedLS) {
         this.algorithmName = algorithmName;
         this.datasetName=datasetName;
         this.implementationType=implementation;
@@ -77,14 +118,20 @@ public class EvaluationRun {
         }
         this.learnedLS = learnedLS;
     }
-    /** 
+
+    public EvaluationRun(String algorithmName, String implementation, String datasetName,
+                         Map<EvaluatorType, Double> evaluatorsScores, int run, LinkSpecification learnedLS) {
+        this(algorithmName, implementation, datasetName, evaluatorsScores, learnedLS);
+        this.runInExperiment = run;
+    }
+
+    /**
      * @param  algorithmName The name of the evaluated algorithm
      * @param  datasetName The name of used dataset for evaluation
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * @param  quantitativeRecord A record of the quantitative measures values
      * */
-    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, RunRecord quantitativeRecord)
-    {
+    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, RunRecord quantitativeRecord) {
         this.algorithmName = algorithmName;
         this.datasetName=datasetName;
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
@@ -92,19 +139,16 @@ public class EvaluationRun {
         }
         this.quanititativeRecord = quantitativeRecord;
     }
-    
-    
-    
-    public Set<EvaluatorType> getQualititativeMeasures()
-    {
+
+
+    public Set<EvaluatorType> getQualititativeMeasures() {
         return qualititativeScores.keySet();
     }
-    
+
     /**
      * This method displays the evaluation run values in a tabular form
      */
-    public void display()
-    {
+    public void display() {
         System.out.println("==================================================================================================================");
         System.out.println("ALGORITHM_NAME\tIMPLEMENTATION\tDATASET");
         System.out.println(getAlgorithmName()+"\t"+getImplementationType()+"\t"+getDatasetName());
@@ -114,20 +158,20 @@ public class EvaluationRun {
         }
         if(learnedLS != null){
             System.out.println("------------------------------------------------------------------------------------------------------------------");
-            System.out.println(learnedLS);
+            System.out.println(learnedLS.toStringPretty());
         }
         System.out.println("==================================================================================================================");
 
 
     }
+
     @Override
     public String toString() {
         String erString = Serialize(":");
         return erString+"\n";
     }
-    
-    public String Serialize(String separator)
-    {
+
+    public String Serialize(String separator) {
         StringBuilder sb = new StringBuilder(stringSize);
         sb.append(getAlgorithmName());
         sb.append(separator);
@@ -142,6 +186,7 @@ public class EvaluationRun {
         sb.replace(sb.length()-1, sb.length(), "");
         return sb.toString();
     }
+
     public String getAlgorithmName() {
         return algorithmName;
     }
@@ -154,5 +199,43 @@ public class EvaluationRun {
         return datasetName;
     }
 
+    public int getRunInExperiment() {
+        return runInExperiment;
+    }
+
+    public void setRunInExperiment(int runInExperiment) {
+        this.runInExperiment = runInExperiment;
+    }
+
+    public RunRecord getQuanititativeRecord() {
+        return quanititativeRecord;
+    }
+
+    public void setQuanititativeRecord(RunRecord quanititativeRecord) {
+        this.quanititativeRecord = quanititativeRecord;
+    }
+
+    @Override
+    public EvaluationRun clone() {
+        EvaluationRun clone = new EvaluationRun();
+        clone.algorithmName = algorithmName;
+        clone.implementationType = implementationType;
+        clone.datasetName = datasetName;
+        Map<EvaluatorType, Double> cloneQualiScores = new HashMap<>();
+        qualititativeScores.forEach((key, value) -> cloneQualiScores.put(key, value));
+        clone.qualititativeScores = cloneQualiScores;
+        Map<EvaluatorType, Pair<Double, Double>> cloneQualiScoresWithVariance = new HashMap<>();
+        qualititativeScoresWithVariance.forEach((key, value) -> cloneQualiScoresWithVariance.put(key,
+                new Pair<Double, Double>(value.getFirst(), value.getSecond())));
+        clone.qualititativeScoresWithVariance = cloneQualiScoresWithVariance;
+        clone.runInExperiment = runInExperiment;
+        if (quanititativeRecord != null) {
+            clone.quanititativeRecord = quanititativeRecord.clone();
+        }
+        if (learnedLS != null) {
+            clone.learnedLS = learnedLS.clone();
+        }
+        return clone;
+    }
 
 }

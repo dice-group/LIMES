@@ -1,26 +1,50 @@
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
 *.ear
+/.server-storage/
+target/
+out/
+nbactions.xml
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-*/bin/
-
-*~
-*/target/
+# Eclipse
 .project
 .classpath
-.settings/
-**/.idea/
-*.iml
-.DS_Store
-*.ser
+.settings
 
-# ignore gitbook builds
-_book
+# IntelliJ IDEA #
+*.iml
+.idea/
+.DS_STORE
+dependency-reduced-pom.xml
+# Markdown Editor Metadata #
+
+/manual/node_modules
+/manual/_book
+
+# Subrepositories
+/faraday-cage/
+/deer-slipo-plugin/
+
+
+# Other
+.java-version
+.server-storage/
+deer-analytics.json
+package-lock.json
+.tool-versions
+/experiments-data/
+
+
+# ignore dist files from vue build
+/limes-web-ui/dist/
+/limes-web-ui/node_modules/
+# misc
+release.properties
+cache/
+
+# dependency tree file generiated via `mvn dependency:tree > deptree.txt`
+deptree.txt
+

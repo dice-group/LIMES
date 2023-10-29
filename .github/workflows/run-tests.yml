@@ -1,0 +1,30 @@
+name: Run Java Tests
+on:
+  push:
+    branches: [ 'master', 'dev' ]
+    paths-ignore: [ 'docs/**' ]
+  pull_request:
+    paths-ignore: [ 'docs/**' ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distribution: [ 'zulu', 'adopt' ]
+        java: [ '11', '16' ]
+    name: Build on Java ${{ matrix.Java }} (${{ matrix.distribution }})
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.Java }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build with Maven
+        run: mvn -B verify --file pom.xml

@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.engine;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
@@ -25,6 +38,10 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -61,6 +78,27 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
+     * Constructor for a simple execution engine.
+     *
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Source variable
+     * @param targetVar
+     *            Target variable
+     * @param maxOpt,
+     *            optimization time constraint
+     * @param k,
+     *            expected selectivity
+     */
+    public SimpleExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar, long maxOpt,
+                                 double k) {
+        super(source, target, sourceVar, targetVar, maxOpt, k);
+    }
+
+    /**
      * Implementation of the execution of a plan. It receives a plan as a set of
      * instructions and executes them sequentially. This function does not
      * execute nested plans. In case of a RUN command, the instruction must
@@ -71,7 +109,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * @return The mapping obtained from executing the plan
      */
     public AMapping executeInstructions(Plan plan) {
-        buffer = new ArrayList<>();
+        setBuffer(new ArrayList<>());
         if (plan.isEmpty()) {
             logger.info("Plan is empty. Done.");
             return MappingFactory.createDefaultMapping();
@@ -87,53 +125,53 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeRun(inst);
             } // runs the filter operator
             else if (inst.getCommand().equals(Command.FILTER)) {
-                m = executeFilter(inst, buffer.get(inst.getSourceIndex()));
+                m = executeFilter(inst, getBuffer().get(inst.getSourceIndex()));
             } else if (inst.getCommand().equals(Command.REVERSEFILTER)) {
-                m = executeReverseFilter(inst, buffer.get(inst.getSourceIndex()));
+                m = executeReverseFilter(inst, getBuffer().get(inst.getSourceIndex()));
             } // runs set operations such as intersection,
             else if (inst.getCommand().equals(Command.INTERSECTION)) {
-                m = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+                m = executeIntersection(getBuffer().get(inst.getSourceIndex()), getBuffer().get(inst.getTargetIndex()));
             } // union
             else if (inst.getCommand().equals(Command.UNION)) {
-                m = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+                m = executeUnion(getBuffer().get(inst.getSourceIndex()), getBuffer().get(inst.getTargetIndex()));
             } // diff
             else if (inst.getCommand().equals(Command.DIFF)) {
-                m = executeDifference(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+                m = executeDifference(getBuffer().get(inst.getSourceIndex()), getBuffer().get(inst.getTargetIndex()));
             } // xor
             else if (inst.getCommand().equals(Command.XOR)) {
                 LinearFilter f = new LinearFilter();
-                AMapping m1 = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+                AMapping m1 = executeUnion(getBuffer().get(inst.getSourceIndex()), getBuffer().get(inst.getTargetIndex()));
                 m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
-                AMapping m2 = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+                AMapping m2 = executeIntersection(getBuffer().get(inst.getSourceIndex()), getBuffer().get(inst.getTargetIndex()));
                 m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
                 m = executeDifference(m1, m2);
             } // end of processing. Return the indicated mapping
             else if (inst.getCommand().equals(Command.RETURN)) {
-                if (buffer.isEmpty()) {
+                if (getBuffer().isEmpty()) {
                     return m;
                 }
                 if (index < 0) {// return last element of buffer
-                    return buffer.get(buffer.size() - 1);
+                    return getBuffer().get(getBuffer().size() - 1);
                 } else {
-                    return buffer.get(index);
+                    return getBuffer().get(index);
                 }
             }
             // place resulting mapping in the buffer
             if (index < 0) {// add the new mapping at the end of the list
-                buffer.add((MemoryMapping) m);
+                getBuffer().add((MemoryMapping) m);
             } else {
                 // avoid overriding places in buffer
                 // by adding the result at the end
-                if (index < buffer.size()) {
-                    buffer.add((MemoryMapping) m);
+                if (index < getBuffer().size()) {
+                    getBuffer().add((MemoryMapping) m);
                 } else {
                     // add placeholders to ensure that the mapping can be placed
                     // where the user wanted to have it
                     // new mappings are added at the end
-                    while ((index + 1) > buffer.size()) {
-                        buffer.add(MappingFactory.createDefaultMapping());
+                    while ((index + 1) > getBuffer().size()) {
+                        getBuffer().add(MappingFactory.createDefaultMapping());
                     }
-                    buffer.set(index, (MemoryMapping) m);
+                    getBuffer().set(index, (MemoryMapping) m);
                 }
 
             }
@@ -141,10 +179,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 
         // just in case the return operator was forgotten.
         // then we return the last mapping computed
-        if (buffer.isEmpty()) {
+        if (getBuffer().isEmpty()) {
             return MappingFactory.createDefaultMapping();
         } else {
-            return buffer.get(buffer.size() - 1);
+            return getBuffer().get(getBuffer().size() - 1);
         }
     }
 
@@ -158,28 +196,28 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      */
     public AMapping executeRun(Instruction inst) {
         double threshold = Double.parseDouble(inst.getThreshold());
-        //try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
+        // try {
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
 
-            } else {
-                IMapper mapper;
-                //try {
-                    MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
-                    mapper = MapperFactory.createMapper(type);
+        } else {
+            IMapper mapper;
+            // try {
+            MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            mapper = MapperFactory.createMapper(type);
 
-                    return mapper.getMapping(source, target, sourceVariable, targetVariable,
-                            inst.getMeasureExpression(), threshold);
-               /* } catch (InvalidMeasureException e) {
-                    e.printStackTrace();
-                    logger.info("Returning an empty mapping");
-                }*/
-            }
-        /*} catch (InvalidThresholdException e) {
-            e.printStackTrace();
-            logger.info("Returning an empty mapping");
-        }*/
-        
+            return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
+                    threshold);
+            /*
+             * } catch (InvalidMeasureException e) { e.printStackTrace();
+             * logger.info("Returning an empty mapping"); }
+             */
+        }
+        /*
+         * } catch (InvalidThresholdException e) { e.printStackTrace();
+         * logger.info("Returning an empty mapping"); }
+         */
+
     }
 
     /**
@@ -283,8 +321,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         else if (plan.isAtomic()) {
             m = executeInstructions(plan);
         } // nested plans contain subplans, an operator for merging the results
-          // of the subplans and a filter for filtering the results of the
-          // subplan
+        // of the subplans and a filter for filtering the results of the
+        // subplan
         else {
             // run all the subplans
             m = executeStatic(plan.getSubPlans().get(0));
@@ -342,7 +380,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * re-plan the remaining non-executed parts of P (if any). Then it executes
      * the second sub-plan of P, that can vary given from the initial given the
      * intermediate executed steps of the first plan.
-     * 
+     *
      *
      * @param spec
      *            The input link specification

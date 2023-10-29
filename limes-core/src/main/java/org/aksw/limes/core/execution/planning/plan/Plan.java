@@ -1,10 +1,27 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.plan;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the plan of a link specification. A plan consists of a set of
@@ -38,7 +55,7 @@ public class Plan implements IPlan {
      * Constructor of Plan class.
      */
     public Plan() {
-        instructionList = new ArrayList<Instruction>();
+        instructionList = new ArrayList<>();
         runtimeCost = 0d;
         mappingSize = 0;
         selectivity = 1d;
@@ -58,8 +75,9 @@ public class Plan implements IPlan {
         if (instruction != null) {
             // instructions are added at the end of the list
             boolean added = instructionList.add(instruction);
-            if (!added)
+            if (!added) {
                 logger.info("ExecutionPlan.addInstructiun() failed");
+            }
         }
 
     }
@@ -74,10 +92,11 @@ public class Plan implements IPlan {
      */
     @Override
     public void removeInstruction(int index) {
-        if (index >= getInstructionList().size() || index < 0)
+        if (index >= getInstructionList().size() || index < 0) {
             logger.info("ExecutionPlan.removeInstructiun() failed");
-        else
+        } else {
             instructionList.remove(index);
+        }
     }
 
     /**
@@ -129,10 +148,16 @@ public class Plan implements IPlan {
     @Override
     public boolean equals(Object other) {
         Plan o = (Plan) other;
-        if (o == null)
+        if (o == null) {
             return false;
-        return (this.instructionList.equals(o.instructionList));
+        }
+        return instructionList.equals(o.instructionList);
 
+    }
+
+    @Override
+    public int hashCode() {
+        return instructionList.hashCode();
     }
 
     /**
@@ -147,23 +172,24 @@ public class Plan implements IPlan {
         Plan clone = new Plan();
 
         // clone primitives fields
-        clone.setMappingSize(this.mappingSize);
-        clone.setRuntimeCost(this.runtimeCost);
-        clone.setSelectivity(this.selectivity);
+        clone.setMappingSize(mappingSize);
+        clone.setRuntimeCost(runtimeCost);
+        clone.setSelectivity(selectivity);
 
         // clone instructionList
-        if (this.instructionList != null) {
-            if (this.instructionList.isEmpty() == false) {
-                List<Instruction> cloneInstructionList = new ArrayList<Instruction>();
-                for (Instruction i : this.instructionList) {
+        if (instructionList != null) {
+            if (instructionList.isEmpty() == false) {
+                List<Instruction> cloneInstructionList = new ArrayList<>();
+                for (Instruction i : instructionList) {
                     cloneInstructionList.add(i.clone());
                 }
                 clone.setInstructionList(cloneInstructionList);
             } else {
                 clone.setInstructionList(new ArrayList<Instruction>());
             }
-        } else
+        } else {
             clone.setInstructionList(null);
+        }
 
         return clone;
     }

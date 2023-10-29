@@ -1,13 +1,26 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.eagle.genes;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -19,6 +32,10 @@ import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -63,13 +80,13 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      * @throws InvalidConfigurationException
      */
     public StringMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
-            int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
+                         int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType,
                 a_subReturnType,
                 new int[]{
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-                );
+        );
         fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
@@ -91,13 +108,13 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringMeasure(String opName, final GPConfiguration a_conf,
-            final Class<?> a_returnType, boolean a_mutateable)
-                    throws InvalidConfigurationException {
+                         final Class<?> a_returnType, boolean a_mutateable)
+            throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
                 new int[]{ // specify child subtyps
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-                );
+        );
         fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
@@ -141,6 +158,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
             return CommandGene.DoubleClass;
 
     }
+
     @Override
     public String getName() {
         return getOperationName();
@@ -200,14 +218,15 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         allowedOperations.add(MeasureFactory.JAROWINKLER);
         allowedOperations.add(MeasureFactory.LEVENSHTEIN);
     }
+
     /**
      * Returns all (standard) String Measures.
      * @return A Set of all standard String Measures.
      */
     public Set<String> getMeasures() {
-    	return allowedOperations;
+        return allowedOperations;
     }
-    
+
     @Override
     public CommandGene applyMutation(int a_index, double a_percentage)
             throws InvalidConfigurationException {
@@ -259,16 +278,18 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
+
     @Override
     public boolean isValid(ProgramChromosome a_program) {
         return isValid(a_program, 0);
     }
+
     /**
      * Setter for a specific set of LIMES Measures.
      * @param operationSet
      */
     public void setAllowedOperations(Set<String> operationSet) {
-    	this.allowedOperations = operationSet;
+        this.allowedOperations = operationSet;
     }
-    
+
 }

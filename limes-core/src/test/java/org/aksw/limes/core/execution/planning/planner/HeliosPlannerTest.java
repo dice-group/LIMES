@@ -1,9 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.planner;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -15,6 +27,12 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HeliosPlannerTest {
     public ACache source = new MemoryCache();
@@ -168,7 +186,7 @@ public class HeliosPlannerTest {
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.label,y.label)", "0.8", -1, -1, 0);
         plan2.addInstruction(run1);
 
-        assertTrue(plan.equals(plan2));
+        assertEquals(plan, plan2);
     }
 
     @Test
@@ -214,7 +232,7 @@ public class HeliosPlannerTest {
         planNew.setOperator(Command.UNION);
         planNew.setFilteringInstruction(new Instruction(Command.FILTER, null, "0.8", -1, -1, 0));
 
-        assertTrue(plan.equals(planNew));
+        assertEquals(plan, planNew);
     }
 
 
@@ -224,17 +242,17 @@ public class HeliosPlannerTest {
         HeliosPlanner p = new HeliosPlanner(source, target);
 
         assertTrue(p.getFilterCosts(null, 500) == 0);
-        List<String> t = new ArrayList<String>();
+        List<String> t = new ArrayList<>();
         t.add("cosine");
         assertTrue(p.getFilterCosts(t, 500) != 0);
 
-        t = new ArrayList<String>();
+        t = new ArrayList<>();
         assertTrue(p.getFilterCosts(t, 500) == 0);
 
         //t.add("blabla");
         //assertTrue(p.getFilterCosts(t, 500) != 0);
 
-        t = new ArrayList<String>();
+        t = new ArrayList<>();
         t.add("cosine");
         assertTrue(p.getFilterCosts(t, 0) == 0);
 

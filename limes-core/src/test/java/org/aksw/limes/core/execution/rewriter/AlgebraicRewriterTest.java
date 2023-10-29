@@ -1,10 +1,27 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.rewriter;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AlgebraicRewriterTest {
 
@@ -78,7 +95,7 @@ public class AlgebraicRewriterTest {
      * spec.readSpec("jaccard(x.q, y.q)", 0.5); LinkSpecification spec2 = new
      * LinkSpecification(); spec2.readSpec("jaccard(x.q, y.o)", 0.7); //
      * System.out.println(ar.computeAtomicDependency(spec, spec2));
-     * 
+     *
      * spec.readSpec(
      * "OR(jaccard(x.q, y.q)|0.75, AND(jaccard(x.q, y.q)|0.7, jaccard(x.q, y.q)|0.5)|0.8)"
      * , 0.5); spec = ar.computeAllDependencies(spec); System.out.println(spec);
@@ -97,7 +114,7 @@ public class AlgebraicRewriterTest {
      * AlgebraicRewriter(); LinkSpecification spec = new LinkSpecification();
      * LinkSpecification spec2 = new LinkSpecification(); LinkSpecification
      * spec3 = new LinkSpecification();
-     * 
+     *
      * spec.readSpec("trigrams(x.p, y.p)", 0.7); spec2.readSpec(
      * "euclidean(x.q, y.q)", 0.3); spec3.setThreshold(0.5);
      * spec3.setOperator(LogicOperator.AND); spec.addChild(spec3);

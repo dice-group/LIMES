@@ -1,17 +1,39 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.measure.string;
 
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Instance;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class TrigramMeasure extends StringMeasure {
+
+    public TrigramMeasure() {
+    }
+
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
         return ((double) 2 * overlap) / (double) (lengthA + lengthB);
@@ -49,22 +71,22 @@ public class TrigramMeasure extends StringMeasure {
             return 1.0;
         if ((p1.length() == 4 && p2.length() > 4) || (p2.length() == 4 && p1.length() > 4))
             return 0.0;
-        TreeSet<String> t1 = getTrigrams(p1);
-        TreeSet<String> t2 = getTrigrams(p2);
+        Set<String> t1 = getTrigrams(p1);
+        Set<String> t2 = getTrigrams(p2);
         double counter = 0;
         for (String s : t1) {
             if (t2.contains(s))
                 counter++;
         }
-        return 2 * counter / (t1.size() + t2.size());
+        return counter / (t1.size() + t2.size() - counter);
     }
 
-    public TreeSet<String> getTrigrams(String a) {
-        TreeSet<String> result = new TreeSet<String>();
+    public Set<String> getTrigrams(String a) {
+        Set<String> result = new HashSet<>();
         String copy = a;
 
-        for (int i = 2; i < copy.length(); i++) {
-            result.add(copy.substring(i - 2, i));
+        for (int i = 3; i <= copy.length(); i++) {
+            result.add(copy.substring(i - 3, i));
         }
         return result;
     }

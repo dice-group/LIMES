@@ -1,7 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.planner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -20,6 +34,9 @@ import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the Helios planner class. It receives a link specification as
@@ -151,7 +168,7 @@ public class HeliosPlanner extends Planner {
      * @return a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, ACache source, ACache target, AMapping sourceMapping,
-            AMapping targetMapping) {
+                           AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
         // atomic specs are simply ran
         if (spec == null)
@@ -217,7 +234,7 @@ public class HeliosPlanner extends Planner {
                 if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                     plan.setRuntimeCost(plan.getRuntimeCost()
                             + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * plan.getSelectivity()));
+                            source.size() * target.size() * plan.getSelectivity()));
                 }
             } // here we can optimize.
             else if (spec.getOperator().equals(LogicOperator.AND)) {
@@ -283,7 +300,7 @@ public class HeliosPlanner extends Planner {
      * @return a NestedPlan of the input link specification
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans,
-            double selectivity) {
+                                             double selectivity) {
         if (plans == null) {
             return left;
         }
@@ -323,7 +340,7 @@ public class HeliosPlanner extends Planner {
      *         costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-            double selectivity) {
+                                             double selectivity) {
         double runtime1 = 0, runtime2, runtime3;
         NestedPlan result = new NestedPlan();
         // first instructionList: run both children and then merge

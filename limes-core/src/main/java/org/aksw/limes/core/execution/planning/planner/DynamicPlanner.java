@@ -1,10 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.planner;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -23,6 +34,12 @@ import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Implements the Dynamic planner class. It receives a link specification as
@@ -151,7 +168,7 @@ public class DynamicPlanner extends Planner {
      * @param threshold
      *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
-     * 
+     *
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         AMapper mapper = null;
@@ -170,7 +187,7 @@ public class DynamicPlanner extends Planner {
      * @param threshold
      *            Threshold of metric expression
      * @return estimated size of returned mapping
-     * 
+     *
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         AMapper mapper = null;
@@ -304,7 +321,7 @@ public class DynamicPlanner extends Planner {
      * @return a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, ACache source, ACache target, AMapping sourceMapping,
-            AMapping targetMapping) {
+                           AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
 
         // if plan is executed, just return the plan
@@ -355,7 +372,7 @@ public class DynamicPlanner extends Planner {
                 if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                     plan.setRuntimeCost(plan.getRuntimeCost()
                             + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * plan.getSelectivity()));
+                            source.size() * target.size() * plan.getSelectivity()));
                 }
             } else if (spec.getOperator().equals(LogicOperator.XOR)) {
                 List<NestedPlan> children = new ArrayList<NestedPlan>();
@@ -389,7 +406,7 @@ public class DynamicPlanner extends Planner {
                 if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                     plan.setRuntimeCost(plan.getRuntimeCost()
                             + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * plan.getSelectivity()));
+                            source.size() * target.size() * plan.getSelectivity()));
                 }
 
             } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
@@ -416,7 +433,7 @@ public class DynamicPlanner extends Planner {
                 }
                 // SELECTIVITY
                 double selectivity = 1d;
-                for (int i = 1; i < children.size(); i++) {
+                for (int i = 0; i < children.size(); i++) {
                     // selectivity is not influenced by bestConjuctivePlan
                     selectivity = selectivity * children.get(i).getSelectivity();
                 }
@@ -446,7 +463,7 @@ public class DynamicPlanner extends Planner {
      * selection of the best alternative is based upon runtime estimations
      * obtained for each of the atomic measure expressions included in the
      * children specifications.
-     * 
+     *
      * @param spec
      *            The link specification
      * @param left
@@ -459,7 +476,7 @@ public class DynamicPlanner extends Planner {
      *         costly
      */
     public NestedPlan getBestDifferencePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-            double selectivity) {
+                                            double selectivity) {
         double runtime1 = 0, runtime2 = 0;
         NestedPlan result = new NestedPlan();
         double mappingSize = source.size() * target.size() * selectivity;
@@ -485,7 +502,7 @@ public class DynamicPlanner extends Planner {
             result.setMappingSize(mappingSize);
             return result;
         } // if right child is executed, then there is one option: run left and
-          // then do filter
+        // then do filter
         else if (!left.getExecutionStatus() && right.getExecutionStatus()) {
             // OPERATOR
             result.setOperator(Instruction.Command.DIFF);
@@ -572,7 +589,7 @@ public class DynamicPlanner extends Planner {
      * costly plan is (1). The selection of the best alternative is based upon
      * runtime estimations obtained for each of the atomic measure expressions
      * included in the children specifications.
-     * 
+     *
      * @param spec
      *            The link specification
      * @param left
@@ -585,7 +602,7 @@ public class DynamicPlanner extends Planner {
      *         costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-            double selectivity) {
+                                             double selectivity) {
         double runtime1 = 0, runtime2 = 0, runtime3 = 0;
         NestedPlan result = new NestedPlan();
 

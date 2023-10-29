@@ -1,16 +1,30 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
+import org.aksw.limes.core.exceptions.NullIndexerException;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
@@ -19,44 +33,27 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.measures.WuPalmerMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
+import org.aksw.limes.core.measures.measure.string.*;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
-import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
-import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
-import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
-import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
-import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
-import org.apache.jena.reasoner.rulesys.builtins.MakeSkolem;
+import org.aksw.limes.core.measures.measure.topology.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.area.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.diagonal.*;
+import org.aksw.limes.core.measures.measure.topology.cobalt.mixed.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,12 +80,19 @@ public class MeasureFactory {
     public static final String MONGEELKAN = "mongeelkan";
     public static final String OVERLAP = "overlap";
     public static final String QGRAMS = "qgrams";
+    public static final String LESS_THAN = "less_than";
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
-  //  public static final String METAPHONE = "metaphone";
-  //  public static final String KOELNERPHONETIC = "koelnerPhonetic";
+    public static final String DOUBLEMETA = "doublemeta";
+    public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
-
+    public static final String META = "meta";
+    public static final String NYSIIS = "nysiis";
+    public static final String CAVERPHONE1 = "caverphone1";
+    public static final String CAVERPHONE2 = "caverphone2";
+    public static final String REFINEDSOUNDEX = "refinedsoundex";
+    public static final String MATCHRATING = "matchrating";
+    public static final String DAITCHMOKOTOFF = "daitchmokotoff";
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
     public static final String MANHATTAN = "manhattan";
@@ -111,7 +115,7 @@ public class MeasureFactory {
     public static final String GEO_FRECHET = "geo_frechet";
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
-    public static final String GEO_NAIVE_SURJECTION = "geo_surjection";
+    public static final String GEO_SURJECTION = "geo_surjection";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
 
     // Temporal measures
@@ -145,8 +149,44 @@ public class MeasureFactory {
     public static final String TOP_TOUCHES = "top_touches";
     public static final String TOP_WITHIN = "top_within";
 
+    // Topological measures of cobalt
+    public static final String TOP_COBALT_AREA_CONTAINS = "top_cobalt_area_contains";
+    public static final String TOP_COBALT_AREA_COVERED_BY = "top_cobalt_area_covered_by";
+    public static final String TOP_COBALT_AREA_COVERS = "top_cobalt_area_covers";
+    public static final String TOP_COBALT_AREA_DISJOINT = "top_cobalt_area_disjoint";
+    public static final String TOP_COBALT_AREA_EQUALS = "top_cobalt_area_equals";
+    public static final String TOP_COBALT_AREA_INTERSECTS = "top_cobalt_area_intersects";
+    public static final String TOP_COBALT_AREA_OVERLAPS = "top_cobalt_area_overlaps";
+    public static final String TOP_COBALT_AREA_TOUCHES = "top_cobalt_area_touches";
+    public static final String TOP_COBALT_AREA_WITHIN = "top_cobalt_area_within";
+
+    public static final String TOP_COBALT_DIAGONAL_CONTAINS = "top_cobalt_diagonal_contains";
+    public static final String TOP_COBALT_DIAGONAL_COVERED_BY = "top_cobalt_diagonal_covered_by";
+    public static final String TOP_COBALT_DIAGONAL_COVERS = "top_cobalt_diagonal_covers";
+    public static final String TOP_COBALT_DIAGONAL_DISJOINT = "top_cobalt_diagonal_disjoint";
+    public static final String TOP_COBALT_DIAGONAL_EQUALS = "top_cobalt_diagonal_equals";
+    public static final String TOP_COBALT_DIAGONAL_INTERSECTS = "top_cobalt_diagonal_intersects";
+    public static final String TOP_COBALT_DIAGONAL_OVERLAPS = "top_cobalt_diagonal_overlaps";
+    public static final String TOP_COBALT_DIAGONAL_TOUCHES = "top_cobalt_diagonal_touches";
+    public static final String TOP_COBALT_DIAGONAL_WITHIN = "top_cobalt_diagonal_within";
+
+    public static final String TOP_COBALT_MIXED_CONTAINS = "top_cobalt_mixed_contains";
+    public static final String TOP_COBALT_MIXED_COVERED_BY = "top_cobalt_mixed_covered_by";
+    public static final String TOP_COBALT_MIXED_COVERS = "top_cobalt_mixed_covers";
+    public static final String TOP_COBALT_MIXED_DISJOINT = "top_cobalt_mixed_disjoint";
+    public static final String TOP_COBALT_MIXED_EQUALS = "top_cobalt_mixed_equals";
+    public static final String TOP_COBALT_MIXED_INTERSECTS = "top_cobalt_mixed_intersects";
+    public static final String TOP_COBALT_MIXED_OVERLAPS = "top_cobalt_mixed_overlaps";
+    public static final String TOP_COBALT_MIXED_TOUCHES = "top_cobalt_mixed_touches";
+    public static final String TOP_COBALT_MIXED_WITHIN = "top_cobalt_mixed_within";
+
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
+    // Semantic edge-counting measures
+    public static final String SHORTEST_PATH = "shortest_path";
+    public static final String LCH = "lch";
+    public static final String LI = "li";
+    public static final String WUPALMER = "wupalmer";
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
@@ -161,6 +201,9 @@ public class MeasureFactory {
 
         if (measure.startsWith(COSINE)) {
             return MeasureType.COSINE;
+        }
+        if (measure.startsWith(LESS_THAN)) {
+            return MeasureType.LESS_THAN;
         }
         if (measure.startsWith(EXACTMATCH)) {
             return MeasureType.EXACTMATCH;
@@ -185,7 +228,6 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-
         if (measure.startsWith(QGRAMS)) {
             return MeasureType.QGRAMS;
         }
@@ -195,7 +237,33 @@ public class MeasureFactory {
         if (measure.startsWith(SOUNDEX)) {
             return MeasureType.SOUNDEX;
         }
-      
+        if (measure.startsWith(DOUBLEMETA)) {
+            return MeasureType.DOUBLEMETA;
+        }
+        if (measure.startsWith(KOELN)) {
+            return MeasureType.KOELN;
+        }
+        if (measure.startsWith(META)) {
+            return MeasureType.META;
+        }
+        if (measure.startsWith(REFINEDSOUNDEX)) {
+            return MeasureType.REFINEDSOUNDEX;
+        }
+        if (measure.startsWith(NYSIIS)) {
+            return MeasureType.NYSIIS;
+        }
+        if (measure.startsWith(MATCHRATING)) {
+            return MeasureType.MATCHRATING;
+        }
+        if (measure.startsWith(CAVERPHONE1)) {
+            return MeasureType.CAVERPHONE1;
+        }
+        if (measure.startsWith(CAVERPHONE2)) {
+            return MeasureType.CAVERPHONE2;
+        }
+        if (measure.startsWith(DAITCHMOKOTOFF)) {
+            return MeasureType.DAITCHMOKOTOFF;
+        }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
         }
@@ -259,7 +327,7 @@ public class MeasureFactory {
         if (measure.startsWith(GEO_SUM_OF_MIN)) {
             return MeasureType.GEO_SUM_OF_MIN;
         }
-        if (measure.startsWith(GEO_NAIVE_SURJECTION)) {
+        if (measure.startsWith(GEO_SURJECTION)) {
             return MeasureType.GEO_NAIVE_SURJECTION;
         }
         if (measure.startsWith(GEO_FAIR_SURJECTION)) {
@@ -351,8 +419,107 @@ public class MeasureFactory {
         }
 
         ////////////////////////////////////////////////////
+        if (measure.startsWith(TOP_COBALT_AREA_CONTAINS)) {
+            return MeasureType.TOP_COBALT_AREA_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_AREA_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_COVERS)) {
+            return MeasureType.TOP_COBALT_AREA_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_DISJOINT)) {
+            return MeasureType.TOP_COBALT_AREA_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_EQUALS)) {
+            return MeasureType.TOP_COBALT_AREA_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_AREA_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_AREA_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_TOUCHES)) {
+            return MeasureType.TOP_COBALT_AREA_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_AREA_WITHIN)) {
+            return MeasureType.TOP_COBALT_AREA_WITHIN;
+        }
+
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_CONTAINS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_COVERS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_DISJOINT)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_EQUALS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_TOUCHES)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_DIAGONAL_WITHIN)) {
+            return MeasureType.TOP_COBALT_DIAGONAL_WITHIN;
+        }
+
+        if (measure.startsWith(TOP_COBALT_MIXED_CONTAINS)) {
+            return MeasureType.TOP_COBALT_MIXED_CONTAINS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_COVERED_BY)) {
+            return MeasureType.TOP_COBALT_MIXED_COVERED_BY;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_COVERS)) {
+            return MeasureType.TOP_COBALT_MIXED_COVERS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_DISJOINT)) {
+            return MeasureType.TOP_COBALT_MIXED_DISJOINT;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_EQUALS)) {
+            return MeasureType.TOP_COBALT_MIXED_EQUALS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_INTERSECTS)) {
+            return MeasureType.TOP_COBALT_MIXED_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_OVERLAPS)) {
+            return MeasureType.TOP_COBALT_MIXED_OVERLAPS;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_TOUCHES)) {
+            return MeasureType.TOP_COBALT_MIXED_TOUCHES;
+        }
+        if (measure.startsWith(TOP_COBALT_MIXED_WITHIN)) {
+            return MeasureType.TOP_COBALT_MIXED_WITHIN;
+        }
+
+        ////////////////////////////////////////////////////
         if (measure.startsWith(SET_JACCARD)) {
             return MeasureType.SET_JACCARD;
+        }
+
+        ////////////////////////////////////////////////////
+        if (measure.startsWith(SHORTEST_PATH)) {
+            return MeasureType.SHORTEST_PATH;
+        }
+        if (measure.startsWith(LCH)) {
+            return MeasureType.LCH;
+        }
+        if (measure.startsWith(LI)) {
+            return MeasureType.LI;
+        }
+        if (measure.startsWith(WUPALMER)) {
+            return MeasureType.WUPALMER;
         }
         throw new InvalidMeasureException(measure);
     }
@@ -369,138 +536,235 @@ public class MeasureFactory {
     public static AMeasure createMeasure(MeasureType type) {
 
         switch (type) {
-        case COSINE:
-            return new CosineMeasure();
-        case EXACTMATCH:
-            return new ExactMatchMeasure();
-        case JACCARD:
-            return new JaccardMeasure();
-        // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
-        case JAROWINKLER:
-            return new JaroWinklerMeasure();
-        case JARO:
-            return new JaroMeasure();
-        case LEVENSHTEIN:
-            return new LevenshteinMeasure();
-        case MONGEELKAN:
-            return new MongeElkanMeasure();
-        case OVERLAP:
-            return new TrigramMeasure();
-        case QGRAMS:
-            return new QGramSimilarityMeasure();
-        case RATCLIFF:
-            return new RatcliffObershelpMeasure();
-        case SOUNDEX:
-            return new SoundexMeasure();
-        case TRIGRAM:
-            return new TrigramMeasure();
-        ////////////////////////////////////////////
+            case COSINE:
+                return new CosineMeasure();
 
-        case EUCLIDEAN:
-            return new EuclideanMeasure();
-        case MANHATTAN:
-            return new ManhattanMeasure();
-        case GEO_GREAT_ELLIPTIC:
-            return new GeoGreatEllipticMeasure();
-        case GEO_ORTHODROMIC:
-            return new GeoOrthodromicMeasure();
-        ///////////////////////
-        case GEO_CENTROID_INDEXED_HAUSDORFF:
-            return new CentroidIndexedHausdorffMeasure();
-        case GEO_FAST_HAUSDORFF:
-            return new FastHausdorffMeasure();
-        case GEO_HAUSDORFF:
-            return new NaiveHausdorffMeasure();
-        case GEO_INDEXED_HAUSDORFF:
-            return new IndexedHausdorffMeasure();
-        case GEO_NAIVE_HAUSDORFF:
-            return new NaiveHausdorffMeasure();
-        case GEO_SCAN_INDEXED_HAUSDORFF:
-            return new ScanIndexedHausdorffMeasure();
-        case GEO_SYMMETRIC_HAUSDORFF:
-            return new SymmetricHausdorffMeasure();
-        ///////////////////////
-        case GEO_MAX:
-            return new NaiveMaxMeasure();
-        case GEO_MEAN:
-            return new NaiveMeanMeasure();
-        case GEO_MIN:
-            return new NaiveMinMeasure();
-        case GEO_AVG:
-            return new NaiveAverageMeasure();
-        case GEO_FRECHET:
-            return new NaiveFrechetMeasure();
-        case GEO_LINK:
-            return new NaiveLinkMeasure();
-        case GEO_SUM_OF_MIN:
-            return new NaiveSumOfMinMeasure();
-        case GEO_NAIVE_SURJECTION:
-            return new NaiveSurjectionMeasure();
-        case GEO_FAIR_SURJECTION:
-            return new FairSurjectionMeasure();
-        ///////////////////////
-        case TMP_CONCURRENT:
-            return new ConcurrentMeasure();
-        case TMP_PREDECESSOR:
-            return new PredecessorMeasure();
-        case TMP_SUCCESSOR:
-            return new SuccessorMeasure();
+            case LESS_THAN:
+                return new LessThanMeasure();
+            case EXACTMATCH:
+                return new ExactMatchMeasure();
+            case JACCARD:
+                return new JaccardMeasure();
+            // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
+            case JAROWINKLER:
+                return new JaroWinklerMeasure();
+            case JARO:
+                return new JaroMeasure();
+            case LEVENSHTEIN:
+                return new LevenshteinMeasure();
+            case MONGEELKAN:
+                return new MongeElkanMeasure();
+            case OVERLAP:
+                return new TrigramMeasure();
+            case QGRAMS:
+                return new QGramSimilarityMeasure();
+            case RATCLIFF:
+                return new RatcliffObershelpMeasure();
+            case SOUNDEX:
+                return new SoundexMeasure();
+            case DOUBLEMETA:
+                return new DoubleMetaphoneMeasure();
+            case KOELN:
+                return new KoelnPhoneticMeasure();
+            case TRIGRAM:
+                return new TrigramMeasure();
+            ////////////////////////////////////////////
 
-        case TMP_AFTER:
-            return new AfterMeasure();
-        case TMP_BEFORE:
-            return new BeforeMeasure();
-        case TMP_DURING_REVERSE:
-            return new DuringReverseMeasure();
-        case TMP_DURING:
-            return new DuringMeasure();
-        case TMP_EQUALS:
-            return new EqualsMeasure();
-        case TMP_FINISHES:
-            return new FinishesMeasure();
-        case TMP_IS_FINISHED_BY:
-            return new IsFinishedByMeasure();
-        case TMP_IS_MET_BY:
-            return new IsMetByMeasure();
-        case TMP_IS_OVERLAPPED_BY:
-            return new IsOverlappedByMeasure();
-        case TMP_IS_STARTED_BY:
-            return new IsStartedByMeasure();
-        case TMP_MEETS:
-            return new MeetsMeasure();
-        case TMP_OVERLAPS:
-            return new OverlapsMeasure();
-        case TMP_STARTS:
-            return new StartsMeasure();
-        ///////////////////////
-        case TOP_CONTAINS:
-            return new ContainsMeasure();
-        case TOP_COVERED_BY:
-            return new CoveredbyMeasure();
-        case TOP_COVERS:
-            return new CoversMeasure();
-        case TOP_CROSSES:
-            return new CrossesMeasure();
-        case TOP_DISJOINT:
-            return new DisjointMeasure();
-        case TOP_EQUALS:
-            return new org.aksw.limes.core.measures.measure.topology.EqualsMeasure();
-        case TOP_INTERSECTS:
-            return new IntersectsMeasure();
-        case TOP_OVERLAPS:
-            return new org.aksw.limes.core.measures.measure.topology.OverlapsMeasure();
-        case TOP_TOUCHES:
-            return new TouchesMeasure();
-        case TOP_WITHIN:
-            return new WithinMeasure();
+            case EUCLIDEAN:
+                return new EuclideanMeasure();
+            case MANHATTAN:
+                return new ManhattanMeasure();
+            case GEO_GREAT_ELLIPTIC:
+                return new GeoGreatEllipticMeasure();
+            case GEO_ORTHODROMIC:
+                return new GeoOrthodromicMeasure();
+            ///////////////////////
+            case GEO_CENTROID_INDEXED_HAUSDORFF:
+                return new CentroidIndexedHausdorffMeasure();
+            case GEO_FAST_HAUSDORFF:
+                return new FastHausdorffMeasure();
+            case GEO_HAUSDORFF:
+                return new NaiveHausdorffMeasure();
+            case GEO_INDEXED_HAUSDORFF:
+                return new IndexedHausdorffMeasure();
+            case GEO_NAIVE_HAUSDORFF:
+                return new NaiveHausdorffMeasure();
+            case GEO_SCAN_INDEXED_HAUSDORFF:
+                return new ScanIndexedHausdorffMeasure();
+            case GEO_SYMMETRIC_HAUSDORFF:
+                return new SymmetricHausdorffMeasure();
+            ///////////////////////
+            case GEO_MAX:
+                return new NaiveMaxMeasure();
+            case GEO_MEAN:
+                return new NaiveMeanMeasure();
+            case GEO_MIN:
+                return new NaiveMinMeasure();
+            case GEO_AVG:
+                return new NaiveAverageMeasure();
+            case GEO_FRECHET:
+                return new NaiveFrechetMeasure();
+            case GEO_LINK:
+                return new NaiveLinkMeasure();
+            case GEO_SUM_OF_MIN:
+                return new NaiveSumOfMinMeasure();
+            case GEO_NAIVE_SURJECTION:
+                return new NaiveSurjectionMeasure();
+            case GEO_FAIR_SURJECTION:
+                return new FairSurjectionMeasure();
+            ///////////////////////
+            case TMP_CONCURRENT:
+                return new ConcurrentMeasure();
+            case TMP_PREDECESSOR:
+                return new PredecessorMeasure();
+            case TMP_SUCCESSOR:
+                return new SuccessorMeasure();
 
-        ///////////////////////
-        case SET_JACCARD:
-            return new SetJaccardMeasure();
-        default:
-            throw new InvalidMeasureException(type.toString());
+            case TMP_AFTER:
+                return new AfterMeasure();
+            case TMP_BEFORE:
+                return new BeforeMeasure();
+            case TMP_DURING_REVERSE:
+                return new DuringReverseMeasure();
+            case TMP_DURING:
+                return new DuringMeasure();
+            case TMP_EQUALS:
+                return new EqualsMeasure();
+            case TMP_FINISHES:
+                return new FinishesMeasure();
+            case TMP_IS_FINISHED_BY:
+                return new IsFinishedByMeasure();
+            case TMP_IS_MET_BY:
+                return new IsMetByMeasure();
+            case TMP_IS_OVERLAPPED_BY:
+                return new IsOverlappedByMeasure();
+            case TMP_IS_STARTED_BY:
+                return new IsStartedByMeasure();
+            case TMP_MEETS:
+                return new MeetsMeasure();
+            case TMP_OVERLAPS:
+                return new OverlapsMeasure();
+            case TMP_STARTS:
+                return new StartsMeasure();
+            ///////////////////////
+            case TOP_CONTAINS:
+                return new ContainsMeasure();
+            case TOP_COVERED_BY:
+                return new CoveredbyMeasure();
+            case TOP_COVERS:
+                return new CoversMeasure();
+            case TOP_CROSSES:
+                return new CrossesMeasure();
+            case TOP_DISJOINT:
+                return new DisjointMeasure();
+            case TOP_EQUALS:
+                return new org.aksw.limes.core.measures.measure.topology.EqualsMeasure();
+            case TOP_INTERSECTS:
+                return new IntersectsMeasure();
+            case TOP_OVERLAPS:
+                return new org.aksw.limes.core.measures.measure.topology.OverlapsMeasure();
+            case TOP_TOUCHES:
+                return new TouchesMeasure();
+            case TOP_WITHIN:
+                return new WithinMeasure();
+
+            ///////////////////////
+            case TOP_COBALT_AREA_CONTAINS:
+                return new CobaltAreaContainsMeasure();
+            case TOP_COBALT_AREA_COVERED_BY:
+                return new CobaltAreaCoveredbyMeasure();
+            case TOP_COBALT_AREA_COVERS:
+                return new CobaltAreaCoversMeasure();
+            case TOP_COBALT_AREA_DISJOINT:
+                return new CobaltAreaDisjointMeasure();
+            case TOP_COBALT_AREA_EQUALS:
+                return new CobaltAreaEqualsMeasure();
+            case TOP_COBALT_AREA_INTERSECTS:
+                return new CobaltAreaIntersectsMeasure();
+            case TOP_COBALT_AREA_OVERLAPS:
+                return new CobaltAreaOverlapsMeasure();
+            case TOP_COBALT_AREA_TOUCHES:
+                return new CobaltAreaTouchesMeasure();
+            case TOP_COBALT_AREA_WITHIN:
+                return new CobaltAreaWithinMeasure();
+
+            case TOP_COBALT_DIAGONAL_CONTAINS:
+                return new CobaltDiagonalContainsMeasure();
+            case TOP_COBALT_DIAGONAL_COVERED_BY:
+                return new CobaltDiagonalCoveredbyMeasure();
+            case TOP_COBALT_DIAGONAL_COVERS:
+                return new CobaltDiagonalCoversMeasure();
+            case TOP_COBALT_DIAGONAL_DISJOINT:
+                return new CobaltDiagonalDisjointMeasure();
+            case TOP_COBALT_DIAGONAL_EQUALS:
+                return new CobaltDiagonalEqualsMeasure();
+            case TOP_COBALT_DIAGONAL_INTERSECTS:
+                return new CobaltDiagonalIntersectsMeasure();
+            case TOP_COBALT_DIAGONAL_OVERLAPS:
+                return new CobaltDiagonalOverlapsMeasure();
+            case TOP_COBALT_DIAGONAL_TOUCHES:
+                return new CobaltDiagonalTouchesMeasure();
+            case TOP_COBALT_DIAGONAL_WITHIN:
+                return new CobaltDiagonalWithinMeasure();
+
+            case TOP_COBALT_MIXED_CONTAINS:
+                return new CobaltMixedContainsMeasure();
+            case TOP_COBALT_MIXED_COVERED_BY:
+                return new CobaltMixedCoveredbyMeasure();
+            case TOP_COBALT_MIXED_COVERS:
+                return new CobaltMixedCoversMeasure();
+            case TOP_COBALT_MIXED_DISJOINT:
+                return new CobaltMixedDisjointMeasure();
+            case TOP_COBALT_MIXED_EQUALS:
+                return new CobaltMixedEqualsMeasure();
+            case TOP_COBALT_MIXED_INTERSECTS:
+                return new CobaltMixedIntersectsMeasure();
+            case TOP_COBALT_MIXED_OVERLAPS:
+                return new CobaltMixedOverlapsMeasure();
+            case TOP_COBALT_MIXED_TOUCHES:
+                return new CobaltMixedTouchesMeasure();
+            case TOP_COBALT_MIXED_WITHIN:
+                return new CobaltMixedWithinMeasure();
+
+            ///////////////////////
+            case SET_JACCARD:
+                return new SetJaccardMeasure();
+
+            ///////////////////////
+            case SHORTEST_PATH:
+                AIndex IndexerSP = createIndexer();
+                if (IndexerSP == null) {
+                    throw new NullIndexerException("Cannot initialize " + SHORTEST_PATH + ". Index instance is null.");
+                }
+                return new ShortestPathMeasure(IndexerSP);
+            case LCH:
+                AIndex IndexerLCH = createIndexer();
+                if (IndexerLCH == null) {
+                    throw new NullIndexerException("Cannot initialize " + LCH + ". Index instance is null.");
+                }
+                return new LCHMeasure(IndexerLCH);
+            case LI:
+                AIndex IndexerLi = createIndexer();
+                if (IndexerLi == null) {
+                    throw new NullIndexerException("Cannot initialize " + LI + ". Index instance is null.");
+                }
+                return new LiMeasure(IndexerLi);
+            case WUPALMER:
+                AIndex IndexerWP = createIndexer();
+                if (IndexerWP == null) {
+                    throw new NullIndexerException("Cannot initialize " + WUPALMER + ". Index instance is null.");
+                }
+                return new WuPalmerMeasure(IndexerWP);
+            default:
+                throw new InvalidMeasureException(type.toString());
         }
 
+    }
+
+    public static AIndex createIndexer() {
+        AIndex Indexer = new MemoryIndex();
+        Indexer.preIndex();
+        return Indexer;
     }
 
 }

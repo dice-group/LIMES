@@ -1,12 +1,25 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.mapping;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.util.RandomStringGenerator;
+
+import java.util.*;
 
 /**
  * This class contains the mappings computed by an organizer. Each URI from the
@@ -22,12 +35,12 @@ import org.aksw.limes.core.util.RandomStringGenerator;
  */
 public class MemoryMapping extends AMapping{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2763300329497546833L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2763300329497546833L;
 
-	protected MemoryMapping() {
+    protected MemoryMapping() {
         super();
 
     }
@@ -215,6 +228,26 @@ public class MemoryMapping extends AMapping{
     }
 
     /**
+     * Computes the number of mappings with value greater than 0 contained in the
+     * object
+     *
+     * @return number of mappings with value greater than 0
+     */
+    @Override
+    public int getNumberofPositiveMappings() {
+        int size = 0;
+        for (String s : map.keySet()) {
+            for (String k : map.get(s).keySet()) {
+                if (map.get(s).get(k) > 0) {
+                    size++;
+                }
+            }
+        }
+        return size;
+    }
+
+
+    /**
      * Computes the best one to n mapping for the current mapping, i.e., for
      * each element of the source, it gets the best t from target. This does not
      * mean an 1 to 1 mapping, as a t can be mapped to several s.
@@ -227,7 +260,6 @@ public class MemoryMapping extends AMapping{
         for (String s : map.keySet()) {
             double maxSim = 0;
             Set<String> target = new HashSet<String>();
-            ;
             for (String t : map.get(s).keySet()) {
                 if (getConfidence(s, t) == maxSim) {
                     target.add(t);
@@ -323,6 +355,18 @@ public class MemoryMapping extends AMapping{
             // }
         }
         return result;
+    }
+
+    @Override
+    public AMapping getOnlyPositiveExamples() {
+        AMapping onlyPos = MappingFactory.createDefaultMapping();
+        map.forEach((key, subMap) -> {
+            subMap.forEach((key2, value) -> {
+                if (value > 0)
+                    onlyPos.add(key, key2, value);
+            });
+        });
+        return onlyPos;
     }
 
 }

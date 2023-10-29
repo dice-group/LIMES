@@ -1,13 +1,25 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.mapper.space;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
-// * Previously call ToralOrderBlockingMapper
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -18,6 +30,10 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * Uses metric spaces to create blocks.
@@ -57,10 +73,9 @@ public class HR3Mapper extends AMapper {
      *         the target instances
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+                               double threshold) {
 
-        
-        
+
         AMapping mapping = MappingFactory.createDefaultMapping();
 
         // maps each block id to a set of instances. Actually one should
@@ -183,4 +198,5 @@ public class HR3Mapper extends AMapper {
             return 0.006 * (sourceSize + targetSize) - 134.2 * threshold;
         }
     }
+
 }

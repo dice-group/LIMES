@@ -1,19 +1,36 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * This class implements the HR3 algorithm which can ensure that a certain RRR
@@ -66,7 +83,7 @@ public class HR3Blocker implements IBlockingModule {
         cache = new HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>>();
     }
 
-    public static ArrayList<Double> copyList(ArrayList<Double> list) {
+    private static ArrayList<Double> copyList(ArrayList<Double> list) {
         ArrayList<Double> copy = new ArrayList<Double>();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
@@ -76,8 +93,8 @@ public class HR3Blocker implements IBlockingModule {
         return copy;
     }
 
-    public static ArrayList<ArrayList<Double>> addIdsToList(ArrayList<ArrayList<Double>> keys,
-                                                            TreeSet<String> propValues) {
+    private static ArrayList<ArrayList<Double>> addIdsToList(ArrayList<ArrayList<Double>> keys,
+                                                             TreeSet<String> propValues) {
         ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
         ArrayList<Double> values = new ArrayList<Double>();
         double value = 0;

@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -19,23 +36,8 @@ import org.slf4j.LoggerFactory;
  */
 public class PseudoRefFMeasure extends PseudoFMeasure {
     static Logger logger = LoggerFactory.getLogger(PseudoRefFMeasure.class);
-    /** 
-     * The method calculates the pseudo reference F-Measure of the machine learning predictions compared to a gold standard for beta = 1 .
-     * @param predictions The predictions provided by a machine learning algorithm.
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
-     * @param beta this values specifies how F-Measure is biased between precision and recall
-     * @return double - This returns the calculated pseudo reference F-Measure.
-     */
-    public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {
 
-        double p = precision(predictions, goldStandard);
-        double r = recall(predictions, goldStandard);
-        if (p == 0 && r == 0) return 0.0;
-        double f = (1 + beta * beta) * p * r / (beta * beta * p + r);
-        return f;
-    }
-
-    /** 
+    /**
      * The method calculates the pseudo reference recall of the machine learning predictions compared to a gold standard
      * @param predictions The predictions provided by a machine learning algorithm
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
@@ -45,7 +47,7 @@ public class PseudoRefFMeasure extends PseudoFMeasure {
         return new PseudoRefRecall().calculate(predictions, goldStandard);
     }
 
-    /** 
+    /**
      * The method calculates the pseudo reference precision of the machine learning predictions compared to a gold standard
      * @param predictions The predictions provided by a machine learning algorithm
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs

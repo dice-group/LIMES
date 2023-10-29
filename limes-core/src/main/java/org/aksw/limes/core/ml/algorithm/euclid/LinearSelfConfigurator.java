@@ -1,11 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.euclid;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.controller.LSPipeline;
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -23,21 +33,22 @@ import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
- *
  */
 public class LinearSelfConfigurator implements ISelfConfigurator {
-	// execution mode. STRICT = true leads to a strong bias towards precision by
-	// ensuring that the initial classifiers are classifiers that have the
-	// maximal threshold that leads to the best pseudo-f-measure. False leads to the
-	// best classifier with the smallest threshold
-	public boolean STRICT = true;
-	public int ITERATIONS_MAX = 1000;
-	public double MIN_THRESHOLD = 0.3;
-	
+    // execution mode. STRICT = true leads to a strong bias towards precision by
+    // ensuring that the initial classifiers are classifiers that have the
+    // maximal threshold that leads to the best pseudo-f-measure. False leads to the
+    // best classifier with the smallest threshold
+    public boolean STRICT = true;
+    public int ITERATIONS_MAX = 1000;
+    public double MIN_THRESHOLD = 0.3;
+
     static Logger logger = LoggerFactory.getLogger(LinearSelfConfigurator.class);
 
     public enum Strategy {
@@ -49,7 +60,6 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     }
 
 
-    
     Strategy strategy = Strategy.FMEASURE;
     QMeasureType qMeasureType = QMeasureType.UNSUPERVISED;
     public ACache source; //source cache
@@ -67,7 +77,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     /* supervised approaches need a reference mapping to compute qualities*/
     AMapping reference = MappingFactory.createDefaultMapping(); // all true instance pairs.
     public AMapping asked = MappingFactory.createDefaultMapping();// all known instance pairs.
-    
+
     /**
      * Set PFMs based upon name.
      * if name.equals("reference") using ReferencePseudoMeasures.class:  Nikolov/D'Aquin/Motta ESWC 2012.
@@ -79,7 +89,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
                 qMeasure = EvaluatorFactory.create(EvaluatorType.F_MEASURE);
                 break;
             case UNSUPERVISED:
-            	qMeasure = EvaluatorFactory.create(EvaluatorType.PF_MEASURE);
+                qMeasure = EvaluatorFactory.create(EvaluatorType.PF_MEASURE);
                 break;
         }
     }
@@ -92,7 +102,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         this.qMeasureType = QMeasureType.UNSUPERVISED;
         this.qMeasure = pfm;
     }
-    
+
     /**
      * Constructor
      *
@@ -100,7 +110,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @param target Target cache
      */
     public LinearSelfConfigurator(ACache source, ACache target) {
-    	this(source, target, 0.9, 1);
+        this(source, target, 0.9, 1);
     }
 
     /**
@@ -113,10 +123,10 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @param measures Atomic measures
      */
     public LinearSelfConfigurator(ACache source, ACache target, double minCoverage, double beta, Map<String, String> measures) {
-    	this(source, target, minCoverage, beta);
+        this(source, target, minCoverage, beta);
         this.measures = measures;
     }
-    
+
     /**
      * Constructor
      *
@@ -128,8 +138,8 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      *
      */
     public LinearSelfConfigurator(ACache source, ACache target, double minCoverage, double beta) {
-    	this.source = source;
-    	this.target = target;
+        this.source = source;
+        this.target = target;
         this.beta = beta;
         sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
         targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
@@ -161,7 +171,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
+
     /**
      * Extracts all properties from a cache that have a coverage beyond minCoverage
      *
@@ -176,6 +186,8 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         //first count how often properties appear across instances
         for (Instance i : c.getAllInstances()) {
             for (String p : i.getAllProperties()) {
+                if(p.equalsIgnoreCase("price") || p.equalsIgnoreCase("year"))
+                    continue;
                 if (!buffer.containsKey(p)) {
                     buffer.put(p, 1.0);
                 } else {
@@ -246,7 +258,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     public List<SimpleClassifier> getBestInitialClassifiers() {
         Set<String> measureList = new HashSet<String>();
         measureList.add(MeasureFactory.COSINE);
-   		measureList.add(MeasureFactory.LEVENSHTEIN);
+        measureList.add(MeasureFactory.LEVENSHTEIN);
         measureList.add(MeasureFactory.TRIGRAM);
         return getBestInitialClassifiers(measureList);
     }
@@ -281,6 +293,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         }
         return initialClassifiers;
     }
+
     /**
      * Gets the best parameter to match the entities contained in the source and
      * target via properties p1 and p2 by the means of the similarity measure
@@ -298,7 +311,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         for (double threshold = 1; threshold > MIN_THRESHOLD; threshold = threshold - learningRate) {
 //        	logger.info("execute("+sourceProperty+", "+targetProperty+ ", "+measure+", "+threshold+");");
             AMapping mapping = execute(sourceProperty, targetProperty, measure, threshold);
-            //            double fMeasure = qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), mapping, beta);
+            //            double fMeasure = qMeasure.calculate(source.getAllUris(), target.getAllUris(), mapping, beta);
             double fMeasure = computeQuality(mapping);
             //            System.out.println("Source: " + sourceProperty + ""
             //                    + " Target: " + targetProperty + " Threshold " + threshold + " leads to F-Measure " + fMeasure);
@@ -412,14 +425,14 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      **/
 
     public double computeNext(List<SimpleClassifier> classifiers, int index) {
-    	// FIXME simply subtracting learning rate?
-    	double newWeight = Math.max(0, classifiers.get(index).getWeight() - learningRate);
-    	if(newWeight == classifiers.get(index).getWeight()) {
-    		logger.info("Computed weight under zero. Skipping.");
-    	} else {
+        // FIXME simply subtracting learning rate?
+        double newWeight = Math.max(0, classifiers.get(index).getWeight() - learningRate);
+        if(newWeight == classifiers.get(index).getWeight()) {
+            logger.info("Computed weight under zero. Skipping.");
+        } else {
             classifiers.get(index).setWeight(newWeight);
             classifiers = normalizeClassifiers(classifiers);
-    	}
+        }
         AMapping m = getMapping(classifiers);
         buffer = classifiers;
 
@@ -429,7 +442,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     public List<SimpleClassifier> learnClassifer(List<SimpleClassifier> classifiers) {
         classifiers = normalizeClassifiers(classifiers);
         AMapping m = getMapping(classifiers);
-        //      double f = qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+        //      double f = qMeasure.calculate(source.getAllUris(), target.getAllUris(), m, beta);
         double f = computeQuality(m);
         // no need to update if the classifiers are already perfect
         if (f == 1.0) {
@@ -533,14 +546,14 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return
      */
     public Double computeQuality(AMapping map) {
-    	return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
+        return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
     }
 
     /** Set caches to trimmed caches according to the given reference mapping.
      * @param reference
      */
     public void setSupervisedBatch(AMapping reference) {
-    	logger.info("Setting training data to "+reference.size()+" links");
+        logger.info("Setting training data to "+reference.size()+" links");
         this.qMeasureType = QMeasureType.SUPERVISED;
         setPFMType(this.qMeasureType);
         for(String sUri : reference.getMap().keySet()) {
@@ -583,22 +596,22 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     public void setTarget(ACache target) {
         this.target = target;
     }
-    
+
     /**
      * TODO FIXME this is only a basic implementation
      * @param list
      * @return
      */
     public LinkSpecification getLinkSpecification(List<SimpleClassifier> list) {
-    	LinkSpecification parent = new LinkSpecification();
-    	// TODO apply linear weights
-    	for(SimpleClassifier sc : list) {
-    		LinkSpecification child = new LinkSpecification();
-    		child.readSpec(sc.getMetricExpression(), sc.getThreshold());
-    		child.setParent(parent);
-    		parent.addChild(child);
-    	}
-    	return parent;
+        LinkSpecification parent = new LinkSpecification();
+        // TODO apply linear weights
+        for(SimpleClassifier sc : list) {
+            LinkSpecification child = new LinkSpecification();
+            child.readSpec(sc.getMetricExpression(), sc.getThreshold());
+            child.setParent(parent);
+            parent.addChild(child);
+        }
+        return parent;
     }
 
 

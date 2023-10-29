@@ -1,17 +1,34 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -91,7 +108,7 @@ public class ScanIndexedHausdorffMeasure extends CentroidIndexedHausdorffMeasure
      *         threshold
      */
     public double getCurrentApproximation(int sourceIndex, AMapping knownDistances,
-            Map<Integer, List<Integer>> toCompute, double threshold) {
+                                          Map<Integer, List<Integer>> toCompute, double threshold) {
         if (toCompute.containsKey(sourceIndex)) {
             return -1.0; // distance is unknown
         } else {
@@ -119,7 +136,7 @@ public class ScanIndexedHausdorffMeasure extends CentroidIndexedHausdorffMeasure
      * @return true if computation should be terminated
      */
     public boolean checkTermination(Polygon s, AMapping knownDistances, Map<Integer, List<Integer>> toCompute,
-            double threshold) {
+                                    double threshold) {
         for (int i = 0; i < s.points.size(); i++) {
             if (getCurrentApproximation(i, knownDistances, toCompute, threshold) > threshold) {
                 return true;
@@ -140,7 +157,7 @@ public class ScanIndexedHausdorffMeasure extends CentroidIndexedHausdorffMeasure
      * @return distances that are still to be computed
      */
     public Map<Integer, List<Integer>> initToCompute(Polygon sPoly, Polygon tPoly, double threshold,
-            AMapping knownDistances) {
+                                                     AMapping knownDistances) {
         // 1. compute first distance
         Map<Integer, List<Integer>> toCompute = new HashMap<Integer, List<Integer>>();
         double approx, d = pointToPointDistance(sPoly.points.get(0), tPoly.points.get(0));
@@ -202,7 +219,7 @@ public class ScanIndexedHausdorffMeasure extends CentroidIndexedHausdorffMeasure
      * @return distances that are still to be computed
      */
     public Map<Integer, List<Integer>> updateToCompute(Polygon sPoly, Polygon tPoly, double threshold,
-            AMapping knownDistances, Map<Integer, List<Integer>> toCompute) {
+                                                       AMapping knownDistances, Map<Integer, List<Integer>> toCompute) {
         // 1. compute first distance
         int sIndex, tIndex;
         Map.Entry<Integer, List<Integer>> entries = toCompute.entrySet().iterator().next();

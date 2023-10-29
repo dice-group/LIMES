@@ -1,22 +1,29 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.cache;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 
 /**
@@ -30,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MemoryCache extends ACache {
     private static final Logger logger = LoggerFactory.getLogger(MemoryCache.class);
-    
+
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap = null;
 
@@ -47,6 +54,10 @@ public class MemoryCache extends ACache {
      * @return null if no next instance, else the next instance
      */
     public Instance getNextInstance() {
+        if (instanceIterator == null) {
+            instanceIterator = instanceMap.values().iterator();
+        }
+
         if (instanceIterator.hasNext()) {
             return instanceIterator.next();
         } else {
@@ -159,38 +170,12 @@ public class MemoryCache extends ACache {
         return c;
     }
 
-    public ACache processData(Map<String, String> propertyMap) {
-        ACache c = new MemoryCache();
-        for (Instance instance : getAllInstances()) {
-            String uri = instance.getUri();
-            for (String p : instance.getAllProperties()) {
-                for (String value : instance.getProperty(p)) {
-                    if (propertyMap.containsKey(p)) {
-                        c.addTriple(uri, p, Preprocessor.process(value, propertyMap.get(p)));
-                    } else {
-                        c.addTriple(uri, p, value);
-                    }
-                }
-            }
-        }
-        return c;
-    }
-
     public ACache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain) {
-        ACache c = new MemoryCache();
-        for (Instance instance : getAllInstances()) {
-            String uri = instance.getUri();
-            for (String p : instance.getAllProperties()) {
-                for (String value : instance.getProperty(p)) {
-                    if (p.equals(sourcePropertyName)) {
-                        c.addTriple(uri, targetPropertyName, Preprocessor.process(value, processingChain));
-                        c.addTriple(uri, p, value);
-                    } else {
-                        c.addTriple(uri, p, value);
-                    }
-                }
-            }
-        }
+        LinkedHashMap<String, Map<String,String>> functions = new LinkedHashMap<>();
+        HashMap<String, String> f1 = new HashMap<>();
+        f1.put(targetPropertyName, processingChain);
+        functions.put(sourcePropertyName,f1);
+        ACache c = Preprocessor.applyFunctionsToCache(this, functions, true);
         logger.debug("Cache is ready");
         return c;
     }
@@ -254,6 +239,33 @@ public class MemoryCache extends ACache {
             i = getNextInstance();
         }
         return model;
+    }
+
+    /**
+     * Ignores instanceIterator since there is no sane way to test the equality of iterators 
+     */
+    @Override
+    public MemoryCache clone() {
+        MemoryCache clone = new MemoryCache();
+        for(Instance i : getAllInstances()){
+            clone.addInstance(i.copy());
+        }
+        return clone;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(instanceMap);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof MemoryCache){
+            final MemoryCache other = (MemoryCache) obj;
+            return Objects.equals(instanceMap, other.instanceMap);
+        }else{
+            return false;
+        }
     }
 
 }

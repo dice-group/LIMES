@@ -1,20 +1,39 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
+
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- *
  */
 public class MeasurementErrorModifierTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(MeasurementErrorModifierTest.class);
     @Test
     public void test() {
 
@@ -63,15 +82,15 @@ public class MeasurementErrorModifierTest {
 
         // Print Modified Malta
         Polygon maltaDbpediapoly1G = new MeasurementErrorModifier().modify(maltaDbpediaPoly1, 2);
-        System.out.println("Malta in DBpedia after applying measurement error modifier: " + maltaDbpediapoly1G.points);
+        logger.info("{}","Malta in DBpedia after applying measurement error modifier: " + maltaDbpediapoly1G.points);
 
         Polygon maltaNutsPoly1G = new MeasurementErrorModifier().modify(maltaNutsPoly1, 2);
-        System.out.println("Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly1G.points);
+        logger.info("{}","Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly1G.points);
         Polygon maltaNutsPoly2G = new MeasurementErrorModifier().modify(maltaNutsPoly2, 2);
-        System.out.println("Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly2G.points);
+        logger.info("{}","Malta in Nuts after applying measurement error modifier: " + maltaNutsPoly2G.points);
 
         Polygon maltaLgdPoly1G = new MeasurementErrorModifier().modify(maltaLgdPoly1, 2);
-        System.out.println("Malta in LGD after applying measurement error modifier: " + maltaLgdPoly1G.points);
+        logger.info("{}","Malta in LGD after applying measurement error modifier: " + maltaLgdPoly1G.points);
     }
 
 }

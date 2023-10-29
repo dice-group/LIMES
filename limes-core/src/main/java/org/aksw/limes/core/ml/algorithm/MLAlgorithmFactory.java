@@ -1,15 +1,33 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.MeshEuclid;
-import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MLAlgorithmFactory {
 
-    
+
     public static final String EAGLE = "eagle";
     public static final String WOMBAT_SIMPLE = "wombat simple";
     public static final String WOMBAT_COMPLETE = "wombat complete";
@@ -17,7 +35,7 @@ public class MLAlgorithmFactory {
     public static final String EUCLID_LINEAR = "euclid linear";
     public static final String EUCLID_BOOLEAN = "euclid boolean";
     public static final String EUCLID_MESH = "euclid mesh";
-//    public static final String DECISION_TREE_LEARNING = "dtl";
+    public static final String DRAGON = "dragon";
 
     public static final String SUPERVISED_ACTIVE = "supervised active";
     public static final String SUPERVISED_BATCH = "supervised batch";
@@ -41,18 +59,22 @@ public class MLAlgorithmFactory {
             return WombatComplete.class;
         }
         if (name.equalsIgnoreCase(EUCLID_LINEAR)) {
-        	return LinearEuclid.class;
+            return LinearEuclid.class;
         }
         if (name.equalsIgnoreCase(EUCLID_BOOLEAN)) {
-        	return BooleanEuclid.class;
+            return BooleanEuclid.class;
         }
         if (name.equalsIgnoreCase(EUCLID_MESH)) {
-        	return MeshEuclid.class;
+            return MeshEuclid.class;
         }
         if (name.equalsIgnoreCase(LION)) {
             //@todo: fix this
             return Eagle.class;
         }
+        if (name.equalsIgnoreCase(DRAGON)) {
+            return Dragon.class;
+        }
+
 //        if(name.equalsIgnoreCase(DECISION_TREE_LEARNING)){
 //            return DecisionTreeLearning.class;
 //        }

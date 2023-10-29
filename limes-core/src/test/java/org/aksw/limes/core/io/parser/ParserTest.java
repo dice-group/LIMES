@@ -1,13 +1,28 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.io.parser;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.*;
 
 public class ParserTest {
     private static final Logger logger = LoggerFactory.getLogger(ParserTest.class.getName());
@@ -24,7 +39,6 @@ public class ParserTest {
                         + " with " + "threshold " + threshold);
             }
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -35,7 +49,6 @@ public class ParserTest {
         try {
             assertTrue(p.isAtomic());
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -44,7 +57,6 @@ public class ParserTest {
 
             assertFalse(p.isAtomic());
         } catch (UnsupportedOperator e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -56,7 +68,6 @@ public class ParserTest {
             p = new Parser("MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))",
                     0.5);
         } catch (RuntimeException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         assertTrue(p.getOperator().equals(Parser.MAX));
@@ -65,50 +76,44 @@ public class ParserTest {
     }
 
     @Test
-    public void atomicParcer() {
-
-        try {
-            Parser p = new Parser(
-                    "blabala(trigrams(x.skos:prefLabel,y.rdfs:label)|0.5,trigrams(x.osnp:valueLabel, y.rdfs:label)|0.5)",
-                    0.5);
+    public void testUnsupportedOperatorException() { 
+        assertThrows(UnsupportedOperator.class, () -> {
+            Parser p = new Parser("blabala(trigrams(x.skos:prefLabel,y.rdfs:label)|0.5,trigrams(x.osnp:valueLabel, y.rdfs:label)|0.5)",0.5);
             p.isAtomic();
-        } catch (RuntimeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        });
     }
-    
+
     @Test
-    public void weightedTest(){
-    	double theta = 0.8;
-    	Parser p = new Parser("ADD("
-    							+ "0.5* ADD("
-    								+ "0.8* ExactMatch(a.purl:identifier, b.sg:hasPerson),"
-    								+ "0.2* Jaro(a.foaf:name, b.sg:publishedName)),"
-    							+ "0.5* ADD("
-    								+ "0.8* ExactMatch(a.DBgridID, b.SGgridID),"
-    								+ "0.2* Jaro(a.foaf:name, b.SGgridName)))",theta);
-    	assertEquals("ADD(0.8*ExactMatch(a.purl:identifier,b.sg:hasPerson),0.2*Jaro(a.foaf:name,b.sg:publishedName))",p.getLeftTerm());
-    	assertEquals("ADD(0.8*ExactMatch(a.DBgridID,b.SGgridID),0.2*Jaro(a.foaf:name,b.SGgridName))",p.getRightTerm());
-    	assertEquals(0.5,p.getLeftCoefficient(),0.0);
-    	assertEquals(0.5,p.getRightCoefficient(),0.0);
+    public void testWeighted(){
+        double theta = 0.8;
+        Parser p = new Parser("ADD("
+                + "0.5* ADD("
+                + "0.8* ExactMatch(a.purl:identifier, b.sg:hasPerson),"
+                + "0.2* Jaro(a.foaf:name, b.sg:publishedName)),"
+                + "0.5* ADD("
+                + "0.8* ExactMatch(a.DBgridID, b.SGgridID),"
+                + "0.2* Jaro(a.foaf:name, b.SGgridName)))",theta);
+        assertEquals("ADD(0.8*ExactMatch(a.purl:identifier,b.sg:hasPerson),0.2*Jaro(a.foaf:name,b.sg:publishedName))",p.getLeftTerm());
+        assertEquals("ADD(0.8*ExactMatch(a.DBgridID,b.SGgridID),0.2*Jaro(a.foaf:name,b.SGgridName))",p.getRightTerm());
+        assertEquals(0.5,p.getLeftCoefficient(),0.0);
+        assertEquals(0.5,p.getRightCoefficient(),0.0);
         Parser p1 = new Parser(p.getLeftTerm(), Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient());
-    	assertEquals("ExactMatch(a.purl:identifier,b.sg:hasPerson)", p1.getLeftTerm());
-    	assertEquals("Jaro(a.foaf:name,b.sg:publishedName)",p1.getRightTerm());
-    	assertEquals(0.8,p1.getLeftCoefficient(),0.0);
-    	assertEquals(0.2,p1.getRightCoefficient(),0.0);
+        assertEquals("ExactMatch(a.purl:identifier,b.sg:hasPerson)", p1.getLeftTerm());
+        assertEquals("Jaro(a.foaf:name,b.sg:publishedName)",p1.getRightTerm());
+        assertEquals(0.8,p1.getLeftCoefficient(),0.0);
+        assertEquals(0.2,p1.getRightCoefficient(),0.0);
         Parser p2 = new Parser(p.getRightTerm(), Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient());
         assertEquals("ExactMatch(a.DBgridID,b.SGgridID)",p2.getLeftTerm());
         assertEquals("Jaro(a.foaf:name,b.SGgridName)", p2.getRightTerm());
-    	assertEquals(0.8,p2.getLeftCoefficient(),0.0);
-    	assertEquals(0.2,p2.getRightCoefficient(),0.0);
+        assertEquals(0.8,p2.getLeftCoefficient(),0.0);
+        assertEquals(0.2,p2.getRightCoefficient(),0.0);
     }
-    
+
     @Test
-    public void weih2(){
-    	Parser p = new Parser("ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)",0.8);
-    	System.out.println(p.getLeftCoefficient());
-    	System.out.println(p.getRightCoefficient());
+    public void testGetCoefficients(){
+        Parser p = new Parser("ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)",0.8);
+        assertEquals(p.getLeftCoefficient(), 0,3);
+        assertEquals(p.getRightCoefficient(), 0,7);
     }
 
 }

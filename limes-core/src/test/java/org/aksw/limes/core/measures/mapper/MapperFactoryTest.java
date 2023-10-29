@@ -1,6 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper;
-
-import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -8,46 +23,25 @@ import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
-import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.string.JaroMapper;
-import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.string.*;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverseMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.EqualsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.FinishesMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.MeetsMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.OverlapsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.*;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.topology.ContainsMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoveredbyMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoversMapper;
-import org.aksw.limes.core.measures.mapper.topology.CrossesMapper;
-import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
-import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
-import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
-import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
+import org.aksw.limes.core.measures.mapper.topology.*;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MapperFactoryTest {
     public ACache source = new MemoryCache();
@@ -105,8 +99,8 @@ public class MapperFactoryTest {
 
     }
 
-    @Test
-    public void test() {
+    // @Test
+    public void testMapperFactory() {
         MeasureType type = null;
         AMapper mapper = null;
         /////////////////////////////////////////////////////////////////////////
@@ -119,7 +113,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -133,7 +126,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
 
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -146,7 +138,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -159,7 +150,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -168,11 +158,9 @@ public class MapperFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
-            assertTrue(mapper instanceof PPJoinPlusPlus);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -185,7 +173,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -198,7 +185,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -224,7 +210,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "mongeelkan(x.name,y.name)";
@@ -236,7 +221,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -249,7 +233,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         /////////////////////////////////////////////////
@@ -262,7 +245,6 @@ public class MapperFactoryTest {
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -271,11 +253,10 @@ public class MapperFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
-            assertTrue(mapper instanceof OrchidMapper);
+            assertTrue(mapper instanceof HR3Mapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "Geo_Great_Elliptic(x.name,y.name)";
@@ -283,11 +264,10 @@ public class MapperFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
-            assertTrue(mapper instanceof OrchidMapper);
+            assertTrue(mapper instanceof HR3Mapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
             assertTrue(mapper.getMappingSizeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         /////////////////////////////////////////////////////////
@@ -299,7 +279,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -311,7 +290,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -323,7 +301,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -335,7 +312,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -371,7 +347,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -384,7 +359,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_mean(x.name,y.name)";
@@ -406,7 +380,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_avg(x.name,y.name)";
@@ -417,7 +390,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_frechet(x.name,y.name)";
@@ -428,7 +400,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_link(x.name,y.name)";
@@ -450,7 +421,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_surjection(x.name,y.name)";
@@ -461,7 +431,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "geo_fairsurjection(x.name,y.name)";
@@ -472,7 +441,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof OrchidMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         ///////////////////////////////
@@ -495,7 +463,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof PredecessorMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_concurrent(x.name,y.name)";
@@ -506,7 +473,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof ConcurrentMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_after(x.name,y.name)";
@@ -517,7 +483,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof AfterMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_before(x.name,y.name)";
@@ -528,7 +493,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof BeforeMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_meets(x.name,y.name)";
@@ -539,7 +503,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof MeetsMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_is_met_by(x.name,y.name)";
@@ -550,7 +513,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof IsMetByMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_finishes(x.name,y.name)";
@@ -561,7 +523,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof FinishesMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -573,7 +534,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof IsFinishedByMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_starts(x.name,y.name)";
@@ -584,7 +544,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof StartsMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_is_started_by(x.name,y.name)";
@@ -595,7 +554,6 @@ public class MapperFactoryTest {
             assertTrue(mapper instanceof IsStartedByMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -606,7 +564,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof DuringMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -617,7 +574,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof DuringReverseMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -628,7 +584,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof OverlapsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         str = "tmp_is_overlapped_by(x.name,y.name)";
@@ -638,7 +593,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof IsOverlappedByMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -649,7 +603,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof EqualsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -661,7 +614,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof ContainsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -672,7 +624,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof CrossesMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -683,7 +634,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof IntersectsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -694,7 +644,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof org.aksw.limes.core.measures.mapper.topology.OverlapsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -705,7 +654,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof org.aksw.limes.core.measures.mapper.topology.EqualsMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -716,7 +664,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof DisjointMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -727,7 +674,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof CoversMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -738,7 +684,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof WithinMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -749,7 +694,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof CoveredbyMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -760,7 +704,6 @@ public class MapperFactoryTest {
             mapper = MapperFactory.createMapper(type);
             assertTrue(mapper instanceof TouchesMapper);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

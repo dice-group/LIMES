@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm;
 
 
@@ -14,19 +31,20 @@ public class LearningParameter {
     protected double rangeEnd;
     protected double rangeStep;
     protected String description;
+    protected String[] instanceOptions;
 
-    
+
     /**
      * Constructor
      */
     public LearningParameter(){
         super();
     }
-    
-    
+
+
     /**
      * Constructor
-     * 
+     *
      * @param name parameter's name
      * @param value parameter's value
      */
@@ -35,10 +53,10 @@ public class LearningParameter {
         this.name = name;
         this.value = value;
     }
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param name parameter's name
      * @param value parameter's value
      * @param clazz parameter's class
@@ -48,7 +66,7 @@ public class LearningParameter {
      * @param description parameter's description
      */
     public LearningParameter(String name, Object value, Class<?> clazz, double rangeStart, double rangeEnd,
-            double rangeStep, String description) {
+                             double rangeStep, String description) {
         this(name, value);
         this.clazz = clazz;
         this.rangeStart = rangeStart;
@@ -57,8 +75,20 @@ public class LearningParameter {
         this.description = description;
     }
 
-    
-    
+
+    public LearningParameter(String name, Object value, Class<?> clazz, String[] instanceOptions, String description) {
+        this(name, value);
+        this.clazz = clazz;
+        this.instanceOptions = instanceOptions;
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("").append(name).append(" : ").append(value).toString();
+    }
+
+
     /**
      * @return parameter's range step
      */
@@ -79,83 +109,93 @@ public class LearningParameter {
     public String getName() {
         return name;
     }
-    
+
     /**
      * @param name to be set
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * @return parameter's value
      */
     public Object getValue() {
         return value;
     }
-    
+
     /**
      * @param value to be set
      */
     public void setValue(Object value) {
         this.value = value;
     }
-    
+
     /**
      * @return parameter's class 
      */
     public Class<?> getClazz() {
         return clazz;
     }
-    
+
     /**
      * @param clazz to be set
      */
     public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
-    
+
     /**
      * @return parameter's range start as double
      */
     public double getRangeStart() {
         return rangeStart;
     }
-    
+
     /**
      * @param rangeStart to be set
      */
     public void setRangeStart(double rangeStart) {
         this.rangeStart = rangeStart;
     }
-    
+
     /**
      * @return parameter's range end
      */
     public double getRangeEnd() {
         return rangeEnd;
     }
-    
+
     /**
      * @param rangeEnd to be set
      */
     public void setRangeEnd(double rangeEnd) {
         this.rangeEnd = rangeEnd;
     }
-    
+
     /**
      * @return parameter's description
      */
     public String getDescription() {
         return description;
     }
-    
+
     /**
      * @param description to be set
      */
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String[] getInstanceOptions() {
+        return instanceOptions;
+    }
+
+
+    public void setInstanceOptions(String[] instanceOptions) {
+        this.instanceOptions = instanceOptions;
+    }
+
 
     @Override
     public int hashCode() {
@@ -206,6 +246,6 @@ public class LearningParameter {
             return false;
         return true;
     }
-    
+
 
 }

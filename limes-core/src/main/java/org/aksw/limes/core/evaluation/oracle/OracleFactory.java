@@ -1,8 +1,26 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.evaluation.oracle;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
+import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +57,9 @@ public class OracleFactory {
         if (inputType.equalsIgnoreCase("csv")) //scan input types here
         {
             reader = new CSVMappingReader(filePath);
-        } else if (inputType.equalsIgnoreCase("xml")) //scan input types here
+        } else if (inputType.equalsIgnoreCase("rdf")) //scan input types here
         {
-            //commented by mofeed to check if it exists or not and the possibilities of adding it
-            //reader = new XMLMappingReader();
+            reader = new RDFMappingReader(filePath);
         } else if (inputType.equalsIgnoreCase("tab")) //scan input types here
         {
             reader = new CSVMappingReader(filePath);
@@ -55,7 +72,7 @@ public class OracleFactory {
         AMapping m = reader.read();
 
         //finally return the right type of oracle
-        if (inputType.equals("simple")) //scan input types here
+        if (oracleType.equals("simple")) //scan input types here
         {
             oracle = new SimpleOracle(m);
         } else //default
@@ -66,3 +83,4 @@ public class OracleFactory {
         return oracle;
     }
 }
+

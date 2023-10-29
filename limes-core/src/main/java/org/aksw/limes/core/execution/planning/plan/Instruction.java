@@ -1,5 +1,24 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.plan;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +67,7 @@ public class Instruction {
     private int targetIndex;
     /**
      * Index for storing the result mapping in the execution engine buffer.
-     * 
+     *
      */
     private int resultIndex;
 
@@ -67,7 +86,7 @@ public class Instruction {
      *            Target index
      * @param result
      *            Result index
-     * 
+     *
      */
     public Instruction(Command c, String measure, String thrs, int source, int target, int result) {
         command = c;
@@ -79,6 +98,7 @@ public class Instruction {
     }
 
     /* Setters and Getters for private fields */
+
     /**
      * Returns the result index of the instruction.
      *
@@ -152,7 +172,7 @@ public class Instruction {
      *            The resourceIndex to set
      */
     public void setSourceIndex(int resourceIndex) {
-        this.sourceIndex = resourceIndex;
+        sourceIndex = resourceIndex;
     }
 
     /**
@@ -199,7 +219,7 @@ public class Instruction {
      * @return the mainThreshold
      */
     public String getMainThreshold() {
-        return this.mainThreshold;
+        return mainThreshold;
     }
 
     /**
@@ -209,7 +229,7 @@ public class Instruction {
      *            The mainThreshold to set
      */
     public void setMainThreshold(String threshold) {
-        this.mainThreshold = threshold;
+        mainThreshold = threshold;
     }
 
     /**
@@ -222,74 +242,52 @@ public class Instruction {
      */
     @Override
     public boolean equals(Object other) {
-        Instruction i = (Instruction) other;
-        if (i == null)
+        if (!(other instanceof Instruction)) {
             return false;
-
-        if (this.mainThreshold == null && i.getMainThreshold() == null)
-            return (this.toSmallString().equals(((Instruction) other).toSmallString()));
-        if (this.mainThreshold != null && i.getMainThreshold() == null)
-            return false;
-        if (this.mainThreshold == null && i.getMainThreshold() != null)
-            return false;
-        if (this.mainThreshold.equals(i.getMainThreshold()))
-            return (this.toSmallString().equals(((Instruction) other).toSmallString()));
-
-        return false;
+        }
+        EqualsBuilder eb = new EqualsBuilder();
+        Instruction o = (Instruction) other;
+        eb.append(command, o.getCommand());
+        eb.append(measureExpression, o.getMeasureExpression());
+        eb.append(threshold, o.getThreshold());
+        return eb.isEquals();
     }
 
-    /**
-     * String representation of the Instruction excluding source, target and
-     * result index. For internal use only.
-     *
-     * @return a string representations of the instruction
-     */
-    private String toSmallString() {
-        String s = "";
-        if (command.equals(Command.RUN)) {
-            s = "RUN\t";
-        } else if (command.equals(Command.FILTER)) {
-            s = "FILTER\t";
-        } else if (command.equals(Command.DIFF)) {
-            s = "DIFF\t";
-        } else if (command.equals(Command.INTERSECTION)) {
-            s = "INTERSECTION\t";
-        } else if (command.equals(Command.UNION)) {
-            s = "UNION\t";
-        } else if (command.equals(Command.XOR)) {
-            s = "XOR\t";
-        } else if (command.equals(Command.REVERSEFILTER)) {
-            s = "REVERSEFILTER\t";
-        }
-
-        s = s + measureExpression + "\t";
-        s = s + threshold + "\t";
-        return s;
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hb = new HashCodeBuilder();
+        hb.append(command);
+        hb.append(measureExpression);
+        hb.append(threshold);
+        return hb.toHashCode();
     }
 
     @Override
     public Instruction clone() {
 
         Command command = this.command;
-        int sourceMapping = this.sourceIndex;
-        int targetMapping = this.targetIndex;
+        int sourceMapping = sourceIndex;
+        int targetMapping = targetIndex;
         int resultIndex = this.resultIndex;
 
         Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
-        if (this.mainThreshold == null)
+        if (mainThreshold == null) {
             newInstruction.setMainThreshold(null);
-        else
-            newInstruction.setMainThreshold(new String(this.mainThreshold));
+        } else {
+            newInstruction.setMainThreshold(new String(mainThreshold));
+        }
 
-        if (this.threshold == null)
+        if (threshold == null) {
             newInstruction.setThreshold(null);
-        else
-            newInstruction.setThreshold(new String(this.threshold));
+        } else {
+            newInstruction.setThreshold(new String(threshold));
+        }
 
-        if (this.measureExpression == null)
+        if (measureExpression == null) {
             newInstruction.setMeasureExpression(null);
-        else
-            newInstruction.setMeasureExpression(new String(this.measureExpression));
+        } else {
+            newInstruction.setMeasureExpression(new String(measureExpression));
+        }
 
         return newInstruction;
     }
@@ -299,6 +297,7 @@ public class Instruction {
      *
      * @return a string representations of instruction
      */
+    @Override
     public String toString() {
         String s = "";
         if (command.equals(Command.RUN)) {

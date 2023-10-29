@@ -1,15 +1,25 @@
 /*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -19,6 +29,8 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
+
+import java.util.*;
 
 /**
  * Still need to add tabu list. Basically checks whether two polygons have
@@ -46,10 +58,13 @@ public class GeoHR3 {
     int latMax, latMin, longMax, longMin;
 
     public GeoHR3(float distanceThreshold, int granularity, MeasureType hd) {
-        this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.distanceThreshold = distanceThreshold;
+        this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.granularity = granularity;
         HR3 = true;
+        if (distanceThreshold == 0) {
+            angularThreshold = (float) ((0.001 * 180) / (Math.PI * OrthodromicDistance.R));
+        }
         delta = angularThreshold / (float) granularity;
         latMax = (int) Math.floor(90f / delta) - 1; // we count 0 to the
         // positives
@@ -127,11 +142,13 @@ public class GeoHR3 {
             // we have reached the north or south pole
             if (realLat == latMax || realLat == latMin) {
                 for (int deltaLong = longMin; deltaLong <= longMax; deltaLong++) {
-                    toCompare.add(Arrays.asList(new Integer[] { realLat, deltaLong }));
+                    if (index.getSquare(realLat, deltaLong).size() > 0) {
+                        toCompare.add(Arrays.asList(new Integer[] { realLat, deltaLong }));
+                    }
                 }
             } // if latitude index is negative then take the circle above, i.e.,
-              // else take the one below. Equivalent to taking the latitude
-              // circle with the largest radius
+            // else take the one below. Equivalent to taking the latitude
+            // circle with the largest radius
             else {
                 if (realLat < 0) {
                     localGranularity = (int) Math

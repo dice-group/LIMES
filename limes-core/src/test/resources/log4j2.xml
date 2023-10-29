@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="FATAL">
+<Appenders>
+    <Routing name="Routing">
+        <Routes pattern="$${ctx:requestId}">
+            <Route>
+                <RandomAccessFile name="user.log" append="false" fileName=".server-storage/logs/${ctx:requestId}.log">
+                    <PatternLayout>
+                        <pattern>%d{ISO8601} [%t] %p %c %L - %m%n</pattern>
+                    </PatternLayout>
+                </RandomAccessFile>
+            </Route>
+        </Routes>
+    </Routing>
+</Appenders>
+<Loggers>
+    <Root level="fatal">
+        <AppenderRef ref="Routing" level="info">
+            <ThreadContextMapFilter onMatch="DENY" onMismatch="ACCEPT">
+                <KeyValuePair key="requestId" value="" />
+            </ThreadContextMapFilter>
+        </AppenderRef>
+    </Root>
+</Loggers>
+</Configuration>

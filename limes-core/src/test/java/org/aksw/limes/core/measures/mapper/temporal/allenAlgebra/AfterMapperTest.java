@@ -1,9 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -18,9 +30,17 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.junit.Assert.assertTrue;
 
 public class AfterMapperTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(AfterMapperTest.class);
     public ACache source = new MemoryCache();
     public ACache target = new MemoryCache();
 
@@ -65,9 +85,8 @@ public class AfterMapperTest {
         source.addTriple("S12", "beginsAtDateTime", "2015-05-20T08:31:04+02:00");
         source.addTriple("S12", "endsAtDateTime", "2015-05-20T08:45:04+02:00");
 
-        //target = source;
-        
-        
+        // target = source;
+
         target.addTriple("S1", "b", "2015-05-20T08:21:04+02:00");
         target.addTriple("S1", "e", "2015-05-20T08:22:04+02:00");
 
@@ -123,38 +142,35 @@ public class AfterMapperTest {
                 dates.add(e);
         }
         for (String s : dates) {
-            System.out.println(s);
+            logger.info("{}",s);
         }
     }
 
     @Test
     public void simpleLS() {
-        System.out.println("simpleLS");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        logger.info("{}","simpleLS");
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
     }
 
     @Test
     public void similarity() {
-        System.out.println("similarity");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        logger.info("{}","similarity");
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
 
         AMapping m2 = MappingFactory.createDefaultMapping();
         for (Instance s : source.getAllInstances()) {
             for (Instance t : target.getAllInstances()) {
                 AfterMeasure measure = new AfterMeasure();
-                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime",
-                        "b|e");
+                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime", "b|e");
                 if (sim != 0)
                     m2.add(s.getUri(), t.getUri(), sim);
             }
@@ -164,16 +180,14 @@ public class AfterMapperTest {
 
     @Test
     public void reverse() {
-        System.out.println("reverse");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        logger.info("{}","reverse");
+        LinkSpecification ls = new LinkSpecification("tmp_after(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
-        System.out.println(m);
+        logger.info("{}",m);
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        LinkSpecification ls2 = new LinkSpecification(
-                "tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
+        LinkSpecification ls2 = new LinkSpecification("tmp_before(x.beginsAtDateTime|endsAtDateTime,y.b|e)", 1.0);
         AMapping m2 = e.execute(ls2, p);
         AMapping m3 = MappingFactory.createDefaultMapping();
         for (String s : m2.getMap().keySet()) {
@@ -182,7 +196,7 @@ public class AfterMapperTest {
             }
         }
 
-        System.out.println(m3);
+        logger.info("{}",m3);
         assertTrue(m.equals(m3));
     }
 }

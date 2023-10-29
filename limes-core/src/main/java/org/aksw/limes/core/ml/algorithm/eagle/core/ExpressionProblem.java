@@ -1,20 +1,26 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.ml.algorithm.eagle.core;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.AtomicPreprocessingCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.ChainedPreprocessingCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.MetricCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.NestedBoolean;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetPropertyPair;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPreprocessMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPropertyPair;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.*;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -25,11 +31,15 @@ import org.jgap.gp.terminal.Terminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
+import java.util.List;
+
 
 /**
  * JGAP GPProblem implementation for EAGLE and all derivates.
- * Creates a population of individuals for the given linking task. 
- * @author Klaus Lyko (lyko@informatik.uni-leipzig.de) 
+ * Creates a population of individuals for the given linking task.
+ *
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
@@ -97,7 +107,7 @@ public class ExpressionProblem extends GPProblem {
         maxDepths[0] = 6;
         boolean[] fullModeAllowed = {true};
         int maxNodes = 100;
-        
+
         return GPGenotype.randomInitialGenotype(config,
                 types, argTypes, nodeSets,
                 minDepths, maxDepths, maxNodes, fullModeAllowed,
@@ -157,40 +167,40 @@ public class ExpressionProblem extends GPProblem {
         /**
          * FIXME reset out commenting additional metrics and operators
          */
-//			nodes.add(new NestedBoolean("MINUS", config))
+//          nodes.add(new NestedBoolean("MINUS", config))
         nodes.add(new NestedBoolean("OR", config));
-//			nodes.add(new NestedBoolean("XOR", config));
-//			nodes.add(new AddMetric(config));
+//          nodes.add(new NestedBoolean("XOR", config));
+//          nodes.add(new AddMetric(config));
         nodes.add(new MetricCommand(config, LinkSpecification.class));
 
-        
+
         /*#################### pointset measures ####################*/
-		if(config.hasPointSetProperties()) {					
-			nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
-		for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
-				nodes.add( new PointSetPropertyPair(config, PairSimilar.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
-			}
-		}	
+        if(config.hasPointSetProperties()) {
+            nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
+            for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
+                nodes.add( new PointSetPropertyPair(config, PairSimilar.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
+            }
+        }
 
 
-//		if(config.hasNumericProperties()) {					
-//			nodes.add(new NumberMeasure(config));
-//			for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
-//				nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
-//			}
-//			// threshold for numeric properties - more restrictive due to possible memory lacks		
-//		    nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
-//			   		ResourceTerminalType.NUMBERTHRESHOLD.intValue(), true));
-//		}
+//      if(config.hasNumericProperties()) {                 
+//          nodes.add(new NumberMeasure(config));
+//          for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
+//              nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
+//          }
+//          // threshold for numeric properties - more restrictive due to possible memory lacks     
+//          nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
+//                  ResourceTerminalType.NUMBERTHRESHOLD.intValue(), true));
+//      }
 
-//		if(config.hasDateProperties()) {
-//			nodes.add(new DateMeasure("yearsim", config));
-//			System.out.println("Creating date props");
-//			
-//			for(int i=0; i<config.getPropertyMapping().datePropPairs.size(); i++) {
-//				nodes.add( new DatePropertyPair(config, Pair.class, ResourceTerminalType.DATEPROPPAIR.intValue(), true, i));
-//			}
-//		}
+//      if(config.hasDateProperties()) {
+//          nodes.add(new DateMeasure("yearsim", config));
+//          System.out.println("Creating date props");
+//          
+//          for(int i=0; i<config.getPropertyMapping().datePropPairs.size(); i++) {
+//              nodes.add( new DatePropertyPair(config, Pair.class, ResourceTerminalType.DATEPROPPAIR.intValue(), true, i));
+//          }
+//      }
 
         if (config.redundantCommands()) {
             nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.0d, 1.0d, false,
@@ -242,11 +252,11 @@ public class ExpressionProblem extends GPProblem {
         nodes.add(new AtomicPreprocessingCommand("regularAlphabet", config));
 
         nodes.add(new ChainedPreprocessingCommand("nolang", config));
-//		nodes.add(new ChainedPreprocessingCommand("cleaniri", config));
+//      nodes.add(new ChainedPreprocessingCommand("cleaniri", config));
         nodes.add(new ChainedPreprocessingCommand("uppercase", config));
         nodes.add(new ChainedPreprocessingCommand("lowercase", config));
-//		nodes.add(new ChainedPreprocessingCommand("removebraces", config));
-//		nodes.add(new ChainedPreprocessingCommand("regularAlphabet", config));
+//      nodes.add(new ChainedPreprocessingCommand("removebraces", config));
+//      nodes.add(new ChainedPreprocessingCommand("regularAlphabet", config));
 
         nodes.add(new StringPreprocessMeasure("trigrams", config, String.class, true));
         nodes.add(new StringPreprocessMeasure("jaccard", config, String.class, true));
@@ -278,7 +288,7 @@ public class ExpressionProblem extends GPProblem {
         DATEPROPPAIR(4),
         POINTSETPROPPAIR(5),
         NUMBERTHRESHOLD(6),
-        GOBALTHRESHOLD(7),      
+        GOBALTHRESHOLD(7),
         PREPROCESS(10);
         private int m_value;
 

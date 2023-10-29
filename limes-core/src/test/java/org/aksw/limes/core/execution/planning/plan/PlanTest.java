@@ -1,8 +1,21 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.aksw.limes.core.execution.planning.plan;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
 
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -12,6 +25,11 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PlanTest {
     public ACache source = new MemoryCache();
@@ -71,46 +89,37 @@ public class PlanTest {
 
     @Test
     public void addInstruction() {
-        System.out.println("addInstruction");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
-        System.out.println("Size before: " + plan.size());
 
         plan.addInstruction(run1);
         plan.addInstruction(null);
 
         assertTrue(plan.size() == 1);
-        System.out.println("Size after: " + plan.size());
 
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void removeInstruction() {
-        System.out.println("removeInstruction");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
         plan.addInstruction(null);
         plan.addInstruction(null);
-        System.out.println("Size before: " + plan.size());
 
         plan.removeInstruction(run1);
         plan.removeInstruction(null);
-        System.out.println("Size after: " + plan.size());
         assertTrue(plan.size() == 0);
 
         plan.removeInstruction(-1);
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void removeInstruction2() {
-        System.out.println("removeInstruction2");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
@@ -122,91 +131,71 @@ public class PlanTest {
         plan.addInstruction(run2);
         plan.addInstruction(union);
 
-        System.out.println("Plan size with Union: " + plan.size());
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping mUnion = ee.executeInstructions(plan);
-        System.out.println("Size of Mapping with Union: " + mUnion.size());
 
         plan.removeInstruction(union);
         plan.addInstruction(instersection);
 
-        System.out.println("Plan size with Intersection: " + plan.size());
         AMapping mIntersection = ee.executeInstructions(plan);
-        System.out.println("Size of Mapping with Intersection: " + mIntersection.size());
 
         assertTrue(!mUnion.toString().equals(mIntersection.toString()));
         assertTrue(plan.getInstructionList().contains(union) == false);
 
 
-        System.out.println("------------------------");
-
     }
 
     @Test
     public void removeNonExistingInstruction() {
-        System.out.println("removeNonExistingInstruction");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
-        System.out.println("Size before: " + plan.size());
 
         Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
         plan.removeInstruction(run2);
-        System.out.println("Size after: " + plan.size());
         assertTrue(plan.size() != 0);
 
         plan.removeInstruction(-1);
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void removeInstructionWithIndex() {
-        System.out.println("removeInstructionWithIndex");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
-        System.out.println("Size before: " + plan.size());
 
 
         plan.removeInstruction(0);
-        System.out.println("Size after: " + plan.size());
         assertTrue(plan.size() == 0);
 
         plan.addInstruction(run1);
-        System.out.println("Size before: " + plan.size());
 
         plan.removeInstruction(20);
-        System.out.println("Size after: " + plan.size());
         assertTrue(plan.size() != 0);
 
         plan.removeInstruction(-1);
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void isEmpty() {
-        System.out.println("isEmpty");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         plan.addInstruction(run1);
-        System.out.println("Size before: " + plan.size());
         assertTrue(plan.isEmpty() == false);
 
         plan.removeInstruction(null);
         assertTrue(plan.isEmpty() == false);
 
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void getInstructionList() {
-        System.out.println("getInstructionList");
 
         Plan plan = new Plan();
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
@@ -214,9 +203,7 @@ public class PlanTest {
         plan.addInstruction(run1);
         plan.addInstruction(run2);
         List<Instruction> list = plan.getInstructionList();
-        System.out.println("Size before: " + plan.size());
 
-        System.out.println("Size of Instruction list " + list.size());
 
         assertTrue(list.size() == plan.size());
 
@@ -230,19 +217,14 @@ public class PlanTest {
         assertTrue(list.contains(run4) == false);
 
         list.add(run4);
-        System.out.println(list);
-        System.out.println(plan.getInstructionList());
 
         assertTrue(list.size() == plan.getInstructionList().size());
 
-
-        System.out.println("------------------------");
 
     }
 
     @Test
     public void Clone() {
-        System.out.println("Clone");
         Plan plan1 = new Plan();
 
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
@@ -258,33 +240,23 @@ public class PlanTest {
         //////////////////////////////////////////////////////////////////////////////////////////
         Plan clonePlan = plan1.clone();
         // check plan itself
-        System.out.println("Plan hashCode: " + plan1.hashCode());
-        System.out.println("PlanClone hashCode: " + clonePlan.hashCode());
-        assertTrue(plan1.hashCode() != clonePlan.hashCode());
-        System.out.println("\n");
+        assertEquals(plan1.hashCode(), clonePlan.hashCode());
 
         // check instructionList
-        System.out.println("InstructionList hashCode: " + plan1.getInstructionList().hashCode());
-        System.out.println("InstructionListClone hashCode: " + clonePlan.getInstructionList().hashCode());
-        assertTrue(plan1.getInstructionList().hashCode() != clonePlan.getInstructionList().hashCode());
+        assertEquals(plan1.getInstructionList().hashCode(),
+                clonePlan.getInstructionList().hashCode());
         for (int i = 0; i < plan1.getInstructionList().size(); i++) {
 
             Instruction inst = plan1.getInstructionList().get(i);
             Instruction instClone = clonePlan.getInstructionList().get(i);
 
-            System.out.println(inst);
-            System.out.println("----Instruction hashCode: " + inst.hashCode());
-            System.out.println(instClone);
-            System.out.println("----InstructionClone hashCode: " + instClone.hashCode());
-            assertTrue(inst.hashCode() != instClone.hashCode());
+            assertEquals(inst.hashCode(), instClone.hashCode());
         }
-        System.out.println("\n");
 
     }
 
     @Test
     public void Equal() {
-        System.out.println("Equal");
         Plan plan1 = new Plan();
 
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
@@ -305,7 +277,6 @@ public class PlanTest {
         NestedPlan plan3 = null;
         assertTrue(!plan1.equals(plan3));
         ///////////////////////////////////////////////////////////////////////////////////////////
-        System.out.println("------------------------");
 
 
     }

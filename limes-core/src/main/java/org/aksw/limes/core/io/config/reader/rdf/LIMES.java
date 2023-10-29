@@ -1,3 +1,20 @@
+/*
+ * LIMES Core Library - LIMES – Link Discovery Framework for Metric Spaces.
+ * Copyright © 2011 Data Science Group (DICE) (ngonga@uni-paderborn.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  *
  */
@@ -25,7 +42,8 @@ public class LIMES {
     public static final Property pageSize = property("pageSize");
     public static final Property restriction = property("restriction");
     public static final Property property = property("property");
-    public static final Property optionalProperty = property("optionalProperty");  
+    public static final Property function = property("function");
+    public static final Property optionalProperty = property("optionalProperty");
     public static final Property expression = property("expression");
     public static final Property threshold = property("threshold");
     public static final Property file = property("file");
@@ -35,6 +53,8 @@ public class LIMES {
     public static final Property executionPlanner = property("executionPlanner");
     public static final Property executionRewriter = property("executionRewriter");
     public static final Property executionEngine = property("executionEngine");
+    public static final Property optimizationTime = property("optimizationTime");
+    public static final Property expectedSelectivity = property("expectedSelectivity");
     public static final Property granularity = property("granularity");
     public static final Property outputFormat = property("outputFormat");
     public static final Property mlParameterName = property("mlParameterName");
