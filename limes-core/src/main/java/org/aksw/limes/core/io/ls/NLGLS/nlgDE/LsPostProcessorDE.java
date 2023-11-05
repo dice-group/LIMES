@@ -33,7 +33,7 @@ public class LsPostProcessorDE {
 	private static Lexicon lexicon=Lexicon.getDefaultLexicon();
 	public static List<NLGElement> allNLGElement;
 
-	void postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	public String postProcessor(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		LinkSpecSummeryDE linkSpecsSummery= new LinkSpecSummeryDE();
 		LsPreProcessorDE lsPreProcessor=new LsPreProcessorDE();                     
@@ -89,6 +89,7 @@ public class LsPostProcessorDE {
 				NLGElement clauseRealised = clauseRealiser.realise(clause2);
 				System.out.println(clauseRealised);
 				clause2=new SPhraseSpec(nlgFactory);
+				return clauseRealised.toString();
 
 			}
 			if(d==0) 
@@ -109,6 +110,7 @@ public class LsPostProcessorDE {
 				System.out.println(clauseRealised);
 				clause2=new SPhraseSpec(nlgFactory);
 				subject.addComplement(name);
+				return clauseRealised.toString();
 			}
 			if(d>0&& d<1) 
 			{
@@ -129,11 +131,12 @@ public class LsPostProcessorDE {
 				NLGElement clauseRealised = clauseRealiser.realise(clause2);
 				System.out.println(clauseRealised);
 				clause2=new SPhraseSpec(nlgFactory);
-
+				return clauseRealised.toString();
 			}
 
 
 		}
+		return "";
 	}
 
 	// ACache source, ACache target

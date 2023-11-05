@@ -26,6 +26,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,6 +38,7 @@ public class LimesResult {
     private ACache sourceCache = null;
     private ACache targetCache = null;
     private long runTime = 0;
+    private Map<String, String> lsVerbalization = null; //Language->Verbalization Map
 
     /**
      * Constructor
@@ -65,12 +67,14 @@ public class LimesResult {
      * @param sourceCache source resources cache
      * @param targetCache target resources cache
      * @param runTime run time
+     * @param lsVerbalization A natural language explanation of the metric grouped by language
      */
-    public LimesResult(AMapping verificationMapping, AMapping acceptanceMapping, ACache sourceCache, ACache targetCache, long runTime) {
+    public LimesResult(AMapping verificationMapping, AMapping acceptanceMapping, ACache sourceCache, ACache targetCache, long runTime, Map<String, String> lsVerbalization) {
         this(verificationMapping, acceptanceMapping);
         this.sourceCache = sourceCache;
         this.targetCache = targetCache;
         this.runTime = runTime;
+        this.lsVerbalization = lsVerbalization;
     }
 
 
@@ -103,7 +107,18 @@ public class LimesResult {
         double pseudoPrecisionForAll = new PseudoFMeasure().precision(wholeMapping, goldStandard);
         double pseudoRecallForAll = new PseudoFMeasure().recall(wholeMapping, goldStandard);
         double pseudoFMeasureForAll = new PseudoFMeasure().calculate(wholeMapping, goldStandard);
-        return String.format(
+
+        StringBuilder lsVerbalizationStringBuilder = new StringBuilder(",\n\t\"lsVerbalization\" : {");
+        if (lsVerbalization != null && !lsVerbalization.isEmpty()) {
+            for (Map.Entry<String, String> entry : lsVerbalization.entrySet()) {
+                lsVerbalizationStringBuilder.append("\n\t\t\"").append(entry.getKey()).append("\" : \"").append(entry.getValue()).append("\"").append(",");
+            }
+            lsVerbalizationStringBuilder.deleteCharAt(lsVerbalizationStringBuilder.length() - 1);
+        }
+        lsVerbalizationStringBuilder.append("\n\t}");
+        String lsVerbalizationString = lsVerbalizationStringBuilder.toString();
+        System.out.println(lsVerbalizationString);
+        String formatted = String.format(
                 "{" +
                         "\n\t\"mappingTime\" : %d," +
                         "\n\t\"inputSizes\" : {" +
@@ -125,13 +140,15 @@ public class LimesResult {
                         "\n\t\t\t\"recall\" : %s," +
                         "\n\t\t\t\"f-measure\" : %s" +
                         "\n\t\t}" +
-                        "\n\t}" +
-                        "\n}",
-                this.runTime, this.sourceCache.size(), this.targetCache.size(),
+                        "\n\t}",
+                        this.runTime, this.sourceCache.size(), this.targetCache.size(),
                 this.verificationMapping.size(), this.acceptanceMapping.size(),
                 Double.toString(pseudoPrecisionForAcceptance), Double.toString(pseudoRecallForAcceptance), Double.toString(pseudoFMeasureForAcceptance),
                 Double.toString(pseudoPrecisionForAll), Double.toString(pseudoRecallForAll), Double.toString(pseudoFMeasureForAll));
+        return formatted + lsVerbalizationString +
+                "\n}";
     }
+
 
     private AMapping filterReferenceCompliant(AMapping input, Set<String> referenceS, Set<String> referenceT) {
         AMapping filtered = MappingFactory.createDefaultMapping();

@@ -110,6 +110,7 @@ public class LsPostProcessor {
 			Realiser clauseRealiser = new Realiser(lexicon);
 			NLGElement clauseRealised = clauseRealiser.realise(clause2);
 			System.out.println(clauseRealised);
+			finlalStr = clauseRealised.toString();
 
 		}
 		return finlalStr;

@@ -67,6 +67,7 @@ public class Configuration implements IConfiguration {
     protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
     protected String mlTrainingDataFile = null;
     protected EvaluatorType mlPseudoFMeasure = null;
+    protected String explainLS = "None";
 
     public Configuration() {
     }
@@ -321,19 +322,41 @@ public class Configuration implements IConfiguration {
         return mlTrainingDataFile;
     }
 
+    public String getExplainLS() {
+        return explainLS;
+    }
+
+    public void setExplainLS(String explainLS) {
+        this.explainLS = explainLS;
+    }
+
     @Override
     public String toString() {
-        return "Configuration [sourceInfo=" + sourceInfo + ", targetInfo=" + targetInfo + ", metricExpression="
-                + metricExpression + ", acceptanceRelation=" + acceptanceRelation + ", verificationRelation="
-                + verificationRelation + ", acceptanceThreshold=" + acceptanceThreshold + ", acceptanceFile="
-                + acceptanceFile + ", verificationThreshold=" + verificationThreshold + ", verificationFile="
-                + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat
-                + ", executionRewriter=" + executionRewriter + ", executionPlanner=" + executionPlanner
-                + ", executionEngine=" + executionEngine + ", optimization time=" + optimizationTime
-                + ", expected selectivity=" + expectedSelectivity + ", granularity=" + granularity
-                + ", mlAlgorithmName=" + mlAlgorithmName + ", mlParameters=" + mlAlgorithmParameters
-                + ", mlImplementationType=" + mlImplementationType + ", mlTrainingDataFile=" + mlTrainingDataFile
-                + ", mlPseudoFMeasure=" + mlPseudoFMeasure + "]";
+        return "Configuration{" +
+                "sourceInfo=" + sourceInfo +
+                ", targetInfo=" + targetInfo +
+                ", metricExpression='" + metricExpression + '\'' +
+                ", acceptanceRelation='" + acceptanceRelation + '\'' +
+                ", verificationRelation='" + verificationRelation + '\'' +
+                ", acceptanceThreshold=" + acceptanceThreshold +
+                ", acceptanceFile='" + acceptanceFile + '\'' +
+                ", verificationThreshold=" + verificationThreshold +
+                ", verificationFile='" + verificationFile + '\'' +
+                ", prefixes=" + prefixes +
+                ", outputFormat='" + outputFormat + '\'' +
+                ", executionRewriter='" + executionRewriter + '\'' +
+                ", executionPlanner='" + executionPlanner + '\'' +
+                ", executionEngine='" + executionEngine + '\'' +
+                ", optimizationTime=" + optimizationTime +
+                ", expectedSelectivity=" + expectedSelectivity +
+                ", granularity=" + granularity +
+                ", mlAlgorithmName='" + mlAlgorithmName + '\'' +
+                ", mlAlgorithmParameters=" + mlAlgorithmParameters +
+                ", mlImplementationType=" + mlImplementationType +
+                ", mlTrainingDataFile='" + mlTrainingDataFile + '\'' +
+                ", mlPseudoFMeasure=" + mlPseudoFMeasure +
+                ", explainLS='" + explainLS + '\'' +
+                '}';
     }
 
     @Override
@@ -350,6 +373,7 @@ public class Configuration implements IConfiguration {
         result = prime * result + ((executionRewriter == null) ? 0 : executionRewriter.hashCode());
         result = prime * result + granularity;
         result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
+        result = prime * result + ((explainLS == null) ? 0 : explainLS.hashCode());
         result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
         result = prime * result + ((mlImplementationType == null) ? 0 : mlImplementationType.hashCode());
         result = prime * result + ((mlAlgorithmParameters == null) ? 0 : mlAlgorithmParameters.hashCode());
@@ -412,6 +436,11 @@ public class Configuration implements IConfiguration {
             if (other.metricExpression != null)
                 return false;
         } else if (!metricExpression.equals(other.metricExpression))
+            return false;
+        if (explainLS == null) {
+            if (other.explainLS != null)
+                return false;
+        } else if (!explainLS.equals(other.explainLS))
             return false;
         if (mlAlgorithmName == null) {
             if (other.mlAlgorithmName != null)

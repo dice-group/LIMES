@@ -76,6 +76,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String AS = " AS ";
     protected static final String RENAME = " RENAME ";
     protected static final String METRIC = "METRIC";
+    protected static final String EXPLAIN_LS = "EXPLAIN_LS";
     protected static final String NAMESPACE = "NAMESPACE";
     protected static final String REWRITER = "REWRITER";
     protected static final String PLANNER = "PLANNER";
@@ -373,6 +374,13 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 list = xmlDocument.getElementsByTagName(TARGET);
                 children = list.item(0).getChildNodes();
                 processKBDescription(TARGET, children);
+
+                // LS Verbalization
+                list = xmlDocument.getElementsByTagName(EXPLAIN_LS);
+                if(list.getLength() > 0){
+                    String explainLs = getText(list.item(0));
+                    configuration.setExplainLS(explainLs);
+                }
 
                 // 3.METRIC
                 list = xmlDocument.getElementsByTagName(METRIC);

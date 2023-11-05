@@ -17,6 +17,7 @@
  */
 package org.aksw.limes.core.io.mapping;
 
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.jena.vocabulary.OWL;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public abstract class AMapping implements IMapping {
     protected HashMap<Double, HashMap<String, TreeSet<String>>> reversedMap;
     protected int size;
     protected String predicate;
+    protected LinkSpecification linkSpecification;
 
 
     public AMapping() {
@@ -121,6 +123,14 @@ public abstract class AMapping implements IMapping {
 
     public void setPredicate(String mappingPredicate) {
         this.predicate = mappingPredicate;
+    }
+
+    public LinkSpecification getLinkSpecification() {
+        return linkSpecification;
+    }
+
+    public void setLinkSpecification(LinkSpecification linkSpecification) {
+        this.linkSpecification = linkSpecification;
     }
 
     @Override

@@ -158,9 +158,6 @@ public class runNlg {
 		System.out.println(linkspecs.size());
 
 		File fout = new File("/home/abdullah/dataset/lsverbalization100K.csv");
-		FileOutputStream fos = new FileOutputStream(fout);
-
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 		//linkSpec.readSpec(ls4, 0.7);
 		//String s=lsPostProcessor.postProcessor(linkSpec);
 		//System.out.println("sss "+s);
@@ -171,13 +168,9 @@ public class runNlg {
 
 			linkSpec.readSpec(str, 0.7);
 			//System.out.println(linkSpec.getFullExpression());
-			//lsPostProcessor.postProcessor(linkSpec);
+			lsPostProcessor.postProcessor(linkSpec);
 			String postProcessor = lsPostProcessor.postProcessor(linkSpec);
-			bw.write(postProcessor);
-			bw.newLine();
-
 		}
-		bw.close();
 		//AMapping slection = lsPostProcessor.selection(linkSpec,eval.getSourceCache(),eval.getTargetCache());
 
 		//lsPostProcessor.summarization(linkSpec,eval.getSourceCache(),eval.getTargetCache(), slection,0.8);
