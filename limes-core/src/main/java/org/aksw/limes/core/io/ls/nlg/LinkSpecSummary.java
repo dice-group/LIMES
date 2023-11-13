@@ -1,4 +1,4 @@
-package  org.aksw.limes.core.io.ls.NLGLS;
+package  org.aksw.limes.core.io.ls.nlg;
 import java.util.ArrayList;
 import java.util.List;
 

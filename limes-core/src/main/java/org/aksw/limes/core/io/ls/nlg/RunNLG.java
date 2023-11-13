@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS;
+package org.aksw.limes.core.io.ls.nlg;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class RunNLG {
 		
 		LinkSpecification link=new LinkSpecification();
 
-		link.readSpec(ls1, 0.6);
+		link.readSpec(test, 0.6);
 		//System.out.println(ls5);
 		List<SPhraseSpec> allNLGElement=LinkSpecSummary.fullMeasureNLG(link);
 		for(SPhraseSpec ele:allNLGElement) {

@@ -39,7 +39,7 @@ import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.ls.NLGLS.LSVerbalization;
+import org.aksw.limes.core.io.ls.nlg.LSVerbalization;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.io.serializer.ISerializer;
@@ -72,8 +72,7 @@ public class Controller {
     /**
      * Take configuration file as argument and run the specified linking task.
      *
-     * @param args
-     *            Command line arguments
+     * @param args Command line arguments
      */
     public static void main(String[] args) {
         // I. Configure Logger
@@ -88,7 +87,7 @@ public class Controller {
 //        } else if (cmd.hasOption('g')){
 //            LimesGUI.startGUI(new String[0]);
 //            System.exit(0);
-        } else if (cmd.hasOption('s')){
+        } else if (cmd.hasOption('s')) {
             int port = defaultPort;
             if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
             int limit = defaultLimit;
@@ -185,14 +184,11 @@ public class Controller {
     /**
      * Execute LIMES
      *
-     * @param config
-     *            LIMES configuration object
-     *
+     * @param config LIMES configuration object
      * @return Instance of ResultMapping
-     *
      */
     public static LimesResult getMapping(Configuration config) {
-        return  getMapping(config, -1, new ConsoleOracle(MAX_ITERATIONS_NUMBER));
+        return getMapping(config, -1, new ConsoleOracle(MAX_ITERATIONS_NUMBER));
     }
 
     static LimesResult getMapping(Configuration config, int limit, ActiveLearningOracle oracle) {
@@ -246,7 +242,7 @@ public class Controller {
 
         //LSVerbalization
         Map<String, String> lsVerbalizationByLanguage = LSVerbalization.getLSVerbalizationByLanguage(config.getExplainLS(),
-                isAlgorithm ? results.getLinkSpecification().getFullExpression() : config.getMetricExpression());
+                isAlgorithm ? results.getLinkSpecification().getFullExpression() : new LinkSpecification(config.getMetricExpression(), config.getAcceptanceThreshold()).getFullExpression());
 
         return new LimesResult(verificationMapping, acceptanceMapping, sourceCache, targetCache, runTime, lsVerbalizationByLanguage);
     }

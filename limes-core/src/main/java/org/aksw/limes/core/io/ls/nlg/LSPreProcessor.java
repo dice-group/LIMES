@@ -1,4 +1,4 @@
-package org.aksw.limes.core.io.ls.NLGLS;
+package org.aksw.limes.core.io.ls.nlg;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
