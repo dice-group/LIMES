@@ -242,7 +242,7 @@ public class Controller {
 
         //LSVerbalization
         Map<String, String> lsVerbalizationByLanguage = LSVerbalization.getLSVerbalizationByLanguage(config.getExplainLS(),
-                isAlgorithm ? results.getLinkSpecification().getFullExpression() : new LinkSpecification(config.getMetricExpression(), config.getAcceptanceThreshold()).getFullExpression());
+                isAlgorithm ? results.getLinkSpecification() : new LinkSpecification(config.getMetricExpression(), config.getAcceptanceThreshold()));
 
         return new LimesResult(verificationMapping, acceptanceMapping, sourceCache, targetCache, runTime, lsVerbalizationByLanguage);
     }

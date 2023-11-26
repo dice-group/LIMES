@@ -117,7 +117,7 @@ public class LimesResult {
         }
         lsVerbalizationStringBuilder.append("\n\t}");
         String lsVerbalizationString = lsVerbalizationStringBuilder.toString();
-        System.out.println(lsVerbalizationString);
+
         String formatted = String.format(
                 "{" +
                         "\n\t\"mappingTime\" : %d," +

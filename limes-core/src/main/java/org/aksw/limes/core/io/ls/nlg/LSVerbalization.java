@@ -1,21 +1,28 @@
 package org.aksw.limes.core.io.ls.nlg;
 
+import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.ls.nlg.de.LSVerbalizerDE;
 import org.aksw.limes.core.io.ls.nlg.en.LSVerbalizerEN;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LSVerbalization {
 
-    public static Map<String, String> getLSVerbalizationByLanguage(String explainLSConfigString, String linkSpecString) {
+    private static Logger logger = LoggerFactory.getLogger(LSVerbalization.class.getName());
+
+
+    /**
+     * Returns the link specification verbalization for the given languages and link specification
+     * @param explainLSConfigString A string consisting of one or more languages, seperated by commas
+     */
+    public static Map<String, String> getLSVerbalizationByLanguage(String explainLSConfigString, LinkSpecification linkSpec) {
         explainLSConfigString = explainLSConfigString.replaceAll(" ", "");
         String[] split = explainLSConfigString.split(",");
         Map<String, String> languageToVerbalizationMap = new LinkedHashMap<>();
-
-        LinkSpecification link=new LinkSpecification();
-        link.readSpec(linkSpecString, 1);
 
         for (String language : split) {
             ILSVerbalizer verbalizer;
@@ -23,6 +30,7 @@ public class LSVerbalization {
             switch (language) {
                 case "None":
                     verbalizer = null;
+                    break;
                 case "English":
                     verbalizer = new LSVerbalizerEN();
                     break;
@@ -31,13 +39,14 @@ public class LSVerbalization {
                     break;
                 default:
                     verbalizer = linkSpecification -> "Error: Language not implemented";
+                    break;
             }
 
-            LinkSpecification linkSpec=new LinkSpecification();
-            linkSpec.readSpec(linkSpecString, 1.0);
-            String verbalized = verbalizer.verbalize(linkSpec);
-            System.out.println("LS-Verbalization-" + language + " : " + verbalized);
-            languageToVerbalizationMap.put(language, verbalized);
+            if(verbalizer != null){
+                String verbalized = verbalizer.verbalize(linkSpec);
+                logger.info("LS-Verbalization-" + language + " : " + verbalized);
+                languageToVerbalizationMap.put(language, verbalized);
+            }
 
         }
         return languageToVerbalizationMap;
