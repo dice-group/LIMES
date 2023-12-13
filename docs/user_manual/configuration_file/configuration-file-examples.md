@@ -34,6 +34,7 @@ The following shows the whole configuration file for LIMES explicated in the sec
         <PROPERTY>geom:geometry/geos:asWKT RENAME polygon</PROPERTY>
     </TARGET>
     <METRIC>geo_hausdorff(x.polygon, y.polygon)</METRIC>
+    <EXPLAIN_LS>English,German</EXPLAIN_LS>
     <ACCEPTANCE>
         <THRESHOLD>0.9</THRESHOLD>
         <FILE>lgd_relaybox_verynear.nt</FILE>
@@ -171,6 +172,7 @@ The following configuration file uses the machine learning algorithm of the Womb
             <VALUE>60</VALUE>
         </PARAMETER>
     </MLALGORITHM>
+    <EXPLAIN_LS>English,German</EXPLAIN_LS>
     
     <ACCEPTANCE>
         <THRESHOLD>0.9</THRESHOLD>

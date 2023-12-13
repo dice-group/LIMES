@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.ls.nlg;
 
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.ls.nlg.de.LSVerbalizerDE;
 import org.aksw.limes.core.io.ls.nlg.en.LSVerbalizerEN;

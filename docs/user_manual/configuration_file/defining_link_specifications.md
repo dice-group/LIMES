@@ -358,3 +358,10 @@ $$wupalmer(c_1,c_2) = \frac{2depth(lso(c_1,c_2))}{2depth(lso(c_1,c_2))+N_1+N_2}$
 
 where $N_1 = len(lso(c_1,c_2),c_1)$ and $N_2 = len(lso(c_1,c_2),c_2)$ and $depth(lso(c_1,c_2))$ is
 the depth in the hierarchy of their most specific common concept.
+
+### Link Specification Verbalization
+To get a verbalization of the given link specification, the optional EXPLAIN_LS tag can be used.
+Possible arguments are "German", "English" and "None". They can be combined by seperating them with a comma.
+```xml
+<EXPLAIN_LS>English,German</EXPLAIN_LS>
+```
