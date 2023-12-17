@@ -208,7 +208,8 @@ geometries has the same dimension as the geometries themselves
 common, but no interior points.
 * **Top_Within**: A geometry a is within a geometry b if and only if a lies in the interior of b.
 
-
+If both resources are polygons, it is also possible to use area, diagonal or mixed content-measures for the 
+topological relations defined above using **Top_cobalt\_\[area/diagonal/mixed\]\_\[relation\]**
 
 ### Temporal Measures
 
