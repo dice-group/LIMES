@@ -3,14 +3,10 @@ package org.aksw.limes.core.measures.mapper.topology;
 import org.aksw.limes.core.measures.mapper.topology.im.RelateDE9IM;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.io.WKTReader;
 
 public class RelateDE9IMTest extends TestCase {
 	GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory( null );
