@@ -85,7 +85,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected MLResults learn(AMapping trainingData) {
+	public MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
         return learn();
     }

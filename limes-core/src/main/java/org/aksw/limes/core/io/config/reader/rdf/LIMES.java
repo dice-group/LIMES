@@ -34,6 +34,7 @@ public class LIMES {
     public static final Property hasSource = property("hasSource");
     public static final Property hasTarget = property("hasTarget");
     public static final Property hasMetric = property("hasMetric");
+    public static final Property hasExplainLS = property("hasExplainLS");
     public static final Property hasAcceptance = property("hasAcceptance");
     public static final Property hasExecutionParameters = property("hasExecutionParameters");
     public static final Property hasReview = property("hasReview");

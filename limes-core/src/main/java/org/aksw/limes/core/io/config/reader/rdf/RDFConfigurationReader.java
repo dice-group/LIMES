@@ -117,6 +117,12 @@ public class RDFConfigurationReader extends AConfigurationReader {
         readKBDescription((Resource) getObject(specsSubject, LIMES.hasSource, true));
         readKBDescription((Resource) getObject(specsSubject, LIMES.hasTarget, true));
 
+        // LS Verbalization
+        if(configModel.contains(specsSubject, LIMES.hasExplainLS, (RDFNode) null)){
+            Resource explainLs = (Resource) getObject(specsSubject, LIMES.hasExplainLS, true);
+            configuration.setExplainLS(getObject(explainLs, LIMES.expression, true).toString());
+        }
+
         // 3. METRIC
         if (configModel.contains(specsSubject, LIMES.hasMetric, (RDFNode) null)) {
             Resource metric = (Resource) getObject(specsSubject, LIMES.hasMetric, true);

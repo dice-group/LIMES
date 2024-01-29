@@ -146,6 +146,12 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
             }
         }
 
+        //LS Verbalization
+        Resource lsVerbalization = ResourceFactory.createResource();
+        m.add(s, LIMES.hasExplainLS, lsVerbalization);
+        m.add(lsVerbalization, RDF.type, LIMES.hasExplainLS);
+        m.add(lsVerbalization, LIMES.expression, configuration.getExplainLS());
+
         // 3. Metric
         Resource metric = ResourceFactory.createResource();
         m.add(s, LIMES.hasMetric, metric);

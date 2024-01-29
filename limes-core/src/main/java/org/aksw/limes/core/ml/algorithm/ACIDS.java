@@ -40,7 +40,7 @@ public class ACIDS extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected MLResults learn(AMapping trainingData) {
+	public MLResults learn(AMapping trainingData) {
         // TODO Auto-generated method stub
         return null;
     }

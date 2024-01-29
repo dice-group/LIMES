@@ -76,7 +76,9 @@ public class MLPipeline {
                 mls.getMl().setConfiguration(configuration);
                 mlm = mls.learn(trainingDataMap);
                 logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
-                return mls.predict(source, target, mlm);
+                AMapping mappingMls = mls.predict(source, target, mlm);
+                mappingMls.setLinkSpecification(mlm.getLinkSpecification());
+                return mappingMls;
             case SUPERVISED_ACTIVE:
                 // for active learning, need to reiterate and prompt the user for evaluation of examples:
                 //            boolean stopLearning = false;
@@ -97,7 +99,9 @@ public class MLPipeline {
                     mlm = mla.activeLearn(classify);
                 }
                 logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
-                return mla.predict(source, target, mlm);
+                AMapping mappingMla = mla.predict(source, target, mlm);
+                mappingMla.setLinkSpecification(mlm.getLinkSpecification());
+                return mappingMla;
             case UNSUPERVISED:
                 UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
                 mlu.init(learningParameters, source, target);
@@ -108,7 +112,9 @@ public class MLPipeline {
                 }
                 mlm = mlu.learn(pfm);
                 logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
-                return mlu.predict(source, target, mlm);
+                AMapping mappingMlu = mlu.predict(source, target, mlm);
+                mappingMlu.setLinkSpecification(mlm.getLinkSpecification());
+                return mappingMlu;
             default:
                 throw new UnsupportedMLImplementationException(clazz.getName());
         }
