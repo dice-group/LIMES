@@ -208,9 +208,79 @@ geometries has the same dimension as the geometries themselves
 common, but no interior points.
 * **Top_Within**: A geometry a is within a geometry b if and only if a lies in the interior of b.
 
-If both resources are polygons, it is also possible to use area, diagonal or mixed content-measures for the 
-topological relations defined above using **Top_cobalt\_\[area/diagonal/mixed\]\_\[relation\]**
+Content-Based topological relations (COBALT) are also supported in case both resources have polygon representations. 
+COBALT  uses area, diagonal or mixed content-measures for computing another light version of the 
+topological relations defined above. In particular, COBALT works by checking if the given relation is 
+possible for the two polygons based on their minimum bounding boxes (MBBs). Notice that COBALT trade 
+runtime for accuracy. i.e., COBALT is able to speed up the topological relation discovery up to 14000 
+times faster than the previously defined topological measures maintaining an F-Measure 
+between 0.7 and 0.9 depending on the relation. 
+For more details, see our [paper](https://papers.dice-research.org/2023/SEMANTICS_COBALT/public.pdf).
 
+The area based measure works by comparing the size of the two polygons MBBs and their unions MBB:
+* **top_cobalt_area_contains**: A geometry a contains geometry b if and only if no points of b lie in the exterior
+  of a, and at least one point of the interior of b lies in the interior of a.
+* **top_cobalt_area_covers**: A geometry a covers geometry b if and only if the geometry b lies in a. i.e. no points
+  of b lie in the exterior of a, or Every point of b is a point of (the interior or boundary of) a.
+* **top_cobalt_area_covered_by**: A geometry a is covered by a geometry b if and only if every point of a is a
+  point of b, and the interiors of the two geometries have at least one point in common. Note that
+  Top_Covered_By is the reverse relation of Top_Covers.
+* **top_cobalt_area_disjoint**: Two geometries a and b are disjoint if and only if they have no point in common.
+  They form a set of disconnected geometries.
+* **top_cobalt_area_equals**: Two geometries a and b are topologically equal if their interiors intersect and
+  no part of the interior or boundary of one geometry intersects the exterior of the other.
+* **top_cobalt_area_intersects**: A geometry a intersects A geometry b if and only if geometries a and b have
+  at least one point in common.
+* **top_cobalt_area_overlaps**: A geometry a overlaps a geometry b if and only if they have some but not all
+  points in common, they have the same dimension and the intersection of the interiors of the two
+  geometries has the same dimension as the geometries themselves
+* **top_cobalt_area_touches**: Two geometries a and touched if they have at least one boundary point in
+  common, but no interior points.
+* **top_cobalt_area_within**: A geometry a is within a geometry b if and only if a lies in the interior of b.
+
+
+The diagonal based measure works by comparing the diagonal length of the two polygons MBBs and their unions MBB:
+* **top_cobalt_diagonal_contains**: A geometry a contains geometry b if and only if no points of b lie in the exterior
+  of a, and at least one point of the interior of b lies in the interior of a.
+* **top_cobalt_diagonal_covers**: A geometry a covers geometry b if and only if the geometry b lies in a. i.e. no points
+  of b lie in the exterior of a, or Every point of b is a point of (the interior or boundary of) a.
+* **top_cobalt_diagonal_covered_by**: A geometry a is covered by a geometry b if and only if every point of a is a
+  point of b, and the interiors of the two geometries have at least one point in common. Note that
+  Top_Covered_By is the reverse relation of Top_Covers.
+* **top_cobalt_diagonal_disjoint**: Two geometries a and b are disjoint if and only if they have no point in common.
+  They form a set of disconnected geometries.
+* **top_cobalt_diagonal_equals**: Two geometries a and b are topologically equal if their interiors intersect and
+  no part of the interior or boundary of one geometry intersects the exterior of the other.
+* **top_cobalt_diagonal_intersects**: A geometry a intersects A geometry b if and only if geometries a and b have
+  at least one point in common.
+* **top_cobalt_diagonal_overlaps**: A geometry a overlaps a geometry b if and only if they have some but not all
+  points in common, they have the same dimension and the intersection of the interiors of the two
+  geometries has the same dimension as the geometries themselves
+* **top_cobalt_diagonal_touches**: Two geometries a and touched if they have at least one boundary point in
+  common, but no interior points.
+* **top_cobalt_diagonal_within**: A geometry a is within a geometry b if and only if a lies in the interior of b.
+
+The mixed based measure works by utilizing the area and diagonal length of the two MBBs of the polygons
+but also makes use of the distance between the MBBs:
+* **top_cobalt_mixed_contains**: A geometry a contains geometry b if and only if no points of b lie in the exterior
+  of a, and at least one point of the interior of b lies in the interior of a.
+* **top_cobalt_mixed_covers**: A geometry a covers geometry b if and only if the geometry b lies in a. i.e. no points
+  of b lie in the exterior of a, or Every point of b is a point of (the interior or boundary of) a.
+* **top_cobalt_mixed_covered_by**: A geometry a is covered by a geometry b if and only if every point of a is a
+  point of b, and the interiors of the two geometries have at least one point in common. Note that
+  Top_Covered_By is the reverse relation of Top_Covers.
+* **top_cobalt_mixed_disjoint**: Two geometries a and b are disjoint if and only if they have no point in common.
+  They form a set of disconnected geometries.
+* **top_cobalt_mixed_equals**: Two geometries a and b are topologically equal if their interiors intersect and
+  no part of the interior or boundary of one geometry intersects the exterior of the other.
+* **top_cobalt_mixed_intersects**: A geometry a intersects A geometry b if and only if geometries a and b have
+  at least one point in common.
+* **top_cobalt_mixed_overlaps**: A geometry a overlaps a geometry b if and only if they have some but not all
+  points in common, they have the same dimension and the intersection of the interiors of the two
+  geometries has the same dimension as the geometries themselves
+* **top_cobalt_mixed_touches**: Two geometries a and touched if they have at least one boundary point in
+  common, but no interior points.
+* **top_cobalt_mixed_within**: A geometry a is within a geometry b if and only if a lies in the interior of b.
 ### Temporal Measures
 
 The temporal relations between POI resources can be found by using the following relations:
@@ -362,7 +432,24 @@ the depth in the hierarchy of their most specific common concept.
 
 ### Link Specification Verbalization
 To get a verbalization of the given link specification, the optional EXPLAIN_LS tag can be used.
-Possible arguments are "German", "English" and "None". They can be combined by seperating them with a comma.
+It is used to get a natural language version of an otherwise complicated link specification expression, 
+which can help to work with link specifications in an effective and efficient way. 
+The following is an example of natural language generated to explain a link specification:
+
+Original link specification:
+*OR(OR(cosine(x.title,y.name)|0.48,cosine(x.description,y.description)|0.43)|1.0,jaccard(x.title,y.description)|0.44)*
+
+English verbalization:
+*The link will be generated if the resource's title of the source and the resource's name of the target has a 48% of Cosine similarity or the description of the source and the target resources has a 43% of Cosine similarity or the resource's title of the source and the resource's description of the target has a 44% of Jaccard similarity*
+
+German verbalization:
+*Der Link passiert, wenn die Ressource Titles der Datenquelle und die Ressource Namens des Datenziels 48% einer Cosines Ähnlichkeit haben oder der Link passiert, wenn description von der Datenquelle und dem Datenziel Ressourcen 43% einer Cosines Ähnlichkeit hat oder der Link passiert, wenn die Ressource Titles der Datenquelle und die Ressource Descriptions des Datenziels 44% einer Jaccards Ähnlichkeit hat*
+
+Details of how the verbalization works can be found [in the paper](https://svn.aksw.org/papers/2019/NLDB_LSVS/public.pdf).
+
+Possible arguments are "German", "English" and "None". They can be combined by separating them with a comma.
+Instead of using "None" as an argument, the EXPLAIN_LS tag can be omitted.
+The natural language result will be printed to the console and will be a part of the statistics file generated at the end of the linking process.
 ```xml
 <EXPLAIN_LS>English,German</EXPLAIN_LS>
 ```
