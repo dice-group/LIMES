@@ -18,6 +18,9 @@
 package org.aksw.limes.core.io.config.reader;
 
 import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.KBInfo;
+
+import java.util.*;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -46,6 +49,79 @@ public abstract class AConfigurationReader {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    /**
+     * This method replaces any URIs used in the kbInfo with their prefixes
+     * @param info
+     */
+    public static void replaceURIsWithPrefixes(KBInfo info) {
+        Map<String, String> prefixes = info.getPrefixes();
+        HashMap<String, String> rev = new HashMap<>();
+        for(Map.Entry<String, String> entry : prefixes.entrySet()) {
+            rev.put(entry.getValue(), entry.getKey());
+        }
+        info.setProperties(replaceURIsWithPrefixes(info.getProperties(), rev));
+        info.setOptionalProperties(replaceURIsWithPrefixes(info.getOptionalProperties(), rev));
+        info.setRestrictions(replaceURIsWithPrefixes(info.getRestrictions(), rev));
+        info.setFunctions(replaceURIsWithPrefixes(info.getFunctions(), rev));
+    }
+
+    private static ArrayList<String> replaceURIsWithPrefixes(Collection<String> props, HashMap<String, String> rev) {
+        ArrayList<String> replacements = new ArrayList<>();
+        for (String property : props) {
+            String originalProp = property;
+            for (Map.Entry<String, String> prefixEntry : rev.entrySet()) {
+                if(property.contains(prefixEntry.getKey())){
+                    property = property.replace(prefixEntry.getKey(), prefixEntry.getValue() + ":");
+                }
+            }
+            replacements.add(property);
+
+            if(property.contains("://")){
+                throw new IllegalArgumentException("LIMES does not support using URIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
+                        "Please define a prefix and use the prefix for the following URI: " + originalProp);
+            }
+        }
+        return replacements;
+    }
+
+    private static LinkedHashMap<String, Map<String, String>> replaceURIsWithPrefixes(Map<String, Map<String, String>> funcs, HashMap<String, String> rev) {
+        LinkedHashMap<String, Map<String, String>> replacements = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, String>> entry : funcs.entrySet()) {
+            String property = entry.getKey();
+            String originalProp = property;
+
+            //Replace key of function
+            for (Map.Entry<String, String> prefixEntry : rev.entrySet()) {
+                if(property.contains(prefixEntry.getKey())){
+                    property = property.replace(prefixEntry.getKey(), prefixEntry.getValue() + ":");
+                }
+            }
+            if(property.contains("://")){
+                throw new IllegalArgumentException("LIMES does not support using URIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
+                        "Please define a prefix and use the prefix for the following URI: " + originalProp);
+            }
+
+            //Replace value map
+            Map<String, String> intermediateReplacement = new HashMap<>();
+            for (Map.Entry<String, String> stringEntry : entry.getValue().entrySet()) {
+                String subKey = stringEntry.getKey();
+                String origSubKey = subKey;
+                for (Map.Entry<String, String> prefixEntry : rev.entrySet()) {
+                    subKey = subKey.replace(prefixEntry.getKey(), prefixEntry.getValue() + ":");
+                }
+                intermediateReplacement.put(subKey, stringEntry.getValue());
+                if(subKey.contains("://")){
+                    throw new IllegalArgumentException("LIMES does not support using URIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
+                            "Please define a prefix and use the prefix for the following URI: " + origSubKey);
+                }
+
+            }
+
+            replacements.put(property, intermediateReplacement);
+        }
+        return replacements;
     }
 
 

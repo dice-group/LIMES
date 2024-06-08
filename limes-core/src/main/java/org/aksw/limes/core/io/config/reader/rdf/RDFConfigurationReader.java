@@ -166,6 +166,15 @@ public class RDFConfigurationReader extends AConfigurationReader {
             configuration.setOutputFormat(output.toString());
         }
 
+        // 10. Check for invalid config because of URIs without prefixes
+        if(configuration.getSourceInfo() != null){
+            replaceURIsWithPrefixes(configuration.getSourceInfo());
+        }
+        if(configuration.getTargetInfo() != null){
+            replaceURIsWithPrefixes(configuration.getTargetInfo());
+        }
+
+
         return configuration;
     }
 
