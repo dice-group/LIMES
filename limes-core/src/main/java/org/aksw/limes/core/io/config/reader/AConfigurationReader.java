@@ -99,8 +99,8 @@ public abstract class AConfigurationReader {
                 }
             }
             if(property.contains("://")){
-                throw new IllegalArgumentException("LIMES does not support using URIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
-                        "Please define a prefix and use the prefix for the following URI: " + originalProp);
+                throw new IllegalArgumentException("LIMES does not support using namespace IRIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
+                        "Please define a prefix and use the prefix for the namespace of the following IRI: " + originalProp);
             }
 
             //Replace value map
@@ -113,8 +113,8 @@ public abstract class AConfigurationReader {
                 }
                 intermediateReplacement.put(subKey, stringEntry.getValue());
                 if(subKey.contains("://")){
-                    throw new IllegalArgumentException("LIMES does not support using URIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
-                            "Please define a prefix and use the prefix for the following URI: " + origSubKey);
+                    throw new IllegalArgumentException("LIMES does not support using namespace IRIs in the properties, optionalProperties, restrictions, or functions in the configuration file. " +
+                            "Please define a prefix and use the prefix for the namespace of the following IRI: " + origSubKey);
                 }
 
             }
