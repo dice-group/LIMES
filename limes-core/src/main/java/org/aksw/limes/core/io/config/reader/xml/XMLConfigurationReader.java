@@ -513,6 +513,15 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     children = list.item(0).getChildNodes();
                     configuration.setOutputFormat(getText(list.item(0)));
                 }
+
+                // 10. Check for invalid config because of URIs without prefixes
+                if(configuration.getSourceInfo() != null){
+                    replaceURIsWithPrefixes(configuration.getSourceInfo());
+                }
+                if(configuration.getTargetInfo() != null){
+                    replaceURIsWithPrefixes(configuration.getTargetInfo());
+                }
+
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());

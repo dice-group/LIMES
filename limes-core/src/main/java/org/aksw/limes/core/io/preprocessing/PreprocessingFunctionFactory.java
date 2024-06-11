@@ -44,10 +44,10 @@ public class PreprocessingFunctionFactory {
     public static final String REMOVE_NON_ALPHANUMERIC = "regularalphabet";
     public static final String URI_AS_STRING = "uriasstring";
     public static final String SPLIT = "split";
-    public static final String TO_WKT_POINT = "toWktPoint";
+    public static final String TO_WKT_POINT = "towktpoint"; //toWktPoint
 
     public static PreprocessingFunctionType getPreprocessingType(String expression){
-        switch(expression.trim()){
+        switch(expression.trim().toLowerCase()){
             case(CLEAN_IRI):
                 return PreprocessingFunctionType.CLEAN_IRI;
             case(CLEAN_NUMBER):

@@ -258,6 +258,7 @@ public class SparqlQueryModule implements IQueryModule {
         if (kb.getRestrictions().size() > 0) {
             query = query + "}";
         }
+
         logger.info("Query issued is \n" + query);
         return query;
     }
