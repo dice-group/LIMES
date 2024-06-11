@@ -136,7 +136,8 @@ The Prefixes component consists of two parts:
 
 The Data source and data target consists of the two similar components, which include three input fields:
 * *Sparql endpoint/Local file*: One of two options can be chosen. Sparql endpoint means that the user will select the endpont from the list. Local file means that the file should be provided as an endpoint.
-* *Endpoint*: A dropdown list of available endpoints. Moreover, the user can try to search for the endpoint, typing it in the input field or write your own endpoint. After clicking on the endpoint from the list or writing it by hand and press the Enter, the user will get the list of restriction classes according to this endpoint.
+* *Endpoint*: A dropdown list of available endpoints. Moreover, the user can try to search for the endpoint, typing it in the input field or write your own endpoint. After clicking on the endpoint from the list or writing it by hand and press the Enter, the user will get the list of restriction classes according to this endpoint. 
+If you upload files for the data source and target, and upload a configuration file after that, then you must upload the data source and target file again as the file path of them gets overwritten by the value of the later uploaded configuration file.
 * *Restriction*: Contains of three parameters splitted by space (?s rdf:type some:Type). The third parameter will be changed automatically after changing the restriction class. 
 * *Restriction class*: A dropdown list of restriction classes according to the endpoint. You can start typing the name of the class and the list will be filtered automatically. After choosing the restriction class, you will get all the properties related to this class.
 

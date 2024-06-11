@@ -65,7 +65,27 @@ Optional properties can be set to segment the requested dataset.
 * The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
 * The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
 
-Please note that LIMES does not allow namespace IRIs to be used in the `PROPERTY`, `RESTRICTION`, and `OPTIONAL_PROPERTY` tag. Please use namespace prefixes and reference the namespace IRI using a prefix.
+Please note that LIMES does not allow namespace IRIs to be used in the `PROPERTY`, `RESTRICTION`, and `OPTIONAL_PROPERTY` tag. Please use namespace prefixes and reference the namespace IRI using a prefix. Example: Do not use
+```
+<SOURCE>
+	...
+    <PROPERTY>http://xmlns.com/foaf/0.1#name</PROPERTY>
+	...
+</SOURCE>
+```
+instead use the following
+```
+<PREFIX>
+    <NAMESPACE>http://xmlns.com/foaf/0.1/</NAMESPACE>
+    <LABEL>foaf</LABEL>
+</PREFIX>
+<SOURCE>
+	...
+    <PROPERTY>foaf:name</PROPERTY>
+	...
+</SOURCE>
+```
+
 ### Preprocessing Functions
 #### Simple
 
