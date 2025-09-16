@@ -36,6 +36,13 @@ public class QueryModuleFactory {
         if (name.toLowerCase().startsWith("csv")) {
             return new CsvQueryModule(kbinfo);
         }
+        else if (name.equalsIgnoreCase("nquads")
+                || name.equalsIgnoreCase("n-quad")
+                || name.equalsIgnoreCase("n-quads")
+                || name.equalsIgnoreCase("nq")) {
+            kbinfo.setType("NQUADS");
+            return new FileQueryModule(kbinfo);
+        }
         //processes N3 files
         else if (name.toLowerCase().startsWith("n3") || name.toLowerCase().startsWith("nt")) {
             kbinfo.setType("N3");
