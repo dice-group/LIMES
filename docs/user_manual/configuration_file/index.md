@@ -5,6 +5,7 @@ A LIMES configuration file consists of ten parts, of which some are optional.
 ## Metadata
 
 The `metadata` tag always consists of the following bits of XML:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LIMES SYSTEM "limes.dtd">
@@ -14,7 +15,7 @@ The `metadata` tag always consists of the following bits of XML:
 ## Prefixes
 
 Defining a prefix in a LIMES file demands setting two values:
- The `namespace` that will be addressed by the prefix's `label`
+The `namespace` that will be addressed by the prefix's `label`
 
 ```xml
 <PREFIX>
@@ -38,7 +39,7 @@ LIMES computes links between items contained in two Linked Data sources dubbed s
     <RESTRICTION>?y rdf:type meshr:Concept</RESTRICTION>
     <PROPERTY>dc:title</PROPERTY>
     <TYPE>sparql</TYPE>
-</SOURCE>    
+</SOURCE>
 <TARGET>
     <ID>linkedct</ID>
     <ENDPOINT>http://data.linkedct.org/sparql</ENDPOINT>
@@ -51,21 +52,22 @@ LIMES computes links between items contained in two Linked Data sources dubbed s
 
 Six properties need to be set.
 
-* Each data source must be given an ID via the tag `ID`.
-* The endpoint of the data source needs to be explicated via the `ENDPOINT` tag.
-    + If the data is to be queried from a SPARQL end point, the `ENDPOINT` tag must be set to the corresponding SPARQL endpoint URI.
-    + In case the data is stored in a local file (CSV, N3, TURTLE, etc.), `ENDPOINT` tag must be set to the absolute path of the file containing the data.
-* The `VAR` tag describes the variable associated with the aformentioned endpoint. This variable is also used later, when specifying the metric used to link the entities retrieved from the source and target endpoints.
-* The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping even the value is set. If the SPARQL endpoint does not limit the number of triples it returns or if the input is a file, the value of `PAGESIZE` should be set to -1.
-* The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only use instances of MESH concepts. Additionally, multiple `RESTRICTION` tags are allowed per data source.
-* The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`. If you are not sure if all your entities have a certain property you can use the `OPTIONAL_PROPERTY` tag instead of `PROPERTY`. Additionally, multiple `PROPERTY` tags are allowed per data source.
+- Each data source must be given an ID via the tag `ID`.
+- The endpoint of the data source needs to be explicated via the `ENDPOINT` tag.
+  - If the data is to be queried from a SPARQL end point, the `ENDPOINT` tag must be set to the corresponding SPARQL endpoint URI.
+  - In case the data is stored in a local file (CSV, N3, TURTLE, etc.), `ENDPOINT` tag must be set to the absolute path of the file containing the data.
+- The `VAR` tag describes the variable associated with the aformentioned endpoint. This variable is also used later, when specifying the metric used to link the entities retrieved from the source and target endpoints.
+- The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping even the value is set. If the SPARQL endpoint does not limit the number of triples it returns or if the input is a file, the value of `PAGESIZE` should be set to -1.
+- The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only use instances of MESH concepts. Additionally, multiple `RESTRICTION` tags are allowed per data source.
+- The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`. If you are not sure if all your entities have a certain property you can use the `OPTIONAL_PROPERTY` tag instead of `PROPERTY`. Additionally, multiple `PROPERTY` tags are allowed per data source.
 
 Optional properties can be set to segment the requested dataset.
 
-* The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
-* The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
+- The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
+- The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
 
 Please note that LIMES does not allow namespace IRIs to be used in the `PROPERTY`, `RESTRICTION`, and `OPTIONAL_PROPERTY` tag. Please use namespace prefixes and reference the namespace IRI using a prefix. Example: Do not use
+
 ```
 <SOURCE>
 	...
@@ -73,7 +75,9 @@ Please note that LIMES does not allow namespace IRIs to be used in the `PROPERTY
 	...
 </SOURCE>
 ```
+
 instead use the following
+
 ```
 <PREFIX>
     <NAMESPACE>http://xmlns.com/foaf/0.1/</NAMESPACE>
@@ -87,23 +91,26 @@ instead use the following
 ```
 
 ### Preprocessing Functions
+
 #### Simple
 
 Currently, LIMES supports the following set of pre-processing functions:
-* `nolang` for removing language tags
-* `lowercase` for converting the input string into lower case
-* `uppercase` for converting the input string into upper case
-* `number` for ensuring that only the numeric characters, "." and "," are contained in the input string
-* `replace(String a,String b)` for replacing each occurrence of `a` with `b`
-* `regexreplace(String x,String b)` for replacing each occurrence the regular excepression `x` with `b`
-* `cleaniri` for removing all the prefixes from IRIs
-* `celsius` for converting Fahrenheit to Celsius
-* `fahrenheit` for converting Celsius to Fahrenheit
-* `removebraces` for removing the braces
-* `regularAlphabet` for removing nun-alphanumeric characters
-* `uriasstring` returns the last part of a URI as a String. Additional parsing `_` as space
 
-Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would store the homepage of an object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being the first cast down to the lowercase and then merged to a single property.
+- `nolang` for removing language tags
+- `lowercase` for converting the input string into lower case
+- `uppercase` for converting the input string into upper case
+- `number` for ensuring that only the numeric characters, "." and "," are contained in the input string
+- `replace(String a,String b)` for replacing each occurrence of `a` with `b`
+- `regexreplace(String x,String b)` for replacing each occurrence the regular excepression `x` with `b`
+- `cleaniri` for removing all the prefixes from IRIs
+- `celsius` for converting Fahrenheit to Celsius
+- `fahrenheit` for converting Celsius to Fahrenheit
+- `removebraces` for removing the braces
+- `regularAlphabet` for removing nun-alphanumeric characters
+- `uriasstring` returns the last part of a URI as a String. Additional parsing `_` as space
+
+Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would store the homepage of an object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals) of MESH concepts being the first cast down to the lowercase and then merged to a single property.
+
 ```xml
 <SOURCE>
     <ID>mesh</ID>
@@ -136,9 +143,10 @@ In addition, the following allows splitting the values of `foaf:homepage` into t
 
 It is also possible to use complex pre-processing functions, i.e. functions that manipulate multiple values at once.
 Currently the following complex pre-processing functions are available:
-* `concat(property1, property2, glue=",") RENAME newprop` this concatenates the values of `property1` and `property2` into `newprop` using a comma as glue between the values. The use of the `glue=` argument is optional. So `concat(property1, property2) RENAME newprop` would be valid as well.
-* `split(property, splitChar=",") RENAME prop1,prop2` this splits the values of `property` on the comma character, the first part is stored in `prop1` the rest in `prop2`. The `splitChar=` argument is mandatory. You can control the maximum number of splits by providing more or less properties after the `RENAME` keyword. For example if you would write `RENAME prop1,prop2,prop3` the values of `property` would be split into at most 3 values if 3 or more commas are present.
-* `toWktPoint(property1, property2) RENAME wktPoint` this takes the values of property1 and property2 and stores them as `POINT(p1 p2)`. The values of the two properties have to be numbers.
+
+- `concat(property1, property2, glue=",") RENAME newprop` this concatenates the values of `property1` and `property2` into `newprop` using a comma as glue between the values. The use of the `glue=` argument is optional. So `concat(property1, property2) RENAME newprop` would be valid as well.
+- `split(property, splitChar=",") RENAME prop1,prop2` this splits the values of `property` on the comma character, the first part is stored in `prop1` the rest in `prop2`. The `splitChar=` argument is mandatory. You can control the maximum number of splits by providing more or less properties after the `RENAME` keyword. For example if you would write `RENAME prop1,prop2,prop3` the values of `property` would be split into at most 3 values if 3 or more commas are present.
+- `toWktPoint(property1, property2) RENAME wktPoint` this takes the values of property1 and property2 and stores them as `POINT(p1 p2)`. The values of the two properties have to be numbers.
 
 Complex pre-processing functions are provided using the `FUNCTION` tag.
 
@@ -159,27 +167,28 @@ Complex pre-processing functions are provided using the `FUNCTION` tag.
 
 Please note that complex functions always require the `RENAME` operation.
 
-
 ### Source types
 
 A source type can be set via `TYPE`. The default type is set to `SPARQL`
 (for a SPARQL endpoint) but LIMES also supports reading files directly from
 the hard-drive. The supported data formats are:
-* `CSV`: Character-separated file can be loaded directly into LIMES.
+
+- `CSV`: Character-separated file can be loaded directly into LIMES.
   Note that the separation character is set to `TAB` as a default.
   The user can alter this setting programmatically.
-* `N3` (which also reads `NT` files) reads files in the `N3` language.
-* `N-TRIPLE` reads files in W3C's core
-  [N-Triples format](http://www.w3.org/TR/rdf-testcases/\#ntriples)
-* `TURTLE` allows reading files in the
+- `N3` (which also reads `NT` files) reads files in the `N3` language.
+- `N-TRIPLE` reads files in W3C's core
+  [N-Triples format](http://www.w3.org/TR/rdf-testcases/#ntriples)
+- `TURTLE` allows reading files in the
   `Turtle` [syntax](http://www.w3.org/TR/turtle/).
+- `NQUADS` Reads an [N-Quads](https://www.w3.org/TR/rdf12-n-quads/) file. By default, **all quads are flattened and merged into the default graph** (i.e., union of all named graphs; graph IRIs are discarded).
 
 Moreover, if you want to download data from a SPARQL endpoint, there is
 no need to set the `<TYPE>` tag.
 Instead, if you want to read the source (or target) data from a file,
 you should fill `<ENDPOINT>` tag with the absolute path of the input file,
 .g. `<ENDPOINT>C:/Files/dbpedia.nt</ENDPOINT>`, and you should also set the
-`<TYPE>` tag  with the type of the input data, for example `<TYPE>NT</TYPE>`.
+`<TYPE>` tag with the type of the input data, for example `<TYPE>NT</TYPE>`.
 
 ## Metric Expression for Similarity Measurement
 
@@ -201,29 +210,28 @@ variable `x` is associated).
 For detailed instructions on how to assemble a valid link specification
 and a complete catalogue of all measure types included in LIMES, see [Defining Link Specifications](user_manual/configuration_file/defining_link_specifications.md)
 
-
 ## Execution (optional)
 
 Three LIMES execution parameters could be set here:
- * `REWRITER`: LIMES 1.0.0 implements the `DEFAULT` rewriter.
- * `PLANNER`: the user can choose between:
- 	* `CANONICAL`: It generates an immutable plan in a static manner.
- 	* `HELIOS`: It generates an immutable plan in a dynamic manner.
- 	* `DYNAMIC`: It generates an mutable plan in a dynamic manner.
- 	* `DEFAULT`: same as `CANONICAL`.
- * `ENGINE`: the user can choose between:
- 	* `SIMPLE`: It executes each independent part of the plan sequentially.
- 	* `PARTIAL_RECALL`: For an input link specification $L$, it finds a link specification $L'$
-      that achieves a lower expected run time than $L$, while
-      abiding a predefined constraint on the expected recall it has to achieve.
-	  A link specification $L'$ is subsumed by a link specification $L$, when the set of links retrieved by executing the plan of $L'$ are a subset of the links retrieved by executing the plan of $L$.
-      Then, it executes each independent part of $L'$'s plan sequentially.
-	  To use the `PARTIAL_RECALL`, the user should set two additional (optional) parameters:
-		* `OPTIMIZATION_TIME`: as the optimization time limit (in milliseconds) that the engine can spend to find $L'$. If not set, the default value is 0. Negative values are also set to 0.
-		* `EXPECTED_SELECTIVITY`: as the expected recall value that $L'$ has to achieve, at least. The values of `EXPECTED_SELECTIVITY` must belong to $[0,1]$. If not set, the default value is 1. Negative and values above 1 are also set to 1.
-      
-	Both `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` parameters are only used when the `PARTIAL_RECALL` is chosen as `ENGINE`. The rest of the `ENGINE` values ignore the `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` values.
- 	* `DEFAULT`: same as `SIMPLE`.
+
+- `REWRITER`: LIMES 1.0.0 implements the `DEFAULT` rewriter.
+- `PLANNER`: the user can choose between:
+  - `CANONICAL`: It generates an immutable plan in a static manner.
+  - `HELIOS`: It generates an immutable plan in a dynamic manner.
+  - `DYNAMIC`: It generates an mutable plan in a dynamic manner.
+  - `DEFAULT`: same as `CANONICAL`.
+- `ENGINE`: the user can choose between:
+  - `SIMPLE`: It executes each independent part of the plan sequentially.
+  - `PARTIAL_RECALL`: For an input link specification $L$, it finds a link specification $L'$
+    that achieves a lower expected run time than $L$, while
+    abiding a predefined constraint on the expected recall it has to achieve.
+    A link specification $L'$ is subsumed by a link specification $L$, when the set of links retrieved by executing the plan of $L'$ are a subset of the links retrieved by executing the plan of $L$.
+    Then, it executes each independent part of $L'$'s plan sequentially.
+    To use the `PARTIAL_RECALL`, the user should set two additional (optional) parameters:
+    - `OPTIMIZATION_TIME`: as the optimization time limit (in milliseconds) that the engine can spend to find $L'$. If not set, the default value is 0. Negative values are also set to 0.
+    - `EXPECTED_SELECTIVITY`: as the expected recall value that $L'$ has to achieve, at least. The values of `EXPECTED_SELECTIVITY` must belong to $[0,1]$. If not set, the default value is 1. Negative and values above 1 are also set to 1.
+      Both `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` parameters are only used when the `PARTIAL_RECALL` is chosen as `ENGINE`. The rest of the `ENGINE` values ignore the `OPTIMIZATION_TIME` and `EXPECTED_SELECTIVITY` values.
+  - `DEFAULT`: same as `SIMPLE`.
 
 If not set, the `DEFAULT` value for each parameter will be used.
 
@@ -253,11 +261,13 @@ For more information on the meaning and possible values of the elements within t
 please refer to [Defining Machine Learning Tasks]{./defining_ml_tasks.md}.
 
 ## Granularity (optional)
+
 The user can choose positive integers to set the granularity of HYPPO, HR3 or ORCHID by setting
 
     <GRANULARITY>2</GRANULARITY>.
 
 ## Acceptance Condition
+
 Filling the acceptance condition consists of setting the threshold value to the minimum value that two instances must have in order to satisfy a relation. This can be carried out as exemplified below.
 
 ```xml
@@ -273,6 +283,7 @@ By using the `THRESHOLD` tag, the user can set the minimum value that two instan
 Future versions of LIMES will allow to write the output to other streams and in other data formats.
 
 ## Review Condition
+
 Setting the condition upon which links must be reviewed manually is very similar to setting the acceptance condition as shown below.
 
 ```xml
